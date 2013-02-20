@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="" />
+<meta name="keywords" content=""  />
+<title></title>
+<style type="text/css">
+*{margin:0;padding:0;list-style:none outside none;}
+body{font-family:Arial,"宋体";background:#FFF;}
+.main{width:443px;padding-top:100px;margin:0 auto;}
+.banner{height:544px;position:relative;background:#666;}
+.banner .imgbox{position:absolute;width:220px;height:180px;overflow:hidden;border:1px solid #000}
+.banner .part1{top:0;left:0;}
+.banner .part2{top:0;left:221px;}
+.banner .part3{top:181px;left:0;}
+.banner .part4{top:181px;left:221px;}
+.banner .part5{top:362px;left:0;}
+.banner .part6{top:362px;left:221px;}
+.banner .img1,.banner .img2{position:absolute;width:100%;height:100%;}
+.banner .img1{z-index:1;}
+.banner .part1 .img1{background-position:0 0;}
+.banner .part2 .img1{background-position:-220px 0;}
+.banner .part3 .img1{background-position:0 -180px;}
+.banner .part4 .img1{background-position:-220px -180px;}
+.banner .part5 .img1{background-position:0 -360px;}
+.banner .part6 .img1{background-position:-220px -360px;}
+.banner .part1 .img2{background-position:0 0;}
+.banner .part2 .img2{background-position:-220px 0;}
+.banner .part3 .img2{background-position:0 -180px;}
+.banner .part4 .img2{background-position:-220px -180px;}
+.banner .part5 .img2{background-position:0 -360px;}
+.banner .part6 .img2{background-position:-220px -360px;}
+</style>
+</head>
+<body>
+<div class="main">
+	<div id="banner" class="banner">
+		<div class="imgbox part1">
+			<div class="img1"></div>
+			<div class="img2"></div>
+		</div>
+		<div class="imgbox part2">
+			<div class="img1"></div>
+			<div class="img2"></div>
+		</div>
+		<div class="imgbox part3">
+			<div class="img1"></div>
+			<div class="img2"></div>
+		</div>
+		<div class="imgbox part4">
+			<div class="img1"></div>
+			<div class="img2"></div>
+		</div>
+		<div class="imgbox part5">
+			<div class="img1"></div>
+			<div class="img2"></div>
+		</div>
+		<div class="imgbox part6">
+			<div class="img1"></div>
+			<div class="img2"></div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript" src="js/somesayss.js"></script>
+<script type="text/javascript">
+$.ui.banner = $.Class.creat();
+$.ui.banner.prototype = {
+	init:function(){
+		this.opat = {
+			id:document,
+			nodeBe:null,
+			nodeAf:null,
+			url:[]
+			};
+		$.Object.extend(this.opat,arguments[0]||{});
+		this.fire();
+	},
+	fire:function(){
+		var _this = this,_opat = _this.opat;
+		var _id = $(_opat.id);
+		var _nodeBe = _this._nodeBe = _id.find(_opat.nodeBe);
+		var _nodeAf = _this._nodeAf = _id.find(_opat.nodeAf);
+		var _width = _this._width = _nodeBe.innerWidth();
+		var _height = _this._height = _nodeBe.innerHeight();
+		var _length = _opat.url.length;
+		var guid = 0;
+		_id.css({"background":"#666"});
+		_nodeBe.css({'background-image':'url("'+_opat.url[0]+'")'});
+		_nodeAf.css({'background-image':'url("'+_opat.url[1]+'")'});
+		setTimeout(function(){
+			_nodeBe.css({
+				'background-image':'url("'+_opat.url[guid]+'")',
+				"opacity":1,
+				"top":0,
+				"left":0,
+				"width":_width+"px",
+				"height":_height+"px"
+			});
+			guid++;
+			if(guid >= _length) guid = 0;
+			_nodeAf.css({
+				'background-image':'url("'+_opat.url[guid]+'")',
+				"opacity":1,
+				"top":0,
+				"left":0,
+				"width":_width+"px",
+				"height":_height+"px"
+			});
+			_this['changeStyle'+Math.floor(Math.random()*5)]();
+			setTimeout(arguments.callee,3000);
+		},3000);
+	},
+	changeStyle0:function(){
+		var _this = this,_opat = _this.opat;
+		var _nodeBe = _this._nodeBe;
+		var _time = 0;
+		_nodeBe.each(function(i,o){
+			setTimeout(function(){
+				$(o[i]).animate({opacity:0})
+			},_time);
+			_time += 50;
+		})
+	},
+	changeStyle1:function(){
+		var _this = this,_opat = _this.opat;
+		var _nodeBe = _this._nodeBe;
+		var _nodeAf = _this._nodeAf;
+		var _width = _this._width;
+		var _height = _this._height;
+		function _animat(o1,o2,k){
+			_nodeBe.eq(k).animate(o1);
+			_nodeAf.eq(k).animate(o2);
+		}
+		_nodeBe.each(function(i,o){
+			var style = i%4;
+			switch(style){
+				case 0:
+					_nodeAf.eq(i).css("left","-"+_width+"px");
+					_animat({left:_width,ease:"spring"},{left:0,ease:"spring"},i);
+					break;
+				case 1:
+					_nodeAf.eq(i).css("top","-"+_height+"px");
+					_animat({top:_height,ease:"spring"},{top:0,ease:"spring"},i);
+					break;
+				case 2:
+					_nodeAf.eq(i).css("left",_width+"px");
+					_animat({left:-_width,ease:"spring"},{left:0,ease:"spring"},i);
+					break;
+				case 3:
+					_nodeAf.eq(i).css("top",_height+"px");
+					_animat({top:-_height,ease:"spring"},{top:0,ease:"spring"},i);
+					break;
+			}
+		});
+	},
+	changeStyle2:function(){
+		var _this = this,_opat = _this.opat;
+		var _nodeBe = _this._nodeBe;
+		var _nodeAf = _this._nodeAf;
+		_nodeBe.css({"opacity":0});
+		_nodeAf.css({"opacity":0});
+		var _time = _nodeBe.length * 50;
+		_nodeAf.each(function(i,o){
+			setTimeout(function(){
+				$(o[i]).animate({opacity:1})
+			},_time);
+			_time -= 50;
+		})
+	},
+	changeStyle3:function(){
+		var _this = this,_opat = _this.opat;
+		var _nodeBe = _this._nodeBe;
+		var _nodeAf = _this._nodeAf;
+		var _height = _this._height;
+		_nodeAf.css({
+				top:-_height+"px"
+			})
+		_nodeBe.each(function(i,o){
+			setTimeout(function(){
+				_nodeBe.eq(i).animate({
+					top:_height
+				});
+				_nodeAf.eq(i).animate({
+					top:0
+				});
+			},parseInt(Math.random()*200))
+		})
+	},
+	changeStyle4:function(){
+		var _this = this,_opat = _this.opat;
+		var _nodeBe = _this._nodeBe;
+		var _nodeAf = _this._nodeAf;
+		var _width = _this._width;
+		var _height = _this._height;
+		_nodeBe.animate({
+			width:0,
+			height:0,
+			top:_width/2,
+			left:_height/2,
+			"opacity":0
+		});
+	}
+}
+new $.Imageload({
+	url:['http://pic002.cnblogs.com/images/2012/319713/2012103021492628.jpg',
+		 'http://pic002.cnblogs.com/images/2012/319713/2012103021500686.jpg',
+		 'http://pic002.cnblogs.com/images/2012/319713/2012103021504340.jpg',
+		 'http://pic002.cnblogs.com/images/2012/319713/2012103021511080.jpg'],
+	callback:function(url){
+		new $.ui.banner({
+			id:"#banner",
+			nodeBe:".img1",
+			nodeAf:".img2",
+			url:url
+		});
+	}
+})
+</script>
+</body>
+</html>
+<!--
+http://pic002.cnblogs.com/images/2012/319713/2012103021492628.jpg
+http://pic002.cnblogs.com/images/2012/319713/2012103021500686.jpg
+http://pic002.cnblogs.com/images/2012/319713/2012103021504340.jpg
+http://pic002.cnblogs.com/images/2012/319713/2012103021511080.jpg
+http://pic002.cnblogs.com/images/2012/319713/2012103021514298.jpg
+http://pic002.cnblogs.com/images/2012/319713/2012103021523850.jpg
+-->

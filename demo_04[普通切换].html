@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title></title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+*{margin:0;padding:0;list-style:none outside none;}
+body{font-family:Arial,"宋体";background:#FFF;font-size:12px;}
+a{outline:none;cursor:pointer;*outline:expression(this.hideFocus=true);text-decoration:none;color:#666}
+.main{width:500px;margin:0 auto;}
+.banner{height:330px;position:relative;margin-bottom:20px;overflow:hidden;}
+.banner ul{position:absolute;}
+.botton{height:20px;margin-bottom:10px;}
+.botton a,.botton span{float:left;width:20px;height:20px;text-align:center;font:12px/20px Arial;background:#CCC;}
+.botton a:hover,.botton .on{background:#F00;color:#FFF; }
+.text{line-height:20px;}
+</style>
+</head>
+<body>
+<div class="main">
+	<div id="bannerbox" class="banner">
+		<ul id="banner">
+			<li title="图片1"><img src="http://pic002.cnblogs.com/images/2012/319713/2012103021492628.jpg" width="500" height="330" alt="" /></li>
+			<li title="图片2"><img src="http://pic002.cnblogs.com/images/2012/319713/2012103021500686.jpg" width="500" height="330" alt="" /></li>
+			<li title="图片3"><img src="http://pic002.cnblogs.com/images/2012/319713/2012103021504340.jpg" width="500" height="330" alt="" /></li>
+		</ul>
+	</div>
+	<div id="botton" class="botton"></div>
+	<div id="text" class="text"></div>
+</div>
+<script type="text/javascript" src="js/somesayss.js"></script>
+<script type="text/javascript">
+$.ui.bannerleft = $.Class.creat();
+$.ui.bannerleft.prototype = {
+	init:function(){
+ 		this.option = {
+ 			type:"left",
+ 			bannerboxid:null,
+ 			bannerid:null,
+ 			banner:null,
+ 			ischildbanner:false,
+ 			bottonid:null,
+ 			botton:"a",
+ 			hasbottonnum:true,
+ 			textid:null,
+ 			autotime:3000,
+ 			classname:"on",
+ 			mouse:"click",
+ 			animatetime:500,
+ 			animatetype:"easeInOutExpo"
+ 		};
+ 		$.Object.extend(this.option,arguments[0] || {});
+ 		if(!this.option.bannerboxid || !this.option.bannerid || !this.option.banner) return;
+ 		this.star();
+ 		if(this.option.bottonid) this.fire();
+	},
+	star:function(){
+		var _this = this,_option = _this.option;
+		_this._bannerboxid = $(_option.bannerboxid)
+		_this._bannerid = $(_option.bannerid);
+		_this.howbanner = !_option.ischildbanner ? "find" : "children";
+		_this._banner = _this._bannerid[_this.howbanner](_option.banner);
+		_this._height = _this._bannerboxid.css("height");
+		_this._width = _this._bannerboxid.css("width");
+		_this._bannerid.css({
+			"position":"absolute"
+		});
+		_this._banner.css({
+				"height":_this._height+"px",
+				"overflow":"hidden"
+				})
+		if(_option.type === "left"){
+			_this.towherepx = _this._width;
+			_this._bannerid.css({
+				"width":_this._width*(_this._banner.length+1)+"px"
+			})
+			_this._banner.css({
+				"float":"left",
+				"width":_this._width+"px"
+				})
+		}else if(_option.type === "top"){
+			_this.towherepx = _this._height;
+		}
+		if(_option.bottonid){
+ 			_this.setbutton();
+ 			_this._button = $(_option.bottonid)["children"](_option.botton);
+ 			_this._button.eq(0).addClass(_option.classname);
+ 		}
+ 		_this._bannerid.append(_this._banner.eq(0).clone());
+ 		if(_option.autotime){
+			_this.guid = 0;
+			_this.auto();
+		}
+		if(_option.textid){
+ 			_this._textid = $(_option.textid);
+ 			_this._textid.html(_this._banner.dom().title);
+ 		}
+	},
+	fire:function(){
+		var _this = this,_option = _this.option;
+		_this._button.bind(_option.mouse,function(e){
+				e.stop();
+				var i = _this._button.index(this)
+				clearTimeout(_this.timer);
+ 				_this.mainanimate(i);
+ 				if(_option.autotime){
+ 					_this.auto();
+ 					_this.guid = i;
+ 				} 
+			})
+	},
+	mainanimate:function(i){
+		var _this = this,_option = _this.option;
+		if(i >= _this._banner.length){
+			if(_option.bottonid) _this._button.eq(0).addClass(_option.classname).siblings().removeClass(_option.classname);
+			if(_option.textid) _this._textid.html(_this._banner.dom().title);
+			if(_option.type === "left"){
+				_this._bannerid.animateStop().animate({
+					left : -(_this.towherepx*i),
+					time : _option.animatetime,
+					callback:function(){
+						_this._bannerid.css(_option.type,"0")
+						_this.guid = 0;
+					}
+				})
+			}else if(_option.type === "top"){
+				_this._bannerid.animateStop().animate({
+					top : -(_this.towherepx*i),
+					time : _option.animatetime,
+					callback:function(){
+						_this._bannerid.css(_option.type,"0")
+						_this.guid = 0;
+					}
+				})
+			}
+			return;
+		}
+		if(_option.type === "left"){
+			_this._bannerid.animateStop().animate({
+				left : -(_this.towherepx*i),
+				time:_option.animatetime,
+			})
+		}else if(_option.type === "top"){
+			_this._bannerid.animateStop().animate({
+				top : -(_this.towherepx*i),
+				time:_option.animatetime,
+			})
+		}
+		if(_option.bottonid) _this._button.eq(i).addClass(_option.classname).siblings().removeClass(_option.classname);
+		if(_option.textid) _this._textid.html(_this._banner.eq(i).dom().title);
+	},
+	auto:function(){
+		var _this = this,_option = _this.option;
+		_this.timer = setTimeout(function(){
+			_this.guid++;
+			_this.mainanimate(_this.guid);
+			_this.timer = setTimeout(arguments.callee,_option.autotime);
+		},_option.autotime);
+	},
+	setbutton:function(){
+ 		var _this = this,_option = _this.option;
+ 		var _temp = $(document.createDocumentFragment());
+ 		var _setnode = $(document.createElement(_option.botton));
+ 		if(_option.botton === "a") _setnode.dom().href = "javascript:void(0)";
+ 		$.Each(_this._banner,function(i){
+ 			if(!_option.hasbottonnum) _temp.append(_setnode.clone())
+ 			else{
+ 				var _clone = _setnode.clone();
+ 				_clone.innerHTML = i+1;
+ 				_temp.append(_clone)
+ 			}
+ 		})
+ 		$(_option.bottonid).append(_temp.dom());
+ 	}
+}
+new $.ui.bannerleft({
+	type:"left",					//选填 默认 left
+	bannerboxid:"#bannerbox",	//必填
+	bannerid:"#banner",			//必填
+	banner:"li",				//必填 
+	ischildbanner:false,		//选填 默认 false
+	bottonid:"#botton",			//选填 默认 null
+	botton:"a",					//选填 默认 "a"
+	hasbottonnum:true,			//选填 默认 true
+	textid:"#text",				//选填 默认 null
+	autotime:3000,				//选填 默认 3000
+	classname:"on",				//选填 默认 "on"
+	mouse:"mouseover",			//选填 默认 "click"
+	animatetime:800,			//选填 默认 500
+	animatetype:"easeInOutExpo"	//选填 默认 "easeInOutExpo"
+});
+</script>
+</body>
+</html>
