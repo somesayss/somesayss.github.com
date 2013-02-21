@@ -78,23 +78,23 @@ $.Array = function(obj){
 		return Array.prototype.slice.call(obj,0);
 	}catch(e){
 		var arr = [];
-		for(var i=0,j=obj.length;i<j;i++) arr.push(obj[i]);
+		for(var i=0,j=obj.length;i<j;++i) arr.push(obj[i]);
 		return arr;
 	}
 };
 $.Index = function(obj,objs){
 	try{
-		for(var i=0,j=objs.length;i<j;i++) if(obj === objs[i].dom()) return i;
+		for(var i=objs.length-1,j=0; j<=i; --i) if(obj.dom() == objs[i]) return i;
 		return -1;
 	}catch(e){
-		for(var i=0,j=objs.length;i<j;i++) if(obj == objs[i]) return i;
+		for(var i=objs.length-1,j=0; j<=i; --i) if(obj == objs[i]) return i;
 		return -1;
 	}
 };
 $.Each = function(obj,fn,isdom){
 	if(!obj) return;
 	if(!isdom){
-		for(var i=0,j=obj.length; i<j; i++) fn.call(obj[i],i,obj);
+		for(var i=obj.length-1,j=0; j<=i; --i) fn.call(obj[i],i,obj);
 	}else{
 		for(var i in obj) fn.call(obj[i],i,obj);
 	}
@@ -128,7 +128,7 @@ $.Typeof = function(key){
 	}
 };
 $.Try = function(){
-	for(var i=0,j=arguments.length;i<j;i++){
+	for(var i=0,j=arguments.length;i<j;++i){
 		try{
 			return arguments[i]();
 		}catch(e){}
@@ -174,9 +174,6 @@ $.cacheRex = {
 }
 /*---Array---*/
 $.ArrayMethod = {
-	value:function(arr){
-		return arr;
-	},
 	clear:function(arr){
 		arr.length = 0;
 		return $.Use(arr);
@@ -196,12 +193,12 @@ $.ArrayMethod = {
 		}
 	},
 	each:function(arr,fn){
-		for(var i=0,j=arr.length; i<j; i++) fn.call(arr[i],i,arr);
+		for(var i=arr.length-1,j=0; j<=i; --i) fn.call(arr[i],i,arr);
 		return $.Use(arr);
 	},
-	inArray:function(arr){
-		for(var i=0,j=arr.length; i<j; i++){
-			if(arr[i] === arguments[1]) return true;
+	inArray:function(arr,tar){
+		for(var i=arr.length-1,j=0; j<=i; --i){
+			if(arr[i] === tar) return true;
 		}
 		return false;
 	},
@@ -255,9 +252,6 @@ $.ArrayMethod = {
 }
 /*---Number---*/
 $.NumberMethod = {
-	value:function(num){
-		return num;
-	},
 	formatcolor:function(num){
 		var _num = num.toString(16);
 		if(num < 16) _num =  "0" + _num;
@@ -266,9 +260,6 @@ $.NumberMethod = {
 }
 /*---String---*/
 $.StringMethod = {
-	value:function(str){
-		return str;
-	},
 	strip:function(str){
 		str = str.replace(/^\s+/, '').replace(/\s+$/, '');
 		return $.Use(str);
@@ -390,7 +381,7 @@ $.Dom = {
 		if(!$.Browser.IE8){
 			$(document).bind("DOMContentLoaded",function(){
 				$(document).unbind("DOMContentLoaded");
-				for(var i=0,j=_arr.length;i<j;i++) _arr[i]();
+				for(var i=0,j=_arr.length;i<j;++i) _arr[i]();
 				$.Use(_arr).clear();
 			});
 		}else{
@@ -399,7 +390,7 @@ $.Dom = {
 				if(document.readyState === "complete"){
 					$(document).unbind("readystatechange");
 					if(_isread) return;
-					for(var i=0,j=_arr.length;i<j;i++) _arr[i]();
+					for(var i=0,j=_arr.length;i<j;++i) _arr[i]();
 					_isread = true;
 					$.Use(_arr).clear();
 				}
@@ -408,7 +399,7 @@ $.Dom = {
 				try{
 					img.doScroll();
 					if(_isread) return;
-					for(var i=0,j=_arr.length;i<j;i++) _arr[i]();
+					for(var i=0,j=_arr.length;i<j;++i) _arr[i]();
 					_isread = true;
 					$.Use(_arr).clear();
 				}catch(e){
@@ -530,7 +521,7 @@ $.Method = {
 		return $(eles[num ? num : 0]);
 	},
 	each:function(eles,fn){
-		for(var i=0,j=eles.length; i<j; i++) fn.call(eles[i],i,eles);
+		for(var i=eles.length-1,j=0; j<=i; --i) fn.call(eles[i],i,eles);
 		return $(eles); 
 	},
 	index:function(eles,node){
@@ -608,7 +599,12 @@ $.Method = {
     	return $(eles);
     },
     find:function(eles,str){
-    	return $($.Selector(str,eles[0]));
+    	var newarr = [];
+    	$.Each(eles,function(){
+    		var _temp = $.Selector(str,this);
+    		newarr = newarr.concat(_temp);
+    	})
+    	return $(newarr);
     },
     _findnode:function(node,type){
     	while(node && node.nodeType !== 1){
@@ -767,13 +763,13 @@ $.Method = {
     },
     text:function(eles,str){
     	var innerText = ("textContent" in eles[0]) ? "textContent" : "innerText";
-    	if($.Typeof(str) !== 'String') return $.Use(eles[0][innerText]).strip().value();
+    	if($.Typeof(str) !== 'String') return $.Use(eles[0][innerText]).strip().value;
     	//cleardata -> All
     	eles[0][innerText] = str;
     	return $(eles);
     },
     html:function(eles,str){
-    	if($.Typeof(str) !== 'String') return $.Use(eles[0].innerHTML).strip().value();
+    	if($.Typeof(str) !== 'String') return $.Use(eles[0].innerHTML).strip().value;
         //cleardata -> All
         eles[0].innerHTML = str;
         return $(eles);
@@ -796,7 +792,7 @@ $.Method = {
     	}else{
     		$.Each(eles,function(){
     			if(!$.Method.hasClass([this],str)) return;
-    			this.className = $.Use(this.className.replace(str,"").replace(/\s+/g," ")).strip().value();
+    			this.className = $.Use(this.className.replace(str,"").replace(/\s+/g," ")).strip().value;
     		});
     		return $(eles);
     	}
@@ -818,9 +814,13 @@ $.Method = {
     		var _val = eles[0].getAttributeNode(name);
     		return _val ? _val.nodeValue : null;
     	}else{
-    		var _att = document.createAttribute(name);
+	        var _att = document.createAttribute(name);
 	        _att.nodeValue = value;
-	        eles[0].setAttributeNode(_att);
+	        $.Each(eles,function(){
+	        	var clone = _att.cloneNode(true);
+	        	if(!clone.nodeValue) clone.nodeValue = value;
+	        	this.setAttributeNode(clone)
+	        });
 	        return $(eles);
     	}
     },
@@ -833,7 +833,8 @@ $.Method = {
 		        eles[0].removeAttribute("className");
 		        break;
 	        default: 
-	         	eles[0].removeAttribute(name);
+	        	$.Each(eles,function(){this.removeAttribute(name)})
+	         	break;
         }
         return $(eles);
     },
@@ -890,14 +891,14 @@ $.Use = function(){
 		case "Function" : return new $._ForFunction(arguments[0]);
 	}
 }
-$._ForArray = function(arg){this.arg = arg;this.length = arg.length;};
-$._ForNumber = function(arg){this.arg = arg};
-$._ForString = function(arg){this.arg = arg};
-$._ForFunction = function(arg){this.arg = arg};
-$._ForElement = function(arg){this.arg = arg;this.length = arg.length;this.list = arg;};
+$._ForArray = function(arg){this.value = arg;this.length = arg.length;};
+$._ForNumber = function(arg){this.value = arg;};
+$._ForString = function(arg){this.value = arg;};
+$._ForFunction = function(arg){this.value = arg;};
+$._ForElement = function(arg){this.value = arg;this.length = arg.length;};
 $.BasicExtend = {
 	special:function(oldO,newO){
-		$.Each(newO,function(i,o){oldO[i] = function(){return o[i].apply(null,[this.arg].concat(Array.prototype.slice.call(arguments)))}},true);
+		$.Each(newO,function(i,o){oldO[i] = function(){return o[i].apply(null,[this.value].concat(Array.prototype.slice.call(arguments)))}},true);
 	},
 	action:function(){
 		var Basic = $.BasicExtend;
@@ -1183,13 +1184,18 @@ $.Imageload.prototype = {
 			};
 		$.Object.extend(this.opat,arguments[0]||{});
 		var _url = this.opat.url;
-		var _only = this.opat.only;
+		var _node = this.opat.node;
 		if(!_url) return;
-		if($.Typeof(_url) === "Array" && _url.length !== 0) this.fire();
-		if($.Typeof(_url) === "String" && !this.opat.node) this.base(_url,this.opat.callback);
-		if($.Typeof(_url) === "String" && this.opat.node){
-			if(!this.opat.node.img)this.opat.node.img = new Image();
-			this.only();	
+		switch($.Typeof(_url)){
+			case "Array" : return  _url.length !== 0 ? this.fire() : undefined;
+			case "String" :
+				if(!_node){
+					return this.base(_url,this.opat.callback);
+				}
+				else{
+					if(!_node.img) _node.img = new Image();
+					return this.only();	
+				}
 		}
 	},
 	fire:function(){
@@ -1198,22 +1204,25 @@ $.Imageload.prototype = {
 			_this.base(o[i],function(url){
 				guid++;
 				if(guid < _opat.url.length) return;
-				_opat.callback(url);
+				_opat.callback(_opat.url);
 			})
 		})
 	},
 	only:function(){
 		var _this = this,_opat = _this.opat;
 		var _url = _opat.url;
-		var _img = _opat.node.img;
+		var _node = _opat.node; 
+		var _img = _node.img;
 		_img.onload = null;
 		_img.src = _url;
 		if(_img.complete == false){
         	_img.onload = function(){
-			_opat.callback(_url);
+				_opat.callback(_url);
+				_node.img = null;
 			};
         }else{
-        	_opat.callback(_url);
+	        	_opat.callback(_url);
+	        	_node.img = null;
         }
 
 	},
@@ -1222,10 +1231,10 @@ $.Imageload.prototype = {
         _img.src = url;
         if(_img.complete == false){
         	_img.onload = function(){
-			callback(url);
+				callback(url);
 			};
         }else{
-        	callback(url);
+        		callback(url);
         }
 	}
 }
