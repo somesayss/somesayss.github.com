@@ -67,17 +67,18 @@ $.ui.lazyload.prototype = {
 		var _arr = [];
 		var _criticalMinTop = $.Window.scrollTop();
 		var _criticalMaxTop = _criticalMinTop + _this.height;
-		$.Each(_imgs.list,function(i,o){
+		$.Each(_imgs.value,function(i,o){
 			var __mintop = $(this).offset().top;
 			var __maxtop = __mintop+$(this).outerHeight();
 			if((__mintop >= _criticalMinTop && __mintop <= _criticalMaxTop) || (__maxtop >= _criticalMinTop && __maxtop <= _criticalMaxTop) || (__mintop <= _criticalMinTop && __maxtop >= _criticalMaxTop)){
+
 				this.src = $(this).attr("loadsrc")
 				_arr.push(i);
 			}
 		})
 		var _guid = 0;
 		$.Each(_arr,function(){
-			$.Use(_imgs.list).except(this - _guid);
+			$.Use(_imgs.value).except(this - _guid);
 			_guid++;
 		});
 		_arr = [];
@@ -89,21 +90,6 @@ new $.ui.lazyload({
 </script>
 </body>
 </html>
-<!--
-_imgs.list  = $.Use(_imgs.list).filter(function(i,o){
-	var is;
-	$.Each(_arr,function(){
-		is = (i != this);
-	});
-	return is; 
-}).value();
-替换
-var _guid = 0;
-$.Each(_arr,function(){
-	$.Use(_imgs.list).except(this - _guid);
-	_guid++;
-});
--->
 <!--
 http://pic002.cnblogs.com/images/2012/319713/2012103021492628.jpg
 http://pic002.cnblogs.com/images/2012/319713/2012103021500686.jpg
