@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  ng-app="myApp">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="renderer" content="webkit"><!-- 360浏览器切换内核 webkit | ie-comp[IE6/7]? | ie-stand[IE8910]? -->
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1"><!-- 手机头部设置 -->
+<meta name="description" content="" />
+<meta name="keywords" content=""  />
+<title>angularJS - 数据表格</title>
+<link href="/assets/css/globe.css" rel="stylesheet" type="text/css">
+<!-- angularJS脚本引用 -->
+<script src="/assets/common/jquery.js"></script>
+<script src="angular-1.0.1.min.js"></script>
+<!-- /angularJS脚本引用 -->
+<style type="text/css">
+.data-table td{padding:5px;border:1px solid #CCC;vertical-align:top;line-height:22px;}
+.data-table input{width:120px;border:1px solid #CCC;padding:3px 5px;line-height:14px;height:14px;vertical-align:top;border-radius:3px;}
+.data-table select{border:1px solid #CCC;border-radius:0;width:50px;height:22px;padding:0 5px;border-radius:3px;}
+.data-no-deit .show{display:none;}
+.data-no-deit .hide{display:inline;}
+.data-deit .show{display:inline;}
+.data-deit .hide{display:none;}
+</style>
+</head>
+<body>
+<div ng-controller="testCtrl">
+	<table class="data-table fn-table-fixed">
+		<thead>
+			<tr>
+				<td width="30" align="center">编号</td>
+				<td width="132">名字</td>
+				<td width="50">年龄</td>
+				<td width="50">职业</td>
+				<td width="52" align="center">操作</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="key in orgData" ng-class="key.editCls">
+				<td align="center">
+					{{$index + 1}}
+				</td>
+				<td>
+					<span class="hide">{{key.name}}</span>
+					<input type="text" class="show" ng-model="key.name" ng-keypress="keySavePerson($event, $index)" />
+				</td>
+				<td>
+					<span class="hide">{{key.age}}</span>
+					<select ng-model="key.age" class="show" ng-options="x for x in ageList"></select>
+				</td>
+				<td>
+					<span class="hide">{{key.job}}</span>
+					<select ng-model="key.job" class="show" ng-options="x for x in jobList"></select>
+				</td>
+				<td>
+					<a href="javascript:" class="hide" ng-click="editPerson($index)">编辑</a>
+					<a href="javascript:" class="show" ng-click="savePerson($index)">保存</a>
+					<a href="javascript:" ng-click="detPerson($index)">删除</a>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="5" align="right">
+					<a href="javascript:" ng-click="addPerson()">增加</a>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<script type="text/javascript">
+;(function(){
+
+	//自定义指令模块定义
+	var meDirective = angular.module('meDirective', [], function(){
+
+	});
+	meDirective.directive('ngKeypress', function($parse){
+		return function($scope, $element, $attr){
+			var fn = $parse($attr.ngKeypress);
+			$element.on('keypress', function(e){
+				$scope.$apply(fn($scope, {$event: e}));
+			});
+		}
+	});
+
+	//应用模块定义
+	var app = angular.module('myApp', ['meDirective'], function(){
+		console.log('RUN!!');
+	});
+	//应用控制器
+	app.controller('testCtrl', function($scope){
+		//初始化数据
+		var orgData = $scope.orgData = [
+			{name: '小明', age: '18', job: 'web', edit: false, editCls: 'data-no-deit'},
+			{name: '小红', age: '21', job: 'php', edit: false, editCls: 'data-no-deit'}
+		];
+		$scope.ageList = ['16', '17', '18'];
+		$scope.jobList = ['web', 'php', 'java'];
+
+		//新增人员
+		$scope.addPerson = function(){
+			orgData.push({edit: true, editCls: 'data-deit', age: '18', job: 'web'});
+		}
+
+		//删除人员
+		$scope.detPerson = function(index){
+			orgData.splice(index, 1);
+		}
+
+		//保存
+		var savePerson = $scope.savePerson = function(index){
+			console.log(index, '来');
+			orgData[index].edit = false;
+			orgData[index].editCls = 'data-no-deit';
+		}
+
+		//编辑
+		$scope.editPerson = function(index){
+			orgData[index].edit = true;
+			orgData[index].editCls = 'data-deit';
+		}
+
+		//交互优化
+		$scope.keySavePerson = function(e, index){
+			if(e.charCode === 13){
+				savePerson(index);
+			}
+		}
+	});
+
+})();
+</script>
+</body>
+</html>

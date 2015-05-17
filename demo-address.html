@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  ng-app="myApp">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="renderer" content="webkit"><!-- 360浏览器切换内核 webkit | ie-comp[IE6/7]? | ie-stand[IE8910]? -->
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1"><!-- 手机头部设置 -->
+<meta name="description" content="" />
+<meta name="keywords" content=""  />
+<title>angularJS - address</title>
+<link href="/assets/css/globe.css" rel="stylesheet" type="text/css">
+<!-- angularJS脚本引用 -->
+<script src="/assets/common/jquery.js"></script>
+<script src="angular-1.0.1.min.js"></script>
+<!-- /angularJS脚本引用 -->
+</head>
+<body>
+<div ng-controller="testCtrl">
+	<select ng-model="province" ng-options="k for (k, v) in address"></select>
+	<select ng-model="city" ng-options="k for (k, v) in province"></select>
+	<select ng-model="region" ng-options="k for k in city"></select>
+</div>
+<script type="text/javascript">
+;(function(){
+	var app = angular.module('myApp', [], function(){
+		console.log('RUN!!');
+	});
+	//自身控制器
+	
+	app.controller('testCtrl', function($scope){
+		
+		//初始化数据
+		var address = $scope.address = {
+			'浙江': {
+				'杭州市': ['上城区', '下城区', '江干区'],
+				'绍兴市': ['越城区', '柯桥区', '上虞区'],
+				'嘉兴市': ['南湖区', '秀洲区', '海宁市']
+			},
+			'安徽': {
+				'合肥市': ['肥东县', '肥西县', '长丰县'],
+				'芜湖市': ['镜湖区', '弋江区', '鸠江区'],
+				'池州市': ['贵池区', '青阳县', '石台县']
+			}
+		}
+
+		//变量
+		var province = $scope.province = address['浙江'];
+		//观察者
+		$scope.$watch('province', function(to, from){
+			for(var i in to){
+				$scope.city  = to[i];
+				break;
+			}
+			$scope.city[0];
+		});
+		$scope.$watch('city', function(to, from){
+			$scope.region = to[0];
+		});
+
+	});
+
+})();
+</script>
+</body>
+</html>
