@@ -1,10 +1,12 @@
 //配置
 seajs.config({
     //基础路径
-    base: "/dist/js/",
+    base: "/src/js/",
     //配置路径
     paths: {
-        
+        'github': 'http://somesayss.github.io/src/js',
+        //支付宝
+        'arale': 'https://a.alipayobjects.com/arale'
     },
     //别名配置
     alias: {
@@ -12,7 +14,11 @@ seajs.config({
         'events': 'common/events',
         'aspect': 'common/aspect',
         'attrs': 'common/attrs',
-        'base': 'common/base'
+        'base': 'common/base',
+        //arale Base
+        'araleBase': "arale/base/1.1.1/base",
+        //arale widget
+        'araleWidget': "arale/widget/1.1.1/widget"
     }
 
 });

@@ -2,7 +2,11 @@
 /**
  * 2015.02.28
  * 属性类
- * version: 1.0.0
+ * version: 1.0.0 2015.02.28
+ * version: 1.0.1 2015.05.27
+ *
+ * 增加对attr:{} 属性的递归跟踪
+ * 
  * 提供最基础的 set get
  *
  * 属性初始化
@@ -50,7 +54,7 @@ define(function(require, exports) {
 			var me = this;
 			me.__attrs__ = me.__attrs__ || {};
 			me.__attrsName__ = me.__attrsName__ || [];
-			eachObj(config, function(val, key){
+			eachObj(extendObj(recursiveAttrs(me), config), function(val, key){
 				me.set(key, val);
 			});
 		},
@@ -197,13 +201,14 @@ define(function(require, exports) {
 			}
 		}
 	}
-	//复制
-	function cloneConfig(config){
-		var O = {};
-		eachObj(config, function(val, key){
-			O[key] = val;
+	//继承
+	function extendObj(origin, target, flag){
+		!flag ? eachObj(target, function(val, key){
+			origin[key] = val;
+		}): eachObj(target, function(val, key){
+			!origin[key] && (origin[key] = val);
 		});
-		return O;
+		return origin;
 	}
 	//判断是否存在 set get
 	function noSetGet(option){
@@ -260,6 +265,20 @@ define(function(require, exports) {
 				return val;
 			}
 		}
+	}
+	//递归获取attrs
+	function recursiveAttrs(me){
+		var prop = me.constructor.prototype,
+			superClass,
+			origin = {},
+			attrs;
+		while((superClass = prop.constructor.superClass) && prop){
+			if(attrs = prop.hasOwnProperty('attrs')){
+				extendObj(origin, prop.attrs, true);
+			}
+			prop = superClass;
+		}
+		return origin;
 	}
 
 	//返回

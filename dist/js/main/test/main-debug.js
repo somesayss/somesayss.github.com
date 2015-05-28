@@ -3,9 +3,9 @@
 /**
  * 业务
  */
-define("main/test/main-debug", [ "common/base-debug", "main/testKiss/config-debug" ], function(require, exports, module) {
+define("main/test/main-debug", [ "common/base-debug", "github/main/test/config-debug" ], function(require, exports, module) {
     //依赖
-    var Base = require("common/base-debug"), config = require("main/testKiss/config-debug");
+    var Base = require("common/base-debug"), config = require("github/main/test/config-debug");
     var person = new Base(config);
     console.log(person.get("kiss"));
 });
@@ -767,15 +767,4 @@ define("common/events-debug", [ "common/class-debug" ], function(require, export
     }
     //返回
     return Events;
-});
-
-"use strict";
-
-/**
- * 业务
- */
-define("main/testKiss/config-debug", [], function(require, exports, module) {
-    return {
-        kiss: "hello testKiss"
-    };
 });
