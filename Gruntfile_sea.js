@@ -1,9 +1,12 @@
 /**
- * [exports JS打包合并+CSS打包合并+require打包]
  * 2015,05,11
  */
 module.exports = function(grunt) {
- 
+    
+    //依赖
+    var fs = require('fs'),
+        path = require("path");
+
     // LiveReload的默认端口号，你也可以改成你想要的端口号
     var lrPort = 35729;
     // 使用connect-livereload模块，生成一个与LiveReload脚本
@@ -22,13 +25,12 @@ module.exports = function(grunt) {
     };
 
     var uglifyRex = /(.*)\.(.*)/;   //过滤 dist/js/libs/main.js => dist/js/libs/main.min.js
-    //requirejs的配置项目
-    var requirejsCfg = {
-        baseUrl: "src/js/",
-        outerUrl: "dist/js/",
-        rex: /src\/js\/(.*)\.js/, //过滤 src/js/main/test/test.js => main/test/test
-        mainConfigFile: "src/js/libs/requireCfg.js"
-    };
+
+
+    //seaJS的配置项
+    var seaCfgUrl = 'src/js/libs/seaCfg.js';
+
+
     //自助打包的JS
     var uglifyCfg = {
         js: [{
@@ -56,22 +58,6 @@ module.exports = function(grunt) {
         }
     }
 
-    function setRequireJS(){
-        var config = {};   
-        config['options'] = requirejsCfg;
-        grunt.file.expand(requirejsCfg.baseUrl+'main/*/main.js').forEach(function(val){
-            if(requirejsCfg.rex.test(val)){
-                val = RegExp.$1;
-                config[val] = {
-                    options: {
-                        name: val,
-                        out: requirejsCfg.outerUrl+val+'.js'
-                    }
-                }
-            }
-        });
-        return config;
-    }
     //转换
     function uglifyUtil(list){
         var noMin = {},
@@ -83,9 +69,18 @@ module.exports = function(grunt) {
         return [noMin, min];
     }
 
+
+
     var uglifyJS = uglifyUtil(uglifyCfg.js),
         uglifyCSS = uglifyUtil(uglifyCfg.css);
 
+    //seaJS配置项的读取
+    function readSeaConfig(){
+         var cont = fs.readFileSync(path.join(__dirname, seaCfgUrl), 'utf8');
+        cont = cont.match(/{[\s\S]*}/)[0];
+        return new Function('return '+cont)();
+    }
+    var seaCfg = readSeaConfig();
 
     // 项目配置(任务配置)
     grunt.initConfig({
@@ -139,7 +134,17 @@ module.exports = function(grunt) {
                     preserveComments: 'all' //注释是否保留(默认是删除)
                 },
                 files: uglifyJS[0]
+            },
+            //打包seajs
+            missionSeajs: {
+                files: [{
+                    expand:true,
+                    cwd:'dist/js/main', //js目录下
+                    src:'**/main.js', //所有js文件
+                    dest: 'dist/js/main' //输出到此目录下
+                }]
             }
+
         },
         //CSS打包配置
         cssmin: {
@@ -147,14 +152,47 @@ module.exports = function(grunt) {
                 files: uglifyCSS[1]
             }
         },
-        //合并
-        concat: {
-            Packaged: {
-                files: uglifyCSS[0]
+        //seajs CMD提取
+        transport: {
+            options: {
+                paths: ['src/js'],
+                alias: seaCfg.alias
+                // aliasPaths: '/src/js/'
+
+            },
+            missionMain: {
+                files: [  
+                    {  
+                        cwd: 'src/js', //目标地址
+                        src: ['main/**/*.js', 'common/**/*.js'], //目标文件
+                        dest: 'dist/js/', //编译地址
+                        expand: true
+                    }  
+                ]  
             }
         },
-        //requireJS
-        requirejs: setRequireJS()
+        //seajs CMD合并
+        concat: {
+            options: {
+                paths: ['dist/js'],
+                include: "all",
+            },
+            mission: {
+                files: [
+                    {
+                        cwd: 'dist/js', //目标地址
+                        src: ['**/*.js'], //需要合并的文件
+                        dest: "dist/js",
+                        expand: true
+                        // ext: ".js",
+                        // filter: "isFile"
+                    }
+                ]
+            }
+        },
+        clean: {
+            js: ['dist/js/**/*.js', '!dist/js/libs/*.js', '!dist/js/main/**/main.js', '!dist/js/main/**/main-debug.js']
+        }
     }); // grunt.initConfig配置完毕
  
     // 加载插件
@@ -164,14 +202,20 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     //css打包
     grunt.loadNpmTasks('grunt-contrib-cssmin');
-    grunt.loadNpmTasks('grunt-contrib-concat');
-    //requireJS
-    grunt.loadNpmTasks('grunt-contrib-requirejs');
- 
+    //清除
+    grunt.loadNpmTasks('grunt-contrib-clean');
+    //seajs
+    grunt.loadNpmTasks('grunt-cmd-transport');
+    grunt.loadNpmTasks('grunt-cmd-concat');
+
+
     // 自定义任务
     grunt.registerTask('live', ['connect', 'watch']);
     //普通打包
-    grunt.registerTask('default', ['uglify', 'cssmin', 'concat', 'requirejs']);
+    grunt.registerTask('default', ['transport', 'concat', 'clean', 'uglify', 'cssmin']);
+    //seajs
+    grunt.registerTask('seajs', ['transport', 'concat']);
+
 
 
 };

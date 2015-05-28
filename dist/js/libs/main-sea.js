@@ -1,4 +1,4 @@
-/*! hello-grunt 2015-05-15 */
+/*! hello-grunt 2015-05-26 */
 /*! jQuery v1.9.1 | (c) 2005, 2012 jQuery Foundation, Inc. | jquery.org/license
 */
 !function(a, b) {
@@ -3280,7 +3280,9 @@ seajs.config({
     //基础路径
     base: "/dist/js/",
     //配置路径
-    paths: {},
+    paths: {
+        github: "http://somesayss.github.io/src/js"
+    },
     //别名配置
     alias: {
         "class": "common/class",

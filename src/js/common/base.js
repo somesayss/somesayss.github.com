@@ -21,6 +21,7 @@ define(function(require, exports) {
 		//初始化
 		init: function(config){
 			var me = this;
+			//初始化配置属性
 			me.initAttrs(config);
 			return me;
 		},
