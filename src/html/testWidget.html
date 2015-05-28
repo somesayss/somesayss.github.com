@@ -41,11 +41,26 @@
 <style>
 body{padding-left:calc(100vw - 100%);}
 header{margin-left:calc(100% - 100vm);padding-left:calc(100vm - 100%);}
+.warp{
+	width:100px;
+	/*强制折行*/
+	word-wrap:break-word;
+	word-break:break-all;
+	white-space:normal;
+	/*多余两行省略*/
+	overflow : hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-line-clamp: 4;
+	-webkit-box-orient: vertical;
+}
 </style>
 <body>
-<header>
-	<div style="width:500px;margin:0 auto;background:#F00;" id="click">点我</div>
-</header>
+
+
+<div class="warp">
+	222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+</div>
 
 
 
