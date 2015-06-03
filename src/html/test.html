@@ -19,17 +19,17 @@
 
 
 <!-- requireJS未打包脚本 -->
-<script type="text/javascript" charset="utf-8" src="/src/js/libs/jquery.js"></script>
+<!-- <script type="text/javascript" charset="utf-8" src="/src/js/libs/jquery.js"></script>
 <script type="text/javascript" charset="utf-8" src="/src/js/libs/require.js"></script>
-<script type="text/javascript" charset="utf-8" src="/src/js/libs/requireCfg.js"></script>
+<script type="text/javascript" charset="utf-8" src="/src/js/libs/requireCfg.js"></script> -->
 <!-- requireJS已打包 -->
 <!-- <script type="text/javascript" charset="utf-8" src="/dist/js/libs/main-require.min.js"></script> -->
 
 
 <!-- seaJS未打包脚本 -->
-<!-- <script type="text/javascript" charset="utf-8" src="/src/js/libs/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="/src/js/libs/jquery.js"></script>
 <script type="text/javascript" charset="utf-8" src="/src/js/libs/sea.js"></script>
-<script type="text/javascript" charset="utf-8" src="/src/js/libs/seaCfg.js"></script> -->
+<script type="text/javascript" charset="utf-8" src="/src/js/libs/seaCfg.js"></script>
 <!-- seaJS已打包脚本 -->
 <!-- <script type="text/javascript" charset="utf-8" src="/dist/js/libs/main-sea.min.js"></script> -->
 
@@ -48,8 +48,8 @@
 
 <!-- 脚本入口 -->
 <script type="text/javascript">
-require(['main/test/main']);
-// seajs.use(['main/test/main']);
+// require(['main/test/main']);
+seajs.use(['main/test/main']);
 </script>
 </body>
 </html>

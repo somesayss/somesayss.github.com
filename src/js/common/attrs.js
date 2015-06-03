@@ -50,7 +50,7 @@ define(function(require, exports) {
 	//变量
 	var objectDefineProperty = Object.defineProperty,
 		ObjectGetOwnPropertyDescriptor = Object.getOwnPropertyDescriptor,
-		isEcma5 = !!objectDefineProperty,
+		isEcma5 = !!Object.create, //IE8 有Object.defineProperty的实现
 		REX = /\w+/g;
 
 	//事件类
@@ -87,6 +87,7 @@ define(function(require, exports) {
 			 * 2015 05 29
 			 * 这里判断有点弱 只判断 value 是否为对象 应该判断 value 是否 存在 value 且存在 get 或者 set
 			 */
+			console.log(value, value && value.hasOwnProperty);
 			if( isObject(value) && ( value.hasOwnProperty('value') || !noSetGet(value) ) ){
 				option = value;
 				value = option.value;
@@ -170,9 +171,9 @@ define(function(require, exports) {
 	function K(k){
 		return k;
 	}
-	//判断是否是对象
+	//判断是否是对象这里排除的dom对象, jQuery对象
 	function isObject(obj){
-		return !!obj && Object.prototype.toString.call(obj) === '[object Object]';
+		return !!obj && Object.prototype.toString.call(obj) === '[object Object]' && !obj.nodeType && !obj.jquery;
 	}
 	//查询
 	function indexOfArr(arr, ele, formIndex){
