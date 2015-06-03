@@ -9,20 +9,20 @@ define(function(require, exports) {
 	//依赖
 	var Class = require('class'),
 		Attrs = require('attrs'),
-		Aspect = require('aspect');
-
-	//变量
-	var E = function(){};
+		Aspect = require('aspect'),
+		util = require('util');
 
 	//类
 	var Base = Class.create({
 		//接口
-		Implements: [Attrs, Aspect],
+		Implements: [Attrs, Aspect, util],
 		//初始化
 		init: function(config){
 			var me = this;
 			//初始化配置属性
 			me.initAttrs(config);
+			//把this塞入属性让attr内的属性调用 this.me
+			me.getAttrs('attrs')['me'] = me;
 			return me;
 		},
 		//销毁
@@ -38,8 +38,6 @@ define(function(require, exports) {
 					delete me[i];
 				}
 			}
-			//干掉销毁方法
-			me.destroy = E;
 			return me;
 		}
 	});

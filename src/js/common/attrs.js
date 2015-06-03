@@ -4,6 +4,7 @@
  * 属性类
  * version: 1.0.0 2015.02.28
  * version: 1.0.1 2015.05.27
+ * version: 1.0.2 2015.05.29 对set('name', {})的支持
  *
  * 增加对attr:{} 属性的递归跟踪
  * 
@@ -20,6 +21,9 @@
  * set('name2', {value: 'value2'});
  * set('name1', {set: function(){}, get: function(){}});
  *
+ * PS:
+ * 如果要set 一个对象 写法应该是 set('name', {value: {...}});
+ * 
  * BUG:无法修复
  * var person = new Base({
 		title: {
@@ -45,6 +49,8 @@ define(function(require, exports) {
 
 	//变量
 	var objectDefineProperty = Object.defineProperty,
+		ObjectGetOwnPropertyDescriptor = Object.getOwnPropertyDescriptor,
+		isEcma5 = !!objectDefineProperty,
 		REX = /\w+/g;
 
 	//事件类
@@ -72,28 +78,30 @@ define(function(require, exports) {
 				attrs = me.getAttrs('attrs'),
 				attrsName = me.getAttrs('attrsName'),
 				attrVal = attrs[name],
+				hasVal = attrs.hasOwnProperty(name),	//用这个判断来取代 !!attrVal
 				newOption;
 			//堆入数组 唯一
-			!attrVal && attrsName.push(name);
+			!hasVal && attrsName.push(name);
 			/**
 			 * set('name', {value:'a1'}), set('name', {set:function(){},get:function(){}});
+			 * 2015 05 29
+			 * 这里判断有点弱 只判断 value 是否为对象 应该判断 value 是否 存在 value 且存在 get 或者 set
 			 */
-			if(isObject(value)){
+			if( isObject(value) && ( value.hasOwnProperty('value') || !noSetGet(value) ) ){
 				option = value;
 				value = option.value;
 			}
 			newOption = mixOptin(value, option);
 			//ECMA 5.0
-			if(!objectDefineProperty){
-				if(attrVal && !option){
+			if(isEcma5){
+				if( hasVal && !option ){
 					attrs[name] = value;
 				}else{
 					objectDefineProperty(attrs, name, newOption);
-
 				}
 			}else{
 				fixSet(
-					attrVal && !option ? attrVal : (attrs[name] = newOption), 
+					hasVal && !option ? attrVal : (attrs[name] = newOption), 
 					newOption.value, 
 					name,
 					attrVal,
@@ -107,7 +115,7 @@ define(function(require, exports) {
 			var me = this,
 				attrs = me.getAttrs('attrs');
 			//ECMA 5.0
-			if(!objectDefineProperty){
+			if(isEcma5){
 				return attrs[name];
 			}else{
 				return fixGet(attrs[name], attrs);
@@ -212,7 +220,7 @@ define(function(require, exports) {
 	}
 	//判断是否存在 set get
 	function noSetGet(option){
-		return !option || !option.set && !option.get;
+		return !option || !option.hasOwnProperty('set') && !option.hasOwnProperty('get');
 	}
 	//格式化writable(只读)
 	function formatWritable(writable){

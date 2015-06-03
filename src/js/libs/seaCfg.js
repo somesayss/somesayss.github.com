@@ -15,10 +15,12 @@ seajs.config({
         'aspect': 'common/aspect',
         'attrs': 'common/attrs',
         'base': 'common/base',
+        'widget': 'common/widget',
+        'util': 'common/util',
+        '$': 'common/jQuery',
         //arale Base
         'araleBase': "arale/base/1.1.1/base",
         //arale widget
         'araleWidget': "arale/widget/1.1.1/widget"
     }
-
 });
