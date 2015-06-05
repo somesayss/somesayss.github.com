@@ -8,15 +8,13 @@ define(function(require, exports, module) {
 	var Pie = require('modules/pie/main'),
 		methodUtil = require('common/methodUtil');
 
-	console.log();
-
 	//类
 	var Progress = Pie.extend({
 		attrs: {
 			//速度
 			speed: 1000,
 			//每次最小偏差值
-			minDiff: 20
+			minDiff: 30
 		},
 		//类名
 		className: 'Progress',
@@ -31,30 +29,37 @@ define(function(require, exports, module) {
 		//开始
 		startPro: function(){
 			var me = this;
-			me.setPro(me.diffTarget = 0);
+			me.setPro(me.now = me.before = 0);
 			return me;
 		},
 		//增加
 		incPro: function(){
 			var me = this,
-				diffTarget = me.diffTarget;
-			diffTarget = methodUtil.getRandom(diffTarget, diffTarget + me.get('minDiff'));
-			me.setPro( me.diffTarget = getDiff(diffTarget) );
+				now = me.now;
+			//me.beforeTarget = now;
+			now = methodUtil.getRandom(now, now + me.get('minDiff'));
+			me.setPro( getDiff(now) );
 			return me;
 		},
 		//设置 0 ~ 100
-		setPro: function(per){
-			var me = this;
-			me.queue(function(next){
-				me.setPath(per);
-				setTimeout(next, me.get('speed'));
-			});
+		setPro: function(now){
+			var me = this,
+				before = me.before;
+			me.before = me.now = now;
+			if(before !== now){
+				me.queue(function(next){
+					animate(me, before, now, me.get('speed'), function(diff){
+						me.setPath(diff)
+					});
+					setTimeout(next, me.get('speed'));
+				});	
+			}
 			return me;
 		},
 		//结束
 		donePro: function(){
 			var me = this;
-			me.setPro(me.diffTarget = 100);
+			me.setPro(me.now = 100);
 			return me;
 		}
 	});
@@ -89,10 +94,28 @@ define(function(require, exports, module) {
 		return diff;
 	}
 
+	//函数：动画函数
+	function easing(pos) {
+        return -.5 * (Math.cos(Math.PI * pos) - 1);
+    }
+	
 	//函数：动画
-	function animate(){
-		
+	function animate(me, begin, end, time, fn){
+		var beginTime = new Date().getTime(),
+			diffPos = end - begin;
+		methodUtil.cancelAnimationFrame(me.animateId);
+		me.animateId = methodUtil.requestAnimationFrame(function loop(){
+			var changeTime = new Date().getTime() - beginTime,
+				diff = Math.floor( diffPos * easing( changeTime/time ) ) + begin;
+			if(changeTime < time){
+				fn(diff);
+				me.animateId = methodUtil.requestAnimationFrame(loop);
+			}else{
+				fn(end);
+			}
+		});
 	}
+	
 	
 
 	return Progress;

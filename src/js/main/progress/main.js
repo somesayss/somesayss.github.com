@@ -8,9 +8,9 @@ define(function(require, exports, module) {
 	var Progress = require('modules/progress/main');
 
 	//组件的使用
-	var p = new Progress().render().startPro().incPro().incPro().incPro();
+	var p = new Progress({element: '#a'}).startPro().setPro(40);
 
-	p.jQuery('body').on('click', function(){
+	p.jQuery('#next').on('click', function(){
 		p.incPro();
 	});
 
