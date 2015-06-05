@@ -16,6 +16,8 @@ define(function(require, exports) {
 	var Base = Class.create({
 		//接口
 		Implements: [Attrs, Aspect, util],
+		//类名
+		className: 'Base',
 		//初始化
 		init: function(config){
 			var me = this;

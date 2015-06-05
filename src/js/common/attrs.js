@@ -87,7 +87,6 @@ define(function(require, exports) {
 			 * 2015 05 29
 			 * 这里判断有点弱 只判断 value 是否为对象 应该判断 value 是否 存在 value 且存在 get 或者 set
 			 */
-			console.log(value, value && value.hasOwnProperty);
 			if( isObject(value) && ( value.hasOwnProperty('value') || !noSetGet(value) ) ){
 				option = value;
 				value = option.value;
