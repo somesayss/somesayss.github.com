@@ -27,30 +27,37 @@ define(function(require, exports, module) {
 			return me;
 		},
 		//开始
-		startPro: function(){
+		startPro: function(per){
 			var me = this;
-			me.setPro(me.now = me.before = 0);
+			//强制转换
+			per = getDiff(~~per);
+			//重设上一个
+			me.beforePro = 0;
+			//设置现在值
+			me.nowPro = per;
+			//如果是0就直接设置，如果不是就绘制
+			me[per === 0 ? 'setPath' : 'setPro'](per);
 			return me;
 		},
 		//增加
-		incPro: function(){
+		incPro: function(per){
 			var me = this,
-				now = me.now;
-			//me.beforeTarget = now;
-			now = methodUtil.getRandom(now, now + me.get('minDiff'));
-			me.setPro( getDiff(now) );
+				nowPro = per || me.nowPro;
+			//获取随机值
+			nowPro = methodUtil.getRandom(nowPro, nowPro + me.get('minDiff'));
+			me.setPro( getDiff(nowPro) );
 			return me;
 		},
 		//设置 0 ~ 100
-		setPro: function(now){
+		setPro: function(nowPro, type){
 			var me = this,
-				before = me.before;
-			me.before = me.now = now;
-			if(before !== now){
+				beforePro = ~~me.beforePro;
+			me.beforePro = me.nowPro = nowPro;
+			if(beforePro !== nowPro){
 				me.queue(function(next){
-					animate(me, before, now, me.get('speed'), function(diff){
+					animate(me, beforePro, nowPro, me.get('speed'), function(diff){
 						me.setPath(diff)
-					});
+					}, type);
 					setTimeout(next, me.get('speed'));
 				});	
 			}
@@ -59,7 +66,7 @@ define(function(require, exports, module) {
 		//结束
 		donePro: function(){
 			var me = this;
-			me.setPro(me.now = 100);
+			me.setPro(me.nowPro = 100, true);
 			return me;
 		}
 	});
@@ -95,18 +102,23 @@ define(function(require, exports, module) {
 	}
 
 	//函数：动画函数
-	function easing(pos) {
-        return -.5 * (Math.cos(Math.PI * pos) - 1);
-    }
+	var easing = {
+		in:function(pos) {
+			return  -(Math.pow(pos - 1, 2) - 1);;
+	    },
+	    out:function(pos) {
+			return Math.pow(pos, 2);
+	    }
+	}
 	
 	//函数：动画
-	function animate(me, begin, end, time, fn){
+	function animate(me, begin, end, time, fn, type){
 		var beginTime = new Date().getTime(),
 			diffPos = end - begin;
 		methodUtil.cancelAnimationFrame(me.animateId);
 		me.animateId = methodUtil.requestAnimationFrame(function loop(){
 			var changeTime = new Date().getTime() - beginTime,
-				diff = Math.floor( diffPos * easing( changeTime/time ) ) + begin;
+				diff = Math.floor( diffPos * easing[!type ? 'in' : 'out']( changeTime/time ) ) + begin;
 			if(changeTime < time){
 				fn(diff);
 				me.animateId = methodUtil.requestAnimationFrame(loop);

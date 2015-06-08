@@ -8,8 +8,20 @@ define(function(require, exports, module) {
 	var Progress = require('modules/progress/main');
 
 	//组件的使用
-	var p = new Progress({element: '#a'}).startPro().setPro(40);
+	var p = new Progress({element: '#progress'});
 
+
+	//开始
+	p.jQuery('#start').on('click', function(){
+		p.startPro().incPro(40);
+	});
+
+	//开始
+	p.jQuery('#end').on('click', function(){
+		p.donePro();
+	});
+
+	//开始
 	p.jQuery('#next').on('click', function(){
 		p.incPro();
 	});
