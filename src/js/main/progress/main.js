@@ -30,12 +30,6 @@ define(function(require, exports, module) {
 	console.log(p);
 
 
-	var _ = require('_');
-
-	var arr = [];
-
-	_.each('abc', function(val){
-		console.log(val);
-	});
+	
 
 });

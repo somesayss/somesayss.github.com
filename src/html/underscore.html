@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="renderer" content="webkit"><!-- 360浏览器切换内核 webkit | ie-comp[IE6/7]? | ie-stand[IE8910]? -->
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1"><!-- 手机头部设置 -->
+<meta name="description" content="" />
+<meta name="keywords" content=""  />
+<title>圆环图测试</title>
+<!-- #公用静态资源 -->
+<!-- 未打包CSS -->
+<!-- <link rel="stylesheet" type="text/css" href="/src/css/reset.css" />
+<link rel="stylesheet" type="text/css" href="/src/css/globe.css" />
+<link rel="stylesheet" type="text/css" href="/src/css/main.css" /> -->
+<!-- 已打包CSS -->
+<link rel="stylesheet" type="text/css" href="/dist/css/main.min.css" />
+
+
+
+<!-- requireJS未打包脚本 -->
+<!-- <script type="text/javascript" charset="utf-8" src="/src/js/libs/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="/src/js/libs/require.js"></script>
+<script type="text/javascript" charset="utf-8" src="/src/js/libs/requireCfg.js"></script> -->
+<!-- requireJS已打包 -->
+<!-- <script type="text/javascript" charset="utf-8" src="/dist/js/libs/main-require.min.js"></script> -->
+
+
+<!-- seaJS未打包脚本 -->
+<script type="text/javascript" charset="utf-8" src="/src/js/libs/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="/src/js/libs/sea.js"></script>
+<script type="text/javascript" charset="utf-8" src="/src/js/libs/seaCfg.js"></script>
+<!-- seaJS已打包脚本 -->
+<!-- <script type="text/javascript" charset="utf-8" src="/dist/js/libs/main-sea.min.js"></script> -->
+<div id="progress" style="width:40px;margin:20px auto;"></div>
+<div style="text-align:center;">
+	<input type="button" id="start" value="开始" />
+	<input type="button" id="end" value="结束" />
+	<input type="button" id="next" value="增加" />
+</div>
+
+
+
+<!-- /公用静态资源 -->
+</head>
+<body>
+<!-- 脚本入口 -->
+<script type="text/javascript">
+// require(['main/pie/main']);
+seajs.use(['main/underscore/main']);
+</script>
+</body>
+</html>
