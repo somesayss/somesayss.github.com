@@ -12,7 +12,7 @@ define(function(require, exports, module) {
 	var Progress = Pie.extend({
 		attrs: {
 			//速度
-			speed: 1000,
+			speed: 500,
 			//每次最小偏差值
 			minDiff: 30
 		},

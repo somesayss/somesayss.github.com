@@ -18,6 +18,7 @@ seajs.config({
         'widget': 'common/widget',
         'util': 'common/util',
         '$': 'common/jQuery',
+        '_': 'common/underscore',
         //arale Base
         'araleBase': "arale/base/1.1.1/base",
         //arale widget

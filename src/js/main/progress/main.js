@@ -10,6 +10,7 @@ define(function(require, exports, module) {
 	//组件的使用
 	var p = new Progress({element: '#progress'});
 
+	
 
 	//开始
 	p.jQuery('#start').on('click', function(){
@@ -28,5 +29,13 @@ define(function(require, exports, module) {
 
 	console.log(p);
 
+
+	var _ = require('_');
+
+	var arr = [];
+
+	_.each('abc', function(val){
+		console.log(val);
+	});
 
 });
