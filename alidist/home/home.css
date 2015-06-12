@@ -1,0 +1,50 @@
+/*我要起诉，我的诉讼图标*/
+.lhome-main-op{background:#FFF url('bg_home/bg_home.jpg') no-repeat top center;height:360px;}
+.lhome-main-op .lc-center-wrap{position:relative;}
+.lhome-main-op .circle {position:absolute;top:180px;width:104px;height:104px;border-radius:52px;cursor:pointer;}
+.lhome-main-op .circle.prosecute{top:191px;left:230px;}
+.lhome-main-op .circle.my-suit{right:157px;top:224px;}
+/*焦点公告，网上法庭受理范围， 帮助中心*/
+.lhome-info-list {margin-top:20px;}
+.lhome-info-list .lc-center-wrap{border-bottom:1px solid #eee;}
+.lhome-info-list .lc-center-wrap > div {display:inline-block;height:180px;vertical-align:top;}
+.lhome-info-list .focus-common,  .lhome-info-list .help-center{width:280px;border-right:1px solid #eee;}
+.focus-common .show-dot{list-style:none inside url("bg_home/home_list_type.png") !important;}
+.focus-common .show-dot li {list-style:none inside url("bg_home/home_list_type.png") !important;}
+.help-center .show-dot{list-style:none inside url("bg_home/home_list_type.png") !important;}
+.help-center .show-dot li {list-style:none inside url("bg_home/home_list_type.png") !important;}
+.lhome-info-list .help-center{border-right:0;padding-left:15px;width:210px;}
+.lhome-info-list .service-range{border-right:1px solid #eee;width:470px;padding-left:15px;}
+.lc-center-wrap h5{font-size:14px;}
+.lhome-info-list h5, .friendship-link h5 {color:#047dc6;font-weight:bold;}
+.lhome-info-list h5 span, .friendship-link h5 span {font-size:13px;vertical-align:bottom;color:#999;margin-left:5px;font-weight:normal;}
+.lhome-info-list  ul{margin:0;padding:0;list-style-position:inside;margin-top:25px;}
+.lhome-info-list li{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:270px;font-size:14px;margin-bottom:3px;}
+/*网上法庭受理范围图标*/
+.lhome-info-list .help-center li{max-width:200px;}
+.lhome-info-list .dispute-wrap{margin-top:25px;}
+.lhome-info-list .dispute-wrap > div{display:inline-block;width:102px;height:122px;border-radius:5px;margin-left:18px;vertical-align:top;cursor:pointer;}
+.lhome-info-list .dispute-wrap > div:first-child{margin-left:0;}
+.dispute-wrap .circle{width:66px;height:66px;border-radius:33px;margin:9px auto 5px;}
+.dispute-wrap .transaction{background:#fff6e4;}
+.dispute-wrap .transaction .circle{background:#ffda91 url('bg_home/transaction.png') no-repeat;}
+.dispute-wrap .transaction .text {color:#b38b3c;}
+.dispute-wrap .copyright {background:#e4fafc;}
+.dispute-wrap .copyright .circle {background:#88c5cc url('bg_home/copyright.png') no-repeat;}
+.dispute-wrap .copyright .text {color:#41868e;}
+.dispute-wrap .petty-loan {background:#f7ffe6;}
+.dispute-wrap .petty-loan .circle {background:#bbd781 url('bg_home/petty_loan.png') no-repeat;}
+.dispute-wrap .petty-loan .text {color:#629200;}
+.dispute-wrap .payment {background:#f8f6e6;}
+.dispute-wrap .payment .circle {background:#fff1ad url('bg_home/payment.png') no-repeat;}
+.dispute-wrap .payment .text {color:#dec120;}
+.dispute-wrap  .text {text-align:center;}
+/*友情链接*/
+.friendship-link .form-control {display:inline-block;width:auto;height:26px;width:140px;margin-right:70px;font-size:12px;/*CHROM下文字被遮盖*/padding:4px 0;}
+.friendship-link .last-select{margin-right:0;}
+.friendship-link .form-control:last-child {margin-right:0;}
+.friendship-link h5 {margin-top:20px;}
+
+
+
+
