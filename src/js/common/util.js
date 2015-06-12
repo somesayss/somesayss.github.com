@@ -1,7 +1,7 @@
 "use strict";
 /**
  * 2015.02.28
- * 事件类
+ * 工具类
  * version: 1.0.0
  */
 define(function(require, exports) {
@@ -13,8 +13,10 @@ define(function(require, exports) {
 
 	//空函数
 	var K = util.K = function(k){return k};
+
 	//空对象
 	var O = util.O = {};
+
 	//控制台
 	var log = util.log = function(){
 		var args = slice.call(arguments),
@@ -30,6 +32,7 @@ define(function(require, exports) {
 		args.unshift('我的信息:');
 		return log.apply(console, args);
 	}
+
 	//遍历对象
 	var breakEachObj = util.breakEachObj = function(obj, callback, context){
 		for(var i in obj){
@@ -40,6 +43,7 @@ define(function(require, exports) {
 			}
 		}
 	}
+
 	//遍历数组
 	var breakEachArr = util.breakEachArr = function(arr, callback, context){
 		var index = 0,
@@ -50,8 +54,6 @@ define(function(require, exports) {
 			}
 		}
 	}
-	
-
 
 	return util;
 

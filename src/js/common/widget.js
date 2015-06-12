@@ -36,6 +36,9 @@ define(function(require, exports) {
 			//父节点
 			parentNode: BODY
 		},
+		//类名
+		className: 'Widget',
+		//初始化
 		init: function(config){
 			var me = this;
 			//属性的初始化
