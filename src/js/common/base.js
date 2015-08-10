@@ -3,6 +3,7 @@
  * 2014.04.29
  * 基础类。
  * version: 1.0.0
+ * 2015,06,14 当attrs里面注册了onXxxx后，且值为函数，就会自动去注册事件
  */
 define(function(require, exports) {
 
@@ -12,10 +13,15 @@ define(function(require, exports) {
 		Aspect = require('aspect'),
 		util = require('util');
 
+	//变量
+	var REX = /^on([A-Z])(.*)/;
+
 	//类
 	var Base = Class.create({
 		//接口
 		Implements: [Attrs, Aspect, util],
+		//静态属性
+		Statics: [util],
 		//类名
 		className: 'Base',
 		//初始化
@@ -25,6 +31,8 @@ define(function(require, exports) {
 			me.initAttrs(config);
 			//把this塞入属性让attr内的属性调用 this.me
 			me.getAttrs('attrs')['me'] = me;
+			//对属性当中的onXXX注册的属性都进行事件绑定
+			bindEvent(me);
 			return me;
 		},
 		//销毁
@@ -43,6 +51,20 @@ define(function(require, exports) {
 			return me;
 		}
 	});
+
+	//事件绑定
+	function bindEvent(me){
+		me.eachAttrs(function(val, key){
+			//如果on打头的
+			if(typeof val === 'function' && REX.test(key)){
+				me.on(
+					RegExp.$1.toLowerCase() + RegExp.$2,
+					val
+				);
+			}
+		});
+	}
+
 
 	//返回
 	return Base;

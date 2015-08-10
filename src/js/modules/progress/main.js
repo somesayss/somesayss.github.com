@@ -19,9 +19,8 @@ define(function(require, exports, module) {
 		//类名
 		className: 'Progress',
 		//初始化
-		init: function(config){
+		initProps: function(config){
 			var me = this;
-			Progress.superClass.init.call(this, config);
 			//初始化队列
 			me.queue = queue();
 			return me;

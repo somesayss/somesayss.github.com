@@ -5,6 +5,8 @@
  * version: 1.0.0 2015.02.28
  * version: 1.0.1 2015.05.27
  * version: 1.0.2 2015.05.29 对set('name', {})的支持
+ * version: 1.0.3 2015.06.22 
+ * 		1. 开放接口 recursiveAttrs 回溯对象
  *
  * 增加对attr:{} 属性的递归跟踪
  * 
@@ -39,6 +41,8 @@
 		}
 	});
 	console.log(person.get('kiss'));
+ *	2015.08.08
+ *	1. 修改两处判断为 是否等于undefined 
  * 
  * 
  */
@@ -51,7 +55,8 @@ define(function(require, exports) {
 	var objectDefineProperty = Object.defineProperty,
 		ObjectGetOwnPropertyDescriptor = Object.getOwnPropertyDescriptor,
 		isEcma5 = !!Object.create, //IE8 有Object.defineProperty的实现
-		REX = /\w+/g;
+		REX = /\w+/g,
+		unshift = Array.prototype.unshift;
 
 	//事件类
 	var Attrs = Class.create({
@@ -60,7 +65,7 @@ define(function(require, exports) {
 			var me = this;
 			me.__attrs__ = me.__attrs__ || {};
 			me.__attrsName__ = me.__attrsName__ || [];
-			eachObj(extendObj(recursiveAttrs(me), config), function(val, key){
+			eachObj(extendObj(me.recursiveAttrs('attrs').origin, config), function(val, key){
 				me.set(key, val);
 			});
 		},
@@ -137,6 +142,7 @@ define(function(require, exports) {
 			var me = this,
 				attrs = me.getAttrs('attrs'),
 				attrsName = me.getAttrs('attrsName');
+			callback = callback || me.K;
 			eachArr(attrsName, function(val, key){
 				callback(me.get(val), val);
 			});
@@ -162,6 +168,32 @@ define(function(require, exports) {
 			me.__attrs__ = {};
 			me.__attrsName__ = [];
 			return me;
+		},
+		//递归
+		recursiveAttrs: function(key){
+			var me = this,
+				prop = me.constructor.prototype,
+				superClass,
+				origin = {},
+				arr = [],
+				tempArr = [],
+				attrs;
+			while((superClass = prop.constructor.superClass) && prop){
+				if( prop.hasOwnProperty(key) && (attrs = prop[key]) ){
+					tempArr.length = 0;
+					//获取正确的顺序 为了events而做的
+					eachObj(attrs, function(val, key){
+						origin[key] === void(0) && tempArr.push(key);
+					});
+					unshift.apply(arr, tempArr);
+					extendObj(origin, attrs, true);
+				}
+				prop = superClass;
+			}
+			return {
+				origin: origin,
+				arr: arr
+			};
 		}
 	});
 
@@ -170,10 +202,12 @@ define(function(require, exports) {
 	function K(k){
 		return k;
 	}
+
 	//判断是否是对象这里排除的dom对象, jQuery对象
 	function isObject(obj){
-		return !!obj && Object.prototype.toString.call(obj) === '[object Object]' && !obj.nodeType && !obj.jquery;
+		return obj === Object(obj) && !obj.nodeType && !obj.jquery;
 	}
+
 	//查询
 	function indexOfArr(arr, ele, formIndex){
 		if(arr.indexOf){
@@ -189,6 +223,7 @@ define(function(require, exports) {
 			return -1;
 		}
 	}
+
 	//遍历数组
 	function eachArr(arr, callback, context){
 		if(!arr.forEach){
@@ -201,6 +236,7 @@ define(function(require, exports) {
 			}
 		}
 	}
+
 	//遍历对象
 	function eachObj(obj, callback){
 		for(var key in obj){
@@ -209,23 +245,27 @@ define(function(require, exports) {
 			}
 		}
 	}
-	//继承
+
+	//继承，由标记位控制是否是 正继承，还是负继承
 	function extendObj(origin, target, flag){
 		!flag ? eachObj(target, function(val, key){
 			origin[key] = val;
 		}): eachObj(target, function(val, key){
-			!origin[key] && (origin[key] = val);
+			origin[key] === void(0) && (origin[key] = val);
 		});
 		return origin;
 	}
+
 	//判断是否存在 set get
 	function noSetGet(option){
 		return !option || !option.hasOwnProperty('set') && !option.hasOwnProperty('get');
 	}
+
 	//格式化writable(只读)
 	function formatWritable(writable){
 		return writable === void 0 ? true : !! writable;
 	}
+
 	//混合value, option
 	function mixOptin(value, option){
 		option = option || {};
@@ -248,6 +288,7 @@ define(function(require, exports) {
 			}
 		}
 	}
+
 	//修正的set
 	function fixSet(option, value, name, attrVal, attrs){
 		if(noSetGet(option)){
@@ -260,6 +301,7 @@ define(function(require, exports) {
 			attrVal && option.set.call(attrs, value);
 		}
 	}
+
 	//修正的get, 使用递归，来获取可能的值
 	function fixGet(option, attrs){
 		var val;
@@ -274,20 +316,8 @@ define(function(require, exports) {
 			}
 		}
 	}
-	//递归获取attrs
-	function recursiveAttrs(me){
-		var prop = me.constructor.prototype,
-			superClass,
-			origin = {},
-			attrs;
-		while((superClass = prop.constructor.superClass) && prop){
-			if(attrs = prop.hasOwnProperty('attrs')){
-				extendObj(origin, prop.attrs, true);
-			}
-			prop = superClass;
-		}
-		return origin;
-	}
+
+	
 
 	//返回
 	return Attrs;

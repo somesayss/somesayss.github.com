@@ -23,14 +23,10 @@ define(function(require, exports, module) {
 		},
 		//类名
 		className: 'Pie',
-		//初始化
-		init: function(config){
+		//入口
+		setup: function(){
 			var me = this;
-			Pie.superClass.init.call(me, config);
-			//构建SVG
-			me.initSvg();
-			//绘制路径0 ~ 359.99
-			return me;
+			return me.initSvg();
 		},
 		//销毁
 		destroy: function(){

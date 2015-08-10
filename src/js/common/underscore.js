@@ -23,7 +23,7 @@ define(function(require, exports, module) {
       var previousUnderscore = root._;
 
       // Establish the object that gets returned to break out of a loop iteration.
-      // ？大概是个空对象
+      // 跳出循环的时候判断条件的唯一对象
       var breaker = {};
 
       // Save bytes in the minified (but not gzipped) version:
@@ -89,6 +89,9 @@ define(function(require, exports, module) {
       // Delegates to **ECMAScript 5**'s native `forEach` if available.
       // EACH的实现
       // 第一层干掉null undefined
+      // 第二层过滤出array类型
+      // 第三层过滤出 string(IE7-有BUG) function(没有value) nodeList JQobj window(bug) 这些length存在的对象
+      // 其他那些length不存在的对象
       var each = _.each = _.forEach = function(obj, iterator, context) {
         if (obj == null) return;
         if (nativeForEach && obj.forEach === nativeForEach) {
@@ -145,7 +148,7 @@ define(function(require, exports, module) {
 
       // The right-associative version of reduce, also known as `foldr`.
       // Delegates to **ECMAScript 5**'s native `reduceRight` if available.
-      // reduceRight的
+      // reduceRight的实现，通过Object的keys方法遍历出对象的键名再逆推，这样就实现了对象的从下到上遍历
       _.reduceRight = _.foldr = function(obj, iterator, memo, context) {
         var initial = arguments.length > 2;
         if (obj == null) obj = [];
@@ -172,6 +175,7 @@ define(function(require, exports, module) {
       };
 
       // Return the first value which passes a truth test. Aliased as `detect`.
+      // 单个寻找，过滤的单一版
       _.find = _.detect = function(obj, iterator, context) {
         var result;
         any(obj, function(value, index, list) {
@@ -186,6 +190,7 @@ define(function(require, exports, module) {
       // Return all the elements that pass a truth test.
       // Delegates to **ECMAScript 5**'s native `filter` if available.
       // Aliased as `select`.
+      // 过滤 如果用对象入参的话就比较怪异。 返回还是个数组，理想的话么应该是个对象
       _.filter = _.select = function(obj, iterator, context) {
         var results = [];
         if (obj == null) return results;
@@ -197,6 +202,7 @@ define(function(require, exports, module) {
       };
 
       // Return all the elements for which a truth test fails.
+      // 过滤的相反方法，条件为false
       _.reject = function(obj, iterator, context) {
         return _.filter(obj, function(value, index, list) {
           return !iterator.call(context, value, index, list);
@@ -206,6 +212,7 @@ define(function(require, exports, module) {
       // Determine whether all of the elements match a truth test.
       // Delegates to **ECMAScript 5**'s native `every` if available.
       // Aliased as `all`.
+      // 全部匹配
       _.every = _.all = function(obj, iterator, context) {
         iterator || (iterator = _.identity);
         var result = true;
@@ -220,6 +227,7 @@ define(function(require, exports, module) {
       // Determine if at least one element in the object matches a truth test.
       // Delegates to **ECMAScript 5**'s native `some` if available.
       // Aliased as `any`.
+      // 只要一个匹配
       var any = _.some = _.any = function(obj, iterator, context) {
         iterator || (iterator = _.identity);
         var result = false;
@@ -233,6 +241,7 @@ define(function(require, exports, module) {
 
       // Determine if the array or object contains a given value (using `===`).
       // Aliased as `include`.
+      // 包含匹配
       _.contains = _.include = function(obj, target) {
         if (obj == null) return false;
         if (nativeIndexOf && obj.indexOf === nativeIndexOf) return obj.indexOf(target) != -1;
@@ -242,6 +251,9 @@ define(function(require, exports, module) {
       };
 
       // Invoke a method (with arguments) on every item in a collection.
+      // Map的增强，使用方式有两种，可以传递参数
+      // 1. _.invoke(['a1', 'a2', 'a3'], 'slice', 1);
+      // 2. _.invoke(['a1', 'a2', 'a3'], function(key){ return this + key;}, 'a4');
       _.invoke = function(obj, method) {
         var args = slice.call(arguments, 2);
         return _.map(obj, function(value) {
@@ -250,12 +262,16 @@ define(function(require, exports, module) {
       };
 
       // Convenience version of a common use case of `map`: fetching a property.
+      // MAP的一个增强
+      // 1. _.pluck([{'value': 'a1'}, {'value': 'a2'}, {'value': 'a2'}], 'value');
       _.pluck = function(obj, key) {
         return _.map(obj, function(value){ return value[key]; });
       };
 
       // Convenience version of a common use case of `filter`: selecting only objects
       // with specific `key:value` pairs.
+      // 过滤的增强，如果被检查的属性为空就返回空，否者的话就按照属性去检测列表中的值，如果全部匹配成功才把这个对象赛选出来
+      // _.where([{a1: 'a1', b1: 'b1', c1: 'c1'}, {a1: 'a1', b1: 'b2'}], {b1:'b1'});
       _.where = function(obj, attrs) {
         if (_.isEmpty(attrs)) return [];
         return _.filter(obj, function(value) {
@@ -269,6 +285,7 @@ define(function(require, exports, module) {
       // Return the maximum element or (element-based computation).
       // Can't optimize arrays of integers longer than 65,535 elements.
       // See: https://bugs.webkit.org/show_bug.cgi?id=80797
+      // 获取最大值，如果对象是数组，并且首个是数字
       _.max = function(obj, iterator, context) {
         if (!iterator && _.isArray(obj) && obj[0] === +obj[0] && obj.length < 65535) {
           return Math.max.apply(Math, obj);
@@ -771,6 +788,7 @@ define(function(require, exports, module) {
 
       // Return a sorted list of the function names available on the object.
       // Aliased as `methods`
+      // 过滤出对象的所有方法
       _.functions = _.methods = function(obj) {
         var names = [];
         for (var key in obj) {
@@ -780,6 +798,8 @@ define(function(require, exports, module) {
       };
 
       // Extend a given object with all the properties in passed-in object(s).
+      // 继承后面参数的所有属性方法
+      // 1. _extend({},{},...,{});
       _.extend = function(obj) {
         each(slice.call(arguments, 1), function(source) {
           if (source) {
@@ -974,6 +994,9 @@ define(function(require, exports, module) {
       }
 
       // Optimize `isFunction` if appropriate.
+      // 历史遗留，以前的Chrom或者safari会把正则解析成function 这里把IE系的方法用原始的typeof
+      // 原始的typeof new Function('') 还是会返回 'function'
+      // 如今chorm返回是  object SO 现在所有判断都被这个代替了
       if (typeof (/./) !== 'function') {
         _.isFunction = function(obj) {
           return typeof obj === 'function';
@@ -981,32 +1004,44 @@ define(function(require, exports, module) {
       }
 
       // Is a given object a finite number?
+      // isFinite存在BUG
+      // http://stackoverflow.com/questions/27007501/underscore-js-calling-isnan-after-isfinite-function
+      // 对于 true,false,null,'', 返回的是true
+      // 用解析对象是否为数字增加对上述的判断
       _.isFinite = function(obj) {
         return isFinite(obj) && !isNaN(parseFloat(obj));
       };
 
       // Is the given value `NaN`? (NaN is the only number which does not equal itself).
+      // isNaN的BUG是对 undefined 判断为 true
+      // 第一层判断是判断 是否为 数字，但是NaN的类型是 number 
+      // 所以有第二层判断 NaN !== NaN 为true
+      // 我觉得 isNaN(obj) && obj !== obj; 这个实现
       _.isNaN = function(obj) {
         return _.isNumber(obj) && obj != +obj;
       };
 
       // Is a given value a boolean?
+      // 判断是否为布尔
       _.isBoolean = function(obj) {
         return obj === true || obj === false || toString.call(obj) == '[object Boolean]';
       };
 
       // Is a given value equal to null?
+      // 判断是否为null
       _.isNull = function(obj) {
         return obj === null;
       };
 
       // Is a given variable undefined?
+      // IE低版本下 undefined 可以被赋值， void 0 可以返回一个原始的undefined
       _.isUndefined = function(obj) {
         return obj === void 0;
       };
 
       // Shortcut function for checking if an object has a given property directly
       // on itself (in other words, not on a prototype).
+      // 对象的静态属性
       _.has = function(obj, key) {
         return hasOwnProperty.call(obj, key);
       };
@@ -1016,12 +1051,14 @@ define(function(require, exports, module) {
 
       // Run Underscore.js in *noConflict* mode, returning the `_` variable to its
       // previous owner. Returns a reference to the Underscore object.
+      // 恢复命名空间
       _.noConflict = function() {
         root._ = previousUnderscore;
         return this;
       };
 
       // Keep the identity function around for default iterators.
+      // 传递器
       _.identity = function(value) {
         return value;
       };

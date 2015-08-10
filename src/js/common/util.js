@@ -55,6 +55,33 @@ define(function(require, exports) {
 		}
 	}
 
+	//检索数组
+	var indexOfArr = util.indexOfArr = function(arr, ele, formIndex){
+		if(arrPro.indexOf){
+			return arrPro.indexOf.call(arr, ele, formIndex);
+		}
+		var length = arr.length;
+		//这里做入参个数的判断
+		formIndex = ~~formIndex;
+		for(; formIndex < length; formIndex++){
+			if(arr[formIndex] === ele){
+				return formIndex;
+			}
+		}
+		return -1;
+	}
+
+	//继承
+	var extend = util.extend = function(origin) {
+		breakEachArr(slice.call(arguments, 1), function(val) {
+			breakEachObj(val, function(val, key){
+				origin[key] = val;
+			});
+		})
+		return origin;
+	}
+
+
 	return util;
 
 });

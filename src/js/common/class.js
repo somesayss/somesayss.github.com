@@ -7,12 +7,27 @@
  * 增加属性的方法: Implements, Statics
  * 2015.04.30
  * 修改了mix方法，在接口继承的时候如果要继承的类也是有继承关系的就需要把所有的属性和方法都继承过来
+ * 2015.06.09
+ * 修改了Statics方法可以传入多个
+ * 2015.06.15
+ * 对Statics也拥有继承特性，对于静态的属性，extend superClass 是不可修改的
  */
 define(function(require, exports) {
 
 	//初始化变量
 	var Class = {},
+		emptyArr = [],
+		K = function (k){return k},
 		Rex = /\w+/g;
+
+	/**
+	 * [默认是过滤 extend superClass的]
+	 * @param  {[string]} key [名称]
+	 * @return {[boolean]}     [是否为extend或者superClass]
+	 */
+	function noName(key){
+		return key !== 'extend' && key !== 'superClass';
+	}
 
 	/**
 	 * [mix 混合方法]
@@ -20,9 +35,10 @@ define(function(require, exports) {
 	 * @param  {Object} TAR [混合源]
 	 * @return {Object} CUR	[被混合的对象]
 	 */
-	function mix(CUR, TAR, NEEDPROP) {
+	function mix(CUR, TAR, NEEDPROP, CALLBACK) {
+		CALLBACK = typeof CALLBACK === 'function' ? CALLBACK : K;
 		for (var i in TAR) {
-			if (TAR.hasOwnProperty(i) || NEEDPROP) {
+			if ( (TAR.hasOwnProperty(i) || NEEDPROP) && CALLBACK(i) ) {
 				CUR[i] = TAR[i];
 			}
 		}
@@ -77,8 +93,14 @@ define(function(require, exports) {
 	function implement(CLS, PROP) {
 		//对于Implements, Statics的特殊处理
 		'Implements,Statics'.replace(Rex, function(a){
-			if(PROP && PROP.hasOwnProperty(a)){
-				Class[a](CLS, PROP[a]);
+			//如果对象存在，不存在的情况是 extend 的时候会直接create();
+			if(PROP){
+				//如果没有属性的话就初始话一个空的数组，这个是为了做统一，保证全部运行
+				!PROP[a] && (PROP[a] = emptyArr);
+				//确保是静态属性
+				if(PROP.hasOwnProperty(a)){
+					Class[a](CLS, PROP[a]);
+				}
 				delete PROP[a];
 			}
 		});
@@ -118,8 +140,15 @@ define(function(require, exports) {
 		return OBJ instanceof CLS && OBJ.constructor === CLS;
 	}
 	//静态属性
-	Class.Statics = function(CLS, OBJ){
-		mix(CLS, OBJ);
+	Class.Statics = function(CLS, ARR){
+		ARR = [].concat(ARR);
+		var item;
+		//如果存在父级，对于父级方法属性的继承
+		CLS.superClass && mix(CLS, CLS.superClass.constructor, false, noName);
+		//属性的继承
+		while(item = ARR.shift()){
+			mix(CLS, item, false, noName);
+		}
 	}
 	//接口
 	Class.Implements = function(CLS, ARR){
@@ -127,6 +156,7 @@ define(function(require, exports) {
 			prop = CLS.prototype;
 		ARR = [].concat(ARR);
 		while(item = ARR.shift()){
+			//接口继承，如果是类的话就用原型属性，否者就用本身，但是会继承所有方法
 			mix(prop, item.prototype || item, true);
 		}
 	}

@@ -3,6 +3,8 @@
  * 2015.02.28
  * 事件类
  * version: 1.0.1
+ * 2015,07,12
+ * 1.修改了trigger的返回值，除了回调函数返回false以外都是为true
  */
 define(function(require, exports) {
 
@@ -92,12 +94,12 @@ define(function(require, exports) {
 			if(ns && meEvents && (meEventsSpace = meEvents[ns.eventType])){
 				//存在事件的命名空间
 				if(ns.nameSpace){
-					(meEventsNameSpace = meEventsSpace[ns.nameSpace]) && eachTrigger(meEventsNameSpace, me, args);
+					return (meEventsNameSpace = meEventsSpace[ns.nameSpace]) && eachTrigger(meEventsNameSpace, me, args);
 				}else{
-					eachTrigger(meEventsSpace, me, args);
+					return eachTrigger(meEventsSpace, me, args);
 				}
 			}
-			return me;
+			return true;
 		},
 		clearEvents: function(){
 			var me = this;
@@ -151,9 +153,11 @@ define(function(require, exports) {
 	}
 	//循环触发
 	function eachTrigger(arr, context, args){
+		var val = true;
 		forEach(arr.slice(0), function(f){
-			f.apply(context, args);
+			f.apply(context, args) === false && (val = false);
 		});
+		return val;
 	}
 
 	//返回

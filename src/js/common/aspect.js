@@ -4,6 +4,8 @@
  * Aspect类
  * version: 1.0.0
  * 对事件增加 before after功能
+ * 2015,07,12
+ * 1.before after 的参数传递 before 会包含'方法'的函数，如果before返回false就无法触发 后面的 '方法' 和 after , after会有 '方法'的返回值和方法的参数
  */
 define(function(require, exports) {
 
@@ -58,13 +60,23 @@ define(function(require, exports) {
 		if(oldMethod && !oldMethod.__isAspect__ && indexOfArr(except, methodName) === -1){
 			//封装新的方法
 			newMethod = me[methodName] = function(){
-				var val;
+				var val,
+					args = arrProSlice.call(arguments);
+				//调整参数
+				args.unshift('beforeMethod.'+methodName);
 				//触发先
-				me.trigger('beforeMethod.'+methodName);
+				if( me.trigger.apply( me, args ) === false ){
+					return me;
+				}
+				//调整参数
+				args.shift();
 				//获取老的返回值
-				val = oldMethod.apply(me, arrProSlice.call(arguments));
+				val = oldMethod.apply(me, args);
+				//调整参数
+				args.unshift(val);
+				args.unshift('afterMethod.'+methodName);
 				//触发后
-				me.trigger('afterMethod.'+methodName);
+				me.trigger.apply(me, args);
 				return val;
 			}
 			newMethod.__isAspect__ = true;
