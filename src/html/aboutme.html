@@ -77,6 +77,9 @@
 
 <!-- 脚本入口 -->
 <script type="text/javascript">
+$(window).on('load', function(){
+	console.log('page load');
+});
 require(['bus/aboutme/main'], function(App){ new App });
 // seajs.use(['bus/aboutme/main'], function(App){ new App });
 </script>

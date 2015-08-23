@@ -34,6 +34,7 @@ define(function(require, exports, module) {
 			// 页面全部加载完后结束进度条
 			me.delegateEvents(me.jQuery(window), {
 				'load': function(){
+					console.log('class load');
 					me.pro.donePro();
 				}
 			});
