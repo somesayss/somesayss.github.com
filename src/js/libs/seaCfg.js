@@ -16,7 +16,7 @@ seajs.config({
         'attrs': 'common/attrs',
         'base': 'common/base',
         'widget': 'common/widget',
-        'util': 'common/util',
+        'limit': 'common/limit',
         '$': 'common/jQuery',
         '_': 'common/underscore',
         //arale Base

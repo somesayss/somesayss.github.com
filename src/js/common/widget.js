@@ -110,10 +110,12 @@ define(function(require, exports) {
 			}else{
 				element = $(element);
 			}
+
 			//如果element构建失败就抛出错误
 			if(element.length === 0){
-				me.log('element构建失败。');
+				me.limit.log('element构建失败。');
 			}
+
 			me.element = element;
 			return me;
 		},
@@ -141,9 +143,9 @@ define(function(require, exports) {
 			}
 		},
 		//构建私有属性
-		initProps: Base.K,
+		initProps: Base.limit.K,
 		//入口
-		setup: Base.K,
+		setup: Base.limit.K,
 		//增加属性
 		renderAttr: function(){
 			var me = this,
@@ -179,10 +181,10 @@ define(function(require, exports) {
 				recursiveEvents = me.recursiveAttrs('events'),
 				events = recursiveEvents.origin,
 				eventsArr = recursiveEvents.arr;
-			me.breakEachObj(attrsEvents, function(val, key){
+			me.limit.breakEachObj(attrsEvents, function(val, key){
 				!events[key] && eventsArr.push(key);
 			});
-			me.set('events',  me.extend( recursiveEvents.origin, attrsEvents ) );
+			me.set('events',  me.limit.extend( recursiveEvents.origin, attrsEvents ) );
 			me.set('eventsArr', eventsArr);
 			return me;
 		},
@@ -210,8 +212,8 @@ define(function(require, exports) {
 			//初始化被委托时间的对象
 			!me.delegateElements && (me.delegateElements = []);
 			//遍历
-			me.indexOfArr(me.delegateElements, element) === -1 && me.delegateElements.push(element);
-			me.breakEachArr(eventsArr, function(key, index){
+			me.limit.indexOfArr(me.delegateElements, element) === -1 && me.delegateElements.push(element);
+			me.limit.breakEachArr(eventsArr, function(key, index){
 				var keys = key.split(' '),
 					val = events[key],
 					val = typeof val === 'function' ? val : me[val] || me.K;
@@ -235,7 +237,7 @@ define(function(require, exports) {
 			else if(length === 1){
 				delegateElements = [].concat(element);
 			}
-			me.breakEachArr(delegateElements, function(val){
+			me.limit.breakEachArr(delegateElements, function(val){
 				val.off(widgetEventsNS + 'widgetCid' + me.widgetCid);
 			});
 			return me;
@@ -246,7 +248,7 @@ define(function(require, exports) {
 		},
 		jQuery: $,
 		//继承属性
-		Implements: domUtil,
+		Implements: {domUtil: domUtil},
 		//静态属性
 		Statics: [{
 					query: function(query){
@@ -255,7 +257,7 @@ define(function(require, exports) {
 							widgetCids = $(query).attr('widget-cid');
 						if(!widgetCids)
 							return null;
-						me.breakEachArr(widgetCids.split(','), function(val){
+						me.limit.breakEachArr(widgetCids.split(','), function(val){
 							var wid = cacheWidget['widgetCid' + val];
 							wid && arr.push(wid);
 						});
@@ -276,10 +278,11 @@ define(function(require, exports) {
 	function parseAttr(me, element){
 		var dataset;
 		if(dataset = element[0].dataset){
-			Base.breakEachObj(element[0].dataset, function(val, key){
+			Base.limit.breakEachObj(element[0].dataset, function(val, key){
 				setAttr(me, key, element);
 			});
 		}else{
+			console.log(element);
 			parseAttrByAttributes(element[0].attributes, function(val, key){
 				setAttr(me, key, element);
 			});
@@ -289,7 +292,7 @@ define(function(require, exports) {
 
 	//函数:用属性值解析
 	function parseAttrByAttributes(attributes, callback){
-		Base.breakEachArr(attributes, function(val, index){
+		Base.limit.breakEachArr(attributes, function(val, index){
 			var key = val.nodeName;
 			if(REX_DATA.test(key)){
 				key = RegExp.$1.slice(1).replace(REX_FIRST, function(a, b){
@@ -303,7 +306,7 @@ define(function(require, exports) {
 	//函数：
 	function formatEventsArr(events){
 		var arr = [];
-		Base.breakEachObj(events, function(val, key){
+		Base.limit.breakEachObj(events, function(val, key){
 			arr.push(key);
 		});
 		return arr;
@@ -317,9 +320,11 @@ define(function(require, exports) {
 		//销毁对象
 		delete cacheWidget['widgetCid'+widgetCid];
 		//删除对应的值
-		widgetCids.splice( me.indexOfArr(widgetCids, widgetCid), 1);
+		widgetCids.splice( me.limit.indexOfArr(widgetCids, widgetCid), 1);
 		//重新赋值
 		element.attr( 'widget-cid', widgetCids.join(',') );
+		// 如果等于空就删除这个属性
+		element.attr('widget-cid') === '' && element.removeAttr('widget-cid');
 	}
 
 	

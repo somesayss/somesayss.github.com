@@ -9,6 +9,8 @@ require.config({
         'aspect': 'common/aspect',
         'attrs': 'common/attrs',
         'base': 'common/base',
+        'widget': 'common/widget',
+        'limit': 'common/limit',
         '$': 'libs/jquery',
         'github': 'http://somesayss.github.io/src/js'
     },

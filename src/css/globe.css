@@ -1,6 +1,6 @@
 ﻿@charset "utf-8";
-*{-webkit-tap-highlight-color:rgba(0,0,0,0);}
-a{color:#666;}
+/* 功能 */
+*{-webkit-tap-highlight-color:rgba(0,0,0,0);vertical-align:top;}
 .fn-tran-100{transition:all .1s ease-in 0s;}
 .fn-tran-200{transition:all .2s ease-in 0s;}
 .fn-tran{transition:all 1s cubic-bezier(0, 1, .1, 1) 0s;}
@@ -25,9 +25,41 @@ a{color:#666;}
 .fn-ellipsis{text-overflow:ellipsis;white-space:nowrap;overflow:hidden;}
 .fn-bg-center{background-position:50%;background-size:contain;background-repeat:no-repeat;}
 .fn-bg-cover-center{background-position:50%;background-size:cover;background-repeat:no-repeat;}
-.fn-margin-middle{margin-left:auto;margin-right:auto;}
-/*新的全局 2014.10.9*/
-.fn-background-color-F00{background-color:#F00;}
-.fn-background-color-000{background-color:#000;}
-.fn-color-FFF{color:#FFF;}
-.fn-color-666{color:#666;}
+.fn-MaCe{margin-left:auto;margin-right:auto;}
+/* 迭代 */
+.fn-BaCoF00{background-color:#F00;}
+.fn-BaCo000{background-color:#000;}
+.fn-BaCo666{background-color:#666;}
+.fn-BaCoFFF{background-color:#FFF;}
+.fn-BaCoF2F2F2{background-color:#F2F2F2;}
+.fn-CoFFF{color:#FFF;}
+.fn-Co666{color:#666;}
+.fn-Co333{color:#333;}
+.fn-Co000{color:#000;}
+.fn-Co4d90fe{color:#4d90fe;}
+.fn-DiTa{display:table;}
+.fn-DiInBl{display:inline-block;}
+.fn-DiTaRo{display:table-row;}
+.fn-DiTaCe{display:table-cell;}
+.fn-FoWeBo{font-weight:bold;}
+.fn-FoSi14{font-size:14px;}
+.fn-FoSi16{font-size:16px;}
+.fn-FoSi20{font-size:20px;}
+.fn-He60{height:60px;}
+.fn-LiHe20{line-height:20px;}
+.fn-MaTo20{margin-top:20px;}
+.fn-PaAl5{padding:5px;}
+.fn-PaAl20{padding:20px;}
+.fn-PaLe2em{padding-left:2em;}
+.fn-PaRi20{padding-right:20px;}
+.fn-Wi100{width:100px;}
+.fn-Wi800{width:800px;}
+.fn-Wi1000{width:1000px;}
+.fn-TeAlLe{text-align:left;}
+.fn-TeAlRi{text-align:right;}
+.fn-TeAlCe{text-align:center;}
+.fn-TeDeUn{text-decoration:underline;}
+.fn-TeIn2em{text-indent:2em;}
+/* 模块 */
+.fn-link-blue{color:#4d90fe;}
+.fn-link-blue:hover{text-decoration:underline;}

@@ -83,15 +83,17 @@ define(function(require, exports, module) {
 
       // Collection Functions
       // --------------------
+      // 基础函数工具
 
       // The cornerstone, an `each` implementation, aka `forEach`.
       // Handles objects with the built-in `forEach`, arrays, and raw objects.
       // Delegates to **ECMAScript 5**'s native `forEach` if available.
       // EACH的实现
-      // 第一层干掉null undefined
+      // 第一层干掉null undefined 因为 这两个 length 属性会报错
       // 第二层过滤出array类型
       // 第三层过滤出 string(IE7-有BUG) function(没有value) nodeList JQobj window(bug) 这些length存在的对象
       // 其他那些length不存在的对象
+      // string nodeList jQobj 都是正常的，目前我了解的 就是要注意 function window 
       var each = _.each = _.forEach = function(obj, iterator, context) {
         if (obj == null) return;
         if (nativeForEach && obj.forEach === nativeForEach) {
@@ -286,6 +288,7 @@ define(function(require, exports, module) {
       // Can't optimize arrays of integers longer than 65,535 elements.
       // See: https://bugs.webkit.org/show_bug.cgi?id=80797
       // 获取最大值，如果对象是数组，并且首个是数字
+      // _.max([1,2,3])
       _.max = function(obj, iterator, context) {
         if (!iterator && _.isArray(obj) && obj[0] === +obj[0] && obj.length < 65535) {
           return Math.max.apply(Math, obj);
@@ -300,6 +303,8 @@ define(function(require, exports, module) {
       };
 
       // Return the minimum element (or element-based computation).
+      // 获取最小值
+      // _.min([1,2,3])
       _.min = function(obj, iterator, context) {
         if (!iterator && _.isArray(obj) && obj[0] === +obj[0] && obj.length < 65535) {
           return Math.min.apply(Math, obj);
@@ -314,6 +319,8 @@ define(function(require, exports, module) {
       };
 
       // Shuffle an array.
+      // 混淆数组
+      // _.shuffle([1,2,3]); => [3, 1, 2];
       _.shuffle = function(obj) {
         var rand;
         var index = 0;
@@ -327,11 +334,15 @@ define(function(require, exports, module) {
       };
 
       // An internal function to generate lookup iterators.
+      // 私有方法，确保sortBy第二个参数为函数
       var lookupIterator = function(value) {
         return _.isFunction(value) ? value : function(obj){ return obj[value]; };
       };
 
       // Sort the object's values by a criterion produced by an iterator.
+      // 对于对象的排序
+      // _.sortBy([{...}, {...}, {...}]);
+      // 这里他只做了void 0的判断，我觉得是不够的
       _.sortBy = function(obj, value, context) {
         var iterator = lookupIterator(value);
         return _.pluck(_.map(obj, function(value, index, list) {
@@ -344,6 +355,8 @@ define(function(require, exports, module) {
           var a = left.criteria;
           var b = right.criteria;
           if (a !== b) {
+            // if (a > b || isNaN(+a)) return 1;
+            // if (a < b || isNaN(+b)) return -1;
             if (a > b || a === void 0) return 1;
             if (a < b || b === void 0) return -1;
           }
@@ -352,6 +365,7 @@ define(function(require, exports, module) {
       };
 
       // An internal function used for aggregate "group by" operations.
+      // 
       var group = function(obj, value, context, behavior) {
         var result = {};
         var iterator = lookupIterator(value || _.identity);
@@ -364,6 +378,7 @@ define(function(require, exports, module) {
 
       // Groups the object's values by a criterion. Pass either a string attribute
       // to group by, or a function that returns the criterion.
+      // 分类
       _.groupBy = function(obj, value, context) {
         return group(obj, value, context, function(result, key, value) {
           (_.has(result, key) ? result[key] : (result[key] = [])).push(value);
@@ -382,11 +397,13 @@ define(function(require, exports, module) {
 
       // Use a comparator function to figure out the smallest index at which
       // an object should be inserted so as to maintain order. Uses binary search.
+      // 用二进制查询所在位置，如果 Number(x) = NaN 将会查询不到，因为 NaN < x or NaN > x 都是false
       _.sortedIndex = function(array, obj, iterator, context) {
         iterator = iterator == null ? _.identity : lookupIterator(iterator);
         var value = iterator.call(context, obj);
         var low = 0, high = array.length;
         while (low < high) {
+          // Math.floor( (low high)/2 )
           var mid = (low + high) >>> 1;
           iterator.call(context, array[mid]) < value ? low = mid + 1 : high = mid;
         }
@@ -394,6 +411,10 @@ define(function(require, exports, module) {
       };
 
       // Safely convert anything iterable into a real, live array.
+      // 如果是假值就返回空数组
+      // 如果是数组就返回他的拷贝
+      // 如果是可数对象就返回它的值 function(){} window 会返回 [undefined]
+      // 其他的返回它的值
       _.toArray = function(obj) {
         if (!obj) return [];
         if (_.isArray(obj)) return slice.call(obj);
@@ -402,6 +423,7 @@ define(function(require, exports, module) {
       };
 
       // Return the number of elements in an object.
+      // 长度，如果是数组等可数对象就返回长度，否者返回静态属性的个数
       _.size = function(obj) {
         if (obj == null) return 0;
         return (obj.length === +obj.length) ? obj.length : _.keys(obj).length;
@@ -409,10 +431,14 @@ define(function(require, exports, module) {
 
       // Array Functions
       // ---------------
+      // 数组的实用方法
 
       // Get the first element of an array. Passing **n** will return the first N
       // values in the array. Aliased as `head` and `take`. The **guard** check
       // allows it to work with `_.map`.
+      // 获取数组的第一个元素
+      // 第二个参数是可以获取第一个到第N个元素
+      // 第三个参数为true是确保返回第一个元素
       _.first = _.head = _.take = function(array, n, guard) {
         if (array == null) return void 0;
         return (n != null) && !guard ? slice.call(array, 0, n) : array[0];
@@ -422,12 +448,14 @@ define(function(require, exports, module) {
       // the arguments object. Passing **n** will return all the values in
       // the array, excluding the last N. The **guard** check allows it to work with
       // `_.map`.
+      // 获取开始到倒数个数(默认是倒数第二个)的数组
       _.initial = function(array, n, guard) {
         return slice.call(array, 0, array.length - ((n == null) || guard ? 1 : n));
       };
 
       // Get the last element of an array. Passing **n** will return the last N
       // values in the array. The **guard** check allows it to work with `_.map`.
+      // 获取数组最后位或者最后几位
       _.last = function(array, n, guard) {
         if (array == null) return void 0;
         if ((n != null) && !guard) {
@@ -441,16 +469,19 @@ define(function(require, exports, module) {
       // Especially useful on the arguments object. Passing an **n** will return
       // the rest N values in the array. The **guard**
       // check allows it to work with `_.map`.
+      // 获取第N(默认是第一个)个到最后一个
       _.rest = _.tail = _.drop = function(array, n, guard) {
         return slice.call(array, (n == null) || guard ? 1 : n);
       };
 
       // Trim out all falsy values from an array.
+      // 把为真的值都过滤出来
       _.compact = function(array) {
         return _.filter(array, _.identity);
       };
 
       // Internal implementation of a recursive `flatten` function.
+      // 私有方法，递归
       var flatten = function(input, shallow, output) {
         each(input, function(value) {
           if (_.isArray(value)) {
@@ -463,11 +494,15 @@ define(function(require, exports, module) {
       };
 
       // Return a completely flattened version of an array.
+      // 解除嵌套的数组
+      // 第二个参数是否需要递归去解除嵌套，默认是全部解除，true后只解除一层
       _.flatten = function(array, shallow) {
         return flatten(array, shallow, []);
       };
 
       // Return a version of the array that does not contain the specified value(s).
+      // 在数组中过滤出不同的元素 和 difference方法的不同之处是入参不同
+      // _.without([1,2,3], 2, 3); 应该说是difference的太监版
       _.without = function(array) {
         return _.difference(array, slice.call(arguments, 1));
       };
@@ -475,6 +510,8 @@ define(function(require, exports, module) {
       // Produce a duplicate-free version of the array. If the array has already
       // been sorted, you have the option of using a faster algorithm.
       // Aliased as `unique`.
+      // 去重复
+      // 有一个判断 如果确定数组是按照 从大到小排序的话会直接通过最大值判断这样去重的速度就更快
       _.uniq = _.unique = function(array, isSorted, iterator, context) {
         if (_.isFunction(isSorted)) {
           context = iterator;
@@ -495,12 +532,16 @@ define(function(require, exports, module) {
 
       // Produce an array that contains the union: each distinct element from all of
       // the passed-in arrays.
+      // 去重复的简单版
+      // _.union([...],[...],1);
       _.union = function() {
         return _.uniq(concat.apply(ArrayProto, arguments));
       };
 
       // Produce an array that contains every item shared between all the
       // passed-in arrays.
+      // 去重的反向版本 过滤的值，必须要在每个集合中出现
+      // _.intersection([..],[], [])
       _.intersection = function(array) {
         var rest = slice.call(arguments, 1);
         return _.filter(_.uniq(array), function(item) {
@@ -512,6 +553,8 @@ define(function(require, exports, module) {
 
       // Take the difference between one array and a number of other arrays.
       // Only the elements present in just the first array will remain.
+      // 在数组中过滤出不同的元素
+      // _.difference([1,2,3], 2, [3]);
       _.difference = function(array) {
         var rest = concat.apply(ArrayProto, slice.call(arguments, 1));
         return _.filter(array, function(value){ return !_.contains(rest, value); });
@@ -519,6 +562,8 @@ define(function(require, exports, module) {
 
       // Zip together multiple lists into a single array -- elements that share
       // an index go together.
+      // 混合数组
+      // _.zip([...],[...],[...]);
       _.zip = function() {
         var args = slice.call(arguments);
         var length = _.max(_.pluck(args, 'length'));
@@ -532,6 +577,9 @@ define(function(require, exports, module) {
       // Converts lists into objects. Pass either a single array of `[key, value]`
       // pairs, or two parallel arrays of the same length -- one of keys, and one of
       // the corresponding values.
+      // 数组 转换成 对象
+      // _.object([['a', 18], ['b', 19], ['c', 20]]);
+      // _.object(['a', 'b', 'c'], [18, 19, 20]);
       _.object = function(list, values) {
         if (list == null) return {};
         var result = {};
@@ -551,6 +599,9 @@ define(function(require, exports, module) {
       // Delegates to **ECMAScript 5**'s native `indexOf` if available.
       // If the array is large and already in sort order, pass `true`
       // for **isSorted** to use binary search.
+      // 获取遍历值，这个比原生的要弱
+      // 如果第二个参数存在切不是一个数字的时候
+      // 返回是的-1 原生的情况是可以查询到的 
       _.indexOf = function(array, item, isSorted) {
         if (array == null) return -1;
         var i = 0, l = array.length;
@@ -568,6 +619,7 @@ define(function(require, exports, module) {
       };
 
       // Delegates to **ECMAScript 5**'s native `lastIndexOf` if available.
+      // 从最后往前获取遍历值 如果from为非数字 返回-1
       _.lastIndexOf = function(array, item, from) {
         if (array == null) return -1;
         var hasIndex = from != null;
@@ -582,6 +634,8 @@ define(function(require, exports, module) {
       // Generate an integer Array containing an arithmetic progression. A port of
       // the native Python `range()` function. See
       // [the Python documentation](http://docs.python.org/library/functions.html#range).
+      // 一个区间
+      // _.range(0, 5, 2) => [0, 2, 4]
       _.range = function(start, stop, step) {
         if (arguments.length <= 1) {
           stop = start || 0;
@@ -611,6 +665,15 @@ define(function(require, exports, module) {
       // optionally). Binding with arguments is also known as `curry`.
       // Delegates to **ECMAScript 5**'s native `Function.bind` if available.
       // We check for `func.bind` first, to fail fast when `func` is undefined.
+      // 情况有两种，一个是非构造函数，一个是构造函数
+      // 当非构造函数的时候 绑定上下文
+      // 如果是构造函数的时候，返回被绑定构造函数的实例
+      // 和原生的bind的不同之处
+      // var A = function(){}
+      // var B = a.bind();
+      // var C = _.bind(A);
+      // new B instanceof A //true; new B instanceof B //true
+      // new C instanceof A //true; new C instanceof B //false
       _.bind = function(func, context) {
         var args, bound;
         if (func.bind === nativeBind && nativeBind) return nativeBind.apply(func, slice.call(arguments, 1));
@@ -629,6 +692,7 @@ define(function(require, exports, module) {
 
       // Bind all of an object's methods to that object. Useful for ensuring that
       // all callbacks defined on an object belong to it.
+      // 所有的函数都绑定obj的上下文
       _.bindAll = function(obj) {
         var funcs = slice.call(arguments, 1);
         if (funcs.length == 0) funcs = _.functions(obj);
@@ -637,6 +701,7 @@ define(function(require, exports, module) {
       };
 
       // Memoize an expensive function by storing its results.
+      // 缓存计算结果，这版本的设计是废的，后面改进了。
       _.memoize = function(func, hasher) {
         var memo = {};
         hasher || (hasher = _.identity);
@@ -648,6 +713,7 @@ define(function(require, exports, module) {
 
       // Delays a function for the given number of milliseconds, and then calls
       // it with the arguments supplied.
+      // 延迟触发
       _.delay = function(func, wait) {
         var args = slice.call(arguments, 2);
         return setTimeout(function(){ return func.apply(null, args); }, wait);
@@ -655,12 +721,18 @@ define(function(require, exports, module) {
 
       // Defers a function, scheduling it to run after the current call stack has
       // cleared.
+      // 异步 延迟触发的简易版
       _.defer = function(func) {
         return _.delay.apply(_, [func, 1].concat(slice.call(arguments, 1)));
       };
 
       // Returns a function, that, when invoked, will only be triggered at most once
       // during a given window of time.
+      // 确保间隔时间内触发回调的数量  一定会触发的回调会有两次 第一次 和 最后一次
+      // 比如说延迟1000
+      // 调用第一次会立刻触发
+      // 如果在1000秒以后再触发不影响立即触发
+      // 如果在1000面以内的触发，将会被延迟。有且只有一个。
       _.throttle = function(func, wait) {
         var context, args, timeout, result;
         var previous = 0;
@@ -690,6 +762,8 @@ define(function(require, exports, module) {
       // be triggered. The function will be called after it stops being called for
       // N milliseconds. If `immediate` is passed, trigger the function on the
       // leading edge, instead of the trailing.
+      // 确保在等待的时间一次调用，immediate 确保第一次调用
+      // 如果在这段时间内调用，将会重新被推迟
       _.debounce = function(func, wait, immediate) {
         var timeout, result;
         return function() {
@@ -708,6 +782,7 @@ define(function(require, exports, module) {
 
       // Returns a function that will be executed at most one time, no matter how
       // often you call it. Useful for lazy initialization.
+      // 确保值运行一次
       _.once = function(func) {
         var ran = false, memo;
         return function() {
@@ -722,6 +797,7 @@ define(function(require, exports, module) {
       // Returns the first function passed as an argument to the second,
       // allowing you to adjust arguments, run code before and after, and
       // conditionally execute the original function.
+      // 包裹函数，把被包裹的函数，当做参数传入包裹函数当做，作为第一个参数
       _.wrap = function(func, wrapper) {
         return function() {
           var args = [func];
@@ -732,6 +808,7 @@ define(function(require, exports, module) {
 
       // Returns a function that is the composition of a list of functions, each
       // consuming the return value of the function that follows.
+      // 符合函数 var c = _.compose(a, b); => a( b( c() ) )
       _.compose = function() {
         var funcs = arguments;
         return function() {
@@ -744,6 +821,7 @@ define(function(require, exports, module) {
       };
 
       // Returns a function that will only be executed after being called N times.
+      // 创建一个函数，当执行过N次之后才会被触发
       _.after = function(times, func) {
         if (times <= 0) return func();
         return function() {
@@ -758,7 +836,11 @@ define(function(require, exports, module) {
 
       // Retrieve the names of an object's properties.
       // Delegates to **ECMAScript 5**'s native `Object.keys`
-      _.keys = nativeKeys || function(obj) {
+      // 获取静态的键名
+      // 兼容的方法写错了
+      // 应该是判断的是 obj == null
+      _.keys = function(obj) {
+        // 1. if(obj == null) throw new TypeError('Cannot convert undefined or null to object')
         if (obj !== Object(obj)) throw new TypeError('Invalid object');
         var keys = [];
         for (var key in obj) if (_.has(obj, key)) keys[keys.length] = key;
@@ -766,6 +848,7 @@ define(function(require, exports, module) {
       };
 
       // Retrieve the values of an object's properties.
+      // 获取静态的值
       _.values = function(obj) {
         var values = [];
         for (var key in obj) if (_.has(obj, key)) values.push(obj[key]);
@@ -773,6 +856,7 @@ define(function(require, exports, module) {
       };
 
       // Convert an object into a list of `[key, value]` pairs.
+      // 获取静态的键值对
       _.pairs = function(obj) {
         var pairs = [];
         for (var key in obj) if (_.has(obj, key)) pairs.push([key, obj[key]]);
@@ -780,6 +864,7 @@ define(function(require, exports, module) {
       };
 
       // Invert the keys and values of an object. The values must be serializable.
+      // 反序列化键值对
       _.invert = function(obj) {
         var result = {};
         for (var key in obj) if (_.has(obj, key)) result[obj[key]] = key;
@@ -812,8 +897,12 @@ define(function(require, exports, module) {
       };
 
       // Return a copy of the object only containing the whitelisted properties.
+      // 获取一个对象的白名单
+      // _.pick({'a': 'a1', 'b': 'b1', 'c': 'c1' }, ['a', 'b']); => {a: "a1", b: "b1"}
+      // _.pick({'a': 'a1', 'b': 'b1', 'c': 'c1' }, 'a', 'b'); => {a: "a1", b: "b1"}
       _.pick = function(obj) {
         var copy = {};
+        // concat方法不修改原数组，所有用ArrayProto是安全的 ArrayProto 相当于一个全局的数组
         var keys = concat.apply(ArrayProto, slice.call(arguments, 1));
         each(keys, function(key) {
           if (key in obj) copy[key] = obj[key];
@@ -822,6 +911,8 @@ define(function(require, exports, module) {
       };
 
        // Return a copy of the object without the blacklisted properties.
+       // 获取一个对象的黑名单
+       // _.pick({'a': 'a1', 'b': 'b1', 'c': 'c1' }, ['a', 'b']); => {c: "c1"}
       _.omit = function(obj) {
         var copy = {};
         var keys = concat.apply(ArrayProto, slice.call(arguments, 1));
@@ -832,10 +923,14 @@ define(function(require, exports, module) {
       };
 
       // Fill in a given object with default properties.
+      // 获取的一个对象，把别的对象里面的新值给覆盖，
+      // _.defaults({'a': 'a1'}, {'a': 'a2','b': 'b1'}); => {a: "a1", b: "b1"}
       _.defaults = function(obj) {
         each(slice.call(arguments, 1), function(source) {
           if (source) {
             for (var prop in source) {
+              // 这个判断的话无法定义源值为null所以判断应该是
+              // if (obj[prop] === void(0)) obj[prop] = source[prop];
               if (obj[prop] == null) obj[prop] = source[prop];
             }
           }
@@ -844,6 +939,7 @@ define(function(require, exports, module) {
       };
 
       // Create a (shallow-cloned) duplicate of an object.
+      // 对象的浅拷贝
       _.clone = function(obj) {
         if (!_.isObject(obj)) return obj;
         return _.isArray(obj) ? obj.slice() : _.extend({}, obj);
@@ -852,6 +948,8 @@ define(function(require, exports, module) {
       // Invokes interceptor with the obj, and then returns obj.
       // The primary purpose of this method is to "tap into" a method chain, in
       // order to perform operations on intermediate results within the chain.
+      // 传递值
+      // _.tap([1,2,3], function(val){console.log(val)})
       _.tap = function(obj, interceptor) {
         interceptor(obj);
         return obj;
@@ -955,6 +1053,18 @@ define(function(require, exports, module) {
 
       // Is a given array, string, or object empty?
       // An "empty" object has no enumerable own-properties.
+      // 是否为空
+      // 为空的值有
+      // 1.undefined
+      // 2.null
+      // 3.1,0
+      // 4.‘’
+      // 5.true,false
+      // 6.[]
+      // 7.{}
+      // 8.function(){}
+      // 9.new Date()
+      // 10.new RegExp('a')
       _.isEmpty = function(obj) {
         if (obj == null) return true;
         if (_.isArray(obj) || _.isString(obj)) return obj.length === 0;
@@ -963,22 +1073,26 @@ define(function(require, exports, module) {
       };
 
       // Is a given value a DOM element?
+      // 是否是一个dom元素
       _.isElement = function(obj) {
         return !!(obj && obj.nodeType === 1);
       };
 
       // Is a given value an array?
       // Delegates to ECMA5's native Array.isArray
+      // 是否是数组
       _.isArray = nativeIsArray || function(obj) {
         return toString.call(obj) == '[object Array]';
       };
 
       // Is a given variable an object?
+      // 是否是个对象 判断一般的对象 比如 new String()
       _.isObject = function(obj) {
         return obj === Object(obj);
       };
 
       // Add some isType methods: isArguments, isFunction, isString, isNumber, isDate, isRegExp.
+      // 判断是否是这些对象
       each(['Arguments', 'Function', 'String', 'Number', 'Date', 'RegExp'], function(name) {
         _['is' + name] = function(obj) {
           return toString.call(obj) == '[object ' + name + ']';
@@ -987,6 +1101,7 @@ define(function(require, exports, module) {
 
       // Define a fallback version of the method in browsers (ahem, IE), where
       // there isn't any inspectable "Arguments" type.
+      // 对isArgumens的兼容
       if (!_.isArguments(arguments)) {
         _.isArguments = function(obj) {
           return !!(obj && _.has(obj, 'callee'));
@@ -1006,17 +1121,20 @@ define(function(require, exports, module) {
       // Is a given object a finite number?
       // isFinite存在BUG
       // http://stackoverflow.com/questions/27007501/underscore-js-calling-isnan-after-isfinite-function
-      // 对于 true,false,null,'', 返回的是true
-      // 用解析对象是否为数字增加对上述的判断
+      // 原生的判断极限会对入参进行 Number 操作
+      // 第一层会过滤出 数字型字符 null boolean number [] new Date
+      // 通过parseFloat 可以过滤出 boolean [] new Date
+      // 由于数字的 NaN 和 Infinity 直接被isFinite干掉了所以过滤出了真正的极限值
       _.isFinite = function(obj) {
         return isFinite(obj) && !isNaN(parseFloat(obj));
       };
 
       // Is the given value `NaN`? (NaN is the only number which does not equal itself).
-      // isNaN的BUG是对 undefined 判断为 true
-      // 第一层判断是判断 是否为 数字，但是NaN的类型是 number 
-      // 所以有第二层判断 NaN !== NaN 为true
-      // 我觉得 isNaN(obj) && obj !== obj; 这个实现
+      // 由于原生的isNaN会在判断的时候会预先 Number(obj) 格式化所以导致 'a' undefined 这些会被解析成NaN
+      // 所以用原生的判断会返回true导致isNaN判断出错
+      // 所以这里先过滤出数字型 NaN 也是数字型，但是只有NaN 是不等于自己的
+      // 这个判断是纯粹的判断 NaN
+      // 等价于_.isNaN = isNaN( +obj );
       _.isNaN = function(obj) {
         return _.isNumber(obj) && obj != +obj;
       };
@@ -1064,6 +1182,7 @@ define(function(require, exports, module) {
       };
 
       // Run a function **n** times.
+      // 
       _.times = function(n, iterator, context) {
         var accum = Array(n);
         for (var i = 0; i < n; i++) accum[i] = iterator.call(context, i);

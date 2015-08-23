@@ -55,7 +55,8 @@ define(function(require, exports, module) {
 			if(beforePro !== nowPro){
 				me.queue(function(next){
 					animate(me, beforePro, nowPro, me.get('speed'), function(diff){
-						me.setPath(diff)
+						me.setPath(diff);
+						diff === 100 && me.trigger('progressDone');
 					}, type);
 					setTimeout(next, me.get('speed'));
 				});	

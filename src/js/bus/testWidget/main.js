@@ -9,6 +9,18 @@ define(function(require, exports, module) {
 		araleWidget = require('araleWidget');
 
 
+
+	var A = Widget.extend({
+		attrs: {
+			element: '#aa'
+		}
+	});
+
+	var a = new A().get('str');
+	console.log(a, typeof a);
+
+	return;
+
 	var A = Widget.extend({
 		attrs: {
 			a: null

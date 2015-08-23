@@ -36,13 +36,15 @@
 		kiss: {
 			get: function(){
 				return this.title; //这个是可以用的
-				return this.title + '!!!'; //这个是用不了的	==> return person.get('title') + '!!!'; 不支持新API的浏览器只能这样写
+				return this.title + '!!!'; //这个是用不了的	==> return this.get('title') + '!!!'; 不支持新API的浏览器只能这样写
 			}
 		}
 	});
 	console.log(person.get('kiss'));
  *	2015.08.08
  *	1. 修改两处判断为 是否等于undefined 
+ *	2015.08.23
+ *	1.初始化方法分离
  * 
  * 
  */
@@ -60,11 +62,15 @@ define(function(require, exports) {
 
 	//事件类
 	var Attrs = Class.create({
-		//初始化
-		initAttrs: function(config){
+		// 基础的初始化，和属性初始化分离
+		initBseAttr: function(){
 			var me = this;
 			me.__attrs__ = me.__attrs__ || {};
 			me.__attrsName__ = me.__attrsName__ || [];
+		},
+		//初始化
+		initAttrs: function(config){
+			var me = this;
 			eachObj(extendObj(me.recursiveAttrs('attrs').origin, config), function(val, key){
 				me.set(key, val);
 			});
@@ -131,7 +137,7 @@ define(function(require, exports) {
 			var me = this,
 				some = me['__'+key+'__'];
 			if(!some){
-				me.initAttrs();
+				me.initBseAttr();
 				return me['__'+key+'__'];
 			}else{
 				return some;
@@ -306,7 +312,7 @@ define(function(require, exports) {
 	function fixGet(option, attrs){
 		var val;
 		if(noSetGet(option)){
-			return option && option.value || option;
+			return option && option.value;
 		}else{
 			val = option.get.call(attrs);
 			if(val && val.__isAttr__){

@@ -38,7 +38,6 @@ define(function(require, exports, module) {
 		//SVG的渲染
 		initSvg: function(){
 			var me = this,
-				element = me.get('element'),
 				radius = me.get('radius'),
 				widthHeiht = radius * 2;
 			//元素:SVG
@@ -47,7 +46,7 @@ define(function(require, exports, module) {
 				'width': widthHeiht,
 				'height': widthHeiht
 			})
-			element.append(svg);
+			me.element.append(svg);
 			//背景圆环
 			me.setPath( 100, renderPath( svg, me, me.get('backgroundColor') ) );
 			//存储
