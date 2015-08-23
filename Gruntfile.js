@@ -59,7 +59,7 @@ module.exports = function(grunt) {
     function setRequireJS(){
         var config = {};   
         config['options'] = requirejsCfg;
-        grunt.file.expand(requirejsCfg.baseUrl+'main/*/main.js').forEach(function(val){
+        grunt.file.expand(requirejsCfg.baseUrl+'bus/*/main.js').forEach(function(val){
             if(requirejsCfg.rex.test(val)){
                 val = RegExp.$1;
                 config[val] = {

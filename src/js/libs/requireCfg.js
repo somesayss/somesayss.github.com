@@ -1,7 +1,7 @@
 //配置
 require.config({
     //基础路径
-    baseUrl: "/src/js/",
+    baseUrl: "/dist/js/",
     //配置路径
     paths: {
         'class': 'common/class',
@@ -11,7 +11,8 @@ require.config({
         'base': 'common/base',
         'widget': 'common/widget',
         'limit': 'common/limit',
-        '$': 'libs/jquery',
+        '_': 'common/underscore',
+        '$': 'common/jQuery',
         'github': 'http://somesayss.github.io/src/js'
     },
     //插件

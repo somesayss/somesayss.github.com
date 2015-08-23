@@ -1,4 +1,4 @@
-/*! hello-grunt 2015-05-26 */
+/*! hello-grunt 2015-08-23 */
 /*! jQuery v1.9.1 | (c) 2005, 2012 jQuery Foundation, Inc. | jquery.org/license
 */
 !function(a, b) {
@@ -3278,10 +3278,12 @@
 }(), //配置
 seajs.config({
     //基础路径
-    base: "/dist/js/",
+    base: "/src/js/",
     //配置路径
     paths: {
-        github: "http://somesayss.github.io/src/js"
+        github: "http://somesayss.github.io/src/js",
+        //支付宝
+        arale: "https://a.alipayobjects.com/arale"
     },
     //别名配置
     alias: {
@@ -3289,6 +3291,14 @@ seajs.config({
         events: "common/events",
         aspect: "common/aspect",
         attrs: "common/attrs",
-        base: "common/base"
+        base: "common/base",
+        widget: "common/widget",
+        limit: "common/limit",
+        $: "common/jQuery",
+        _: "common/underscore",
+        //arale Base
+        araleBase: "arale/base/1.1.1/base",
+        //arale widget
+        araleWidget: "arale/widget/1.1.1/widget"
     }
 });
