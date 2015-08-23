@@ -30,14 +30,13 @@ define(function(require, exports, module) {
 		setup: function(){
 			var me = this;
 			// 启动进度条
-			me.pro.startPro(40).incPro(60);
+			me.pro.startPro(60);
 			// 页面全部加载完后结束进度条
-			me.delegateEvents(me.jQuery(window), {
+			document.readyState !== 'complete' ? me.delegateEvents(me.jQuery(window), {
 				'load': function(){
-					console.log('class load');
 					me.pro.donePro();
 				}
-			});
+			}): me.pro.donePro();
 		}
 	});
 
