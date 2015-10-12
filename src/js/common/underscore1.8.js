@@ -137,6 +137,7 @@ define(function(require, exports, module) {
         var length = collection != null && collection.length;
         return typeof length == 'number' && length >= 0 && length <= MAX_ARRAY_INDEX;
       };
+      _.isArrayLike = isArrayLike;
 
       // Collection Functions
       // --------------------
@@ -1552,6 +1553,6 @@ define(function(require, exports, module) {
           return _;
         });
       }
-    }.call(this));
+    }.call({}));
 
 });

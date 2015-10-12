@@ -16,28 +16,25 @@
 <!-- 已打包CSS -->
 <link rel="stylesheet" type="text/css" href="/dist/css/main.min.css" />
 
-
-
-<!-- requireJS未打包脚本 -->
-<!-- <script type="text/javascript" charset="utf-8" src="/src/js/libs/jquery.js"></script>
-<script type="text/javascript" charset="utf-8" src="/src/js/libs/require.js"></script>
-<script type="text/javascript" charset="utf-8" src="/src/js/libs/requireCfg.js"></script> -->
-<!-- requireJS已打包 -->
-<!-- <script type="text/javascript" charset="utf-8" src="/dist/js/libs/main-require.min.js"></script> -->
-
-
-<!-- seaJS未打包脚本 -->
-<script type="text/javascript" charset="utf-8" src="/src/js/libs/jquery.js"></script>
-<script type="text/javascript" charset="utf-8" src="/src/js/libs/sea.js"></script>
-<script type="text/javascript" charset="utf-8" src="/src/js/libs/seaCfg.js"></script>
-<!-- seaJS已打包脚本 -->
+<!-- 脚本入口 -->
+	<!-- requireJS -->
+		<!-- <script type="text/javascript" charset="utf-8" src="/src/js/libs/jquery.js"></script>
+		<script type="text/javascript" charset="utf-8" src="/src/js/libs/require.js"></script>
+		<script type="text/javascript" charset="utf-8" src="/src/js/libs/requireCfg.js"></script> -->
+		<!-- <script type="text/javascript" charset="utf-8" src="/dist/js/libs/main-require.min.js"></script> -->
+	<!-- requireJS -->
+	<!-- seaJS -->
+		<script type="text/javascript" charset="utf-8" src="/dist/js/libs/main-sea.min.js"></script>
+	<!-- seaJS -->
+<!-- /脚本入口 -->
 
 <!-- /公用静态资源 -->
 </head>
-<body>
-<div style="width:500px;height:300px;">
+<body data-debug="1">
+<div style="width:500px;height:300px;" id="div">
 	<div style="padding:10%;">123</div>
 </div>
+
 
 <select name="" id="select">
 	<option value="a">aaaaaa</option>
@@ -45,10 +42,55 @@
 	<option value="c">cccccc</option>
 </select>
 
-<!-- 脚本入口 -->
-<script type="text/javascript">
-// require(['main/pie/main']);
-seajs.use(['main/underscore/main']);
-</script>
+<div style="height:100px;overflow:auto;width:100px;" id="scroll">
+	1<br />
+	2<br />
+	3<br />
+	4<br />
+	5<br />
+	1<br />
+	2<br />
+	3<br />
+	4<br />
+	5<br />
+	1<br />
+	2<br />
+	3<br />
+	4<br />
+	5<br />
+	1<br />
+	2<br />
+	3<br />
+	4<br />
+	5<br />
+	1<br />
+	2<br />
+	3<br />
+	4<br />
+	5<br />
+	1<br />
+	2<br />
+	3<br />
+	4<br />
+	5<br />
+	1<br />
+	2<br />
+	3<br />
+	4<br />
+	5<br />
+	1<br />
+	2<br />
+	3<br />
+	4<br />
+	5<br />
+</div>
+<div style="height:100px;"></div>
+
+<iframe src="" frameborder="0"></iframe>
+
+
+
+
+
 </body>
 </html>

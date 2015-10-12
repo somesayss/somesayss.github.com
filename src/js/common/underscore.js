@@ -956,6 +956,7 @@ define(function(require, exports, module) {
       };
 
       // Internal recursive comparison function for `isEqual`.
+      // 对象的判断 相当于 == 操作符的提升版本 PS:[1]==1;//true
       var eq = function(a, b, aStack, bStack) {
         // Identical objects are equal. `0 === -0`, but they aren't identical.
         // See the Harmony `egal` proposal: http://wiki.ecmascript.org/doku.php?id=harmony:egal.

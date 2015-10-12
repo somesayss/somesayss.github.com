@@ -45,7 +45,8 @@
  *	1. 修改两处判断为 是否等于undefined 
  *	2015.08.23
  *	1.初始化方法分离
- * 
+ * 	2015.09.23
+ * 	1.增加方法 resetAttrs
  * 
  */
 define(function(require, exports) {
@@ -72,6 +73,13 @@ define(function(require, exports) {
 		initAttrs: function(config){
 			var me = this;
 			eachObj(extendObj(me.recursiveAttrs('attrs').origin, config), function(val, key){
+				me.set(key, val);
+			});
+		},
+		//重新设置
+		resetAttrs: function(config){
+			var me = this;
+			eachObj(config, function(val, key){
 				me.set(key, val);
 			});
 		},

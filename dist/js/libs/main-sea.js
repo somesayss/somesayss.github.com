@@ -1,4 +1,4 @@
-/*! hello-grunt 2015-08-23 */
+/*! hello-grunt 2015-09-23 */
 /*! jQuery v1.9.1 | (c) 2005, 2012 jQuery Foundation, Inc. | jquery.org/license
 */
 !function(a, b) {
@@ -3275,30 +3275,49 @@
             h[b].exec(a.uri, c), a.onRequest();
         }), a.requested = !0);
     }), define("seajs/seajs-text/1.0.2/seajs-text", [], {});
-}(), //配置
-seajs.config({
-    //基础路径
-    base: "/src/js/",
-    //配置路径
-    paths: {
-        github: "http://somesayss.github.io/src/js",
-        //支付宝
-        arale: "https://a.alipayobjects.com/arale"
-    },
-    //别名配置
-    alias: {
-        "class": "common/class",
-        events: "common/events",
-        aspect: "common/aspect",
-        attrs: "common/attrs",
-        base: "common/base",
-        widget: "common/widget",
-        limit: "common/limit",
-        $: "common/jQuery",
-        _: "common/underscore",
-        //arale Base
-        araleBase: "arale/base/1.1.1/base",
-        //arale widget
-        araleWidget: "arale/widget/1.1.1/widget"
-    }
-});
+}(), function(a, b, c) {
+    //配置
+    b.config({
+        //基础路径
+        base: "/dist/js/",
+        //配置路径
+        paths: {
+            github: "http://somesayss.github.io/src/js",
+            //支付宝
+            arale: "https://a.alipayobjects.com/arale"
+        },
+        //别名配置
+        alias: {
+            "class": "common/class",
+            events: "common/events",
+            aspect: "common/aspect",
+            attrs: "common/attrs",
+            base: "common/base",
+            widget: "common/widget",
+            limit: "common/limit",
+            $: "common/jQuery",
+            _: "common/underscore1.8",
+            //arale Base
+            araleBase: "arale/base/1.1.1/base",
+            //arale widget
+            araleWidget: "arale/widget/1.1.1/widget"
+        }
+    });
+    // 路由 http://localhost:9000/src/html/ang.html => ang
+    var d = /\/html\/(.+)\./, e = [], f = Array.prototype, g = f.concat, h = f.slice;
+    b.add = function() {
+        return e = g.apply(e, h.call(arguments));
+    }, // DOM加载完成
+    a(function() {
+        var f = a("body"), g = f.data("init");
+        // 如果是线上地址
+        (b.online || f.data("debug")) && b.config({
+            base: "/src/js/"
+        }), // 自动加载 加载顺序 业务资源是最后加载的
+        b.use(e.concat([ "string" == typeof g ? g : "bus/" + c.href.match(d)[1] + "/main" ]), function() {
+            a.each(arguments, function() {
+                "function" == typeof this && new this();
+            });
+        });
+    });
+}(jQuery, seajs, location);

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" ng-app="myApp">
+<!-- <html xmlns="http://www.w3.org/1999/xhtml" class="ng-app: myApp"> -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="renderer" content="webkit"><!-- 360浏览器切换内核 webkit | ie-comp[IE6/7]? | ie-stand[IE8910]? -->
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1"><!-- 手机头部设置 -->
+<meta name="description" content="" />
+<meta name="keywords" content=""  />
+<title>angularJS</title>
+<!-- #公用静态资源 -->
+	<!-- 未打包CSS -->
+	<link rel="stylesheet" type="text/css" href="/src/css/reset.css" />
+	<link rel="stylesheet" type="text/css" href="/src/css/globe.css" />
+	<link rel="stylesheet" type="text/css" href="/src/css/main.css" />
+	<!-- 已打包CSS -->
+	<!-- <link rel="stylesheet" type="text/css" href="/dist/css/main.min.css" /> -->
+
+	<!-- angularJS脚本引用 -->
+	<script type="text/javascript" charset="utf-8" src="/src/js/libs/angular-1.0.1.min.js"></script>
+<!-- /公用静态资源 -->
+
+<style type="text/css">
+.data-table td{padding:5px;border:1px solid #CCC;vertical-align:top;line-height:22px;}
+.data-table input{width:120px;border:1px solid #CCC;padding:3px 5px;line-height:14px;height:14px;vertical-align:top;border-radius:3px;}
+.data-table select{border:1px solid #CCC;border-radius:0;width:50px;height:22px;padding:0 5px;border-radius:3px;}
+.data-no-deit .show{display:none;}
+.data-no-deit .hide{display:inline;}
+.data-deit .show{display:inline;}
+.data-deit .hide{display:none;}
+.co{color:#F00;[color:#F00;color:#000;]/*safari hack*/}
+</style>
+
+</head>
+<body>
+<div class="co">123</div>
+<div ng-controller="testCtrl">
+	hello {{name}}
+	<ul>
+		<li ng-repeat="key in list">{{key.name}},{{key.age}}</li>
+	</ul>
+</div>
+
+
+<script type="text/javascript">
+;(function(){
+
+	// 应用模块定义
+	var app = angular.module('myApp', [], function(){
+		console.log('RUN!!');
+	});
+
+	// 应用控制器
+	app.controller('testCtrl', function($scope, $timeout){
+		$scope.name = 'world';
+		$scope.list = [{name:'小白', age: 19}, {name:'小黑', age: 20}];
+
+		setTimeout(function(){
+			$scope.name = 'world123';
+			$scope.list[1].name = '小花';
+			$scope.list[1].age = 21;
+			$scope.$digest();
+		},1000);
+
+	});
+
+})();
+</script>
+</body>
+</html>

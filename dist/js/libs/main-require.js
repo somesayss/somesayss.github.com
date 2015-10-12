@@ -1,4 +1,4 @@
-/*! hello-grunt 2015-08-23 */
+/*! hello-grunt 2015-09-23 */
 /*! jQuery v1.9.1 | (c) 2005, 2012 jQuery Foundation, Inc. | jquery.org/license
 */
 !function(a, b) {
@@ -3988,7 +3988,7 @@ var requirejs, require, define;
 }(this), //配置
 require.config({
     //基础路径
-    baseUrl: "/dist/js/",
+    baseUrl: "/src/js/",
     //配置路径
     paths: {
         "class": "common/class",
@@ -3998,7 +3998,7 @@ require.config({
         base: "common/base",
         widget: "common/widget",
         limit: "common/limit",
-        _: "common/underscore",
+        _: "common/underscore1.8",
         $: "common/jQuery",
         github: "http://somesayss.github.io/src/js"
     },

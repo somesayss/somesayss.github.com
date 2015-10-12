@@ -74,6 +74,13 @@ define(function(require, exports, module) {
 		"time": "2014.01",
 		"mark": "来回大概开了7个小时",
 		"defaultShow": true
+	}, {
+		"point": [119.065113,30.258058],
+		"name": "杭州 临安 [浙西大峡谷]",
+		"time": "2015.09",
+		"mark": "下次别去了"
 	}]
+
+
 
 });

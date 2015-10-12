@@ -71,10 +71,10 @@ define(function(require, exports, module) {
 				points = [];
 
 			// 初始化标记
-			me.breakEachArr(me.get('mapMarks'), function(val){
+			me.limit.each(me.get('mapMarks'), function(val){
 				var point = new BMap.Point(val.point[0], val.point[1]),
 					marker = new BMap.Marker( point ),
-					label = new BMap.Label([val.name, val.time, val.mark].join('<br />'), { offset: new BMap.Size(15, val.mark ? -55 : -40) });
+					label = new BMap.Label([val.name, val.time, val.mark].join('<br />') + '<i class="traveSan"></i>', { offset: new BMap.Size(15, val.mark ? -55 : -40) });
 				points.push(point);
 				// 设置样式
 				label.setStyle(mapLabelStyle);
@@ -87,12 +87,12 @@ define(function(require, exports, module) {
 				// 增加事件
 				marker.addEventListener('click', function(){
 					// 其他
-					!label.Da && me.breakEachArr(labels, function(val){
+					!label.Ea && me.limit.breakEach(labels, function(val){
 						// 如果当前是隐藏
 						 label !== val && val.hide();
 					});
 					// 当前
-					label[label.Da ? 'hide' : 'show']();
+					label[label.Ea ? 'hide' : 'show']();
 				});
 				// 默认显示
 				val.defaultShow && map.addEventListener('tilesloaded', function main(){
