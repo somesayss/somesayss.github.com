@@ -73,14 +73,13 @@ $COLOR_BULE: #4d90fe;
 /** 模块：选择框 */
 .fn-select{
 	@extend .fn-focus;
-	border:1px solid #CCC;height:30px;border-radius:0;background:#FFF;padding:6px 9px;-webkit-appearance:menulist-button;
+	border:1px solid #CCC;height:30px;border-radius:0;background:#FFF;padding:6px 9px;-webkit-appearance:menulist-button;color:#666;
 }/** 基础高度30 */
 .fn-select-sm{height:25px;}/** 小号版高度25 */
 /** 模块：文本域 */
 .fn-textarea{
 	@extend .fn-input;
-	resize:none;
-	line-height:1.5em;
+	resize:none;line-height:1.5em;overflow:hidden;
 }
 /** 模块：表格 */
 .fn-table{
