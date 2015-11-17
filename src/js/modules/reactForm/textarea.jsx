@@ -17,7 +17,7 @@ define(function(require, exports, module) {
 				node = me.node,
 				scrollHeight;
 			me.changeHandler(e);
-			node.height( me.props.height || 16 );
+			node.height( me.props.height || 16 ).prop('scrollTop', 0);
 			scrollHeight = node.prop('scrollHeight');
 			if(scrollHeight > me.scrollHeight){
 				node.height(scrollHeight - me.padHeight);
