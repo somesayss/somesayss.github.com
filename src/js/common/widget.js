@@ -18,22 +18,36 @@
  * 	1. 事件的绑定命名空间增加了CID
  * 	2. 增加静态属性query获取组件
  * 	3. 正确的销毁组件
+ * 2015,11,03
+ * 	1.子页面无法获取父页面的组件的问题
  */
 define(function(require, exports) {
 
 	//依赖
-	var Base = require('base'),
-		$ = require('$'),
-		domUtil = require('common/domUtil');
+	var $ = require('$'),
+		Base = require('base'),
+		limitDom = require('common/limitDom');
 
-	//变量
-	var cid = 0,
-		widgetEventsNS = '.widgetEvents',
+
+	// 变量
+	var widgetEventsNS = '.widgetEvents',
+		WIN = window,
 		DOC = document,
 		BODY = DOC.body,
-		cacheWidget = {}, //存储组件的地方
 		REX_DATA = /^data((?:-.+)+)$/,	//严格匹配 data-a-b 只能一个"-"小写 这个有点弱
 		REX_FIRST = /-([a-z])/g;// -a--b => a-B; -a-_b => a_b
+
+	// 全局的
+	var cacheWidget = WIN.cacheWidget = {};//存储组件的地方
+	cacheWidget.cid = 0;
+
+	// 如果存在window.opener
+	var winOpener = WIN.opener;
+	winOpener && Base.limit.extend(cacheWidget, winOpener.cacheWidget);
+
+	// 如果window.parent === window
+	var winParent = WIN.parent;
+	winParent !== WIN && Base.limit.extend(cacheWidget, winParent.cacheWidget);
 
 	//类
 	var Widget = Base.extend({
@@ -61,7 +75,7 @@ define(function(require, exports) {
 			//属性的初始化
 			Widget.superClass.init.call(me, config);
 			//构建element
-			me.parseElement();
+			if( !me.parseElement() ) return me;
 			//对element上的属性进行解析然后设置属性
 			me.parseElementAttr();
 			//构建triggerNode
@@ -69,7 +83,7 @@ define(function(require, exports) {
 			//解析Trigger上的属性
 			me.parseTriggerAttr();
 			//初始化widgetID
-			me.widgetCid = '' + cid++;
+			me.widgetCid = '' + ++cacheWidget.cid;
 			//存储组件
 			cacheWidget['widgetCid'+me.widgetCid] = me;
 			//构建私有属性
@@ -113,11 +127,11 @@ define(function(require, exports) {
 
 			//如果element构建失败就抛出错误
 			if(element.length === 0){
-				me.limit.log('element构建失败。');
+				return me.limit.log('element构建失败。');
+			}else{
+				me.element = element;
+				return me;
 			}
-
-			me.element = element;
-			return me;
 		},
 		//解析element上的属性
 		parseElementAttr: function(){
@@ -249,7 +263,7 @@ define(function(require, exports) {
 		},
 		jQuery: $,
 		//继承属性
-		Implements: {domUtil: domUtil},
+		Implements: {limitDom: limitDom},
 		//静态属性
 		Statics: {
 					query: function(query){
@@ -262,9 +276,9 @@ define(function(require, exports) {
 							var wid = cacheWidget['widgetCid' + val];
 							wid && arr.push(wid);
 						});
-						return arr.length === 1 ? arr[0] : arr;
+						return me.limit.getArray(arr);
 					},
-					domUtil: domUtil
+					limitDom: limitDom
 				}
 	});
 	
@@ -279,12 +293,11 @@ define(function(require, exports) {
 	//函数:解析节点的data-api
 	function parseAttr(me, element){
 		var dataset;
-		if(dataset = element[0].dataset){
-			Base.limit.each(element[0].dataset, function(val, key){
+		if( dataset = element[0].dataset ){
+			Base.limit.each(dataset, function(val, key){
 				setAttr(me, key, element);
 			});
 		}else{
-			console.log(element);
 			parseAttrByAttributes(element[0].attributes, function(val, key){
 				setAttr(me, key, element);
 			});

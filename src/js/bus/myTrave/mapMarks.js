@@ -79,8 +79,10 @@ define(function(require, exports, module) {
 		"name": "杭州 临安 [浙西大峡谷]",
 		"time": "2015.09",
 		"mark": "下次别去了"
+	}, {
+		"point": [119.489093,30.633429],
+		"name": "湖州 安吉 [赋石水库]",
+		"time": "2015.10"
 	}]
-
-
 
 });

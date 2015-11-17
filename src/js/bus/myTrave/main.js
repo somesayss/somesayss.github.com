@@ -13,8 +13,6 @@ define(function(require, exports, module) {
 		className: 'MyTrave',
 		// 属性
 		attrs: {
-			// 元素
-			element: '#map',
 			// 坐标点
 			mapMarks: require('./mapMarks')
 		}

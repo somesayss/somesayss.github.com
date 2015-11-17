@@ -34,10 +34,23 @@ define(function(require, exports, module) {
 			setTimeout(function(){
 				// text1.replaceData(3, 8, me.get('soure').name);
 			}, 1000);
-			
+				
+			// console.log('Ang', this.element);
+
+
 			// console.log( me.formate() );
+
 		}
 	});
 
 
+
+	var a = ['a1', 'a2', 'a3'];
+
+
+	var b = {"a": "a1", "b": "a2", "c": "a3"};
+
+	console.log( limit.contains(b, 'a3') );
+
+	return Ang;
 });

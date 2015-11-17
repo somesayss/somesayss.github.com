@@ -112,7 +112,50 @@ module.exports = function(grunt) {
                 },
                 // '**' 表示包含所有的子目录
                 // '*' 表示包含所有的文件
-                files: ['src/**/*']
+                files: ['src/**/*', '!src/css/**/*.scss', '!src/js/**/*.jsx']
+            },
+            // 监听less文件夹里面的文件
+            sass: {
+                files: ['src/css/**/*.scss'],
+                tasks: ['sass'],
+                options: {
+                    spawn: false,
+                    livereload: lrPort
+                }
+            },
+            // 监听react文件
+            react: {
+                files: ['src/js/**/*.jsx'],
+                tasks: ['react'],
+                options: {
+                    spawn: false,
+                    livereload: lrPort
+                }
+            }
+
+        },
+        // 编译sass
+        sass: {
+            development: {
+                files: [{
+                    expand: true,
+                    cwd: 'src/css',
+                    src: ['**/*.scss'],
+                    dest: 'src/css',
+                    ext: '.css'
+                }]
+            }
+        },
+        // 编译react
+        react: {
+            development: {
+                files: [{
+                    expand: true,
+                    cwd: 'src/js',
+                    src: ['**/*.jsx'],
+                    dest: 'src/js',
+                    ext: '.js'
+                }]
             }
         },
         //JS打包配置
@@ -214,6 +257,12 @@ module.exports = function(grunt) {
     //seajs
     grunt.loadNpmTasks('grunt-cmd-transport');
     grunt.loadNpmTasks('grunt-cmd-concat');
+    // less
+    grunt.loadNpmTasks('grunt-contrib-less');
+    // sass
+    grunt.loadNpmTasks('grunt-contrib-sass');
+    // react
+    grunt.loadNpmTasks('grunt-react');
 
 
     // 自定义任务
@@ -222,6 +271,7 @@ module.exports = function(grunt) {
     grunt.registerTask('default', ['transport', 'concat', 'clean', 'uglify', 'cssmin']);
     //seajs
     grunt.registerTask('seajs', ['transport', 'concat']);
+
 
 
 

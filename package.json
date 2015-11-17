@@ -14,6 +14,9 @@
         "grunt-contrib-concat": "~0.3.0",
         "grunt-contrib-clean": "~0.4.0",
         "grunt-cmd-transport": "~0.5.1",
-        "grunt-cmd-concat" : "~0.2.8"
+        "grunt-cmd-concat" : "~0.2.8",
+        "grunt-contrib-less": "~1.0.0",
+        "grunt-contrib-sass": "~0.9.0",
+        "grunt-react": "~0.12.3"
     }
 }

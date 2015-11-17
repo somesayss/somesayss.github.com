@@ -1,4 +1,4 @@
-/*! hello-grunt 2015-09-23 */
+/*! hello-grunt 2015-10-19 */
 /*! jQuery v1.9.1 | (c) 2005, 2012 jQuery Foundation, Inc. | jquery.org/license
 */
 !function(a, b) {
@@ -3305,18 +3305,29 @@
     });
     // 路由 http://localhost:9000/src/html/ang.html => ang
     var d = /\/html\/(.+)\./, e = [], f = Array.prototype, g = f.concat, h = f.slice;
+    // 暴露出增加的方法
     b.add = function() {
         return e = g.apply(e, h.call(arguments));
     }, // DOM加载完成
     a(function() {
-        var f = a("body"), g = f.data("init");
+        var f = a("body"), g = b.init || f.data("init"), h = [], i = [];
         // 如果是线上地址
-        (b.online || f.data("debug")) && b.config({
+        (b.debug || f.data("debug")) && b.config({
             base: "/src/js/"
-        }), // 自动加载 加载顺序 业务资源是最后加载的
-        b.use(e.concat([ "string" == typeof g ? g : "bus/" + c.href.match(d)[1] + "/main" ]), function() {
-            a.each(arguments, function() {
-                "function" == typeof this && new this();
+        }), // 遍历节点
+        a("[widget]").each(function() {
+            var b = a(this);
+            h[i.push(b.attr("widget")) - 1] = b;
+        }), // 
+        // 自动加载 加载顺序 业务资源是最后加载的
+        // 顺序: 
+        // 1. widget="x";
+        // 2. sea.add('x');
+        // 3. sea.init('x');
+        e = i.concat(e), b.use(e.concat([ "string" == typeof g ? g : "bus/" + c.href.match(d)[1] + "/main" ]), function() {
+            a.each(arguments, function(a) {
+                var b = h[a], c = {};
+                b && (c[void 0 === b.attr("widget-trigger") ? "element" : "trigger"] = b), "function" == typeof this && new this(c);
             });
         });
     });

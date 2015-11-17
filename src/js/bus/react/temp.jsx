@@ -1,0 +1,83 @@
+"use strict";
+/**
+ * 业务
+ */
+define(function(require, exports, module) {
+
+	// 依赖
+	var $ = require('$'),
+		Event = require('events'),
+		limit = require('limit');
+
+	var Seed = React.createClass({
+		render: function(){
+			return <div>2234</div>
+		}
+	});
+
+	// 子节点
+	var Child = React.createClass({
+		getDefaultProps: function(){
+			return {
+				testString: "a",
+				testBoolean: true,
+				testFunction: function(){},
+				testNumber: 1,
+				testArray: [],
+				testArrayOf: ["a1", "a2"],
+				testObject: {},
+				testObjectOf: {a: "a1"},
+				testOneOf: "a1",
+				testOneOfType: "a1",
+				testAny: 1,
+				testElement: <Seed />,
+				testNode: [<Seed />], // 1 "a" undefined null false <Seed /> [...]
+				testInstanceOf: new String("a"),
+				testShape: {
+					string: "a1",
+					number: 123
+				},
+				other: "a2" //
+			};
+		},
+		propTypes: {
+			testString: React.PropTypes.string,
+			testBoolean: React.PropTypes.bool,
+			testFunction: React.PropTypes.func,
+			testNumber: React.PropTypes.number,
+			testArray: React.PropTypes.array,
+			testArrayOf: React.PropTypes.arrayOf(React.PropTypes.string),
+			testObject: React.PropTypes.object,
+			testObjectOf: React.PropTypes.objectOf(React.PropTypes.string),
+			testOneOf: React.PropTypes.oneOf(["a1", "a2"]),
+			testOneOfType: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.bool]),
+			testAny: React.PropTypes.any,
+			testElement: React.PropTypes.element,
+			testNode: React.PropTypes.node,
+			testInstanceOf: React.PropTypes.instanceOf(String),
+			testShape: React.PropTypes.shape({
+				string: React.PropTypes.string,
+				number: React.PropTypes.number
+			}),
+			other: function(props, propName, componentName){
+				if(props[propName] !== "a1"){
+					return new Error("error")
+				}
+			}
+		},
+		render: function(){
+			return (
+				<div onClick={this.clickHandler}>
+					点我 {this.props.content}
+				</div>
+			);
+		}
+	});
+
+	// 置入文档
+	ReactDOM.render(
+		<Child />,
+	    document.getElementById('search')
+  	);
+
+});

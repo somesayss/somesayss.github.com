@@ -341,7 +341,7 @@ define("common/widget-debug", [ "common/base-debug", "common/jQuery-debug", "com
             domUtil: domUtil
         },
         //静态属性
-        Statics: [ {
+        Statics: {
             query: function(query) {
                 var me = this, arr = [], widgetCids = $(query).attr("widget-cid");
                 if (!widgetCids) return null;
@@ -350,8 +350,9 @@ define("common/widget-debug", [ "common/base-debug", "common/jQuery-debug", "com
                     wid && arr.push(wid);
                 });
                 return arr.length === 1 ? arr[0] : arr;
-            }
-        }, domUtil ]
+            },
+            domUtil: domUtil
+        }
     });
     //函数:设置属性
     function setAttr(me, key, element) {
@@ -1332,8 +1333,8 @@ define("common/events-debug", [ "common/class-debug" ], function(require, export
 "use strict";
 
 /**
- * 2015.02.28
- * 工具类
+ * 2015.10.8
+ * 对ES的增强
  * version: 1.0.0
  */
 define("common/limit-debug", [], function(require, exports) {
@@ -1368,31 +1369,28 @@ define("common/limit-debug", [], function(require, exports) {
             type = "error";
         }
         log = con[type] || K;
-        // IE10下的IE8调试模式，console.log是个对象
+        // IE10下的IE8调试模式，console.log是个对象 纯IE8下 log = K;
         try {
-            // 如果是纯IE8下会进去这里，不会报错，且返回的是 'limitJS' 字符
             args.unshift("limitJS " + type + ":");
             log.apply(con, args);
         } catch (e) {
             log("limitJS ", args);
         }
     };
-    // 静态方法
-    var has = limit.has = function(n, k) {
-        // 排除null & undefined 他俩没有hasOwnProperty方法
-        return n != null && hasOwnProperty.call(n, k);
-    };
     ///////////////////////////////////////////////////////
     // 基础判断方法
-    // 需要判断的有
-    // 基础类型 string undefined null boolean number
-    // 引用类型 array function object data regexp error
-    // 特殊的有 arrayLike NaN finite element arguments
-    // 增加判断 empty isEqual
+    // 基础类型 isString[字符] isUndefined[未定义] isNull[空] isBoolean[布尔] isNumber[数字] isDefined[定义]
+    // 引用类型 isArray[数组] isFunction[函数] isObject[对象] isData[日期] isRegexp[正则] isError[错误]
+    // 特殊的有 isArrayLike[类数组] isNaN[非数字] isFinite[有限数] isElement[元素] isArguments[参数] isMath[数学]
+    // 增加判断 isEmpty[无] isEqual[是否一致] isBase[是否是基础类型]
     //////////////////////////////////////////////////////
     // 是否是未定义undefined
     var isUndefined = limit.isUndefined = function(n) {
         return n === void 0;
+    };
+    // 是否是定义
+    var isDefined = limit.isDefined = function(n) {
+        return !isUndefined(n);
     };
     // 是否是空null
     var isNull = limit.isNull = function(n) {
@@ -1412,8 +1410,8 @@ define("common/limit-debug", [], function(require, exports) {
             return toString.call(n) === "[object " + k + "]";
         };
     });
-    var isNumber = limit.isNumber, isArray = limit.isArray, isDate = limit.isDate, isRegExp = limit.isRegExp;
-    // 是否是对象
+    var isNumber = limit.isNumber, isArray = limit.isArray, isDate = limit.isDate, isMath = limit.isMath, isError = limit.isError, isRegExp = limit.isRegExp, isString = limit.isString;
+    // 是否是对象 除了5种基本类型以外都是对象
     var isObject = limit.isObject = function(n) {
         // typeof运算 function['function'] null['object'] 会有错误，对其进行纠正 还有个简单判断是 Object(n) === n;
         return isFunction(n) || typeof n === "object" && !!n;
@@ -1459,15 +1457,6 @@ define("common/limit-debug", [], function(require, exports) {
     };
     // 比较 Sting Number Boolean 这三种类型 值转换比较 new String('123') == '123'
     var equalBaseArr = [ "String", "Number", "Boolean" ];
-    // 判断三种基础类型
-    function equalBaseType(a) {
-        var type = "";
-        some(equalBaseArr, function(val, key) {
-            var fn = limit["is" + val];
-            return fn(a) && (type = val);
-        });
-        return type;
-    }
     // 判断基础类型
     function equalBase(a, b, type) {
         var fn = WIN[type];
@@ -1490,7 +1479,7 @@ define("common/limit-debug", [], function(require, exports) {
         if (limitIsNaN(a)) return true;
         // 基础类型String Number Boolean
         var type;
-        if (type = equalBaseType(a)) return equalBase(a, b, type);
+        if (type = isBase(a, equalBaseArr)) return equalBase(a, b, type);
         // 特殊类型 date
         if (isDate(a)) return +a === +b;
         // 特殊类型 regExp
@@ -1500,8 +1489,21 @@ define("common/limit-debug", [], function(require, exports) {
         // 类数组以及其他
         return equal(a, b);
     };
+    // 是否是基础类型
+    var baseArr = [ "String", "Number", "Boolean", "Null", "Undefined", "RegExp", "Date", "Math", "Error" ];
+    var isBase = limit.isBase = function(n, list) {
+        !isArray(list) && (list = baseArr);
+        var type = "";
+        // 默认是8种
+        some(list, function(val, key) {
+            var fn = limit["is" + val];
+            return fn && fn(n) && (type = val);
+        });
+        return type;
+    };
     /////////////////
     // 字符串的方法
+    // trim[去掉头尾空格]
     ////////////////
     // 去除两边的空格
     var REG_EXP_TRIM = /^\s+|\s+$/g;
@@ -1513,6 +1515,8 @@ define("common/limit-debug", [], function(require, exports) {
     };
     ///////////////
     // 数字的方法
+    // random[随机数] toFixed[四舍五入最后几位] plus[加] minus[减] multiply[乘] except[除]
+    // thousandSeparator[千分位] unThousandSeparator[逆千分位]
     //////////////
     // 随机数
     var random = limit.random = function(form, to) {
@@ -1521,6 +1525,23 @@ define("common/limit-debug", [], function(require, exports) {
         to = ~~to;
         var max = Math.max(form, to), min = Math.min(form, to);
         return Math.floor((max - min + 1) * Math.random() + min);
+    };
+    var REG_THOUSAND_SEPARATOR = /(\d{1,3})(?=(\d{3})+$)/g, REG_THOUSAND_SEPARATOR_POINT = /(\d{1,3})(?=(\d{3})+\.)/g, REG_THOUSAND_SEPARATOR_COMMA = /,/g;
+    // 千分位
+    limit.thousandSeparator = function(num, med) {
+        // 控制入参
+        if (!limitIsFinite(num)) return log("warn", "limit.thousandSeparator is called ", typeof num, ":", num), 
+        "";
+        if (!isNumber(med)) med = 2;
+        // 格式化
+        return toFixed(num, med).replace(med ? REG_THOUSAND_SEPARATOR_POINT : REG_THOUSAND_SEPARATOR, "$1,");
+    };
+    // 反千分位
+    limit.unThousandSeparator = function(str) {
+        // 控制入参
+        if (!isString(str)) return log("warn", "limit.unThousandSeparator is called ", typeof str, ":", str), 
+        NaN;
+        return +str.replace(REG_THOUSAND_SEPARATOR_COMMA, "");
     };
     // 数字的运算
     // 填充字符
@@ -1596,7 +1617,7 @@ define("common/limit-debug", [], function(require, exports) {
         // 控制入参scale为整数
         scale = ~~scale;
         // 对于0的快速处理
-        if (scale === 0) return +num;
+        if (scale === 0) return num;
         var leftStr, rightStr, sign = "";
         // 切割字符串
         num = num.split(".");
@@ -1610,7 +1631,7 @@ define("common/limit-debug", [], function(require, exports) {
         return scale < 0 ? movePointLeft(sign, leftStr, rightStr, -scale) : movePointRight(sign, leftStr, rightStr, scale);
     }
     // chrome下0.295.toFixed(2) => 0.29这里做了兼容
-    limit.toFixed = function(num, scale) {
+    var toFixed = limit.toFixed = function(num, scale) {
         // 控制入参size为正整数
         scale = positive(scale);
         var num = movePoint(num, scale);
@@ -1657,7 +1678,14 @@ define("common/limit-debug", [], function(require, exports) {
     };
     ///////////////
     // 对象的方法
+    // has[含有静态方法] create[实例化] forIn[遍历] keys[静态属性] size[静态属性的个数] 
+    // each[遍历静态属性] breakEach[可断开的遍历静态属性] extend[继承] defaults[反继承] clone[浅克隆] copy[深拷贝]
     //////////////
+    // 静态方法
+    var has = limit.has = function(n, k) {
+        // 排除null & undefined 他俩没有hasOwnProperty方法
+        return n != null && hasOwnProperty.call(n, k);
+    };
     // 空的构造函数
     var E = function() {};
     // 简单的创建原型链对象
@@ -1677,6 +1705,15 @@ define("common/limit-debug", [], function(require, exports) {
             return new E();
         }
     };
+    // 遍历
+    var forIn = limit.forIn = function(obj, iterator, context) {
+        // 排除 null undefined
+        if (obj == null) return obj;
+        for (var key in obj) {
+            iterator.call(context, obj[key], key, obj);
+        }
+        return obj;
+    };
     // 获取对象的静态属性
     // string array arguments nodeList 这三者只会查询到遍历值
     // 也就是说原生的类数组对象只会获取到遍历值
@@ -1685,10 +1722,10 @@ define("common/limit-debug", [], function(require, exports) {
         if (obj == null) return [];
         // 如果有原生的方法
         if (nativeKeys) return nativeKeys.call(Object, obj);
-        var arr = [], key;
-        for (key in obj) {
+        var arr = [];
+        forIn(obj, function(val, key) {
             has(obj, key) && arr.push(key);
-        }
+        });
         return arr;
     };
     // 键名的数量
@@ -1730,17 +1767,20 @@ define("common/limit-debug", [], function(require, exports) {
     var extend = limit.extend = function(obj, isOwn) {
         // 控制入参
         if (!isObject(obj)) return obj;
+        // 主函数
+        function main(val, key) {
+            obj[key] = val;
+        }
         // 默认是全部拷贝
         if (isOwn !== true) {
             each(slice.call(arguments, 1), function(val) {
                 // 继承所有的方法属性
-                if (val) for (var key in val) obj[key] = val[key];
+                forIn(val, main);
             });
         } else {
             each(slice.call(arguments, 2), function(val) {
-                each(val, function(val, key) {
-                    obj[key] = val;
-                });
+                // 继承静态的方法属性
+                each(val, main);
             });
         }
         return obj;
@@ -1749,29 +1789,91 @@ define("common/limit-debug", [], function(require, exports) {
     var defaults = limit.defaults = function(obj, isOwn) {
         // 控制入参
         if (!isObject(obj)) return obj;
+        // 主函数
+        function main(val, key) {
+            isUndefined(obj[key]) && (obj[key] = val);
+        }
         // 默认是全部拷贝
         if (isOwn !== true) {
             each(slice.call(arguments, 1), function(val) {
                 // 继承所有的方法属性
-                if (val) for (var key in val) isUndefined(obj[key]) && (obj[key] = val[key]);
+                forIn(val, main);
             });
         } else {
             each(slice.call(arguments, 2), function(val) {
-                each(val, function(val, key) {
-                    isUndefined(obj[key]) && (obj[key] = val);
-                });
+                // 继承静态的方法属性
+                each(val, main);
             });
         }
         return obj;
     };
-    // 克隆
-    var clone = limit.clone = function(obj, isOwn) {
-        // 控制入参
-        if (!isObject(obj)) return obj;
-        return isArray(obj) ? slice.call(obj) : extend({}, isOwn, obj);
+    // 浅拷贝
+    var clone = limit.clone = function(obj) {
+        // 如果是基础对象
+        if (isBase(obj)) {
+            return copy(obj);
+        }
+        // 如果是函数
+        if (isFunction(obj)) {
+            return extend(function() {
+                return obj.apply(this, arguments);
+            }, obj);
+        }
+        // 函数
+        if (isArray(obj)) {
+            return slice.call(obj);
+        }
+        // 其他
+        return extend({}, obj);
+    };
+    // 深拷贝
+    var copyArr = [ "String", "Number", "Boolean", "Null", "Undefined" ];
+    var copy = limit.copy = function(obj) {
+        var type;
+        // 如果是5个基础对象
+        if (type = isBase(obj, copyArr)) {
+            // 如果是对象
+            return isObject(obj) ? new WIN[type](obj.valueOf()) : obj;
+        }
+        // 如果是Math对象
+        if (isMath(obj)) {
+            return obj;
+        }
+        // 如果是正则对象
+        if (isRegExp(obj)) {
+            return new RegExp(obj.source, (obj.global ? "g" : "") + (obj.multiline ? "m" : "") + (obj.ignoreCase ? "i" : ""));
+        }
+        // 如果是日期对象
+        if (isDate(obj)) {
+            return new Date(obj.getTime());
+        }
+        // 如果是错误对象
+        if (isError(obj)) {
+            return new Error(obj.message);
+        }
+        var value = {};
+        // 如果是数组
+        if (isArray(obj)) {
+            value = [];
+        }
+        // 如果是函数
+        if (isFunction(obj)) {
+            value = function() {
+                return obj.apply(this, arguments);
+            };
+        }
+        // 拷贝属性
+        forIn(obj, function(val, key) {
+            value[key] = copy(val);
+        });
+        return value;
     };
     ///////////////
     // 数组的方法
+    // toArray[格式化数组] getArray[正确获取数组] indexOf[查询遍历值] lastIndexOf[往后查询遍历值] 
+    // forEach[遍历] map[重组]√ filter[赛选]√ every[全部符合]√ some[部分符合]√ 
+    // reduce[从左往右迭代] reduceRight[从右往左迭代] contains[是否在数组当中] union[去重] flatten[解除嵌套数组]
+    // whiteList[白名单] blacklist[黑名单]
     //////////////
     // 格式化数组
     var toArray = limit.toArray = function(obj) {
@@ -1779,6 +1881,21 @@ define("common/limit-debug", [], function(require, exports) {
         // 会影响的类型:string array nodeList jObject arguments
         return isArrayLike(obj) ? slice.call(obj) : (log("warn", obj, "change into [], limit.toArray is called"), 
         []);
+    };
+    // 获取数组
+    var getArray = limit.getArray = function(arr) {
+        // 控制入参
+        arr = toArray(arr);
+        switch (arr.length) {
+          case 0:
+            return null;
+
+          case 1:
+            return arr[0];
+
+          default:
+            return arr;
+        }
     };
     // 获取正序遍历值
     var indexOf = limit.indexOf = function(arr, ele, formIndex) {
@@ -1818,64 +1935,74 @@ define("common/limit-debug", [], function(require, exports) {
             iterator.call(this, val, +key, arr);
         }, context);
     };
-    // 遍历替换
+    // 遍历替换 支持对象√
     var map = limit.map = function(arr, iterator, context) {
+        // 如果是空就直接返回
+        if (isEmpty(arr)) return arr;
         // 控制入参
-        arr = toArray(arr);
+        isArrayLike(arr) && (arr = toArray(arr));
         // 确保是函数
         iterator = cb(iterator);
         // 如果有原生方法
-        if (nativeMap) return nativeMap.call(arr, iterator, context);
+        if (nativeMap === arr.map) return nativeMap.call(arr, iterator, context);
         // 初始化数组
-        var result = [];
+        var isArr = isArray(arr), result = isArr ? [] : {};
         // 遍历
-        forEach(arr, function(val, key) {
+        each(arr, function(val, key) {
             result[key] = iterator.call(this, val, key, arr);
         }, context);
         return result;
     };
     // 筛选
     var filter = limit.filter = function(arr, iterator, context) {
+        // 如果是空就直接返回
+        if (isEmpty(arr)) return arr;
         // 控制入参
-        arr = toArray(arr);
+        isArrayLike(arr) && (arr = toArray(arr));
         // 确保是函数
         iterator = cb(iterator);
         // 如果有原生方法
-        if (nativeFilter) return nativeFilter.call(arr, iterator, context);
+        if (nativeFilter === arr.filter) return nativeFilter.call(arr, iterator, context);
         // 初始化数组
-        var result = [];
-        forEach(arr, function(val, key) {
+        var isArr = isArray(arr), result = isArr ? [] : {};
+        isArr ? each(arr, function(val, key) {
             iterator.call(this, val, key, arr) && result.push(val);
-        }, context);
+        }, context) : each(arr, function(val, key) {
+            iterator.call(this, val, key, arr) && (result[key] = val);
+        });
         return result;
     };
-    // 全部为真
+    // 全部为真 支持对象√
     var every = limit.every = function(arr, iterator, context) {
+        // 如果是空直接返回
+        if (isEmpty(arr)) return false;
         // 控制入参
-        arr = toArray(arr);
+        isArrayLike(arr) && (arr = toArray(arr));
         // 确保是函数
         iterator = cb(iterator);
         // 如果有原生方法
-        if (nativeEvery) return nativeEvery.call(arr, iterator, context);
+        if (nativeEvery === arr.every) return nativeEvery.call(arr, iterator, context);
         // 初始化
-        var result = true;
+        var result = true, isArr = isArray(arr);
         breakEach(arr, function(val, key) {
-            if (!iterator.call(this, val, +key, arr)) return result = false;
+            if (!iterator.call(this, val, isArr ? +key : key, arr)) return result = false;
         }, context);
         return result;
     };
-    // 部分为真
+    // 部分为真 支持对象√
     var some = limit.some = function(arr, iterator, context) {
+        // 如果是空直接返回
+        if (isEmpty(arr)) return false;
         // 控制入参
-        arr = toArray(arr);
+        isArrayLike(arr) && (arr = toArray(arr));
         // 确保是函数
         iterator = cb(iterator);
         // 如果有原生方法
-        if (nativeSome) return nativeSome.call(arr, iterator, context);
+        if (nativeSome === arr.some) return nativeSome.call(arr, iterator, context);
         // 初始化
-        var result = false;
+        var result = false, isArr = isArray(arr);
         breakEach(arr, function(val, key) {
-            if (iterator.call(this, val, +key, arr)) return result = true, false;
+            if (iterator.call(this, val, isArr ? +key : key, arr)) return result = true, false;
         }, context);
         return result;
     };
@@ -1946,8 +2073,41 @@ define("common/limit-debug", [], function(require, exports) {
         });
         return value;
     };
+    // 黑白名单判断
+    function whiteBlack(factor, val1) {
+        return some(factor, function(val2) {
+            return every(val2, function(val3, key3) {
+                return val3 === val1[key3];
+            });
+        });
+    }
+    // 数据白名单
+    // limit.whiteList([], {}, {}, {});
+    // limit.whiteList([], [{}, {}, {}]);
+    limit.whiteList = function(arr) {
+        // 控制入参
+        arr = toArray(arr);
+        // 控制条件
+        var factor = flatten(slice.call(arguments, 1));
+        if (isEmpty(factor)) return [];
+        return filter(arr, function(val1) {
+            return whiteBlack(factor, val1);
+        });
+    };
+    // 数据黑名单
+    limit.blacklist = function(arr) {
+        // 控制入参
+        arr = toArray(arr);
+        // 控制条件
+        var factor = flatten(slice.call(arguments, 1));
+        if (isEmpty(factor)) return arr;
+        return filter(arr, function(val1) {
+            return !whiteBlack(factor, val1);
+        });
+    };
     ///////////////
     // 函数的方法
+    // bind[绑定上下文] delay[延迟] defer[异步] once[单次] defered[多异步] when[执行]
     //////////////
     // 绑定上下文
     // 当做构造函数时候的时候会返回被绑定的构造函数的上下文
@@ -1989,10 +2149,140 @@ define("common/limit-debug", [], function(require, exports) {
     // 执行一次
     var once = limit.once = function(fun) {
         var args = slice.call(arguments, 2);
-        unshift.call(args, fun, undefined);
+        unshift.call(args, fun, arguments[1]);
         return function main() {
             return !main.used ? (main.used = true, bind.apply(undefined, concat.apply(args, arguments))()) : undefined;
         };
+    };
+    // 异步执行后触发
+    // JQ的defered[异步包裹] when[当] then[然后] always[一直] resolve[完成] reject[失败] done[成功] fail[失败]
+    // my的defered[异步包裹] when[当] then[然后] always[一直] pass[传递][通过传递的参数确定是失败还是成功]
+    var defered = limit.defered = function() {
+        var main = {}, list = [], back = [ null ];
+        // clean[私有]
+        function clean() {
+            var one, temp;
+            if (one = list.shift()) {
+                // 状态
+                main.status = "pendding";
+                defer(function() {
+                    try {
+                        var checkIsNull = ~~isNull(back[0]);
+                        temp = back.slice(checkIsNull);
+                        back.length = 0;
+                        back[1] = one[one.allback ? "allback" : checkIsNull ? "sucback" : "errback"].apply(undefined, temp);
+                        back[0] = null;
+                    } catch (e) {
+                        back[0] = e;
+                    }
+                    clean();
+                });
+            } else {
+                main.status = "end";
+            }
+        }
+        // 标记位
+        main.isDefered = true;
+        // status
+        main.status = "init";
+        // then
+        main.then = function(sucback, errback) {
+            // 入栈
+            list.push({
+                sucback: sucback || K,
+                errback: errback || K
+            });
+            return main;
+        };
+        // always
+        main.always = function(allback) {
+            // 入栈
+            list.push({
+                allback: allback || K
+            });
+            return main;
+        };
+        // pass
+        main.pass = function(err) {
+            if (arguments.length) {
+                back[0] = err;
+                push.apply(back, slice.call(arguments, 1));
+            }
+            // 如果状态是初始化后
+            clean();
+            return main;
+        };
+        return main;
+    };
+    // 执行
+    limit.when = function() {
+        var theDefer = defered(), guid = arguments.length, sucArgs = [], errArgs = [];
+        function endDo() {
+            if (--guid <= 0) {
+                var isSuc = isNull(getArray(errArgs));
+                isSuc && sucArgs.unshift(null);
+                theDefer.pass.apply(undefined, isSuc ? sucArgs : errArgs);
+            }
+        }
+        forEach(arguments, function(val, key) {
+            // 如果是异步对象
+            if (val.isDefered) {
+                val.then(function() {
+                    sucArgs[key] = getArray(arguments);
+                }, function() {
+                    errArgs[key] = getArray(arguments);
+                }).always(endDo);
+                val.status === "end" && val.pass();
+            } else if (isFunction(val)) {
+                defer(function() {
+                    try {
+                        sucArgs[key] = val();
+                    } catch (e) {
+                        errArgs[key] = e;
+                    }
+                    endDo();
+                });
+            } else {
+                sucArgs[key] = val;
+                endDo();
+            }
+        });
+        return theDefer;
+    };
+    ///////////////
+    // 日期的方法
+    // formatDate[格式化日期]
+    ///////////////
+    var REG_EXP_DATA = /^(yyyy)(?:(.+)(MM))?(?:(.+)(dd))?(?:(.+)(HH))?(?:(.+)(mm))?(?:(.+)(ss))?(.+)?$/, FUN_DATAS = [ "getFullYear", "getMonth", "getDate", "getHours", "getMinutes", "getSeconds" ];
+    // 格式化日期
+    limit.formatDate = function(timestamp, formatStr) {
+        // 格式化入参
+        !isNumber(timestamp) && (timestamp = +new Date());
+        !isString(formatStr) && (formatStr = "yyyy-MM-dd HH:mm:ss");
+        var date = new Date(timestamp);
+        // 控制入参
+        if (limitIsNaN(+date)) return log("warn", "formatDate is called", "timestamp:", timestamp, "date:", date), 
+        "";
+        // 正常入参
+        return formatStr.replace(REG_EXP_DATA, function() {
+            var arr = [];
+            forEach(slice.call(arguments, 1, -2), function(val, key) {
+                var value;
+                if (val) {
+                    if (key % 2 === 0) {
+                        value = date[FUN_DATAS[key / 2]]();
+                        // 如果是月份进一
+                        val === "MM" && value++;
+                        // 如果是非年补零
+                        val !== "yyyy" && (value = (padChar("0", 2) + value).slice(-2));
+                        arr.push(value);
+                    } else {
+                        arr.push(val);
+                    }
+                }
+            });
+            return arr.join("");
+        });
     };
     return limit;
 });

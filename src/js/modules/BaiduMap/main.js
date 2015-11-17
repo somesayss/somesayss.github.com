@@ -27,7 +27,7 @@ define(function(require, exports, module) {
 			var me = this,
 				id = me.element.prop('id');
 			// 异常
-			if(!id) me.log('element 未定义 id 属性');
+			if(!id) me.limit.log('element 未定义 id 属性');
 			// 初始化百度地图
 			me.map = new BMap.Map(id);
 
@@ -87,12 +87,12 @@ define(function(require, exports, module) {
 				// 增加事件
 				marker.addEventListener('click', function(){
 					// 其他
-					!label.Ea && me.limit.breakEach(labels, function(val){
+					!label.Fa && me.limit.breakEach(labels, function(val){
 						// 如果当前是隐藏
 						 label !== val && val.hide();
 					});
 					// 当前
-					label[label.Ea ? 'hide' : 'show']();
+					label[label.Fa ? 'hide' : 'show']();
 				});
 				// 默认显示
 				val.defaultShow && map.addEventListener('tilesloaded', function main(){

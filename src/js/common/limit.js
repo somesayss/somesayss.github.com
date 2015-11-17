@@ -245,6 +245,7 @@ define(function(require, exports) {
 	///////////////
 	// 数字的方法
 	// random[随机数] toFixed[四舍五入最后几位] plus[加] minus[减] multiply[乘] except[除]
+	// thousandSeparator[千分位] unThousandSeparator[逆千分位]
 	//////////////
 
 		// 随机数
@@ -254,6 +255,25 @@ define(function(require, exports) {
 			var max = Math.max(form, to),
 				min = Math.min(form, to);
 			return Math.floor( ( max - min + 1 ) * Math.random() + min );
+		};
+
+		var REG_THOUSAND_SEPARATOR = /(\d{1,3})(?=(\d{3})+$)/g,
+			REG_THOUSAND_SEPARATOR_POINT = /(\d{1,3})(?=(\d{3})+\.)/g,
+			REG_THOUSAND_SEPARATOR_COMMA = /,/g;
+		// 千分位
+		limit.thousandSeparator = function(num, med){
+			// 控制入参
+			if( !limitIsFinite(num) ) return log('warn', 'limit.thousandSeparator is called ', typeof num, ':', num), '';
+			if( !isNumber(med) ) med = 2;
+			// 格式化
+			return toFixed(num, med).replace(med ? REG_THOUSAND_SEPARATOR_POINT : REG_THOUSAND_SEPARATOR, '$1,');
+		};
+
+		// 反千分位
+		limit.unThousandSeparator = function(str){
+			// 控制入参
+			if( !isString(str) ) return log('warn', 'limit.unThousandSeparator is called ', typeof str, ':', str), NaN;
+			return +str.replace(REG_THOUSAND_SEPARATOR_COMMA, '');
 		};
 
 		// 数字的运算
@@ -337,7 +357,7 @@ define(function(require, exports) {
 			// 控制入参scale为整数
 			scale = ~~scale;
 			// 对于0的快速处理
-			if(scale === 0) return +num;
+			if(scale === 0) return num;
 			var leftStr, 
 				rightStr, 
 				sign = '';
@@ -354,7 +374,7 @@ define(function(require, exports) {
 		};
 
 		// chrome下0.295.toFixed(2) => 0.29这里做了兼容
-		limit.toFixed = function(num, scale){
+		var toFixed = limit.toFixed = function(num, scale){
 			// 控制入参size为正整数
 			scale = positive(scale);
 			var num = movePoint(num, scale);
@@ -416,7 +436,7 @@ define(function(require, exports) {
 	///////////////
 	// 对象的方法
 	// has[含有静态方法] create[实例化] forIn[遍历] keys[静态属性] size[静态属性的个数] 
-	// each[遍历静态属性] breakEach[可断开的遍历静态属性] extend[继承] defaults[反继承] clone[浅克隆] copy[深拷贝]
+	// each[遍历静态属性] breakEach[可断开的遍历静态属性] extend[继承] defaults[反继承] clone[浅克隆] copy[深拷贝] getObject[安全获取对象]
 	//////////////
 
 		// 静态方法
@@ -488,7 +508,6 @@ define(function(require, exports) {
 				key = target[num];
 				if( iterator.call(context, obj[key], key, obj) === false && isBreak ) break;
 			};
-			return obj;
 		};
 
 		// 遍历
@@ -609,12 +628,25 @@ define(function(require, exports) {
 			forIn(obj, function(val, key){ value[key] = copy(val) });
 			return value;
 		};
+
+		// 安全获取对象
+		limit.getObject = function(obj){
+			breakEach(slice.call(arguments, 1), function(val){
+				try{
+					obj = obj[val];
+				}catch(e){
+					return obj = undefined, false;
+				};
+			});
+			return obj;
+		};
 	
 	///////////////
 	// 数组的方法
-	// toArray[格式化数组] getArray[正确获取数组] indexOf[查询遍历值] lastIndexOf[往后查询遍历值] 
-	// forEach[遍历] map[重组] filter[赛选] every[全部符合] some[部分符合] 
-	// reduce[从左往右迭代] reduceRight[从右往左迭代] contains[是否在数组当中] union[去重] flatten[解除嵌套数组]
+	// toArray[格式化数组] getArray[正确获取数组] indexOf[查询遍历值]√ lastIndexOf[往后查询遍历值] 
+	// forEach[遍历] map[重组]√ filter[赛选]√ every[全部符合]√ some[部分符合]√ 
+	// reduce[从左往右迭代] reduceRight[从右往左迭代] contains[是否在数组当中]√ union[去重] flatten[解除嵌套数组]
+	// whiteList[白名单] blackList[黑名单]
 	//////////////
 
 		// 格式化数组
@@ -637,17 +669,20 @@ define(function(require, exports) {
 
 		// 获取正序遍历值
 		var indexOf = limit.indexOf = function(arr, ele, formIndex){
+			// 如果是空就直接返回
+			if( isEmpty(arr) ) return -1;
 			// 控制入参
-			arr = toArray(arr);
+			isArrayLike(arr) && ( arr = toArray(arr) );
 			// 如果原生的方法存在
-			if(nativeIndexOf) return nativeIndexOf.apply( arr, slice.call(arguments, 1) );
+			if(nativeIndexOf === arr.indexOf) return nativeIndexOf.apply( arr, slice.call(arguments, 1) );
 			// 初始化返回值
-			var index = -1;
+			var isArr = isArray(arr),
+				index = -1;
 			loop(arr, function(val, key){
 				if(val === ele) return index = key, false;
 			}, undefined, true, ~~formIndex);
 			// loop为了兼容返回值是string
-			return +index;
+			return isArr ? +index : index;
 		};
 
 		// 获取倒叙遍历值
@@ -677,18 +712,21 @@ define(function(require, exports) {
 			}, context);
 		};
 
-		// 遍历替换
+		// 遍历替换 支持对象√
 		var map = limit.map = function(arr, iterator, context){
+			// 如果是空就直接返回
+			if( isEmpty(arr) ) return arr;
 			// 控制入参
-			arr = toArray(arr);
+			isArrayLike(arr) && ( arr = toArray(arr) );
 			// 确保是函数
 			iterator = cb(iterator);
 			// 如果有原生方法
-			if(nativeMap) return nativeMap.call( arr, iterator, context );
+			if(nativeMap === arr.map) return nativeMap.call( arr, iterator, context );
 			// 初始化数组
-			var result = [];
+			var isArr = isArray(arr),
+				result = isArr ? [] : {};
 			// 遍历
-			forEach(arr, function(val, key){
+			each(arr, function(val, key){
 				result[key] = iterator.call(this, val, key, arr);
 			}, context);
 			return result;
@@ -696,48 +734,57 @@ define(function(require, exports) {
 
 		// 筛选
 		var filter = limit.filter = function(arr, iterator, context){
+			// 如果是空就直接返回
+			if( isEmpty(arr) ) return arr;
 			// 控制入参
-			arr = toArray(arr);
+			isArrayLike(arr) && ( arr = toArray(arr) );
 			// 确保是函数
 			iterator = cb(iterator);
 			// 如果有原生方法
-			if(nativeFilter) return nativeFilter.call( arr, iterator, context );
+			if(nativeFilter === arr.filter) return nativeFilter.call( arr, iterator, context );
 			// 初始化数组
-			var  result = [];
-			forEach(arr, function(val, key){
+			var isArr = isArray(arr),
+				result = isArr ? [] : {};
+			isArr ? each(arr, function(val, key){
 				iterator.call(this, val, key, arr) && result.push(val);
-			}, context);
+			}, context) :  each(arr, function(val, key){
+				iterator.call(this, val, key, arr) && (result[key] = val);
+			});
 			return result;
 		};
 
-		// 全部为真
+		// 全部为真 支持对象√
 		var every = limit.every = function(arr, iterator, context){
+			// 如果是空直接返回
+			if( isEmpty(arr) ) return false;
 			// 控制入参
-			arr = toArray(arr);
+			isArrayLike(arr) && ( arr = toArray(arr) );
 			// 确保是函数
 			iterator = cb(iterator);
 			// 如果有原生方法
-			if(nativeEvery) return nativeEvery.call( arr, iterator, context );
+			if(nativeEvery === arr.every) return nativeEvery.call( arr, iterator, context );
 			// 初始化
-			var result = true;
+			var result = true, isArr = isArray(arr);
 			breakEach(arr, function(val, key){
-				if( !iterator.call(this, val, +key, arr) ) return result = false;
+				if( !iterator.call(this, val, (isArr ? +key : key), arr) ) return result = false;
 			}, context);
 			return result;
 		};
 
-		// 部分为真
+		// 部分为真 支持对象√
 		var some = limit.some = function(arr, iterator, context){
+			// 如果是空直接返回
+			if( isEmpty(arr) ) return false;
 			// 控制入参
-			arr = toArray(arr);
+			isArrayLike(arr) && ( arr = toArray(arr) );
 			// 确保是函数
 			iterator = cb(iterator);
 			// 如果有原生方法
-			if(nativeSome) return nativeSome.call( arr, iterator, context );
+			if(nativeSome === arr.some) return nativeSome.call( arr, iterator, context );
 			// 初始化
-			var result = false;
+			var result = false, isArr = isArray(arr);
 			breakEach(arr, function(val, key){
-				if( iterator.call(this, val, +key, arr) ) return result = true, false;
+				if( iterator.call(this, val, (isArr ? +key : key), arr) ) return result = true, false;
 			}, context);
 			return result;
 		};
@@ -788,6 +835,16 @@ define(function(require, exports) {
 			return indexOf(arr, target) !== -1;
 		};
 
+		// 不同的值 
+		limit.difference = function(arr){
+			// 控制入参
+			arr = toArray(arr);
+			var result = concat.apply(arrayProto, slice.call(arguments, 1));
+			return filter(arr, function(val){
+				return !contains(result, val);
+			});
+		};
+
 		// 去重
 		var union = limit.union = function(arr, isEasy){
 			// 控制入参
@@ -817,6 +874,43 @@ define(function(require, exports) {
 			return value;
 		};
 
+		// 黑白名单判断
+		function whiteBlack(factor, val1){
+			return some(factor, function(val2){
+				return every(val2, function(val3, key3){
+					return val3 === val1[key3];
+				});
+			});
+		};
+
+		// 数据白名单
+		// limit.whiteList([], {}, {}, {});
+		// limit.whiteList([], [{}, {}, {}]);
+		limit.whiteList = function(arr){
+			// 控制入参
+			arr = toArray(arr);
+			// 控制条件
+			var factor = flatten( slice.call(arguments, 1) );
+			if( isEmpty(factor) ) return [];
+			return filter(arr, function(val1){
+				return whiteBlack(factor, val1);
+			});
+		};
+
+		// 数据黑名单
+		limit.blackList = function(arr){
+			// 控制入参
+			arr = toArray(arr);
+			// 控制条件
+			var factor = flatten( slice.call(arguments, 1) );
+			if( isEmpty(factor) ) return arr;
+			return filter(arr, function(val1){
+				return !whiteBlack(factor, val1);
+			});
+		};
+
+
+
 	///////////////
 	// 函数的方法
 	// bind[绑定上下文] delay[延迟] defer[异步] once[单次] defered[多异步] when[执行]
@@ -843,6 +937,8 @@ define(function(require, exports) {
 					return isObject(tar) ? tar : context;
 				};
 			};
+			// 咋骗，可以让兼容方法伪装的更像
+			main.toString = function(){ return 'function () { [native code] }'};
 			return main;
 		};
 
@@ -871,7 +967,7 @@ define(function(require, exports) {
 
 		// 异步执行后触发
 		// JQ的defered[异步包裹] when[当] then[然后] always[一直] resolve[完成] reject[失败] done[成功] fail[失败]
-		// my的defered[异步包裹] when[当] then[然后] always[一直] pass[传递]
+		// my的defered[异步包裹] when[当] then[然后] always[一直] pass[传递][通过传递的参数确定是失败还是成功]
 		var defered = limit.defered = function(){
 			var main = {},
 				list = [],
@@ -882,18 +978,13 @@ define(function(require, exports) {
 				if( one = list.shift() ){
 					// 状态
 					main.status = 'pendding';
-					// back.push(one);
+
 					defer(function(){
 						try{
-							if( isNull(back[0]) ){
-								temp = back.slice(1);
-								back.length = 0;
-								back[1] = one[one.allback ? 'allback' : 'sucback'].apply(undefined, temp);
-							}else{
-								temp = back.slice(0);
-								back.length = 0;
-								back[1] = one[one.allback ? 'allback' : 'errback'].apply(undefined, temp);
-							};
+							var checkIsNull = ~~isNull(back[0]);
+							temp = back.slice(checkIsNull);
+							back.length = 0;
+							back[1] = one[one.allback ? 'allback' : (checkIsNull ? 'sucback' : 'errback') ].apply(undefined, temp);
 							back[0] = null;
 						}catch(e){
 							back[0] = e;
@@ -927,8 +1018,10 @@ define(function(require, exports) {
 			};
 			// pass
 			main.pass = function(err){
-				back[0] = err;
-				push.apply(back, slice.call(arguments, 1));
+				if(arguments.length){
+					back[0] = err;
+					push.apply(back, slice.call(arguments, 1));
+				};
 				// 如果状态是初始化后
 				clean();
 				return main;
@@ -952,9 +1045,9 @@ define(function(require, exports) {
 			forEach(arguments, function(val, key){
 				// 如果是异步对象
 				if(val.isDefered){
-					val.then(function(val){
+					val.then(function(){
 						sucArgs[key] = getArray(arguments);
-					}, function(err){
+					}, function(){
 						errArgs[key] = getArray(arguments);
 					}).always(endDo);
 					val.status === 'end' && val.pass();
