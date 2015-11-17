@@ -247,7 +247,7 @@ input[type="submit"], input[type="reset"], input[type="button"], input[type="tex
   height: 30px;
   border-radius: 0;
   background: #FFF;
-  padding: 6px 9px;
+  padding: 6px;
   -webkit-appearance: menulist-button;
   color: #666; }
 
