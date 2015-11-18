@@ -24,13 +24,13 @@ define(function(require, exports, module) {
 			var me = this,
 				node = me.node;
 			if(me.guid === 0){
-				if(IE8){
-					me.guid++;
-					limit.delay(function(){ me.guid = 0; }, 1000);
-				};
+				// if(IE8){
+				// 	me.guid++;
+				// 	limit.delay(function(){ me.guid = 0; }, 1000);
+				// };
 				console.log('13123123123123');
-				node.height( me.props.height || 16 );
-				node.height( ( Math.max( node.prop('scrollHeight'), node.prop('clientHeight') ) ) - me.padHeight );
+				// node.height( me.props.height || 16 );
+				// node.height( ( Math.max( node.prop('scrollHeight'), node.prop('clientHeight') ) ) - me.padHeight );
 			};
 			
 		},
