@@ -22,7 +22,7 @@ define(function(require, exports, module) {
 				node = me.node;
 			node.height( me.props.height || 16 );
 			console.log(node.prop('scrollHeight'), me.padHeight);
-			node.height(node.prop('scrollHeight') - me.padHeight);
+			// node.height(node.prop('scrollHeight') - me.padHeight);
 		},
 		render: function(){
 			var me = this;
