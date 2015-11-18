@@ -25,6 +25,7 @@ define(function(require, exports, module) {
 				onChange = this.props.onChange,
 				conf = {},
 				reslute;
+			console.log(self.prop('value'), val);
 			// 对于checkbox的特殊处理
 			if( type === 'checkbox' ){
 				if( self.prop('checked') ){
