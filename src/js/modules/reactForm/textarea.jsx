@@ -24,15 +24,15 @@ define(function(require, exports, module) {
 			console.log('jin resize');
 			var me = this,
 				node = me.node;
-			if(me.guid === 0){
-				if(IE8){
-					me.guid++;
-					limit.delay(function(){ me.guid = 0; }, 1000);
-				};
-				node.height( me.props.height || 16 );
-				console.log(node.prop('scrollHeight'), node.prop('clientHeight'));
-				node.height( ( Math.max( node.prop('scrollHeight'), node.prop('clientHeight') ) ) - me.padHeight );
-			};
+			// if(me.guid === 0){
+			// 	if(IE8){
+			// 		me.guid++;
+			// 		limit.delay(function(){ me.guid = 0; }, 1000);
+			// 	};
+			// 	node.height( me.props.height || 16 );
+			// 	console.log(node.prop('scrollHeight'), node.prop('clientHeight'));
+			// 	node.height( ( Math.max( node.prop('scrollHeight'), node.prop('clientHeight') ) ) - me.padHeight );
+			// };
 			
 		},
 		render: function(){
