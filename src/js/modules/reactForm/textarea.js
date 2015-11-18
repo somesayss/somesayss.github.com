@@ -50,7 +50,7 @@ define(function(require, exports, module) {
 		},
 		componentDidUpdate: function(){
 			console.log('jin componentDidUpdate');
-			me.guid === 0 && this.resize();
+			this.guid === 0 && this.resize();
 		},
 		componentDidMount: function(){
 			console.log('jin componentDidMount');
