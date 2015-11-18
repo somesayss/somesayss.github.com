@@ -25,11 +25,12 @@ define(function(require, exports, module) {
 			var me = this,
 				node = me.node;
 			if(me.guid === 0){
-				// if(IE8){
-				// 	me.guid++;
-				// 	limit.delay(function(){ me.guid = 0; }, 1000);
-				// };
+				if(IE8){
+					me.guid++;
+					limit.delay(function(){ me.guid = 0; }, 1000);
+				};
 				node.height( me.props.height || 16 );
+				console.log(node.prop('scrollHeight'), node.prop('clientHeight'));
 				node.height( ( Math.max( node.prop('scrollHeight'), node.prop('clientHeight') ) ) - me.padHeight );
 			};
 			
@@ -49,7 +50,7 @@ define(function(require, exports, module) {
 		},
 		componentDidUpdate: function(){
 			console.log('jin componentDidUpdate');
-			this.resize();
+			me.guid === 0 && this.resize();
 		},
 		componentDidMount: function(){
 			console.log('jin componentDidMount');
