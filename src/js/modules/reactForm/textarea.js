@@ -19,24 +19,12 @@ define(function(require, exports, module) {
 		textareaChangeHandler: function(e){
 			var me = this;
 			me.changeHandler(e);
-			// var state = {};
-			// state[me.props.name] = e.target.value;
-			// me.setState(state);
 		},
 		resize: function(){
-			console.log('jin resize');
 			var me = this,
 				node = me.node;
-			// if(me.guid === 0){
-			// 	if(IE8){
-			// 		me.guid++;
-			// 		limit.delay(function(){ me.guid = 0; }, 1000);
-			// 	};
-			// 	node.height( me.props.height || 16 );
-			// 	console.log(node.prop('scrollHeight'), node.prop('clientHeight'));
-			// 	node.height( ( Math.max( node.prop('scrollHeight'), node.prop('clientHeight') ) ) - me.padHeight );
-			// };
-			
+			node.height( me.props.height || 16 );
+			node.height( ( Math.max( node.prop('scrollHeight'), node.prop('clientHeight') ) ) - me.padHeight );
 		},
 		render: function(){
 			var me = this;
@@ -52,11 +40,9 @@ define(function(require, exports, module) {
 			);
 		},
 		componentDidUpdate: function(){
-			console.log('jin componentDidUpdate');
-			this.guid === 0 && this.resize();
+			this.resize();
 		},
 		componentDidMount: function(){
-			console.log('jin componentDidMount');
 			var me = this,
 				node = $(me.refs.node),
 				maxlength = me.props.maxlength;
