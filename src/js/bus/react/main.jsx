@@ -20,7 +20,7 @@ define(function(require, exports, module) {
 				diqu: "zhejiang",
 				sex: "female",
 				like: ["zhuqiu", "paiqiu"],
-				jianjie: "我是简介4"
+				jianjie: "我是简介5"
 			}
 		},
 		change: function(state){
@@ -42,7 +42,7 @@ define(function(require, exports, module) {
 						<Form.Checkbox name="like" value={this.state.like} onChange={this.change} options={this.props.like} />
 					</p>
 					<p className="fn-MaTo10">
-						<Form.Textarea width="200" height="100" name="jianjie" value={this.state.jianjie} onChange={this.change} maxlength="100" />
+						<Form.Textarea width="200" height="100" name="jianjie" value={this.state.jianjie} onChange={this.change}  />
 					</p>
 				</div>
 			);
