@@ -18,10 +18,10 @@ define(function(require, exports, module) {
 		mixins: [Common],
 		textareaChangeHandler: function(e){
 			var me = this;
-			// me.changeHandler(e);
-			var state = {};
-			state[me.props.name] = e.target.value;
-			me.setState(state);
+			me.changeHandler(e);
+			// var state = {};
+			// state[me.props.name] = e.target.value;
+			// me.setState(state);
 		},
 		resize: function(){
 			console.log('jin resize');
