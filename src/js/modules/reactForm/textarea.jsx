@@ -48,7 +48,7 @@ define(function(require, exports, module) {
 				node = $(me.refs.node),
 				maxlength = me.props.maxlength;
 			me.node = node;
-			me.padHeight = node.prop('scrollHeight') - node.height();
+			me.padHeight = node.prop('clientHeight') - node.height();
 			me.guid = 0;
 			// 如果存在maxlength
 			if(maxlength){
