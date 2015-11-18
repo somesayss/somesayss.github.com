@@ -21,6 +21,7 @@ define(function(require, exports, module) {
 			me.changeHandler(e);
 		},
 		resize: function(){
+			console.log('jin resize');
 			var me = this,
 				node = me.node;
 			if(me.guid === 0){
@@ -47,14 +48,16 @@ define(function(require, exports, module) {
 			);
 		},
 		componentDidUpdate: function(){
+			console.log('jin componentDidUpdate');
 			this.resize();
 		},
 		componentDidMount: function(){
+			console.log('jin componentDidMount');
 			var me = this,
 				node = $(me.refs.node),
 				maxlength = me.props.maxlength;
 			me.node = node;
-			me.padHeight = node.outerHeight() - node.height();
+			me.padHeight = node.prop('scrollHeight') - node.height();
 			me.guid = 0;
 			// 如果存在maxlength
 			if(maxlength){
