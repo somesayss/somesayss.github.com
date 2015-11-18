@@ -20,12 +20,11 @@ define(function(require, exports, module) {
 				self = $(e.target),
 				name = self.prop('name'),
 				type = self.prop('type'),
-				val = self.prop('value'),
-				maxlength = self.prop('maxlength'),
+				val = self.prop('value').replace(/\r/g, ''),
+				maxlength = self.data('maxlength'),
 				onChange = this.props.onChange,
 				conf = {},
 				reslute;
-
 			// 对于checkbox的特殊处理
 			if( type === 'checkbox' ){
 				if( self.prop('checked') ){

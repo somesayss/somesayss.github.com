@@ -24,7 +24,6 @@ define(function(require, exports, module) {
 			var me = this,
 				node = me.node;
 			node.height( me.props.height || 16 );
-			console.log(node.prop('scrollHeight'), node.prop('clientHeight'));
 			node.height( ( Math.max( node.prop('scrollHeight'), node.prop('clientHeight') ) ) - me.padHeight );
 		},
 		render: function(){
@@ -55,6 +54,8 @@ define(function(require, exports, module) {
 				var state = {};
 				state[me.props.name] = me.props.value.slice(0, maxlength);
 				me.setState(state);
+			}else{
+				me.componentDidUpdate();
 			};
 		}
 	});
