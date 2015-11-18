@@ -10,6 +10,9 @@ define(function(require, exports, module) {
 		React = require('react'),
 		limit = require('limit');
 
+	// 变量
+	var IE8 = document.documentMode === 8;
+
 	// 类	
 	var Textarea = React.createClass({
 		mixins: [Common],
@@ -20,8 +23,15 @@ define(function(require, exports, module) {
 		resize: function(){
 			var me = this,
 				node = me.node;
-			node.height( me.props.height || 16 );
-			node.height( ( Math.max( node.prop('scrollHeight'), node.prop('clientHeight')) ) - me.padHeight );
+			if(me.guid === 0){
+				node.height( me.props.height || 16 );
+				node.height( ( Math.max( node.prop('scrollHeight'), node.prop('clientHeight') ) ) - me.padHeight );
+				if(IE8){
+					me.guid++;
+					limit.defer(function(){ me.guid = 0; });
+				};
+			};
+			
 		},
 		render: function(){
 			var me = this;
@@ -45,6 +55,7 @@ define(function(require, exports, module) {
 				maxlength = me.props.maxlength;
 			me.node = node;
 			me.padHeight = node.outerHeight() - node.height();
+			me.guid = 0;
 			// 如果存在maxlength
 			if(maxlength){
 				var state = {};
