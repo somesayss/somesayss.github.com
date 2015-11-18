@@ -20,11 +20,16 @@ define(function(require, exports, module) {
 				diqu: "zhejiang",
 				sex: "female",
 				like: ["zhuqiu", "paiqiu"],
-				jianjie: "我是简介10"
+				jianjie: "我是简介11"
 			}
 		},
 		change: function(state){
 			// console.log(state);
+		},
+		textareaChange: function(e){
+			this.setState({
+				jianjie: e.target.value
+			});
 		},
 		render: function(){
 			return (
@@ -42,7 +47,7 @@ define(function(require, exports, module) {
 						<Form.Checkbox name="like" value={this.state.like} onChange={this.change} options={this.props.like} />
 					</p>
 					<p className="fn-MaTo10">
-						<Form.Textarea width="200" height="100" name="jianjie" value={this.state.jianjie} onChange={this.change}  />
+						<textarea className="fn-textarea fn-He100" value={this.state.jianjie} onChange={this.textareaChange}></textarea>
 					</p>
 				</div>
 			);
