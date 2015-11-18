@@ -41,11 +41,13 @@ define(function(require, exports, module) {
 			// 	conf[name] = val;
 			// };
 
-			conf[name] = val;
-
+			var state = {};
+			state[me.props.name] = e.target.value;
+			me.setState(state);
 			
-			me.setState(conf);
-			onChange && onChange(conf);
+			// conf[name] = val;
+			// me.setState(conf);
+			// onChange && onChange(conf);
 		}
 	};
 
