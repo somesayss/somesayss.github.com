@@ -21,8 +21,7 @@ define(function(require, exports, module) {
 			var me = this,
 				node = me.node;
 			node.height( me.props.height || 16 );
-			console.log(node.prop('scrollHeight'), me.padHeight);
-			// node.height(node.prop('scrollHeight') - me.padHeight);
+			node.height( ( Math.max( node.prop('scrollHeight'), node.prop('clientHeight')) ) - me.padHeight );
 		},
 		render: function(){
 			var me = this;
