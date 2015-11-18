@@ -42,7 +42,7 @@ define(function(require, exports, module) {
 			// };
 
 			var state = {};
-			state[me.props.name] = e.target.value;
+			state[name] = val;
 			me.setState(state);
 			
 			// conf[name] = val;
