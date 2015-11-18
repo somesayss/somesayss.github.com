@@ -24,12 +24,12 @@ define(function(require, exports, module) {
 			var me = this,
 				node = me.node;
 			if(me.guid === 0){
-				node.height( me.props.height || 16 );
-				node.height( ( Math.max( node.prop('scrollHeight'), node.prop('clientHeight') ) ) - me.padHeight );
 				if(IE8){
 					me.guid++;
 					limit.defer(function(){ me.guid = 0; });
 				};
+				node.height( me.props.height || 16 );
+				node.height( ( Math.max( node.prop('scrollHeight'), node.prop('clientHeight') ) ) - me.padHeight );
 			};
 			
 		},
