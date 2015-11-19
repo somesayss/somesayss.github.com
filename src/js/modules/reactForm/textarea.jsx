@@ -58,7 +58,7 @@ define(function(require, exports, module) {
 			// 如果存在maxlength
 			if(maxlength){
 				var state = {};
-				state[me.props.name] = me.props.value.slice( 0, me.fixedMaxlength(maxlength, me.props.value) );
+				state[me.props.name] = me.props.value.slice( 0, maxlength );
 				me.setState(state);
 			}else{
 				me.componentDidUpdate();
