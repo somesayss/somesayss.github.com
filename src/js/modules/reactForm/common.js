@@ -9,7 +9,9 @@ define(function(require, exports, module) {
 		limit = require('limit');
 
 	// 变量
-	var IE8 = document.documentMode === 8;
+	var IE8 = document.documentMode === 8,
+		REX_ENTER = /\n/g,
+		STR_ENTER = '\r\n';
 
 	// 类	
 	var InputCommon = {
@@ -39,7 +41,7 @@ define(function(require, exports, module) {
 			// 对于textarea的特殊处理
 			else if( type === 'textarea' && maxlength !== -1 ){
 				var str = val.slice(0, maxlength);
-				conf[name] = IE8 ? str.replace(/\n/g, '\r\n') : str;
+				conf[name] = IE8 ? str.replace(REX_ENTER, STR_ENTER) : str;
 			}else{
 				conf[name] = val;
 			};

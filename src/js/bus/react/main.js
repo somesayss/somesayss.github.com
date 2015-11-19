@@ -42,7 +42,7 @@ define(function(require, exports, module) {
 						React.createElement(Form.Checkbox, {name: "like", value: this.state.like, onChange: this.change, options: this.props.like})
 					), 
 					React.createElement("p", {className: "fn-MaTo10"}, 
-						React.createElement(Form.Textarea, {width: "200", height: "100", name: "jianjie", value: this.state.jianjie, onChange: this.change, maxlength: "10"})
+						React.createElement(Form.Textarea, {width: "200", height: "100", name: "jianjie", value: this.state.jianjie, onChange: this.change})
 					)
 				)
 			);
