@@ -24,7 +24,6 @@ define(function(require, exports, module) {
 				maxlength = self.data('maxlength'),
 				onChange = this.props.onChange,
 				conf = {};
-			console.log(val, val.length, val.replace(/\r/g, ''), val.replace(/\r/g, '').length);
 			// 对于checkbox的特殊处理
 			if( type === 'checkbox' ){
 				if( self.prop('checked') ){

@@ -263,14 +263,17 @@ input[type="submit"], input[type="reset"], input[type="button"], input[type="tex
   overflow: hidden; }
 
 /** 模块：表格 */
-.fn-table td, .fn-table th {
-  border: 1px solid #CCC;
-  padding: 5px 9px;
-  line-height: 1.5em; }
-.fn-table thead th, .fn-table thead td {
-  background: #F2F2F2; }
+.fn-table td, .fn-table-data td, .fn-table th, .fn-table-data th {
+  padding: 5px 9px; }
 
 /** 基础 */
+.fn-table-data td, .fn-table-data th {
+  border: 1px solid #CCC;
+  line-height: 1.5em; }
+.fn-table-data thead th, .fn-table-data thead td {
+  background: #F2F2F2; }
+
+/** 数据 */
 .fn-table-ho tr:hover {
   background: #F9F9F9; }
 .fn-table-ho .ch-ho-disabled:hover {

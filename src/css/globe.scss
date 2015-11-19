@@ -12,6 +12,7 @@ $TEXT_ALIGN_LIST:	(Le:left, Ri:right, Ce:center);
 
 // 配色
 $COLOR_BULE: #4d90fe;
+$COLOR_GRAY: #CCC;
 
 // 函数：设置背景
 @function background($url, $top:0, $left:0, $repeat:no-repeat){
@@ -55,7 +56,7 @@ $COLOR_BULE: #4d90fe;
 .fn-Co666{color:#666;}
 .fn-Co333{color:#333;}
 .fn-Co000{color:#000;}
-.fn-Co4d90fe{color:#4d90fe;} /** 蓝色 */
+.fn-Co4d90fe{color:$COLOR_BULE;} /** 蓝色 */
 .fn-FoWeBo{font-weight:bold;}
 .fn-TeDeUn{text-decoration:underline;}
 .fn-TeIn2em{text-indent:2em;}
@@ -63,17 +64,17 @@ $COLOR_BULE: #4d90fe;
 /** 模块：链接 */
 .fn-link-blue{color:$COLOR_BULE;}
 .fn-link-blue:hover{text-decoration:underline;}
-.fn-focus{ &:focus{ border-color:#4d90fe;box-shadow:0px 0px 3px rgba(77, 144, 254, .3); } }
+.fn-focus{ &:focus{ border-color:$COLOR_BULE;box-shadow:0px 0px 3px rgba(77, 144, 254, .3); } }
 /** 模块：表单域 */
 .fn-input{
 	@extend .fn-focus;
-	border:1px solid #CCC;height:16px;line-height:1em;font-size:1.2em;padding:6px 9px;color:#666;
+	border:1px solid $COLOR_GRAY;height:16px;line-height:1em;font-size:1.2em;padding:6px 9px;color:#666;
 }/** 基础高度30 */
 .fn-input-sm{padding:4px 9px 3px 9px;}/** 小号版高度25 */
 /** 模块：选择框 */
 .fn-select{
 	@extend .fn-focus;
-	border:1px solid #CCC;height:30px;border-radius:0;background:#FFF;padding:6px;-webkit-appearance:menulist-button;color:#666;
+	border:1px solid $COLOR_GRAY;height:30px;border-radius:0;background:#FFF;padding:6px;-webkit-appearance:menulist-button;color:#666;
 }/** 基础高度30 */
 .fn-select-sm{height:25px;}/** 小号版高度25 */
 /** 模块：文本域 */
@@ -83,9 +84,13 @@ $COLOR_BULE: #4d90fe;
 }
 /** 模块：表格 */
 .fn-table{
-	td, th{border:1px solid #CCC;padding:5px 9px;line-height:1.5em;}
-	thead th, thead td{background:#F2F2F2;}
+	td, th{padding:5px 9px;}
 }/** 基础 */
+.fn-table-data{
+	@extend .fn-table;
+	td, th{border:1px solid $COLOR_GRAY;line-height:1.5em;}
+	thead th, thead td{background:#F2F2F2;}
+}/** 数据 */
 .fn-table-ho{
 	tr:hover{background:#F9F9F9;}
 	.ch-ho-disabled:hover{background:none;}
