@@ -31,13 +31,13 @@ define(function(require, exports, module) {
 					style:  {width: me.props.width - 20, height: me.props.height}, 
 					name: me.props.name, 
 					className: "fn-textarea " + (me.props.className||''), 
-					defaultValue: me.state[me.props.name], 
+					value: me.state[me.props.name], 
 					"data-maxlength": me.props.maxlength, 
 					onChange: me.textareaChangeHandler})
 			);
 		},
 		componentDidUpdate: function(){
-			// this.resize();
+			this.resize();
 		},
 		componentDidMount: function(){
 			var me = this,
