@@ -38,9 +38,8 @@ define(function(require, exports, module) {
 			}
 			// 对于textarea的特殊处理
 			else if( type === 'textarea' && maxlength !== -1 ){
-				var str = val.slice(0, maxlength);
-				conf[name] = str;
-				self.val(str);
+				conf[name] = val.slice(0, maxlength);
+				self.val(val.slice(0, maxlength));
 			}else{
 				conf[name] = val;
 			};

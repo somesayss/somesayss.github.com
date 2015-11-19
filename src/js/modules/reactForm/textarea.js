@@ -37,7 +37,7 @@ define(function(require, exports, module) {
 			);
 		},
 		componentDidUpdate: function(){
-			this.resize();
+			// this.resize();
 		},
 		componentDidMount: function(){
 			var me = this,

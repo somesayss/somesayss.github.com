@@ -20,7 +20,7 @@ define(function(require, exports, module) {
 				diqu: "zhejiang",
 				sex: "female",
 				like: ["zhuqiu", "paiqiu"],
-				jianjie: "我是简介555559"
+				jianjie: "我是简介665559"
 			}
 		},
 		change: function(state){
