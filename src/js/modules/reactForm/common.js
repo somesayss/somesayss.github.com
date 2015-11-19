@@ -23,7 +23,7 @@ define(function(require, exports, module) {
 				self = $(e.target),
 				name = self.prop('name'),
 				type = self.prop('type'),
-				val = self.prop('value'),
+				val = self.val(),
 				maxlength = self.data('maxlength'),
 				onChange = this.props.onChange,
 				conf = {};
@@ -38,11 +38,9 @@ define(function(require, exports, module) {
 			}
 			// 对于textarea的特殊处理
 			else if( type === 'textarea' && maxlength !== -1 ){
-				if(!IE8){
-					conf[name] = val.slice(0, maxlength);
-				}else{
-					return me.fixedMaxlength(self, name, onChange, maxlength);
-				};
+				var str = val.slice(0, maxlength);
+				conf[name] = str;
+				self.val(str);
 			}else{
 				conf[name] = val;
 			};

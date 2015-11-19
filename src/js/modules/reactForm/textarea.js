@@ -31,21 +31,13 @@ define(function(require, exports, module) {
 					style:  {width: me.props.width - 20, height: me.props.height}, 
 					name: me.props.name, 
 					className: "fn-textarea " + (me.props.className||''), 
-					value: me.state[me.props.name], 
+					defaultValue: me.state[me.props.name], 
 					"data-maxlength": me.props.maxlength, 
 					onChange: me.textareaChangeHandler})
 			);
 		},
 		componentDidUpdate: function(){
 			this.resize();
-		},
-		// 黑魔法
-		fixedMaxlength: function(node, name, onChange, maxlength){
-			console.log('fixedMaxlength');
-			var me = this;
-			me.state[name] = node.val().slice(0, maxlength);
-			me.forceUpdate();
-			// onChange && onChange(conf);
 		},
 		componentDidMount: function(){
 			var me = this,
