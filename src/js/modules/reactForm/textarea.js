@@ -44,7 +44,9 @@ define(function(require, exports, module) {
 			this.resize();
 		},
 		fixedMaxlength: function(maxlength, val){
-			return IE8 ? maxlength + val.match(REX_ENTER).length : maxlength;
+			if(!IE8) return maxlength;
+			var len = val.match(REX_ENTER);
+			return len ? maxlength + len.length : maxlength;
 		},
 		componentDidMount: function(){
 			var me = this,
