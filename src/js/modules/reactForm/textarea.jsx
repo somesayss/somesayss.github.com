@@ -10,10 +10,6 @@ define(function(require, exports, module) {
 		React = require('react'),
 		limit = require('limit');
 
-	// 变量
-	var IE8 = document.documentMode === 8,
-		REX_ENTER = /\r\n/g;
-
 	// 类	
 	var Textarea = React.createClass({
 		mixins: [Common],
@@ -43,10 +39,13 @@ define(function(require, exports, module) {
 		componentDidUpdate: function(){
 			this.resize();
 		},
-		fixedMaxlength: function(maxlength, val){
-			if(!IE8) return maxlength;
-			var len = val.match(REX_ENTER);
-			return len ? maxlength + len.length : maxlength;
+		// 黑魔法
+		fixedMaxlength: function(node, name, onChange, maxlength){
+			console.log('fixedMaxlength');
+			var me = this;
+			me.state[name] = node.val().slice(0, maxlength);
+			me.forceUpdate();
+			// onChange && onChange(conf);
 		},
 		componentDidMount: function(){
 			var me = this,

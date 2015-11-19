@@ -8,6 +8,9 @@ define(function(require, exports, module) {
 	var $ = require('$'),
 		limit = require('limit');
 
+	// 变量
+	var IE8 = document.documentMode === 8;
+
 	// 类	
 	var InputCommon = {
 		getInitialState: function(){
@@ -35,7 +38,11 @@ define(function(require, exports, module) {
 			}
 			// 对于textarea的特殊处理
 			else if( type === 'textarea' && maxlength !== -1 ){
-				conf[name] = val.slice( 0, maxlength );
+				if(!IE8){
+					conf[name] = val.slice(0, maxlength);
+				}else{
+					return me.fixedMaxlength(self, name, onChange, maxlength);
+				};
 			}else{
 				conf[name] = val;
 			};
