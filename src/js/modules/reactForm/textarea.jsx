@@ -11,7 +11,8 @@ define(function(require, exports, module) {
 		limit = require('limit');
 
 	// 变量
-	var IE8 = document.documentMode === 8;
+	var IE8 = document.documentMode === 8,
+		REX_ENTER = /\r\n/g;
 
 	// 类	
 	var Textarea = React.createClass({
@@ -42,6 +43,9 @@ define(function(require, exports, module) {
 		componentDidUpdate: function(){
 			this.resize();
 		},
+		fixedMaxlength: function(maxlength, val){
+			return IE8 ? maxlength + val.match(REX_ENTER).length : maxlength;
+		},
 		componentDidMount: function(){
 			var me = this,
 				node = $(me.refs.node),
@@ -52,7 +56,7 @@ define(function(require, exports, module) {
 			// 如果存在maxlength
 			if(maxlength){
 				var state = {};
-				state[me.props.name] = me.props.value.slice(0, maxlength);
+				state[me.props.name] = me.props.value.slice( 0, me.fixedMaxlength(maxlength) );
 				me.setState(state);
 			}else{
 				me.componentDidUpdate();
