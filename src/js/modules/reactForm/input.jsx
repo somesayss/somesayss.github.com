@@ -6,24 +6,28 @@ define(function(require, exports, module) {
 
 	// 依赖
 	var Common = require('./common'),
+		limit = require('limit'),
 		React = require('react');
 
 	// 类	
-	var InputText = React.createClass({
-		mixins: [Common],
+	var InputSeed = React.createClass({
 		render: function(){
+			var me = this;
 			return (
-				<input type="text" 
-					style={ {width:this.props.width - 20} }
-					name={this.props.name} 
-					className={"fn-input " + this.props.className} 
-					value={this.state[this.props.name]} 
-					onChange={this.changeHandler} />
+				<label className={'fn-input-label '+me.props.className} >
+					<input
+						tabIndex="0"
+						type={me.props.type}
+						name={me.props.name} 
+						onChange={ limit.cb(me.props.onChange) }
+						checked={me.props.checked}
+						value={me.props.value} /> {me.props.title}
+				</label>
 			);
 		}
 	});
 
 	// 接口
-	module.exports = InputText;
+	module.exports = InputSeed;
 
 });

@@ -33,7 +33,7 @@ define(function(require, exports, module) {
 					className={"fn-textarea " + (me.props.className||'')} 
 					value={me.state[me.props.name]}
 					data-maxlength={me.props.maxlength}
-					onChange={me.textareaChangeHandler}></textarea>
+					onChange={ limit.cb(me.textareaChangeHandler) }></textarea>
 			);
 		},
 		componentDidUpdate: function(){

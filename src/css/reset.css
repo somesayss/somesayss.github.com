@@ -68,4 +68,9 @@ button::-moz-focus-inner, input[type="reset"]::-moz-focus-inner, input[type="but
 input[type="submit"], input[type="reset"], input[type="button"], input[type="text"], input[type="number"], button, select {
   -webkit-appearance: none; }
 
+/** 增加radio checkbox的焦点样式 */
+input[type="checkbox"]:focus, input[type="radio"]:focus {
+  outline: 1px dashed #4d90fe;
+  outline-offset: 1px; }
+
 /*# sourceMappingURL=reset.css.map */

@@ -6,6 +6,7 @@ define(function(require, exports, module) {
 
 	// 依赖
 	var Common = require('./common'),
+		Input = require('./input'),
 		limit = require('limit'),
 		React = require('react');
 
@@ -18,13 +19,15 @@ define(function(require, exports, module) {
 				<span>
 					{limit.map(me.props.options, function(val, key){
 						return (
-							<label key={val.value} className="fn-MaRi10" >
-								<input type="radio"
-									name={me.props.name} 
-									onChange={me.changeHandler}
-									checked={val.value === me.state[me.props.name] && true}
-									value={val.value} /> {val.key}
-							</label>
+							<Input 
+								type="radio"
+								key={val.value}
+								name={me.props.name}
+								className="fn-MaRi10"
+								value={val.value}
+								title={val.key}
+								checked={val.value === me.state[me.props.name] && true}
+								onChange={ limit.cb(me.changeHandler) } />
 						);
 					})}
 				</span>

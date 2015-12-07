@@ -27,26 +27,26 @@ define(function(require, exports, module) {
 				type = self.prop('type'),
 				val = self.val(),
 				maxlength = self.data('maxlength'),
-				onChange = this.props.onChange,
-				conf = {};
+				onChange =  limit.cb(this.props.onChange),
+				state = {};
 			// 对于checkbox的特殊处理
 			if( type === 'checkbox' ){
 				if( self.prop('checked') ){
 					me.state[name].push(val);
-					conf[name] = me.state[name];
+					state[name] = me.state[name];
 				}else{
-					conf[name] = limit.difference(me.state.like, val);
+					state[name] = limit.difference(me.state[name], val);
 				};
 			}
 			// 对于textarea的特殊处理
 			else if( type === 'textarea' && maxlength !== -1 ){
 				var str = val.slice(0, maxlength);
-				conf[name] = IE8 ? str.replace(REX_ENTER, STR_ENTER) : str;
+				state[name] = IE8 ? str.replace(REX_ENTER, STR_ENTER) : str;
 			}else{
-				conf[name] = val;
+				state[name] = val;
 			};
-			me.setState(conf);
-			onChange && onChange(conf);
+			me.setState(state);
+			onChange(state);
 		}
 	};
 

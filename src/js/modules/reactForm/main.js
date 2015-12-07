@@ -6,11 +6,13 @@ define(function(require, exports, module) {
 
 	// 接口
 	module.exports = {
-		Input: 		require('./input'),
-		Select: 	require('./select'),
-		Radio: 		require('./radio'),
-		Checkbox: 	require('./checkbox'),
-		Textarea: 	require('./textarea')
+		Text: require('./text'),
+		Select: require('./select'),
+		RadioList: require('./radio-list'),
+		CheckboxList: require('./checkbox-list'),
+		Textarea: require('./textarea'),
+		Input: require('./input'),
+		Button: require('./button')
 	};
 
 });

@@ -6,6 +6,7 @@ define(function(require, exports, module) {
 
 	// 依赖
 	var Common = require('./common'),
+		Input = require('./input'),
 		limit = require('limit'),
 		React = require('react');
 
@@ -18,13 +19,15 @@ define(function(require, exports, module) {
 				React.createElement("span", null, 
 					limit.map(me.props.options, function(val, key){
 						return (
-							React.createElement("label", {key: val.value, className: "fn-MaRi10"}, 
-								React.createElement("input", {type: "checkbox", 
-									name: me.props.name, 
-									onChange: me.changeHandler, 
-									checked:  limit.contains(me.state.like, val.value), 
-									value: val.value}), " ", val.key
-							)
+							React.createElement(Input, {
+								type: "checkbox", 
+								key: val.value, 
+								name: me.props.name, 
+								className: "fn-MaRi10", 
+								value: val.value, 
+								title: val.key, 
+								onChange:  limit.cb(me.changeHandler), 
+								checked: limit.contains(me.state[me.props.name], val.value)})
 						);
 					})
 				)

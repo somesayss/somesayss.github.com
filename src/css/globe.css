@@ -1,4 +1,13 @@
 @charset "UTF-8";
+/** 蓝色 */
+/** 灰色 */
+/** 浅灰 */
+/** 红色 */
+/** 白色 */
+/** 黑色 */
+/** 浅黑 */
+/** 深黑 */
+/** 橙色 */
 /** 功能 */
 * {
   -webkit-tap-highlight-color: transparent;
@@ -119,7 +128,7 @@
 .fn-BaCoFFF {
   background-color: #FFF; }
 
-.fn-BaCoF2F2F2 {
+.fn-BaCoLightGray {
   background-color: #F2F2F2; }
 
 .fn-CoFFF {
@@ -134,10 +143,9 @@
 .fn-Co000 {
   color: #000; }
 
-.fn-Co4d90fe {
+.fn-CoBule {
   color: #4d90fe; }
 
-/** 蓝色 */
 .fn-FoWeBo {
   font-weight: bold; }
 
@@ -154,7 +162,7 @@
 .fn-link-blue:hover {
   text-decoration: underline; }
 
-.fn-focus:focus, .fn-input:focus, .fn-textarea:focus, .fn-select:focus {
+.fn-input:focus, .fn-textarea:focus, .fn-select:focus {
   border-color: #4d90fe;
   box-shadow: 0px 0px 3px rgba(77, 144, 254, 0.3); }
 
@@ -172,6 +180,85 @@
   padding: 4px 9px 3px 9px; }
 
 /** 小号版高度25 */
+.fn-input-label {
+  font-size: 1.2em;
+  display: inline-block;
+  line-height: 1.2em; }
+  .fn-input-label > input {
+    float: left;
+    margin: 1px 3px 0 0; }
+
+/** checkbox radio的显示文本 */
+.fn-button {
+  border: 1px solid #0161fd;
+  height: 30px;
+  padding: 6px 9px;
+  color: #FFF;
+  background: #4d90fe;
+  border-radius: 2px; }
+  .fn-button:focus {
+    outline: 1px solid #4d90fe;
+    outline-offset: 1px; }
+  .fn-button:active {
+    background: #1a70fe;
+    border-color: #0157e4;
+    outline: none; }
+
+/** 默认的按钮[蓝色] */
+.fn-button-gray {
+  border: 1px solid #a6a6a6;
+  height: 30px;
+  padding: 6px 9px;
+  color: #FFF;
+  background: #CCC;
+  border-radius: 2px; }
+  .fn-button-gray:focus {
+    outline: 1px solid #CCC;
+    outline-offset: 1px; }
+  .fn-button-gray:active {
+    background: #b3b3b3;
+    border-color: #999999;
+    outline: none; }
+
+/** 灰色的按钮 */
+.fn-button-red {
+  border: 1px solid #b30000;
+  height: 30px;
+  padding: 6px 9px;
+  color: #FFF;
+  background: #F00;
+  border-radius: 2px; }
+  .fn-button-red:focus {
+    outline: 1px solid #F00;
+    outline-offset: 1px; }
+  .fn-button-red:active {
+    background: #cc0000;
+    border-color: #990000;
+    outline: none; }
+
+/** 红色的按钮 */
+.fn-button-orange {
+  border: 1px solid #b34700;
+  height: 30px;
+  padding: 6px 9px;
+  color: #FFF;
+  background: #F60;
+  border-radius: 2px; }
+  .fn-button-orange:focus {
+    outline: 1px solid #F60;
+    outline-offset: 1px; }
+  .fn-button-orange:active {
+    background: #cc5200;
+    border-color: #993d00;
+    outline: none; }
+
+/** 橙色的按钮 */
+.fn-button-sm {
+  height: 25px;
+  padding: 0 9px;
+  line-height: 1.1em; }
+
+/** 小号版本 */
 /** 模块：选择框 */
 .fn-select {
   border: 1px solid #CCC;
@@ -180,7 +267,8 @@
   background: #FFF;
   padding: 6px;
   -webkit-appearance: menulist-button;
-  color: #666; }
+  color: #666;
+  border-radius: 5px; }
 
 /** 基础高度30 */
 .fn-select-sm {

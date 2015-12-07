@@ -30,19 +30,25 @@ define(function(require, exports, module) {
 			return (
 				<div>
 					<p>
-						<Form.Input width="200" name="name" value="我是名称" onChange={this.change} />
+						<Form.Text width="200" name="name" value="我是名称" onChange={this.change} maxlength="10" />
 					</p>
 					<p className="fn-MaTo10">
 						<Form.Select width="200" name="diqu" value={this.state.diqu} onChange={this.change} options={this.props.diqu}/>
 					</p>
 					<p className="fn-MaTo10">
-						<Form.Radio name="sex" value={this.state.sex} onChange={this.change} options={this.props.sex}/>
+						<Form.RadioList name="sex" value={this.state.sex} onChange={this.change} options={this.props.sex}/>
 					</p>
 					<p className="fn-MaTo10">
-						<Form.Checkbox name="like" value={this.state.like} onChange={this.change} options={this.props.like} />
+						<Form.CheckboxList name="like" value={this.state.like} onChange={this.change} options={this.props.like} />
 					</p>
 					<p className="fn-MaTo10">
 						<Form.Textarea width="200" height="100" name="jianjie" value={this.state.jianjie} onChange={this.change}  />
+					</p>
+					<p className="fn-MaTo10">
+						<Form.Input type="checkbox" name="aaa" title="哈哈" value="bbb"  />
+					</p>
+					<p className="fn-MaTo10">
+						<Form.Button title="确 定" />
 					</p>
 				</div>
 			);
