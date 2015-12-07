@@ -2,6 +2,7 @@
 // 变量 
 $IMG_PATH: "../../img/" !default;
 $FONT_SIZE: 	50 		!default;
+$LINE_HEIGHT_SIZE: 	50 		!default;
 $WIDTH_SIZE: 	1000 	!default;
 $HEIGH_SIZE: 	100 	!default;
 $PADDING_SIZE: 	100 	!default;
@@ -95,7 +96,7 @@ $COLOR_ORANGE:	 	#F60; 		/** 橙色 */
 	/** 模块：选择框 */
 	.fn-select{
 		@extend %fn-focus;
-		border:1px solid $COLOR_GRAY;height:30px;border-radius:0;background:#FFF;padding:6px;-webkit-appearance:menulist-button;color:#666;border-radius:5px;
+		border:1px solid $COLOR_GRAY;height:30px;border-radius:0;background:#FFF;padding:6px;-webkit-appearance:menulist-button;color:#666;
 	}/** 基础高度30 */
 	.fn-select-sm{height:25px;}/** 小号版高度25 */
 	/** 模块：文本域 */
@@ -123,6 +124,10 @@ $COLOR_ORANGE:	 	#F60; 		/** 橙色 */
 	@each $item in map-keys($DISPLAY_LIST){ .fn-Di#{$item}{display:map-get($DISPLAY_LIST, $item)} }
 	/** 迭代：字体大小 */
 	$guid: 12; @while $guid <= $FONT_SIZE { .fn-FoSi#{$guid}{font-size:$guid+px;} $guid: $guid + 2; }
+	$guid: 12; @while $guid <= $FONT_SIZE { .fn-FoSiEm#{$guid}{font-size:$guid/10+em;} $guid: $guid + 2; }
+	/** 迭代：行高 */
+	$guid: 10; @while $guid <= $LINE_HEIGHT_SIZE { .fn-LiHe#{$guid}{line-height:$guid+px;} $guid: $guid + 5; }
+	$guid: 10; @while $guid <= $LINE_HEIGHT_SIZE { .fn-LiHeEm#{$guid}{line-height:$guid/10+em;} $guid: $guid + 5; }
 	/** 迭代：宽度大小 */
 	$guid: 5; @while $guid <= $WIDTH_SIZE { .fn-Wi#{$guid}{width:$guid+px;} $guid: $guid + 5; }
 	/** 迭代：高度大小 */

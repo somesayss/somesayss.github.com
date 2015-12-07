@@ -267,8 +267,7 @@
   background: #FFF;
   padding: 6px;
   -webkit-appearance: menulist-button;
-  color: #666;
-  border-radius: 5px; }
+  color: #666; }
 
 /** 基础高度30 */
 .fn-select-sm {
@@ -382,6 +381,121 @@
 
 .fn-FoSi50 {
   font-size: 50px; }
+
+.fn-FoSiEm12 {
+  font-size: 1.2em; }
+
+.fn-FoSiEm14 {
+  font-size: 1.4em; }
+
+.fn-FoSiEm16 {
+  font-size: 1.6em; }
+
+.fn-FoSiEm18 {
+  font-size: 1.8em; }
+
+.fn-FoSiEm20 {
+  font-size: 2em; }
+
+.fn-FoSiEm22 {
+  font-size: 2.2em; }
+
+.fn-FoSiEm24 {
+  font-size: 2.4em; }
+
+.fn-FoSiEm26 {
+  font-size: 2.6em; }
+
+.fn-FoSiEm28 {
+  font-size: 2.8em; }
+
+.fn-FoSiEm30 {
+  font-size: 3em; }
+
+.fn-FoSiEm32 {
+  font-size: 3.2em; }
+
+.fn-FoSiEm34 {
+  font-size: 3.4em; }
+
+.fn-FoSiEm36 {
+  font-size: 3.6em; }
+
+.fn-FoSiEm38 {
+  font-size: 3.8em; }
+
+.fn-FoSiEm40 {
+  font-size: 4em; }
+
+.fn-FoSiEm42 {
+  font-size: 4.2em; }
+
+.fn-FoSiEm44 {
+  font-size: 4.4em; }
+
+.fn-FoSiEm46 {
+  font-size: 4.6em; }
+
+.fn-FoSiEm48 {
+  font-size: 4.8em; }
+
+.fn-FoSiEm50 {
+  font-size: 5em; }
+
+/** 迭代：行高 */
+.fn-LiHe10 {
+  line-height: 10px; }
+
+.fn-LiHe15 {
+  line-height: 15px; }
+
+.fn-LiHe20 {
+  line-height: 20px; }
+
+.fn-LiHe25 {
+  line-height: 25px; }
+
+.fn-LiHe30 {
+  line-height: 30px; }
+
+.fn-LiHe35 {
+  line-height: 35px; }
+
+.fn-LiHe40 {
+  line-height: 40px; }
+
+.fn-LiHe45 {
+  line-height: 45px; }
+
+.fn-LiHe50 {
+  line-height: 50px; }
+
+.fn-LiHeEm10 {
+  line-height: 1em; }
+
+.fn-LiHeEm15 {
+  line-height: 1.5em; }
+
+.fn-LiHeEm20 {
+  line-height: 2em; }
+
+.fn-LiHeEm25 {
+  line-height: 2.5em; }
+
+.fn-LiHeEm30 {
+  line-height: 3em; }
+
+.fn-LiHeEm35 {
+  line-height: 3.5em; }
+
+.fn-LiHeEm40 {
+  line-height: 4em; }
+
+.fn-LiHeEm45 {
+  line-height: 4.5em; }
+
+.fn-LiHeEm50 {
+  line-height: 5em; }
 
 /** 迭代：宽度大小 */
 .fn-Wi5 {
