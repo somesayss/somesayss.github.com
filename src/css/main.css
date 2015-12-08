@@ -1751,4 +1751,29 @@ body {
   height: 100px;
   background: url("../../img/tutu.jpg") no-repeat 0 0; }
 
+/** ECMAScript 6.0 */
+.ec-title {
+  background: #4d90fe;
+  color: #FFF;
+  padding: 2px 5px;
+  border-radius: 3px; }
+
+.ec-attr {
+  padding: 2px 0;
+  border-bottom: 1px dashed #CCC; }
+
+.ec-content {
+  background: #FAFAFA;
+  margin: 5px 40px 0 40px;
+  padding: 5px; }
+
+.es-code {
+  font-family: Tahoma; }
+  .es-code .ch-seed {
+    display: inline-block;
+    background: #fdf6e3;
+    padding: 0 10px;
+    margin-left: 2px;
+    border-left: 2px solid #4d90fe; }
+
 /*# sourceMappingURL=main.css.map */

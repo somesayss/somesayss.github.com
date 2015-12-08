@@ -21,3 +21,12 @@ body{background:$color;}
 
 
 .tutu{width:100px;height:100px;background:background("tutu.jpg");}
+
+/** ECMAScript 6.0 */
+.ec-title{background:$COLOR_BULE;color:$COLOR_WHITE;padding:2px 5px;border-radius:3px;}
+.ec-attr{padding:2px 0;border-bottom:1px dashed #CCC;}
+.ec-content{background:#FAFAFA;margin:5px 40px 0 40px;padding:5px;}
+.es-code{
+	font-family:Tahoma;
+	.ch-seed{display:inline-block;background:#fdf6e3;padding:0 10px;margin-left:2px;border-left:2px solid $COLOR_BULE;}
+}
