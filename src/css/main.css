@@ -212,6 +212,9 @@ hr {
 .fn-CoFFF {
   color: #FFF; }
 
+.fn-CoCCC {
+  color: #CCC; }
+
 .fn-Co666 {
   color: #666; }
 
@@ -1768,11 +1771,12 @@ body {
   padding: 5px; }
 
 .es-code {
-  font-family: Tahoma; }
+  margin: 5px 0; }
   .es-code .ch-seed {
+    font-family: Courier New;
     display: inline-block;
     background: #fdf6e3;
-    padding: 0 10px;
+    padding: 5px 10px;
     margin-left: 2px;
     border-left: 2px solid #4d90fe; }
 

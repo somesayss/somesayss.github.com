@@ -8,24 +8,15 @@ define(function(require, exports, module) {
 	var React = require('react'),
 		ReactDOM = require('reactDOM'),
 		Template = require('./template'),
-		Code = require('./code');
+		Code = require('./code'),
+		EsString = require('./EsString');
 
 	var Es6 = React.createClass({displayName: "Es6",
 		render: function(){
 			return (
 				React.createElement("div", null, 
-					React.createElement("h1", {className: "fn-FoSi24"}, "Hello ECMAScript 6.0"), 
-					React.createElement(Template, {title: "字符 String", attr: "codePointAt1()"}, 
-						"你好", 
-						React.createElement(Code, null, 
-							"var a = ", '{}', ";", React.createElement("br", null), 
-							"var b = [];"
-						), 
-						"你好"
-					), 
-					React.createElement(Template, {title: "字符 String", attr: "codePointAt2()", end: "true"}, 
-						"123"
-					), 
+					React.createElement("h1", {className: "fn-FoSi24"}, "Hello ECMAScript 6.0 ", React.createElement("span", {style:  {fontSize: "0.5em"} }, "参考：", React.createElement("a", {href: "http://es6.ruanyifeng.com/#docs/string", target: "_blank", className: "fn-link-blue"}, "点这里"))), 
+					React.createElement(EsString, {title: "字符 String"}), 
 					React.createElement(Template, {title: "数字 Number", attr: "codePointAt()", end: "true"}, 
 						"1234"
 					)

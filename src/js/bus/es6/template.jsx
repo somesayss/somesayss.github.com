@@ -16,6 +16,7 @@ define(function(require, exports, module) {
 			var me = this,
 				title,
 				end,
+				children,
 				props = me.props;
 			// 遍历值
 			if(!guid[props.title]){
@@ -26,11 +27,15 @@ define(function(require, exports, module) {
 			if(props.end === 'true'){
 				end = <hr />;
 			};
+			// 内容
+			if(props.children){
+				children = <div className="ec-content">{props.children}</div>
+			};
 			return (
 				<div className="fn-FoSiEm12 fn-LiHeEm15">
 				 	{title}
-				 	<h3 className="fn-PaLe20 fn-MaTo5">{guid[props.title]++}. <span className="ec-attr">{props.attr}</span></h3>
-				 	<div className="ec-content">{props.children}</div>
+				 	<h3 className={"fn-PaLe20 fn-MaTo5 " + (props.disabled === 'true' ? 'fn-CoCCC' : '') }>{guid[props.title]++}. <span className="ec-attr">{props.attr}</span></h3>
+				 	{children}
 				 	{end}
 				</div>
 			);

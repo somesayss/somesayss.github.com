@@ -16,6 +16,7 @@ define(function(require, exports, module) {
 			var me = this,
 				title,
 				end,
+				children,
 				props = me.props;
 			// 遍历值
 			if(!guid[props.title]){
@@ -26,11 +27,15 @@ define(function(require, exports, module) {
 			if(props.end === 'true'){
 				end = React.createElement("hr", null);
 			};
+			// 内容
+			if(props.children){
+				children = React.createElement("div", {className: "ec-content"}, props.children)
+			};
 			return (
 				React.createElement("div", {className: "fn-FoSiEm12 fn-LiHeEm15"}, 
 				 	title, 
-				 	React.createElement("h3", {className: "fn-PaLe20 fn-MaTo5"}, guid[props.title]++, ". ", React.createElement("span", {className: "ec-attr"}, props.attr)), 
-				 	React.createElement("div", {className: "ec-content"}, props.children), 
+				 	React.createElement("h3", {className: "fn-PaLe20 fn-MaTo5 " + (props.disabled === 'true' ? 'fn-CoCCC' : '') }, guid[props.title]++, ". ", React.createElement("span", {className: "ec-attr"}, props.attr)), 
+				 	children, 
 				 	end
 				)
 			);

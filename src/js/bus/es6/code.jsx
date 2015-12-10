@@ -14,9 +14,9 @@ define(function(require, exports, module) {
 				props = me.props;
 			return (
 				<div className="es-code">
-					<div className="ch-seed">
+					<pre className="ch-seed">
 						{props.children}
-					</div>
+					</pre>
 				</div>
 			);
 		}

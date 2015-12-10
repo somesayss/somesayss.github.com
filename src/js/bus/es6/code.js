@@ -14,7 +14,7 @@ define(function(require, exports, module) {
 				props = me.props;
 			return (
 				React.createElement("div", {className: "es-code"}, 
-					React.createElement("div", {className: "ch-seed"}, 
+					React.createElement("pre", {className: "ch-seed"}, 
 						props.children
 					)
 				)
