@@ -25,7 +25,7 @@ define(function(require, exports, module) {
 						"字符串长度的的BUG ", React.createElement("br", null), 
 						"随意找个超过 0xFFFF 的字符", 
 						React.createElement(Code, null, 
-							"'𠀀'.length //2"
+							"'𠀋'.length //2"
 						), 
 						"正确获取字符串长度应该这样写", 
 						React.createElement(Code, null,  stringSize+'')
@@ -33,19 +33,19 @@ define(function(require, exports, module) {
 					React.createElement(Template, {title: props.title, attr: "codePointAt()"}, 
 						"正确获取超过0xFFFF之外的字符的code", 
 						React.createElement(Code, null, 
-							"'𠀀'.charCodeAt(0).toString(16); //d840 ", React.createElement("br", null), 
-							"'𠀀'.charCodeAt(1).toString(16); //dc00 ", React.createElement("br", null), 
-							"'𠀀'.codePointAt(0).toString(16); //20000 ", React.createElement("br", null)
+							"'𠀋'.charCodeAt(0).toString(16); //d840 ", React.createElement("br", null), 
+							"'𠀋'.charCodeAt(1).toString(16); //dc0b ", React.createElement("br", null), 
+							"'𠀋'.codePointAt(0).toString(16); //2000b ", React.createElement("br", null)
 						), 
 						"可以用刚才写的 parseUnicode 函数验证", 
 						React.createElement(Code, null, 
-							"parseUnicode('20000') //[\"D840\", \"DC00\"]"
+							"parseUnicode('2000b') //[\"D840\", \"DC00B]"
 						)
 					), 
 					React.createElement(Template, {title: props.title, attr: "String.fromCodePoint()"}, 
 						"codePointAt的反义版", 
 						React.createElement(Code, null, 
-							"String.fromCodePoint(0x20000) //𠀀"
+							"String.fromCodePoint(0x2000b) //𠀋"
 						)
 					), 
 					React.createElement(Template, {title: props.title, attr: "at()", disabled: "true"}), 

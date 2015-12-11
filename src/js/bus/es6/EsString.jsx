@@ -25,7 +25,7 @@ define(function(require, exports, module) {
 						字符串长度的的BUG <br />
 						随意找个超过 0xFFFF 的字符
 						<Code>
-							'𠀀'.length //2
+							'𠀋'.length //2
 						</Code>
 						正确获取字符串长度应该这样写
 						<Code>{ stringSize+'' }</Code>
@@ -33,19 +33,19 @@ define(function(require, exports, module) {
 					<Template title={props.title} attr="codePointAt()">
 						正确获取超过0xFFFF之外的字符的code
 						<Code>
-							'𠀀'.charCodeAt(0).toString(16); //d840 <br />
-							'𠀀'.charCodeAt(1).toString(16); //dc00 <br />
-							'𠀀'.codePointAt(0).toString(16); //20000 <br />
+							'𠀋'.charCodeAt(0).toString(16); //d840 <br />
+							'𠀋'.charCodeAt(1).toString(16); //dc0b <br />
+							'𠀋'.codePointAt(0).toString(16); //2000b <br />
 						</Code>
 						可以用刚才写的 parseUnicode 函数验证
 						<Code>
-							parseUnicode('20000') //["D840", "DC00"]
+							parseUnicode('2000b') //["D840", "DC00B]
 						</Code>
 					</Template>
 					<Template title={props.title} attr="String.fromCodePoint()">
 						codePointAt的反义版
 						<Code>
-							String.fromCodePoint(0x20000) //𠀀
+							String.fromCodePoint(0x2000b) //𠀋
 						</Code>
 					</Template>
 					<Template title={props.title} attr="at()" disabled="true"></Template>
