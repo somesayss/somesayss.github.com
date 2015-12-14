@@ -43,6 +43,12 @@ define(function(require, exports) {
 		nativeBind 			= functionProto.bind,
 		nativeTrim 			= stringProto.trim;
 
+	// 原生ES6+的方法
+	var nativeCodePointAt	= stringProto.codePointAt,
+		nativeFromCodePoint = String.fromCodePoint,
+		nativeIncludes 		= stringProto.includes,
+		nativeStartsWith 	= stringProto.startsWith;
+
 	// 空函数
 	var K = limit.K = function(k){return k};
 
@@ -73,6 +79,16 @@ define(function(require, exports) {
 		}catch(e){
 			log('limitJS ', args);
 		};
+	};
+
+	// 警告
+	var typeWarn = {
+		toString: function(obj){
+			return log('warn', obj, 'change into', '\''+obj+'\'', 'limit.toString is called');
+		},
+		toArray:  function(obj){
+			return log('warn', obj, 'change into []', 'limit.toArray is called');
+		}
 	};
 
 	///////////////////////////////////////////////////////
@@ -173,7 +189,8 @@ define(function(require, exports) {
 
 		// 判断是否是window
 		var isWin = limit.isWin = function(n){
-			return !!n && n.window === n && n.self === n;
+			// IE8 下 window.self === window // false
+			return !!n && n.window === n && n.self == n;
 		};
 
 		// 比较 Sting Number Boolean 这三种类型 值转换比较 new String('123') == '123'
@@ -230,8 +247,14 @@ define(function(require, exports) {
 
 	/////////////////
 	// 字符串的方法
-	// trim[去掉头尾空格]
+	// trim[去掉头尾空格] 
+	// codePointAt[字符串获取编码] fromCodePoint[编码转换成字符串] includes[包含] startsWith[开始] endsWith[结束]
 	////////////////
+
+		// 转义成字符串
+		var limiToString = limit.toString = function(obj){
+			return isString(obj) ? obj : ( typeWarn.toString(obj), ''+obj );
+		};
 
 		// 去除两边的空格
 		var REG_EXP_TRIM = /^\s+|\s+$/g;
@@ -241,6 +264,86 @@ define(function(require, exports) {
 			if(nativeTrim) return nativeTrim.call(n);
 			return n.replace(REG_EXP_TRIM, '');
 		};
+
+		// 反编译
+		function fixCodePointAt(codeH, codeL){
+			codeH = ( '0000000000' + (codeH & 1023).toString(2) ).slice(-10);
+			codeL = ( '0000000000' + (codeL & 1023).toString(2) ).slice(-10);
+			return ( parseInt(codeH+codeL, 2) + 0x10000 ).toString(16);
+		};
+
+		// 获取字符编码
+		limit.codePointAt = function(str, index){
+			str = limiToString(str);
+			if(nativeCodePointAt){
+				return nativeCodePointAt.call(str, index).toString(16);
+			}else{
+				var code = str.charCodeAt(index);
+				if(code >= 0xD800 && code <= 0xDBFF){
+					return fixCodePointAt(code, str.charCodeAt(++index));
+				}else{
+					return code.toString(16);
+				};
+			};
+		};
+
+		// 编译
+		function parseUnicode(str16){
+			// 防御如果在 0xFFFF 内的不转义
+			if( parseInt(str16, 16) <= 0xFFFF ) return [str16];
+			// 1.原始长度减去0x10000
+			var origin = parseInt(str16, 16) - 0x10000;
+			// 获取高位和低位
+			var originH = origin >> 10,
+				originL = origin & 1023;
+			// 获取转义后的高低位
+			originH = (0xD800 | originH).toString(16).toUpperCase();
+			originL = (0xDC00 | originL).toString(16).toUpperCase();
+			return [originH, originL];
+		};
+
+		// 通过编码获取字符
+		limit.fromCodePoint = function(code){
+			// 必须是有限的数字
+			if(!isFinite(code)) return log('warn', code, 'the code must be a number'), '';
+			if(nativeFromCodePoint){
+				return nativeFromCodePoint.call(String, code);
+			}else{
+				code = map(parseUnicode(code.toString(16)), function(val){
+					return '\\u' + val;
+				}).join('');
+				return new Function('return "' + code + '"')();
+			};
+		};
+
+		// 包含
+		limit.includes = function(str, arg, index){
+			str = limiToString(str);
+			if(nativeIncludes){
+				return nativeIncludes.call(str, arg, index);
+			}else{
+				return str.indexOf(arg, index) !== -1;				
+			};
+		};
+
+		// 开头
+		limit.startsWith = function(str, arg, index){
+			str = limiToString(str);
+			if(!nativeStartsWith){
+				return nativeStartsWith.call(str, arg, index);
+			}else{
+				index = ~~index;
+				return str.indexOf(arg, index) === index;
+			};
+		};
+
+		// 结尾
+		limit.endsWith = function(str, arg, index){
+			
+		};
+
+
+		console.log( limit.startsWith('Hello ECMAScript 6.0', 'ECMA', 5) );
 
 	///////////////
 	// 数字的方法
@@ -653,7 +756,7 @@ define(function(require, exports) {
 		var toArray = limit.toArray = function(obj){
 			// 如果是类数组对象的话就格式化数组
 			// 会影响的类型:string array nodeList jObject arguments
-			return isArrayLike(obj) ? slice.call(obj) : (log('warn', obj, 'change into [], limit.toArray is called'), []);
+			return isArrayLike(obj) ? slice.call(obj) : ( typeWarn.toArray(obj), [] );
 		};
 
 		// 获取数组

@@ -7,6 +7,7 @@ define(function(require, exports, module) {
 	// 依赖
 	var React = require('react'),
 		Code = require('./code'),
+		limit = require('limit'),
 		Template = require('./template');
 
 	// 类
@@ -82,7 +83,13 @@ define(function(require, exports, module) {
 					<Template title={props.title} attr="repeat()">
 						重复字符串几次
 						<Code>
-							'hello'.repeat(2);	//hellohello
+							'hello'.repeat(2);	//'hellohello' <br />
+							'hello'.repeat(2.1);	//'hellohello' <br />
+							'hello'.repeat(-0.1);	//'' <br />
+							'hello'.repeat(NaN);	//'' <br />
+							'hello'.repeat('a');	//'' <br />
+							'hello'.repeat(Infinity);	//Error <br />
+							'hello'.repeat(-1);	//Error <br />
 						</Code>
 						比较完善的实现，应对各种情况
 						<Code>
@@ -116,7 +123,7 @@ function parseUnicode(str16){
 
 // 真确获取长度
 function stringSize(str){
-	return str.replace(/[\uD800-\uDFFF]{2}/g, '1').length;
+	return str.replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, '1').length;
 };
 
 // 重复字符
@@ -133,7 +140,10 @@ function stringRepear(str, num){
 	// 返回
 	return tem.map(function(){ return str }).join('');
 };
+	
+	
 
+	// console.log( '𠀀'.codePointAt(1).toString(16) );
 
 	return EsString;
 
