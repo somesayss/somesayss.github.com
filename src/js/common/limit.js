@@ -49,7 +49,9 @@ define(function(require, exports) {
 		nativeIncludes 		= stringProto.includes,
 		nativeStartsWith 	= stringProto.startsWith,
 	 	nativeEndsWith 		= stringProto.endsWith,
-	 	nativeRepeat		= stringProto.repeat;
+	 	nativeRepeat		= stringProto.repeat,
+	 	nativePadStart		= stringProto.padStart,
+	 	nativePadEnd 		= stringProto.padEnd;
 
 	// 空函数
 	var K = limit.K = function(k){return k};
@@ -251,7 +253,7 @@ define(function(require, exports) {
 	// 字符串的方法
 	// trim[去掉头尾空格] 
 	// codePointAt[字符串获取编码] fromCodePoint[编码转换成字符串] includes[包含] startsWith[开始] endsWith[结束]
-	// repeat[重复]
+	// repeat[重复] padStart[前补] padEnd[后补]
 	////////////////
 
 		// 转义成字符串
@@ -270,15 +272,16 @@ define(function(require, exports) {
 
 		// 反编译
 		function fixCodePointAt(codeH, codeL){
-			codeH = ( '0000000000' + (codeH & 1023).toString(2) ).slice(-10);
-			codeL = ( '0000000000' + (codeL & 1023).toString(2) ).slice(-10);
+			codeH = padStart( (codeH & 1023).toString(2), '0', 10 );
+			codeL = padStart( (codeL & 1023).toString(2), '0', 10 );
 			return ( parseInt(codeH+codeL, 2) + 0x10000 ).toString(16);
 		};
 
 		// 获取字符编码
 		limit.codePointAt = function(str, index){
 			str = limitToString(str);
-			if(nativeCodePointAt){
+			index = ~~index;
+			if(!nativeCodePointAt){
 				return nativeCodePointAt.call(str, index).toString(16);
 			}else{
 				var code = str.charCodeAt(index);
@@ -353,12 +356,10 @@ define(function(require, exports) {
 		};
 
 		// 重复
-		limit.repeat = function(str, leg){
+		var repeat = limit.repeat = function(str, leg){
 			str = limitToString(str);
-			// 取整 把非数字的格式化为0 整数的不便 小数取整 NaN格式化为0 Infinity格式化为0
-			leg = ~~leg;
-			// 如果是负数格式化为0
-			leg < 0 && (leg = 0);
+			// 格式化为正整数
+			leg = positive(leg);
 			if(nativeRepeat){
 				return nativeRepeat.call(str, leg);
 			}else{
@@ -371,9 +372,36 @@ define(function(require, exports) {
 			};
 		};
 
+
+		// 前补后补的耦合方法
+		function padStartEnd(str, arg, leg, flag){
+			str = limitToString(str);
+			arg = limitToString(arg);
+			leg = ~~leg;
+			var max = str.length,
+				min,
+				nativeMethod = flag ? nativePadStart : nativePadEnd;
+			// 如果要的长度比原字符小就原始返回
+			if(max >= leg){
+				return str;
+			};
+			if(nativeMethod){
+				return nativeMethod.call(str, arg, leg);
+			}else{
+				min = Math.ceil( (leg - max)/arg.length );
+				return flag ? (repeat(arg, min) + str).slice(-leg) : (str + repeat(arg, min)).slice(0, leg);
+			};
+		};
+
 		// 前补
-		
+		var padStart = limit.padStart = function(str, arg, leg){
+			return padStartEnd(str, arg, leg, true);
+		};
+
 		// 后补
+		var padEnd = limit.padEnd = function(str, arg, leg){
+			return padStartEnd(str, arg, leg, false);
+		};
 
 	///////////////
 	// 数字的方法
@@ -446,30 +474,14 @@ define(function(require, exports) {
 			}) );
 		};
 
-		// 右补齐
-		function padRight(str, size){
-			// 控制入参size为正整数
-			size = positive(size);
-			// 切割
-			return ( str + padChar('0', size) ).slice(0, size);
-		};
-
-		// 左补齐
-		function padLeft(str, size){
-			// 控制入参size为正整数
-			size = positive(size);
-			// 切割
-			return ( padChar('0', size) + str ).slice(-size);
-		};
-
 		// 小数点右移
 		function movePointRight(sign, leftStr, rightStr, scale){
 			//如果 刻度比右边的字符长度小
 			if( scale < rightStr.length ){
 				return sign + leftStr + rightStr.slice(0, scale) + '.' + rightStr.slice(scale);
 			}else{
-				return sign + leftStr + padRight(rightStr, scale);
-			}
+				return sign + leftStr + padEnd(rightStr, '0', scale);
+			};
 		};
 		
 		// 小数点左移
@@ -477,8 +489,8 @@ define(function(require, exports) {
 			if( leftStr.length > scale ){
 				return sign + leftStr.slice(0, -scale) + '.' + leftStr.slice(-scale) + rightStr;
 			}else{
-				return sign + '0.' + padLeft(leftStr, scale) + rightStr;
-			}
+				return sign + '0.' + padStart(leftStr, '0', scale) + rightStr;
+			};
 		};
 
 		// 小数点偏移
@@ -1041,8 +1053,6 @@ define(function(require, exports) {
 				return !whiteBlack(factor, val1);
 			});
 		};
-
-
 
 	///////////////
 	// 函数的方法
