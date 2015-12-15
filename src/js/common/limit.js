@@ -47,7 +47,9 @@ define(function(require, exports) {
 	var nativeCodePointAt	= stringProto.codePointAt,
 		nativeFromCodePoint = String.fromCodePoint,
 		nativeIncludes 		= stringProto.includes,
-		nativeStartsWith 	= stringProto.startsWith;
+		nativeStartsWith 	= stringProto.startsWith,
+	 	nativeEndsWith 		= stringProto.endsWith,
+	 	nativeRepeat		= stringProto.repeat;
 
 	// 空函数
 	var K = limit.K = function(k){return k};
@@ -249,10 +251,11 @@ define(function(require, exports) {
 	// 字符串的方法
 	// trim[去掉头尾空格] 
 	// codePointAt[字符串获取编码] fromCodePoint[编码转换成字符串] includes[包含] startsWith[开始] endsWith[结束]
+	// repeat[重复]
 	////////////////
 
 		// 转义成字符串
-		var limiToString = limit.toString = function(obj){
+		var limitToString = limit.toString = function(obj){
 			return isString(obj) ? obj : ( typeWarn.toString(obj), ''+obj );
 		};
 
@@ -274,7 +277,7 @@ define(function(require, exports) {
 
 		// 获取字符编码
 		limit.codePointAt = function(str, index){
-			str = limiToString(str);
+			str = limitToString(str);
 			if(nativeCodePointAt){
 				return nativeCodePointAt.call(str, index).toString(16);
 			}else{
@@ -318,7 +321,7 @@ define(function(require, exports) {
 
 		// 包含
 		limit.includes = function(str, arg, index){
-			str = limiToString(str);
+			str = limitToString(str);
 			if(nativeIncludes){
 				return nativeIncludes.call(str, arg, index);
 			}else{
@@ -328,8 +331,8 @@ define(function(require, exports) {
 
 		// 开头
 		limit.startsWith = function(str, arg, index){
-			str = limiToString(str);
-			if(!nativeStartsWith){
+			str = limitToString(str);
+			if(nativeStartsWith){
 				return nativeStartsWith.call(str, arg, index);
 			}else{
 				index = ~~index;
@@ -339,11 +342,38 @@ define(function(require, exports) {
 
 		// 结尾
 		limit.endsWith = function(str, arg, index){
-			
+			str = limitToString(str);
+			if(nativeEndsWith){
+				return nativeEndsWith.call(str, arg, index);
+			}else{
+				index = arguments.length === 3 ? ~~index : str.length;
+				var leg = index - arg.length;
+				return str.lastIndexOf(arg, leg) === leg;
+			};
 		};
 
+		// 重复
+		limit.repeat = function(str, leg){
+			str = limitToString(str);
+			// 取整 把非数字的格式化为0 整数的不便 小数取整 NaN格式化为0 Infinity格式化为0
+			leg = ~~leg;
+			// 如果是负数格式化为0
+			leg < 0 && (leg = 0);
+			if(nativeRepeat){
+				return nativeRepeat.call(str, leg);
+			}else{
+				var arr = new Array(leg),
+					tem = [];
+				// 正确的塞入值
+				Array.prototype.push.apply(tem, arr);
+				// 返回
+				return tem.map(function(){ return str }).join('');
+			};
+		};
 
-		console.log( limit.startsWith('Hello ECMAScript 6.0', 'ECMA', 5) );
+		// 前补
+		
+		// 后补
 
 	///////////////
 	// 数字的方法
