@@ -11,7 +11,6 @@ define(function(require, exports, module) {
 		Event = require('events'),
 		limit = require('limit');
 
-
 	// React节点
 	var Form = require('modules/reactForm/main');
 

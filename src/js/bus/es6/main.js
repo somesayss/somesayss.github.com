@@ -9,17 +9,19 @@ define(function(require, exports, module) {
 		ReactDOM = require('reactDOM'),
 		Template = require('./template'),
 		Code = require('./code'),
-		EsString = require('./EsString');
+		EsString = require('./EsString'),
+		EsNumber = require('./EsNumber');
 
 	var Es6 = React.createClass({displayName: "Es6",
 		render: function(){
+			var me = this,
+				props = me.props;
+			
 			return (
 				React.createElement("div", null, 
 					React.createElement("h1", {className: "fn-FoSi24"}, "Hello ECMAScript 6.0 ", React.createElement("span", {style:  {fontSize: "0.5em"} }, "参考：", React.createElement("a", {href: "http://es6.ruanyifeng.com/#docs/string", target: "_blank", className: "fn-link-blue"}, "点这里"))), 
 					React.createElement(EsString, {title: "字符 String"}), 
-					React.createElement(Template, {title: "数字 Number", attr: "codePointAt()", end: "true"}, 
-						"1234"
-					)
+					React.createElement(EsNumber, {title: "数字 Number"})
 				)
 			);
 		}
