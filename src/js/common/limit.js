@@ -163,14 +163,26 @@ define(function(require, exports) {
 		};
 
 		// 是否是NaN
-		var limitIsNaN = limit.isNaN = function(n){
+		var limitIsNaN = limit.isNaN = Number.isNaN || function(n){
 			// 由于isNaN方法会预先 Number(n) 再去做判断 所以导致有些变量(+null = 0);返回错误
 			return isNumber(n) && isNaN(n);
 		};
 
 		// 是否是有限的
-		var limitIsFinite = limit.isFinite = function(n){
-			return isFinite(n) && !isNaN(parseFloat(n));
+		var limitIsFinite = limit.isFinite = Number.isFinite || function(n){
+			return isNumber(n) && isFinite(n);
+			// 原始逻辑 对 '1' 返回true
+			// return isFinite(n) && !isNaN(parseFloat(n));
+		};
+
+		// 是否为整数
+		var isInteger = limit.isInteger = Number.isInteger || function(n){
+			return limitIsFinite(n) && Math.floor(n) === n;
+		};
+
+		// 是否为安全整数
+		limit.isSafeInteger = Number.isSafeInteger || function(n){
+			return isInteger(n) && -9007199254740992 < n && n < 9007199254740992;
 		};
 
 		// 是否是空
