@@ -806,6 +806,25 @@ define(function(require, exports) {
 	// whiteList[白名单] blackList[黑名单]
 	//////////////
 
+		// 转化数组
+		var from = limit.from = Array.from || function(obj, iterator, context){
+			var arr = [];
+			// 确保是函数
+			iterator = cb(iterator);
+			if( obj && obj.length ){
+				// 不考虑IE8的话可以这样写 push.apply(arr, obj);
+				push.apply(arr, slice.call(obj));
+				return map(arr, iterator, context);
+			}else{
+				return arr;
+			};
+		};
+
+		// 正确初始化数组
+		limit.of = Array.of || function(){
+			return slice.call(arguments);
+		};
+
 		// 格式化数组
 		var toArray = limit.toArray = function(obj){
 			// 如果是类数组对象的话就格式化数组

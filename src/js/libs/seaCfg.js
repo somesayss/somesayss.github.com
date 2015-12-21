@@ -21,6 +21,7 @@
             'limit'         : 'common/limit',
             'react'         : 'common/react',
             'reactDOM'      : 'common/react-dom',
+            'reflux'        : 'common/reflux',
             '$'             : 'common/jQuery',
             '_'             : 'common/underscore1.8',
             //arale Base
