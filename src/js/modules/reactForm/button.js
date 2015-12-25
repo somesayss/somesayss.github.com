@@ -19,7 +19,7 @@ define(function(require, exports, module) {
 			props.className && className.push(props.className);
 			props.small && className.push('fn-button-sm');
 			return (
-				React.createElement("input", {type: "button", className:  className.join(' '), value: me.props.title})
+				React.createElement("input", {type: "button", className:  className.join(' '), value: props.title, onClick: props.onClick})
 			);
 		}
 	});

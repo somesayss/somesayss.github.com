@@ -11,17 +11,25 @@ define(function(require, exports, module) {
 
 	// 类	
 	var InputSeed = React.createClass({
+		getDefaultProps: function(){
+			return {
+				checked: false,
+				name: 'defaultName',
+				type: 'checkbox'
+			};
+		},
 		render: function(){
-			var me = this;
+			var me = this,
+				props = me.props;
 			return (
-				<label className={'fn-input-label '+me.props.className} >
+				<label className={'fn-input-label '+props.className} >
 					<input
 						tabIndex="0"
-						type={me.props.type}
-						name={me.props.name} 
-						onChange={ limit.cb(me.props.onChange) }
-						checked={me.props.checked}
-						value={me.props.value} /> {me.props.title}
+						type={props.type}
+						name={props.name} 
+						onChange={ limit.cb(props.onChange) }
+						checked={props.checked}
+						value={props.value} /> {props.title}
 				</label>
 			);
 		}

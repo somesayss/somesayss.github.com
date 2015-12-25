@@ -12,7 +12,8 @@ define(function(require, exports, module) {
 		CheckboxList: require('./checkbox-list'),
 		Textarea: require('./textarea'),
 		Input: require('./input'),
-		Button: require('./button')
+		Button: require('./button'),
+		Link: require('./link')
 	};
 
 });

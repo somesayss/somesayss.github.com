@@ -12,9 +12,22 @@ define(function(require, exports, module) {
 
 	// 类	
 	var Checkbox = React.createClass({
+		getDefaultProps: function(){
+			return {
+				name: 'defaultName',
+				value: []
+			};
+		},
 		mixins: [Common],
 		render: function(){
-			var me = this;
+			var me = this,
+				state = me.state,
+				props = me.props,
+				check = state[props.name];
+			// 如果check不是数组转化为数组
+			if(!limit.isArray(check)){
+				check = state[props.name] = limit.of(check);
+			};
 			return (
 				<span>
 					{limit.map(me.props.options, function(val, key){
@@ -22,12 +35,12 @@ define(function(require, exports, module) {
 							<Input 
 								type="checkbox"
 								key={val.value}
-								name={me.props.name}
+								name={props.name}
 								className="fn-MaRi10"
 								value={val.value}
 								title={val.key}
 								onChange={ limit.cb(me.changeHandler) }
-								checked={limit.contains(me.state[me.props.name], val.value)} />
+								checked={limit.contains(check, val.value)} />
 						);
 					})}
 				</span>

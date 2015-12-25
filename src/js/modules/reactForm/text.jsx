@@ -12,16 +12,26 @@ define(function(require, exports, module) {
 	// 类	
 	var InputText = React.createClass({
 		mixins: [Common],
+		getDefaultProps: function(){
+			return {
+				width: 200,
+				name: 'defaultName'
+			};
+		},
 		render: function(){
+			var me = this,
+				props = me.props,
+				state = me.state;
 			return (
 				<input
 					type="text"
-					style={ {width:this.props.width - 20} }
-					name={ this.props.name }
-					className={ "fn-input " + this.props.className }
-					value={ this.state[this.props.name] }
-					maxLength={ this.props.maxlength }
-					onChange={ limit.cb(this.changeHandler) }
+					style={ {width:props.width - 20} }
+					name={ props.name }
+					className={ "fn-input " + props.className }
+					value={ state[props.name] }
+					maxLength={ props.maxlength }
+					onChange={ limit.cb(me.changeHandler) }
+					placeholder={props.placeholder}
 				/>
 			);
 		}

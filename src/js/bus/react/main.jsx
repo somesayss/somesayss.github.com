@@ -24,22 +24,22 @@ define(function(require, exports, module) {
 			}
 		},
 		change: function(state){
-			console.log(state);
+			console.log(state, this.state);
 		},
 		render: function(){
 			return (
 				<div>
 					<p>
-						<Form.Text width="200" name="name" value="我是名称" onChange={this.change} maxlength="10" />
+						<Form.Text name="aaa" value="aaa" onChange={this.change} maxlength="10" />
 					</p>
 					<p className="fn-MaTo10">
 						<Form.Select width="200" name="diqu" value={this.state.diqu} onChange={this.change} options={this.props.diqu}/>
 					</p>
 					<p className="fn-MaTo10">
-						<Form.RadioList name="sex" value={this.state.sex} onChange={this.change} options={this.props.sex}/>
+						<Form.RadioList onChange={this.change} options={this.props.sex}/>
 					</p>
 					<p className="fn-MaTo10">
-						<Form.CheckboxList name="like" value={this.state.like} onChange={this.change} options={this.props.like} />
+						<Form.CheckboxList value={this.state.like} onChange={this.change} options={this.props.like} />
 					</p>
 					<p className="fn-MaTo10">
 						<Form.Textarea width="200" height="100" name="jianjie" value={this.state.jianjie} onChange={this.change}  />
@@ -48,7 +48,7 @@ define(function(require, exports, module) {
 						<Form.Input type="checkbox" name="aaa" title="哈哈" value="bbb"  />
 					</p>
 					<p className="fn-MaTo10">
-						<Form.Button title="确 定" />
+						<Form.Button title="确 定" onClick={this.clickHanle} />
 					</p>
 				</div>
 			);

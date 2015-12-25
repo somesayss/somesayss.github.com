@@ -22,12 +22,13 @@ define(function(require, exports, module) {
 		},
 		changeHandler: function(e){
 			var me = this,
+				props = me.props,
+				name = props.name,
 				self = $(e.target),
-				name = self.prop('name'),
 				type = self.prop('type'),
 				val = self.val(),
 				maxlength = self.data('maxlength'),
-				onChange =  limit.cb(this.props.onChange),
+				onChange =  limit.cb(props.onChange),
 				state = {};
 			// 对于checkbox的特殊处理
 			if( type === 'checkbox' ){
@@ -35,7 +36,7 @@ define(function(require, exports, module) {
 					me.state[name].push(val);
 					state[name] = me.state[name];
 				}else{
-					state[name] = limit.difference(me.state[name], val);
+					state[name] = limit.without(me.state[name], val);
 				};
 			}
 			// 对于textarea的特殊处理
@@ -46,7 +47,10 @@ define(function(require, exports, module) {
 				state[name] = val;
 			};
 			me.setState(state);
-			onChange(state);
+			setTimeout(function(){
+				console.log(me.state, state, '查看');
+			},0);
+			onChange.call(me, state);
 		}
 	};
 

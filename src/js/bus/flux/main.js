@@ -4,81 +4,93 @@
  */
 define(function(require, exports, module) {
 
+	// 依赖
 	var Reflux = require('reflux'),
 		React = require('react'),
-		ReactDOM = require('reactDOM');
+		ReactDOM = require('reactDOM'),
+		limit = require('limit'),
+		ReactForm = require('modules/reactForm/main');
 
-	
+	// 关闭limitJS log
+	limit.logClosed = true;
+
+	// 测试Refulx方法
+	// require('./exReflux');
+
 	// Action
-		// 全局Action方法
-		Reflux.ActionMethods.logSom = function() { console.log('logSom'); };
-		// 单个
-		var addItem = Reflux.createAction();
-		// 多个
-		var Actions = Reflux.createActions(['detItem', 'editItem']);
-		// 异步 Promise
-		var getItem = Reflux.createAction({
-			asyncResult: true,
-			preEmit: function(key){
-				console.log('查之前', key);
-				return 'aaa';
-			},
-			shouldEmit: function(key){
-				console.log(key);
-				return true; //如果没有返回默认是flase不触发
-			}
-		});
-		
+		var SchoolActions = Reflux.createActions(['add', 'get', 'det', 'edit', 'input']);
 
 	// Store
-		// 全局Store方法
-		Reflux.StoreMethods.checkSam = function(){
-			console.log('checkSam');
-		};
-		// 混入方法
-		var needMix = {
-			checkSom: function(){
-				console.log('checkSom');
-			}
-		};
-		var dataStore = Reflux.createStore({
-			//混入
-			mixins: [needMix],
-			listenables: [Actions],	// 多次监听 这样写
-			init: function(){
-				this.listenTo(addItem, 'add');
-				// this.listenToMany(Actions); // 多次监听 也可以这样写
-				this.listenTo(getItem, 'get');
-				this.checkSom();
-				this.checkSam();
+		var SchoolStore = Reflux.createStore({
+			listenables: [SchoolActions],
+			getInitialState: function(){
+				return {nameList:['张三', '李四']};
 			},
-			add: function(key){
-				console.log('增');
+			onAdd: function(){
+				console.log(this);
 			},
-			onDetItem: function(key){ //多次监听的默认写法
-				console.log('删');
+			onGet: function(){
+
 			},
-			onEditItem: function(key){
-				console.log('改');
+			onDet: function(){
+
 			},
-			get: function(key){
-				setTimeout(function(){
-					getItem.completed([{name: 'bbb'}])
-				}, 1000);
+			onEdit: function(){
+
+			},
+			onInput: function(key){
+				console.log(key);
 			}
 		});
 
-		addItem({name: 'xxx'});	// 异步触发 addItem() 会默认调用 triggerAsync
-		Actions.detItem.trigger('xxx');	// 同步触发 或者增加配置{sync: true} 这个会triggerAsync先调用
-		getItem('xxx').then(function(data){  console.log('查') }); // 异步 Promise
-		Actions.editItem('xxx');
-		Actions.editItem.logSom();
-
-
-
 	// View
+		var School = React.createClass({displayName: "School",
+			mixins: [ Reflux.connect(SchoolStore) ],
+			render: function(){
+				var me = this,
+					props = me.props,
+					state = me.state;
+				return (
+					React.createElement("div", null, 
+						React.createElement("table", {className: "fn-table fn-table-data fn-LiHeEm20", width: "200"}, 
+							React.createElement("thead", null, 
+								React.createElement("tr", null, 
+									React.createElement("th", null, "序号"), 
+									React.createElement("th", null, "姓名"), 
+									React.createElement("th", null, "操作")
+								)
+							), 
+							React.createElement("tbody", null, 
+								
+									state.nameList.map(function(val, key){
+										return (
+											React.createElement("tr", {key: val}, 
+												React.createElement("td", null,  limit.padStart( key + 1, '0', 2) ), 
+												React.createElement("td", null, val), 
+												React.createElement("td", null, 
+													React.createElement(ReactForm.Link, {className: "fn-MaRi5", title: "删除"}), 
+													React.createElement(ReactForm.Link, {title: "编辑"})
+												)
+											)
+										);
+									})
+								
+							)
+						), 
+						React.createElement("h2", {className: "fn-MaTo10"}, 
+							React.createElement(ReactForm.Text, {placeholder: "请输入姓名", width: "200", onChange:  SchoolActions.input}), 
+							React.createElement(ReactForm.Button, {title: "新 增", className: "fn-MaLe5", onClick:  SchoolActions.add})
+						)
+					)
+				);
+			}
+		});
 
-
+	// 置入文档
+		ReactDOM.render(
+			React.createElement(School, null),
+		    document.getElementById('content')
+	  	);
 
 
 });

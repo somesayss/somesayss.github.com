@@ -19,7 +19,7 @@ define(function(require, exports, module) {
 			props.className && className.push(props.className);
 			props.small && className.push('fn-button-sm');
 			return (
-				<input type="button" className={ className.join(' ') } value={me.props.title} />
+				<input type="button" className={ className.join(' ') } value={props.title} onClick={props.onClick} />
 			);
 		}
 	});

@@ -806,7 +806,7 @@ define(function(require, exports) {
 	// whiteList[白名单] blackList[黑名单]
 	//////////////
 
-		// 转化数组
+		// 转化数组 [不改变原数组]
 		var from = limit.from = Array.from || function(obj, iterator, context){
 			var arr = [];
 			// 确保是函数
@@ -820,16 +820,23 @@ define(function(require, exports) {
 			};
 		};
 
-		// 正确初始化数组
+		// 正确初始化数组 [不改变原数组]
 		limit.of = Array.of || function(){
 			return slice.call(arguments);
 		};
 
-		// 格式化数组
+		// 格式化数组 会影响的类型:string nodeList jObject arguments
 		var toArray = limit.toArray = function(obj){
+			// 如果是数组原始返回
+			if(isArray(obj)){
+				return obj
+			}
 			// 如果是类数组对象的话就格式化数组
-			// 会影响的类型:string array nodeList jObject arguments
-			return isArrayLike(obj) ? slice.call(obj) : ( typeWarn.toArray(obj), [] );
+			else if(isArrayLike(obj)){
+				return slice.call(obj)
+			}else{
+				return ( typeWarn.toArray(obj), [] );
+			};
 		};
 
 		// 获取数组
@@ -888,7 +895,7 @@ define(function(require, exports) {
 			}, context);
 		};
 
-		// 遍历替换 支持对象√
+		// 遍历替换 支持对象√ [不改变原数组]
 		var map = limit.map = function(arr, iterator, context){
 			// 如果是空就直接返回
 			if( isEmpty(arr) ) return arr;
@@ -908,7 +915,7 @@ define(function(require, exports) {
 			return result;
 		};
 
-		// 筛选
+		// 筛选 [不改变原数组]
 		var filter = limit.filter = function(arr, iterator, context){
 			// 如果是空就直接返回
 			if( isEmpty(arr) ) return arr;
@@ -1011,8 +1018,8 @@ define(function(require, exports) {
 			return indexOf(arr, target) !== -1;
 		};
 
-		// 不同的值 
-		limit.difference = function(arr){
+		// 不同的值 [不改变原数组]
+		var difference = limit.difference = function(arr){
 			// 控制入参
 			arr = toArray(arr);
 			var result = concat.apply(arrayProto, slice.call(arguments, 1));
@@ -1021,7 +1028,15 @@ define(function(require, exports) {
 			});
 		};
 
-		// 去重
+		// 不同的值  [修改变原数组]
+		limit.without = function(arr){
+			var result = difference.apply(undefined, arguments);
+			arr.length = 0;
+			push.apply(arr, result);
+			return arr;
+		};
+
+		// 去重 [不改变原数组]
 		var union = limit.union = function(arr, isEasy){
 			// 控制入参
 			arr = toArray(arr);
@@ -1059,26 +1074,26 @@ define(function(require, exports) {
 			});
 		};
 
-		// 数据白名单
+		// 数据白名单  [不改变原数组]
 		// limit.whiteList([], {}, {}, {});
 		// limit.whiteList([], [{}, {}, {}]);
 		limit.whiteList = function(arr){
 			// 控制入参
 			arr = toArray(arr);
 			// 控制条件
-			var factor = flatten( slice.call(arguments, 1) );
+			var factor = concat.apply(arrayProto, slice.call(arguments, 1));
 			if( isEmpty(factor) ) return [];
 			return filter(arr, function(val1){
 				return whiteBlack(factor, val1);
 			});
 		};
 
-		// 数据黑名单
+		// 数据黑名单  [不改变原数组]
 		limit.blackList = function(arr){
 			// 控制入参
 			arr = toArray(arr);
 			// 控制条件
-			var factor = flatten( slice.call(arguments, 1) );
+			var factor = concat.apply(arrayProto, slice.call(arguments, 1));
 			if( isEmpty(factor) ) return arr;
 			return filter(arr, function(val1){
 				return !whiteBlack(factor, val1);

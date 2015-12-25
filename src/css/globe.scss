@@ -111,7 +111,7 @@ $COLOR_ORANGE:	 	#F60; 		/** 橙色 */
 	}/** 基础 */
 	.fn-table-data{
 		@extend .fn-table;
-		td, th{border:1px solid $COLOR_GRAY;line-height:1.5em;}
+		td, th{border:1px solid $COLOR_GRAY;}
 		thead th, thead td{background:$COLOR_LIGHTGRAY;}
 	}/** 数据 */
 	.fn-table-ho{
