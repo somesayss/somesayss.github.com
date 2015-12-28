@@ -15,7 +15,8 @@ define(function(require, exports, module) {
 		getDefaultProps: function(){
 			return {
 				width: 200,
-				name: 'defaultName'
+				name: 'defaultName',
+				value: ''
 			};
 		},
 		render: function(){

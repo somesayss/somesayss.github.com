@@ -11,7 +11,8 @@ define(function(require, exports, module) {
 	// 变量
 	var IE8 = document.documentMode === 8,
 		REX_ENTER = /\n/g,
-		STR_ENTER = '\r\n';
+		STR_ENTER = '\r\n',
+		oldValue;
 
 	// 类	
 	var InputCommon = {
@@ -19,6 +20,25 @@ define(function(require, exports, module) {
 			var state = {};
 			state[this.props.name] = this.props.value;
 			return state;
+		},
+		componentWillUpdate: function(){
+
+			oldValue = this.props.value;
+		},
+		componentDidUpdate: function(){
+			console.log(this.props);
+			console.log(this.state);
+			var me = this,
+				newState,
+				props = me.props,
+				state = me.state,
+				name = props.name;
+			// 如果状态值和传入的属性不一致进行更新
+			if(oldValue !== props.value){
+				newState = {};
+				newState[name] = props.value;
+				me.setState(newState);
+			};
 		},
 		changeHandler: function(e){
 			var me = this,
@@ -47,9 +67,6 @@ define(function(require, exports, module) {
 				state[name] = val;
 			};
 			me.setState(state);
-			setTimeout(function(){
-				console.log(me.state, state, '查看');
-			},0);
 			onChange.call(me, state);
 		}
 	};

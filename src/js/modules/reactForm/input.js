@@ -13,9 +13,10 @@ define(function(require, exports, module) {
 	var InputSeed = React.createClass({displayName: "InputSeed",
 		getDefaultProps: function(){
 			return {
-				checked: false,
 				name: 'defaultName',
-				type: 'checkbox'
+				type: 'checkbox',
+				title: '',
+				value: ''
 			};
 		},
 		render: function(){

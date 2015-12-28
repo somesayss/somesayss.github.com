@@ -23,11 +23,19 @@ define(function(require, exports, module) {
 	// Store
 		var SchoolStore = Reflux.createStore({
 			listenables: [SchoolActions],
+			store: {
+				nameList: ['张三', '李四'],
+				personName: ''
+			},
 			getInitialState: function(){
-				return {nameList:['张三', '李四']};
+				return this.store;
 			},
 			onAdd: function(){
-				console.log(this);
+				var me = this,
+					store = me.store;
+				store.nameList.push(store.personName);
+				store.personName = '';
+				this.trigger({nameList: store.nameList, personName: ''});
 			},
 			onGet: function(){
 
@@ -39,7 +47,9 @@ define(function(require, exports, module) {
 
 			},
 			onInput: function(key){
-				console.log(key);
+				var me = this,
+					store = me.store;
+				store.personName = key.personName;
 			}
 		});
 
@@ -50,6 +60,7 @@ define(function(require, exports, module) {
 				var me = this,
 					props = me.props,
 					state = me.state;
+				// console.log(state);
 				return (
 					<div>
 						<table className="fn-table fn-table-data fn-LiHeEm20" width="200">
@@ -78,7 +89,7 @@ define(function(require, exports, module) {
 							</tbody>
 						</table>
 						<h2 className="fn-MaTo10">
-							<ReactForm.Text placeholder="请输入姓名" width="200" onChange={ SchoolActions.input } />
+							<ReactForm.Text placeholder="请输入姓名" value={ state.personName } name="personName" onChange={ SchoolActions.input } />
 							<ReactForm.Button title="新 增" className="fn-MaLe5" onClick={ SchoolActions.add } />
 						</h2>
 					</div>

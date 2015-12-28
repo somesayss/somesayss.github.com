@@ -12,6 +12,14 @@ define(function(require, exports, module) {
 
 	// 类	
 	var Textarea = React.createClass({displayName: "Textarea",
+		getDefaultProps: function(){
+			return {
+				width: 200,
+				height: 100,
+				name: 'defaultName',
+				value: ''
+			};
+		},
 		mixins: [Common],
 		textareaChangeHandler: function(e){
 			var me = this;

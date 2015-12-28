@@ -12,21 +12,29 @@ define(function(require, exports, module) {
 
 	// 类	
 	var Radio = React.createClass({
+		getDefaultProps: function(){
+			return {
+				name: 'defaultName',
+				value: ''
+			};
+		},
 		mixins: [Common],
 		render: function(){
-			var me = this;
+			var me = this,
+				state = me.state,
+				props = me.props;
 			return (
 				<span>
 					{limit.map(me.props.options, function(val, key){
 						return (
 							<Input 
 								type="radio"
-								key={val.value}
-								name={me.props.name}
+								key={val.key}
+								name={props.name}
 								className="fn-MaRi10"
 								value={val.value}
 								title={val.key}
-								checked={val.value === me.state[me.props.name] && true}
+								checked={val.value === state[props.name] && true}
 								onChange={ limit.cb(me.changeHandler) } />
 						);
 					})}

@@ -34,7 +34,7 @@ define(function(require, exports, module) {
 						return (
 							React.createElement(Input, {
 								type: "checkbox", 
-								key: val.value, 
+								key: val.key, 
 								name: props.name, 
 								className: "fn-MaRi10", 
 								value: val.value, 

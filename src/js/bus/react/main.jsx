@@ -24,7 +24,7 @@ define(function(require, exports, module) {
 			}
 		},
 		change: function(state){
-			console.log(state, this.state);
+			console.log(state, this.state, 'MyForm');
 		},
 		render: function(){
 			return (
@@ -33,13 +33,13 @@ define(function(require, exports, module) {
 						<Form.Text name="aaa" value="aaa" onChange={this.change} maxlength="10" />
 					</p>
 					<p className="fn-MaTo10">
-						<Form.Select width="200" name="diqu" value={this.state.diqu} onChange={this.change} options={this.props.diqu}/>
+						<Form.Select width="200" onChange={this.change} options={this.props.diqu}/>
 					</p>
 					<p className="fn-MaTo10">
-						<Form.RadioList onChange={this.change} options={this.props.sex}/>
+						<Form.RadioList name="sex" value="" onChange={this.change} options={this.props.sex}/>
 					</p>
 					<p className="fn-MaTo10">
-						<Form.CheckboxList value={this.state.like} onChange={this.change} options={this.props.like} />
+						<Form.CheckboxList onChange={this.change} options={this.props.like} />
 					</p>
 					<p className="fn-MaTo10">
 						<Form.Textarea width="200" height="100" name="jianjie" value={this.state.jianjie} onChange={this.change}  />
