@@ -18,7 +18,7 @@ define(function(require, exports, module) {
 			limit.contains(typeList, props.type) ? className.push('fn-link-' + props.type) : className.push('fn-link-blue');
 			props.className && className.push(props.className);
 			return (
-				React.createElement("a", {href:  props.href ? props.href : 'javascript:;', className:  className.join(' ') }, props.title)
+				React.createElement("a", {href:  props.href ? props.href : 'javascript:;', className:  className.join(' '), onClick: limit.cb(props.onClick), "data-param": props.param}, props.title)
 			);
 		}
 	});

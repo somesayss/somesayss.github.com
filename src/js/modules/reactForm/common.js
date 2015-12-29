@@ -12,7 +12,7 @@ define(function(require, exports, module) {
 	var IE8 = document.documentMode === 8,
 		REX_ENTER = /\n/g,
 		STR_ENTER = '\r\n',
-		oldValue;
+		shouldUpdateProps = false;
 
 	// 类	
 	var InputCommon = {
@@ -21,20 +21,17 @@ define(function(require, exports, module) {
 			state[this.props.name] = this.props.value;
 			return state;
 		},
-		componentWillUpdate: function(){
-
-			oldValue = this.props.value;
+		componentWillReceiveProps: function(){
+			shouldUpdateProps = true;
 		},
 		componentDidUpdate: function(){
-			console.log(this.props);
-			console.log(this.state);
-			var me = this,
+			 var me = this,
 				newState,
 				props = me.props,
 				state = me.state,
 				name = props.name;
-			// 如果状态值和传入的属性不一致进行更新
-			if(oldValue !== props.value){
+			if( shouldUpdateProps ){
+				shouldUpdateProps = false;
 				newState = {};
 				newState[name] = props.value;
 				me.setState(newState);
@@ -68,6 +65,16 @@ define(function(require, exports, module) {
 			};
 			me.setState(state);
 			onChange.call(me, state);
+		},
+		enterPress: function(e){
+			var me = this,
+				props = me.props;
+			var enterPress = limit.cb(props.onEnterPress),
+				keyPress = limit.cb(props.onKeyPress);
+			if(e.charCode === 13){
+				enterPress();
+			};
+			keyPress();
 		}
 	};
 

@@ -77,7 +77,7 @@ $COLOR_ORANGE:	 	#F60; 		/** 橙色 */
 /** 模块：表单域 */
 	.fn-input{
 		@extend %fn-focus;
-		border:1px solid $COLOR_GRAY;height:16px;line-height:1em;font-size:1.2em;padding:6px 9px;color:#666;
+		border:1px solid $COLOR_GRAY;height:16px;font-size:12px;padding:6px 9px;color:#666;line-height:16px;
 	}/** 基础高度30 */
 	.fn-input-sm{padding:4px 9px 3px 9px;}/** 小号版高度25 */
 	.fn-input-label{
@@ -85,7 +85,7 @@ $COLOR_ORANGE:	 	#F60; 		/** 橙色 */
 		&>input{float:left;margin:1px 3px 0 0;}
 	}/** checkbox radio的显示文本 */
 	@mixin button($color:$COLOR_BULE){
-		border:1px solid darken($color, 15%);height:30px;padding:6px 9px;color:#FFF;background:$color;border-radius:2px;
+		border:1px solid darken($color, 15%);height:30px;padding:6px 9px;color:#FFF;background:$color;border-radius:2px;font-size:12px;
 		&:focus{outline:1px solid $color;outline-offset:1px;}
 		&:active{background:darken($color, 10%);border-color:darken($color, 20%);outline:none;}
 	}
@@ -107,6 +107,7 @@ $COLOR_ORANGE:	 	#F60; 		/** 橙色 */
 	}
 /** 模块：表格 */
 	.fn-table{
+		@extend .fn-wrap;
 		td, th{padding:5px 9px;}
 	}/** 基础 */
 	.fn-table-data{

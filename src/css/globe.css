@@ -91,7 +91,7 @@
 .fn-visibility-show {
   visibility: visible; }
 
-.fn-wrap {
+.fn-wrap, .fn-table, .fn-table-data {
   word-wrap: break-word;
   word-break: break-all;
   white-space: normal; }
@@ -173,10 +173,10 @@
 .fn-input, .fn-textarea {
   border: 1px solid #CCC;
   height: 16px;
-  line-height: 1em;
-  font-size: 1.2em;
+  font-size: 12px;
   padding: 6px 9px;
-  color: #666; }
+  color: #666;
+  line-height: 16px; }
 
 /** 基础高度30 */
 .fn-input-sm {
@@ -198,7 +198,8 @@
   padding: 6px 9px;
   color: #FFF;
   background: #4d90fe;
-  border-radius: 2px; }
+  border-radius: 2px;
+  font-size: 12px; }
   .fn-button:focus {
     outline: 1px solid #4d90fe;
     outline-offset: 1px; }
@@ -214,7 +215,8 @@
   padding: 6px 9px;
   color: #FFF;
   background: #CCC;
-  border-radius: 2px; }
+  border-radius: 2px;
+  font-size: 12px; }
   .fn-button-gray:focus {
     outline: 1px solid #CCC;
     outline-offset: 1px; }
@@ -230,7 +232,8 @@
   padding: 6px 9px;
   color: #FFF;
   background: #F00;
-  border-radius: 2px; }
+  border-radius: 2px;
+  font-size: 12px; }
   .fn-button-red:focus {
     outline: 1px solid #F00;
     outline-offset: 1px; }
@@ -246,7 +249,8 @@
   padding: 6px 9px;
   color: #FFF;
   background: #F60;
-  border-radius: 2px; }
+  border-radius: 2px;
+  font-size: 12px; }
   .fn-button-orange:focus {
     outline: 1px solid #F60;
     outline-offset: 1px; }

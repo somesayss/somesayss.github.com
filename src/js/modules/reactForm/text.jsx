@@ -16,7 +16,8 @@ define(function(require, exports, module) {
 			return {
 				width: 200,
 				name: 'defaultName',
-				value: ''
+				value: '',
+				className: ''
 			};
 		},
 		render: function(){
@@ -31,6 +32,7 @@ define(function(require, exports, module) {
 					className={ "fn-input " + props.className }
 					value={ state[props.name] }
 					maxLength={ props.maxlength }
+					onKeyPress= { me.enterPress }
 					onChange={ limit.cb(me.changeHandler) }
 					placeholder={props.placeholder}
 				/>
