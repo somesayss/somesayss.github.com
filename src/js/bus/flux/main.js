@@ -72,7 +72,7 @@ define(function(require, exports, module) {
 				me.trigger(store);
 			}
 		});
-
+		
 	// View
 		var School = React.createClass({displayName: "School",
 			mixins: [ Reflux.connect(SchoolStore) ],
@@ -89,7 +89,6 @@ define(function(require, exports, module) {
 				var me = this,
 					props = me.props,
 					state = me.state;
-				// console.log(state);
 				return (
 					React.createElement("div", {className: "fn-FoSiEm12"}, 
 						React.createElement("table", {className: "fn-table fn-table-data fn-LiHeEm20", width: "200"}, 
@@ -108,8 +107,8 @@ define(function(require, exports, module) {
 												React.createElement("td", null,  limit.padStart( key + 1, '0', 2) ), 
 												React.createElement("td", null, val), 
 												React.createElement("td", null, 
-													React.createElement(ReactForm.Link, {className: "fn-MaRi5", title: "删除", param: key, onClick:  SchoolActions.det}), 
-													React.createElement(ReactForm.Link, {title: "编辑", param: key, onClick:  SchoolActions.edit})
+													React.createElement(ReactForm.Link, {className: "fn-MaRi5", text: "删除", "data-param": key, onClick:  SchoolActions.det}), 
+													React.createElement(ReactForm.Link, {text: "编辑", "data-param": key, onClick:  SchoolActions.edit})
 												)
 											)
 										);
@@ -123,8 +122,8 @@ define(function(require, exports, module) {
 								onEnterPress:  me.enterPressHandle}), 
 							
 								state.editorNum === null ? 
-								React.createElement(ReactForm.Button, {title: "新 增", className: "fn-MaLe5", onClick:  SchoolActions.add}) : 
-								React.createElement(ReactForm.Button, {title: "保 存", className: "fn-MaLe5", onClick:  SchoolActions.save})
+								React.createElement(ReactForm.Button, {value: "新 增", className: "fn-MaLe5", onClick:  SchoolActions.add}) : 
+								React.createElement(ReactForm.Button, {value: "保 存", className: "fn-MaLe5", onClick:  SchoolActions.save})
 								
 							
 						)

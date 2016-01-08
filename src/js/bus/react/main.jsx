@@ -30,25 +30,25 @@ define(function(require, exports, module) {
 			return (
 				<div>
 					<p>
-						<Form.Text name="aaa" value="aaa" onChange={this.change} maxlength="10" />
+						<Form.Text />
 					</p>
 					<p className="fn-MaTo10">
-						<Form.Select width="200" onChange={this.change} options={this.props.diqu}/>
+						<Form.Select></Form.Select>
 					</p>
 					<p className="fn-MaTo10">
 						<Form.RadioList name="sex" value="" onChange={this.change} options={this.props.sex}/>
 					</p>
 					<p className="fn-MaTo10">
-						<Form.CheckboxList onChange={this.change} options={this.props.like} />
+						<Form.CheckboxList onChange={this.change}  options={this.props.like} />
 					</p>
 					<p className="fn-MaTo10">
-						<Form.Textarea width="200" height="100" name="jianjie" value={this.state.jianjie} onChange={this.change}  />
+						<Form.Textarea />
 					</p>
 					<p className="fn-MaTo10">
-						<Form.Input type="checkbox" name="aaa" title="哈哈" value="bbb"  />
+						<Form.Input />
 					</p>
 					<p className="fn-MaTo10">
-						<Form.Button title="确 定" onClick={this.clickHanle} />
+						<Form.Button /> <Form.Link />
 					</p>
 				</div>
 			);

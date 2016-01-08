@@ -30,10 +30,10 @@ define(function(require, exports, module) {
 			return (
 				React.createElement("div", null, 
 					React.createElement("p", null, 
-						React.createElement(Form.Text, {name: "aaa", value: "aaa", onChange: this.change, maxlength: "10"})
+						React.createElement(Form.Text, null)
 					), 
 					React.createElement("p", {className: "fn-MaTo10"}, 
-						React.createElement(Form.Select, {width: "200", onChange: this.change, options: this.props.diqu})
+						React.createElement(Form.Select, null)
 					), 
 					React.createElement("p", {className: "fn-MaTo10"}, 
 						React.createElement(Form.RadioList, {name: "sex", value: "", onChange: this.change, options: this.props.sex})
@@ -42,13 +42,13 @@ define(function(require, exports, module) {
 						React.createElement(Form.CheckboxList, {onChange: this.change, options: this.props.like})
 					), 
 					React.createElement("p", {className: "fn-MaTo10"}, 
-						React.createElement(Form.Textarea, {width: "200", height: "100", name: "jianjie", value: this.state.jianjie, onChange: this.change})
+						React.createElement(Form.Textarea, null)
 					), 
 					React.createElement("p", {className: "fn-MaTo10"}, 
-						React.createElement(Form.Input, {type: "checkbox", name: "aaa", title: "哈哈", value: "bbb"})
+						React.createElement(Form.Input, null)
 					), 
 					React.createElement("p", {className: "fn-MaTo10"}, 
-						React.createElement(Form.Button, {title: "确 定", onClick: this.clickHanle})
+						React.createElement(Form.Button, null), " ", React.createElement(Form.Link, null)
 					)
 				)
 			);

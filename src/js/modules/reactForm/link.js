@@ -9,16 +9,30 @@ define(function(require, exports, module) {
 		limit = require('limit'),
 		typeList = ['blue'];
 
+	// 特指方法
+	function reWriteClassName(val, type){
+		var arr = [];
+		limit.contains(typeList, type) ? arr.push('fn-link-' + type) : arr.push('fn-link-blue');
+		val && arr.push(val);
+		return arr.join(' ');
+	};
+
 	// 类	
 	var Link = React.createClass({displayName: "Link",
+		getDefaultProps: function(){
+			return {
+				href: 'javascript:;',
+				text: 'link'
+			};
+		},
 		render: function(){
 			var me = this,
-				props = me.props,
-				className = [];
-			limit.contains(typeList, props.type) ? className.push('fn-link-' + props.type) : className.push('fn-link-blue');
-			props.className && className.push(props.className);
+				props = limit.clone(me.props);
+			// 重写属性
+			props.className = reWriteClassName(props.className, props.type);
+			// 渲染DOM
 			return (
-				React.createElement("a", {href:  props.href ? props.href : 'javascript:;', className:  className.join(' '), onClick: limit.cb(props.onClick), "data-param": props.param}, props.title)
+				React.createElement("a", React.__spread({},  props), props.text)
 			);
 		}
 	});

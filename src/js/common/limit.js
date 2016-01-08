@@ -28,6 +28,9 @@ define(function(require, exports) {
 		toString 		= objectProto.toString,
 		hasOwnProperty 	= objectProto.hasOwnProperty;
 
+	// 公布接口
+	limit.slice = slice;
+
 	// 原生ES5+的方法
 	var nativeKeys 			= Object.keys,
 		nativeCreate 		= Object.create,
@@ -106,6 +109,15 @@ define(function(require, exports) {
 		// 是否是未定义undefined
 		var isUndefined = limit.isUndefined = function(n){
 			return n === void 0;
+		};
+
+		// 设置默认值
+		limit.setDefault = function(n){
+			var result;
+			breakEach(arguments, function(val){
+				return (result = val), isUndefined(val);
+			});
+			return result;
 		};
 
 		// 是否是定义

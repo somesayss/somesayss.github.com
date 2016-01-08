@@ -38,7 +38,7 @@ define(function(require, exports, module) {
 								name={props.name}
 								className="fn-MaRi10"
 								value={val.value}
-								title={val.key}
+								text={val.key}
 								onChange={ limit.cb(me.changeHandler) }
 								checked={limit.contains(check, val.value)} />
 						);

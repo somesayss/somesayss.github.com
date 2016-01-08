@@ -9,17 +9,29 @@ define(function(require, exports, module) {
 		limit = require('limit'),
 		typeList = ['gray', 'red', 'orange'];
 
+	// 特指方法
+	function reWriteClassName(val, type){
+		var arr = [];
+		limit.contains(typeList, type) ? arr.push('fn-button-' + type) : arr.push('fn-button');
+		val && arr.push(val);
+		return arr.join(' ');
+	};
+
 	// 类	
 	var Button = React.createClass({displayName: "Button",
+		getDefaultProps: function(){
+			return {
+				value: 'submit'
+			};
+		},
 		render: function(){
 			var me = this,
-				props = me.props,
-				className = [];
-			limit.contains(typeList, props.type) ? className.push('fn-button-' + props.type) : className.push('fn-button');
-			props.className && className.push(props.className);
-			props.small && className.push('fn-button-sm');
+				props = limit.clone(me.props);
+			// 重写属性
+			props.className = reWriteClassName(props.className, props.type);
+			// 渲染DOM
 			return (
-				React.createElement("input", {type: "button", className:  className.join(' '), value: props.title, onClick: props.onClick})
+				React.createElement("input", React.__spread({},  props, {type: "button"}))
 			);
 		}
 	});

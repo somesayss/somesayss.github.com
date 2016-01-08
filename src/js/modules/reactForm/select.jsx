@@ -9,6 +9,15 @@ define(function(require, exports, module) {
 		limit = require('limit'),
 		React = require('react');
 
+	// 特殊处理的属性 width[style] className onChange value
+	function reWriteClassName(className){
+		return "fn-select " + className;
+	};
+
+	function reWriteStyle(style, width){
+		return limit.extend({width: width}, style);
+	};
+
 	// 类	
 	var Select = React.createClass({
 		mixins: [Common],
@@ -21,18 +30,18 @@ define(function(require, exports, module) {
 		},
 		render: function(){
 			var me = this,
-				props = me.props,
+				props = limit.clone(me.props),
 				state = me.state;
+			// 重写属性
+			props.className = reWriteClassName(props.className);
+			props.style = reWriteStyle(props.style, props.width);
+			props.value = state[props.name];
+			props.onChange = me.changeHandler;
 			return (
-				<select 
-					style={ {width:props.width} }
-					name={props.name} 
-					className={"fn-select " + props.className} 
-					value={state[props.name]} 
-					onChange={ limit.cb(me.changeHandler) }>
-						{props.empty && <option value="">请选择</option>}
-					{limit.map(props.options, function(val){
-						return <option key={val.value} value={val.value}>{val.key}</option>;
+				<select {...props}>
+					{props.children}
+					{limit.map(props.options, function(val, key){
+						return <option key={key} value={val.value}>{val.key}</option>;
 					})}
 				</select>
 			);

@@ -72,7 +72,7 @@ define(function(require, exports, module) {
 				me.trigger(store);
 			}
 		});
-
+		
 	// View
 		var School = React.createClass({
 			mixins: [ Reflux.connect(SchoolStore) ],
@@ -89,7 +89,6 @@ define(function(require, exports, module) {
 				var me = this,
 					props = me.props,
 					state = me.state;
-				// console.log(state);
 				return (
 					<div className="fn-FoSiEm12">
 						<table className="fn-table fn-table-data fn-LiHeEm20" width="200">
@@ -108,8 +107,8 @@ define(function(require, exports, module) {
 												<td>{ limit.padStart( key + 1, '0', 2 ) }</td>
 												<td>{val}</td>
 												<td>
-													<ReactForm.Link className="fn-MaRi5" title="删除" param={key} onClick={ SchoolActions.det } />
-													<ReactForm.Link title="编辑" param={key}  onClick={ SchoolActions.edit }/>
+													<ReactForm.Link className="fn-MaRi5" text="删除" data-param={key} onClick={ SchoolActions.det } />
+													<ReactForm.Link text="编辑" data-param={key}  onClick={ SchoolActions.edit }/>
 												</td>
 											</tr>
 										);
@@ -123,8 +122,8 @@ define(function(require, exports, module) {
 								onEnterPress={ me.enterPressHandle } />
 							{
 								state.editorNum === null ? 
-								<ReactForm.Button title="新 增" className="fn-MaLe5" onClick={ SchoolActions.add } /> : 
-								<ReactForm.Button title="保 存" className="fn-MaLe5" onClick={ SchoolActions.save } />
+								<ReactForm.Button value="新 增" className="fn-MaLe5" onClick={ SchoolActions.add } /> : 
+								<ReactForm.Button value="保 存" className="fn-MaLe5" onClick={ SchoolActions.save } />
 								
 							}
 						</h2>

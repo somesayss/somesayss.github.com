@@ -72,9 +72,9 @@ define(function(require, exports, module) {
 			var enterPress = limit.cb(props.onEnterPress),
 				keyPress = limit.cb(props.onKeyPress);
 			if(e.charCode === 13){
-				enterPress();
+				enterPress.call(null, e);
 			};
-			keyPress();
+			keyPress.call(null, e);
 		}
 	};
 

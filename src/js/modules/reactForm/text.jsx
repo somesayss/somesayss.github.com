@@ -9,6 +9,15 @@ define(function(require, exports, module) {
 		limit = require('limit'),
 		React = require('react');
 
+	// 特殊处理的属性 width[style] className onChange onEnterPress value
+	function reWriteClassName(className){
+		return "fn-input " + className;
+	};
+
+	function reWriteStyle(style, width){
+		return limit.extend({width: width - 20}, style);
+	};
+
 	// 类	
 	var InputText = React.createClass({
 		mixins: [Common],
@@ -22,20 +31,16 @@ define(function(require, exports, module) {
 		},
 		render: function(){
 			var me = this,
-				props = me.props,
+				props = limit.clone(me.props),
 				state = me.state;
+			// 重写属性
+			props.className = reWriteClassName(props.className);
+			props.style = reWriteStyle(props.style, props.width);
+			props.value = state[props.name];
+			props.onChange = me.changeHandler;
+			props.onKeyPress = me.enterPress;
 			return (
-				<input
-					type="text"
-					style={ {width:props.width - 20} }
-					name={ props.name }
-					className={ "fn-input " + props.className }
-					value={ state[props.name] }
-					maxLength={ props.maxlength }
-					onKeyPress= { me.enterPress }
-					onChange={ limit.cb(me.changeHandler) }
-					placeholder={props.placeholder}
-				/>
+				<input {...props} type="text" />
 			);
 		}
 	});

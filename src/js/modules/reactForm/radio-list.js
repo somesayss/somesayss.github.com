@@ -33,7 +33,7 @@ define(function(require, exports, module) {
 								name: props.name, 
 								className: "fn-MaRi10", 
 								value: val.value, 
-								title: val.key, 
+								text: val.key, 
 								checked: val.value === state[props.name] && true, 
 								onChange:  limit.cb(me.changeHandler) })
 						);

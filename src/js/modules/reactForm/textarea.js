@@ -10,17 +10,41 @@ define(function(require, exports, module) {
 		React = require('react'),
 		limit = require('limit');
 
+	// 特殊处理的属性 width,height[style] className onChange onEnterPress value
+	function reWriteClassName(className){
+		return "fn-textarea " + className;
+	};
+
+	function reWriteStyle(style, width, height){
+		return limit.extend({width: width - 20, height: height}, style);
+	};
+
 	// 类	
 	var Textarea = React.createClass({displayName: "Textarea",
+		mixins: [Common],
 		getDefaultProps: function(){
 			return {
 				width: 200,
 				height: 100,
 				name: 'defaultName',
-				value: ''
+				value: '',
+				className: ''
 			};
 		},
-		mixins: [Common],
+		render: function(){
+			var me = this,
+				props = limit.clone(me.props),
+				state = me.state;
+			// 重写属性
+			props.className = reWriteClassName(props.className);
+			props.style = reWriteStyle(props.style, props.width, props.height);
+			props.value = state[props.name];
+			props.onChange = me.changeHandler;
+			props.onKeyPress = me.enterPress;
+			return (
+				React.createElement("textarea", React.__spread({},  props, {ref: "node"}))
+			);
+		},
 		textareaChangeHandler: function(e){
 			var me = this;
 			me.changeHandler(e);
@@ -31,19 +55,6 @@ define(function(require, exports, module) {
 			node.height( me.props.height || 16 );
 			node.height( ( Math.max( node.prop('scrollHeight'), node.prop('clientHeight') ) ) - me.padHeight );
 		},
-		render: function(){
-			var me = this;
-			return (
-				React.createElement("textarea", {
-					ref: "node", 
-					style:  {width: me.props.width - 20, height: me.props.height}, 
-					name: me.props.name, 
-					className: "fn-textarea " + (me.props.className||''), 
-					value: me.state[me.props.name], 
-					"data-maxlength": me.props.maxlength, 
-					onChange:  limit.cb(me.textareaChangeHandler) })
-			);
-		},
 		componentDidUpdate: function(){
 			this.resize();
 		},
@@ -53,7 +64,6 @@ define(function(require, exports, module) {
 				maxlength = me.props.maxlength;
 			me.node = node;
 			me.padHeight = node.prop('clientHeight') - node.height();
-			me.guid = 0;
 			// 如果存在maxlength
 			if(maxlength){
 				var state = {};
@@ -69,3 +79,15 @@ define(function(require, exports, module) {
 	module.exports = Textarea;
 
 });
+
+/*
+
+<textarea
+	ref="node"
+	style={ {width: me.props.width - 20, height: me.props.height} }
+	name={me.props.name} 
+	className={"fn-textarea " + (me.props.className||'')} 
+	value={me.state[me.props.name]}
+	data-maxlength={me.props.maxlength}
+	onChange={ limit.cb(me.textareaChangeHandler) }></textarea>
+*/

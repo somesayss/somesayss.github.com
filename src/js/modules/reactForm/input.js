@@ -9,28 +9,35 @@ define(function(require, exports, module) {
 		limit = require('limit'),
 		React = require('react');
 
+	// 过滤出Radio checkbox 的特质属性 name value onChange disabled checked
+	var filterPropsList = ['name', 'value', 'onChange', 'disabled', 'checked', 'type'];
+
+	function filterProps(props){
+		var obj = {};
+		limit.each(props, function(val, key){
+			if( limit.contains(filterPropsList, key) ){
+				obj[key] = val;
+				delete props[key];
+			};
+		});
+		return obj;
+	}; 
+
 	// 类	
 	var InputSeed = React.createClass({displayName: "InputSeed",
 		getDefaultProps: function(){
 			return {
 				name: 'defaultName',
-				type: 'checkbox',
-				title: '',
-				value: ''
+				type: 'checkbox'
 			};
 		},
 		render: function(){
 			var me = this,
-				props = me.props;
+				props = limit.clone(me.props),
+				labelProps = filterProps(props);
 			return (
-				React.createElement("label", {className: 'fn-input-label '+props.className}, 
-					React.createElement("input", {
-						tabIndex: "0", 
-						type: props.type, 
-						name: props.name, 
-						onChange:  limit.cb(props.onChange), 
-						checked: props.checked, 
-						value: props.value}), " ", props.title
+				React.createElement("label", React.__spread({},  props), 
+					React.createElement("input", React.__spread({},  labelProps, {style:  {marginTop: "2px"} })), " ", props.text
 				)
 			);
 		}
