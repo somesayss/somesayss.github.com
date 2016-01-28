@@ -49,12 +49,13 @@ define(function(require, exports) {
 	// 原生ES6+的方法
 	var nativeCodePointAt	= stringProto.codePointAt,
 		nativeFromCodePoint = String.fromCodePoint,
-		nativeIncludes 		= stringProto.includes,
+		nativeStringIncludes = stringProto.includes,
 		nativeStartsWith 	= stringProto.startsWith,
 	 	nativeEndsWith 		= stringProto.endsWith,
 	 	nativeRepeat		= stringProto.repeat,
 	 	nativePadStart		= stringProto.padStart,
-	 	nativePadEnd 		= stringProto.padEnd;
+	 	nativePadEnd 		= stringProto.padEnd,
+	 	nativeArrayIncludes = arrayProto.includes;
 
 	// 空函数
 	var K = limit.K = function(k){return k};
@@ -95,6 +96,9 @@ define(function(require, exports) {
 		},
 		toArray:  function(obj){
 			return log('warn', obj, 'change into []', 'limit.toArray is called');
+		},
+		formatDate: function(timestamp, data){
+			return log('warn', 'timestamp:',timestamp, 'date:', date, 'limit.formatDate is called');
 		}
 	};
 
@@ -273,6 +277,21 @@ define(function(require, exports) {
 			return type;
 		};
 
+	////////
+	// 共有方法路由
+	// includes[string array]
+	////////
+
+		// 包含
+		limit.includes = function(obj, arg, index){
+			if(isArray(obj)){
+				return arrayIncludes(obj, arg, index);
+			}else{
+				return stringIncludes(obj, arg, index);
+			};
+		};
+
+
 	/////////////////
 	// 字符串的方法
 	// trim[去掉头尾空格] 
@@ -347,10 +366,10 @@ define(function(require, exports) {
 		};
 
 		// 包含
-		limit.includes = function(str, arg, index){
+		function stringIncludes(str, arg, index){
 			str = limitToString(str);
-			if(nativeIncludes){
-				return nativeIncludes.call(str, arg, index);
+			if(nativeStringIncludes){
+				return nativeStringIncludes.call(str, arg, index);
 			}else{
 				return str.indexOf(arg, index) !== -1;				
 			};
@@ -604,7 +623,7 @@ define(function(require, exports) {
 
 	///////////////
 	// 对象的方法
-	// has[含有静态方法] create[实例化] forIn[遍历] keys[静态属性] size[静态属性的个数] 
+	// is[判断] has[含有静态方法] create[实例化] forIn[遍历] keys[静态属性] size[静态属性的个数] 
 	// each[遍历静态属性] breakEach[可断开的遍历静态属性] extend[继承] defaults[反继承] clone[浅克隆] copy[深拷贝] getObject[安全获取对象]
 	//////////////
 
@@ -809,10 +828,23 @@ define(function(require, exports) {
 			});
 			return obj;
 		};
-	
+
+		// 判断
+		var is = limit.is = Object.is && function(a, b){
+			// 区分NaN
+			if( limitIsNaN(a) && limitIsNaN(b)){
+				return true;
+			};
+			// 区分 +0 -0
+			if( a === 0 && b === 0){
+				return 1/a === 1/b;
+			};
+			return a === b;
+		};
+
 	///////////////
 	// 数组的方法
-	// toArray[格式化数组] getArray[正确获取数组] indexOf[查询遍历值]√ lastIndexOf[往后查询遍历值] 
+	// form[转化数组] of[初始化数组] toArray[格式化数组] getArray[正确获取数组] indexOf[查询遍历值]√ lastIndexOf[往后查询遍历值] 
 	// forEach[遍历] map[重组]√ filter[赛选]√ every[全部符合]√ some[部分符合]√ 
 	// reduce[从左往右迭代] reduceRight[从右往左迭代] contains[是否在数组当中]√ union[去重] flatten[解除嵌套数组]
 	// whiteList[白名单] blackList[黑名单]
@@ -1025,9 +1057,28 @@ define(function(require, exports) {
 			return reduce.apply(undefined, args);
 		};
 
-		// 包含
+		// 匹配可以分辨NaN -0 +0
 		var contains = limit.contains = function(arr, target){
-			return indexOf(arr, target) !== -1;
+			var result = false;
+			loop(arr, function(val){
+				if(is(val, target)) return result = true, false;;
+			}, undefined, true);
+			return result;
+		};
+
+		// 包含可以分辨 NaN
+		function arrayIncludes(arr, target, index){
+			if(!nativeArrayIncludes){
+				return nativeArrayIncludes.call(arr, target, index);
+			}else{
+				var result = false;
+				loop(arr, limitIsNaN(target) ? function(val){
+					if(limitIsNaN(val)) return result = true, false;;
+				} : function(val){
+					if(val === target) return result = true, false;
+				}, undefined, true, index >= 0 ? index : arr.length + index);
+				return result;
+			};
 		};
 
 		// 不同的值 [不改变原数组]
@@ -1059,7 +1110,7 @@ define(function(require, exports) {
 					return (!key || target !== val) && (target = val, true);
 				});
 			}else{
-			// 安全模式默认是安全模式
+			// 安全模式,默认是安全模式
 				target = [];
 				return filter(arr, function(val, key){
 					return !contains(target, val) && (target.push(val), true);
@@ -1067,7 +1118,7 @@ define(function(require, exports) {
 			};
 		};
 
-		// 降位 [[[1]]] => 1
+		// 降位 [[[1]]] => [1]
 		var flatten = limit.flatten = function(){
 			var value = [];
 			forEach(arguments, function(val, key){
@@ -1111,6 +1162,8 @@ define(function(require, exports) {
 				return !whiteBlack(factor, val1);
 			});
 		};
+
+		
 
 	///////////////
 	// 函数的方法
@@ -1285,7 +1338,7 @@ define(function(require, exports) {
 			!isString(formatStr) && (formatStr = 'yyyy-MM-dd HH:mm:ss');
 			var date = new Date(timestamp);
 			// 控制入参
-			if( limitIsNaN(+date) ) return log('warn', 'formatDate is called', 'timestamp:',timestamp, 'date:', date), '';
+			if( limitIsNaN(+date) ) return typeWarn.formatDate(timestamp, data), '';
 			// 正常入参
 			return formatStr.replace(REG_EXP_DATA, function(){
 				var arr = [];
