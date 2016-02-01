@@ -55,7 +55,9 @@ define(function(require, exports) {
 	 	nativeRepeat		= stringProto.repeat,
 	 	nativePadStart		= stringProto.padStart,
 	 	nativePadEnd 		= stringProto.padEnd,
-	 	nativeArrayIncludes = arrayProto.includes;
+	 	nativeArrayIncludes = arrayProto.includes,
+	 	nativeFind 			= arrayProto.find,
+	 	nativeFindIndex		= arrayProto.findIndex;
 
 	// 空函数
 	var K = limit.K = function(k){return k};
@@ -65,6 +67,12 @@ define(function(require, exports) {
 
 	// 空对象
 	var O = limit.O = {};
+
+	var logColor = {
+		'log': 'background:#333;margin-left:11px;padding-right:16px;',
+		'error': 'background:#F00;padding-right:3px;',
+		'warn': 'background:#F70;margin-left:11px;padding-right:10px;'
+	};
 
 	// 控制台
 	var log = limit.log = function(){
@@ -82,7 +90,7 @@ define(function(require, exports) {
 		log = con[type] || K;
 		// IE10下的IE8调试模式，console.log是个对象 纯IE8下 log = K;
 		try{
-			args.unshift('limitJS ' + type + ':');
+			args.unshift('%climitJS ' + type + ':', logColor[type]+'color:#FFF;padding-left:3px;border-radius:3px;');
 			log.apply(con, args);
 		}catch(e){
 			log('limitJS ', args);
@@ -844,10 +852,11 @@ define(function(require, exports) {
 
 	///////////////
 	// 数组的方法
-	// form[转化数组] of[初始化数组] toArray[格式化数组] getArray[正确获取数组] indexOf[查询遍历值]√ lastIndexOf[往后查询遍历值] 
+	// toArray[格式化数组] getArray[正确获取数组] indexOf[查询遍历值]√ lastIndexOf[往后查询遍历值] 
 	// forEach[遍历] map[重组]√ filter[赛选]√ every[全部符合]√ some[部分符合]√ 
 	// reduce[从左往右迭代] reduceRight[从右往左迭代] contains[是否在数组当中]√ union[去重] flatten[解除嵌套数组]
 	// whiteList[白名单] blackList[黑名单]
+	// form[转化数组] of[初始化数组] includes[包含] find[] findIndex[]
 	//////////////
 
 		// 转化数组 [不改变原数组]
@@ -1081,6 +1090,45 @@ define(function(require, exports) {
 			};
 		};
 
+		// 兼容
+		function fixFindAndFindIndex(arr, iterator, context){
+			var result = {key: -1, val: undefined};
+			breakEach(arr, function(val, key){
+				if(iterator.call(this, val, +key)){
+					result = {
+						key: key,
+						val: val
+					};
+					return false;
+				};
+			}, context);
+			return result;
+		};
+
+		// 找到第一个符合的元素
+		limit.find = function(arr, iterator, context){
+			// 控制数组
+			arr = toArray(arr);
+			// 控制函数
+			iterator = cb(iterator);
+			// 用原生方法
+			// if(nativeFind) return nativeFind.call(arr, iterator, context);
+			// 兼容方法
+			return fixFindAndFindIndex(arr, iterator, context).val;
+		};
+
+		// 找到第一个符合元素的位置
+		limit.findIndex = function(arr, iterator, context){
+			// 控制数组
+			arr = toArray(arr);
+			// 控制函数
+			iterator = cb(iterator);
+			// 用原生方法
+			if(nativeFindIndex) return nativeFind.call(arr, iterator, context);
+			// 兼容方法
+			return fixFindAndFindIndex(arr, iterator, context).key;
+		};
+
 		// 不同的值 [不改变原数组]
 		var difference = limit.difference = function(arr){
 			// 控制入参
@@ -1163,7 +1211,7 @@ define(function(require, exports) {
 			});
 		};
 
-		
+
 
 	///////////////
 	// 函数的方法
