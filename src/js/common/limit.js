@@ -69,7 +69,7 @@ define(function(require, exports) {
 	var O = limit.O = {};
 
 	var logColor = {
-		'log': 'background:#333;margin-left:11px;padding-right:16px;',
+		'log': 'background:#333;margin-left:11px;padding-right:17px;',
 		'error': 'background:#F00;padding-right:3px;',
 		'warn': 'background:#F70;margin-left:11px;padding-right:10px;'
 	};
@@ -838,7 +838,7 @@ define(function(require, exports) {
 		};
 
 		// 判断
-		var is = limit.is = Object.is && function(a, b){
+		var is = limit.is = Object.is || function(a, b){
 			// 区分NaN
 			if( limitIsNaN(a) && limitIsNaN(b)){
 				return true;
