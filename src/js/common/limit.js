@@ -6,6 +6,9 @@
  */
 define(function(require, exports) {
 
+	// 依赖
+	var limitDom = require('./limit-dom');
+
 	// 变量
 	var limit = {};
 
@@ -80,7 +83,8 @@ define(function(require, exports) {
 		var args = slice.call(arguments),
 			type = args.shift(),
 			con = console || O,
-			log;
+			log,
+			isChrome = limitDom.isChrome();
 		// 对type的处理可选值 'error'[默认]|'log'|'warn'
 		// 这里可以优化用
 		if( !contains(['error', 'log', 'warn'], type) ){
@@ -90,7 +94,8 @@ define(function(require, exports) {
 		log = con[type] || K;
 		// IE10下的IE8调试模式，console.log是个对象 纯IE8下 log = K;
 		try{
-			args.unshift('%climitJS ' + type + ':', logColor[type]+'color:#FFF;padding-left:3px;border-radius:3px;');
+			isChrome && args.unshift(logColor[type]+'color:#FFF;padding-left:3px;border-radius:3px;');
+			args.unshift( (isChrome ? '%c' : '') +'limitJS ' + type + ':');
 			log.apply(con, args);
 		}catch(e){
 			log('limitJS ', args);

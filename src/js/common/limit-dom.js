@@ -7,8 +7,14 @@
 define(function(require, exports) {
 
 	//变量
-	var limitDom = {};
+	var limitDom = {},
+		WIN = window,
+		DOC = WIN.document;
 
+	// chrom浏览器
+	limitDom.isChrome = function(){
+		return !!WIN.chrome;
+	};
 
 	return limitDom;
 
