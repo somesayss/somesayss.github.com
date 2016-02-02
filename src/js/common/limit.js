@@ -292,13 +292,8 @@ define(function(require, exports) {
 
 		// 包含
 		limit.includes = function(obj, arg, index){
-			if(isArray(obj)){
-				return arrayIncludes(obj, arg, index);
-			}else{
-				return stringIncludes(obj, arg, index);
-			};
+			return isArray(obj) ? arrayIncludes(obj, arg, index) : stringIncludes(obj, arg, index);
 		};
-
 
 	/////////////////
 	// 字符串的方法
