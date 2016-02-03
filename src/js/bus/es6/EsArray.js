@@ -56,6 +56,7 @@ function of(){
 };
 
 	
+	
 	limit.log('log', '哈哈哈哈，我是日志1');
 	limit.log('error', '哈哈哈哈，我是日志1');
 	limit.log('warn', '哈哈哈哈，我是日志1');
