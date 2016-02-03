@@ -69,7 +69,7 @@ define(function(require, exports) {
 	var O = limit.O = {};
 
 	var logColor = {
-		'log': 'background:#333;margin-left:11px;padding-right:16px;',
+		'log': 'background:#333;margin-left:11px;padding-right:17px;',
 		'error': 'background:#F00;padding-right:3px;',
 		'warn': 'background:#F70;margin-left:11px;padding-right:10px;'
 	};

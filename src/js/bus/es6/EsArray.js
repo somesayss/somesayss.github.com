@@ -57,8 +57,8 @@ function of(){
 
 	
 	limit.log('log', '哈哈哈哈，我是日志1');
-	limit.log('error', '哈哈哈哈，我是日志2');
-	limit.log('warn', '哈哈哈哈，我是日志3');
+	limit.log('error', '哈哈哈哈，我是日志1');
+	limit.log('warn', '哈哈哈哈，我是日志1');
 
 	return EsArray;
 
