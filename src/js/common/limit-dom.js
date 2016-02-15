@@ -12,9 +12,7 @@ define(function(require, exports) {
 		DOC = WIN.document;
 
 	// chrom浏览器
-	limitDom.isChrome = function(){
-		return !!WIN.chrome;
-	};
+	limitDom.isChrome = !!WIN.chrome;
 
 	return limitDom;
 

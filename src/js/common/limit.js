@@ -60,7 +60,8 @@ define(function(require, exports) {
 	 	nativePadEnd 		= stringProto.padEnd,
 	 	nativeArrayIncludes = arrayProto.includes,
 	 	nativeFind 			= arrayProto.find,
-	 	nativeFindIndex		= arrayProto.findIndex;
+	 	nativeFindIndex		= arrayProto.findIndex,
+	 	nativeFill 			= arrayProto.fill;
 
 	// 空函数
 	var K = limit.K = function(k){return k};
@@ -84,7 +85,7 @@ define(function(require, exports) {
 			type = args.shift(),
 			con = console || O,
 			log,
-			isChrome = limitDom.isChrome();
+			isChrome = limitDom.isChrome;
 		// 对type的处理可选值 'error'[默认]|'log'|'warn'
 		// 这里可以优化用
 		if( !contains(['error', 'log', 'warn'], type) ){
@@ -111,7 +112,10 @@ define(function(require, exports) {
 			return log('warn', obj, 'change into []', 'limit.toArray is called');
 		},
 		formatDate: function(timestamp, data){
-			return log('warn', 'timestamp:',timestamp, 'date:', date, 'limit.formatDate is called');
+			return log('warn', 'timestamp:', timestamp, 'date:', date, 'limit.formatDate is called');
+		},
+		bind: function(obj){
+			return log('warn', fun, 'type is not function, limit.bind is called');
 		}
 	};
 
@@ -856,7 +860,7 @@ define(function(require, exports) {
 	// forEach[遍历] map[重组]√ filter[赛选]√ every[全部符合]√ some[部分符合]√ 
 	// reduce[从左往右迭代] reduceRight[从右往左迭代] contains[是否在数组当中]√ union[去重] flatten[解除嵌套数组]
 	// whiteList[白名单] blackList[黑名单]
-	// form[转化数组] of[初始化数组] includes[包含] find[] findIndex[]
+	// form[转化数组] of[初始化数组] includes[包含] find[查询值] findIndex[查询遍历值] fill[填充]
 	//////////////
 
 		// 转化数组 [不改变原数组]
@@ -1112,7 +1116,7 @@ define(function(require, exports) {
 			// 控制函数
 			iterator = cb(iterator);
 			// 用原生方法
-			// if(nativeFind) return nativeFind.call(arr, iterator, context);
+			if(nativeFind) return nativeFind.call(arr, iterator, context);
 			// 兼容方法
 			return fixFindAndFindIndex(arr, iterator, context).val;
 		};
@@ -1211,6 +1215,24 @@ define(function(require, exports) {
 			});
 		};
 
+		// 填充 [改变原数组]
+		limit.fill = function(arr, target, start, end){
+			// 控制入参
+			arr = toArray(arr);
+			// 原生方法
+			// if(nativeFill) return nativeFill.call(arr, target, start, end);
+			// 兼容方法
+			start = ~~start;
+			end = ~~end;
+			var len = (end <= 0 ? arr.length + end : end) - start;
+			// 长度必须大于0
+			if(len > 0){
+				var arg = from(new Array(len), function(){return target});
+				unshift.call(arg, start, len);
+				splice.apply(arr, arg);
+			};
+			return arr;
+		};
 
 
 	///////////////
@@ -1223,7 +1245,7 @@ define(function(require, exports) {
 		// 兼容方法的时候 instanceof 会有区别
 		var bind = limit.bind = function(fun){
 			// 控制入参
-			if( !isFunction(fun) ) return log(fun, 'type is not function, limit.bind is called'), K;
+			if( !isFunction(fun) ) return typeWarn.bind(fun), K;
 			// 存在原生方法
 			if(nativeBind) return nativeBind.apply( fun, slice.call(arguments, 1) );
 			// 兼容的方法

@@ -61,6 +61,12 @@ function of(){
 	limit.log('error', '哈哈哈哈，我是日志1');
 	limit.log('warn', '哈哈哈哈，我是日志1');
 
+	var a = ['a1', 'a2', 'a3', 'a4', 'a5', 'a6']
+
+	limit.fill(a, 'b1', 3, 2);
+
+	console.log(a);
+
 	return EsArray;
 
 });
