@@ -63,7 +63,7 @@ function of(){
 
 	var a = ['a1', 'a2', 'a3', 'a4', 'a5', 'a6']
 
-	limit.fill(a, 'b1', 3, 2);
+	limit.fill(a, 'b1', -7, -2);
 
 	console.log(a);
 

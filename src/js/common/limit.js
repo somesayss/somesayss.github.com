@@ -61,7 +61,8 @@ define(function(require, exports) {
 	 	nativeArrayIncludes = arrayProto.includes,
 	 	nativeFind 			= arrayProto.find,
 	 	nativeFindIndex		= arrayProto.findIndex,
-	 	nativeFill 			= arrayProto.fill;
+	 	nativeFill 			= arrayProto.fill,
+	 	nativeCopyWithin	= arrayProto.copyWithin;
 
 	// 空函数
 	var K = limit.K = function(k){return k};
@@ -1220,11 +1221,18 @@ define(function(require, exports) {
 			// 控制入参
 			arr = toArray(arr);
 			// 原生方法
-			// if(nativeFill) return nativeFill.call(arr, target, start, end);
-			// 兼容方法
+			if(nativeFill) return nativeFill.call(arr, target, start, end);
+			var arrLen = arr.length;
+			// 格式化起点终点
 			start = ~~start;
 			end = ~~end;
-			var len = (end <= 0 ? arr.length + end : end) - start;
+			// 纠正小于零的情况
+			start = start <= 0 ? arrLen + start : start;
+			end = end <= 0 ? arrLen + end : end;
+			// 纠正特殊情况
+			start < 0 && (start = 0);
+			end > arrLen && (end = arrLen);
+			var len = end - start;
 			// 长度必须大于0
 			if(len > 0){
 				var arg = from(new Array(len), function(){return target});
@@ -1232,6 +1240,15 @@ define(function(require, exports) {
 				splice.apply(arr, arg);
 			};
 			return arr;
+		};
+
+		// 内部复制
+		limit.copyWithin = function(arr, target, start, end){
+			// 控制入参
+			arr = toArray(arr);
+			// 原生方法
+			if(nativeCopyWithin) return nativeCopyWithin.call(arr, target, start, end);
+			
 		};
 
 
