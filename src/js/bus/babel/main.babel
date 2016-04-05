@@ -1,0 +1,92 @@
+"use strict";
+/**
+ * 业务
+ */
+define(function(require, exports, module) {
+
+	// 定义局部变量
+	let a = 'a1';
+	
+	// 定义全局变量
+	const b = 'b1';
+	
+	// 箭头操作符号
+	let fn1 = (a, b) => a + b;
+	let fn2 = (a, b) => {
+		return a + b 
+	};
+	let fn3 = a => a;
+
+	// 对象的定义
+	let obj = {
+		aaa(){ },
+		bbb(){ },
+		ccc: 'ccc3'
+	}; 
+
+	// 字符串模板
+	let c = 'c1';
+
+	let d = `
+		my name is ${c} haha
+		<div> ${c} </div>
+	`;
+
+	// 解构
+	let [e, f, g] = ['e1', 'f1', 'g1'];
+
+	let {e1, e2, e3} = {e1: 'e11', e2: 'e22', e3: 'e33'};
+
+	// 类
+	class A {
+		constructor(name){
+			this.name = name;
+		}
+		show(){
+			console.log(this.name);
+		}
+		static xixi(){
+			return 'xixi';
+		}
+	};
+	
+
+	// 继承
+	class B extends A {
+		constructor(name, age){
+			super(...arguments);
+			this.age = age;
+		}
+		show(){
+			super.show();
+			console.log(this.age);
+		}
+	};
+
+	var bbb = new B('shao2', 28);
+	bbb.show();
+
+	// console.log(bb, bb instanceof B, bb instanceof A); // true true
+	// console.log(bb.constructor, bb.constructor === B, bb.constructor === A); // true false
+
+	// 默认参数
+	function h(name = 'kiss', age = 19){
+		console.log(name, age);
+	};
+
+	// 
+	let i = ['i1', 'i2', 'i3'];
+
+	let j = [...i];
+
+	function per2(y, ...x){
+		console.log('x', x);
+	};
+
+	per2(...i);
+
+	console.log( 0o767 === 503 );
+
+
+
+});

@@ -1,0 +1,114 @@
+"use strict";
+/**
+ * 2015.10.8
+ * 对ES的增强
+ * version: 2.0.0
+ * 更加优美的构造，入口的统一，ES6语法
+ */
+define(function(require, exports) {
+
+	// 依赖
+	const limitDom = require('./limit-dom'); 
+
+	// 变量
+	const [limit, WIN, DOC, BODY, arrayProto] = [{}, window, window.document, document.body, Array.prototype];
+
+	// 确定全局是否用兼容方法
+	let limitFixed = ((WIN, BODY) => {
+		let flag = WIN.limitUseFixed || (BODY.getAttribute('data-limit-fixed') === 'true');
+		// IE8下delete window下的属性会报错
+		try{
+			delete WIN.limitUseFixed;
+		}catch(e){
+			WIN.limitUseFixed = void 0;
+		};
+		return flag;
+	})(WIN, BODY);
+
+	// 自有属性
+	let {defineProperty, is, assign, keys} = Object;
+	let	{concat, slice} = arrayProto;
+
+	// 传递器
+	let K = (...args) => args.length <= 1 ? args[0] : args;
+
+	// 空函数
+	let E = () => {};
+
+	// 空对象
+	let O = {};
+
+	// 获取属性
+	let getProp = (obj = O, key = '', deVal) => obj[key] === void 0 ? deVal : obj[key];
+
+	// 定义:priority,fixed,when,format
+	let defineIt = (name, config = O) => {
+		let priority, fixed, when, format, value;
+		if( config.value === void 0 ){
+			// 新方法
+			priority = getProp(config, 'priority', K);
+			// 兼容性方法
+			fixed = getProp(config, 'fixed', K);
+			// 条件 [默认为false]
+			when = getProp(config, 'when', E);
+			// 格式化参数
+			format = getProp(config, 'format', K);
+			// 主函数
+			value = function(){
+				let args = concat.call( arrayProto, format(...arguments) );
+				return limitFixed && when(...args) ? priority(...args) : fixed(...args);
+			};
+		}else{
+			value = config.value;
+		};
+		if( defineProperty ){
+			defineProperty(limit, name, {
+				value: value,
+				writable: false, //只读
+				enumerable: true, //被枚举
+				configurable: false //更改内部属性
+			});
+		}else{
+			if( limit[name] !== void 0){
+				throw new TypeError('Cannot redefine property: ' + name);
+			};
+			limit[name] = value;
+		};
+		return value;
+	};
+
+	// 传递器
+	defineIt('K', {value: K});
+
+	// 获取属性
+	defineIt('getProp', {value: getProp});
+
+	// --工具方法-- //
+
+	// --对象方法-- //
+		// ES6: Object.is();
+
+		// ES6: Object.assign();
+		defineIt('assign', {
+			when: () => !!assign,
+			priority: (...args) => assign(...args),
+			fixed(...args){
+				console.log(123);
+			}
+		});
+
+		// ES5: Object.keys
+		defineIt('keys', {
+			when: () => !!keys,
+			priority: (...args) => keys(...args),
+			fixed(...args){
+
+			}
+		});
+
+		// mix: extend
+
+	// 返回主体
+	return limit;
+
+});

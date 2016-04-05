@@ -2,31 +2,40 @@
 /**
  * 业务
  */
-define(function(require, exports, module) {
+
+define(function (require, exports, module) {
 
 	// 依赖
 	var $ = require('$'),
-		Event = require('events'),
-		limit = require('limit');
+	    Event = require('events'),
+	    limit = require('limit');
 
-	var Seed = React.createClass({displayName: "Seed",
-		render: function(){
-			return React.createElement("div", null, "2234")
+	var Seed = React.createClass({
+		displayName: 'Seed',
+
+		render: function render() {
+			return React.createElement(
+				'div',
+				null,
+				'2234'
+			);
 		}
 	});
 
 	// 子节点
-	var Child = React.createClass({displayName: "Child",
-		getDefaultProps: function(){
+	var Child = React.createClass({
+		displayName: 'Child',
+
+		getDefaultProps: function getDefaultProps() {
 			return {
 				testString: "a",
 				testBoolean: true,
-				testFunction: function(){},
+				testFunction: function testFunction() {},
 				testNumber: 1,
 				testArray: [],
 				testArrayOf: ["a1", "a2"],
 				testObject: {},
-				testObjectOf: {a: "a1"},
+				testObjectOf: { a: "a1" },
 				testOneOf: "a1",
 				testOneOfType: "a1",
 				testAny: 1,
@@ -59,25 +68,22 @@ define(function(require, exports, module) {
 				string: React.PropTypes.string,
 				number: React.PropTypes.number
 			}),
-			other: function(props, propName, componentName){
-				if(props[propName] !== "a1"){
-					return new Error("error")
+			other: function other(props, propName, componentName) {
+				if (props[propName] !== "a1") {
+					return new Error("error");
 				}
 			}
 		},
-		render: function(){
-			return (
-				React.createElement("div", {onClick: this.clickHandler}, 
-					"点我 ", this.props.content
-				)
+		render: function render() {
+			return React.createElement(
+				'div',
+				{ onClick: this.clickHandler },
+				'点我 ',
+				this.props.content
 			);
 		}
 	});
 
 	// 置入文档
-	ReactDOM.render(
-		React.createElement(Child, null),
-	    document.getElementById('search')
-  	);
-
+	ReactDOM.render(React.createElement(Child, null), document.getElementById('search'));
 });

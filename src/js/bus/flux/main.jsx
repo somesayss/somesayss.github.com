@@ -5,7 +5,7 @@
 define(function(require, exports, module) {
 
 	// 依赖
-	var $ = require('$'),
+	const $ = require('$'),
 		Reflux = require('reflux'),
 		React = require('react'),
 		ReactDOM = require('reactDOM'),
@@ -72,20 +72,47 @@ define(function(require, exports, module) {
 				me.trigger(store);
 			}
 		});
+
+		let connect = Reflux.connect(SchoolStore);
+		console.log(connect, connect.getInitialState());
 		
 	// View
-		var School = React.createClass({
-			mixins: [ Reflux.connect(SchoolStore) ],
-			enterPressHandle: function(){
-				var me = this,
-					state = me.state;
-				if(state.editorNum === null){
-					SchoolActions.add();
-				}else{
-					SchoolActions.save();
+		// mixins
+		const PopupContainer = (Wrapper, Controller) => {
+			class WrapperComponent extends React.Component {
+				constructor(props){
+					super(...arguments);
+				}
+				componentDidMount() {
+			      console.log('HOC did mount')
+			    }
+			    componentWillUnmount() {
+			      console.log('HOC will unmount')
+			    }
+			    render() {
+			      return <Wrapper {...this.props} />;
+			    }
+			};
+			return WrapperComponent;
+		};
+
+		// 定义React类 
+		class School extends React.Component {
+			constructor(props){
+				super(...arguments);
+				// 相当于[getInitialState]
+				this.state = {
+					personName: 'aaa'
 				};
-			},
-			render: function(){
+			}
+			componentWillMount(){
+				console.log('componentWillMount');
+			}
+			componentDidMount(){
+				console.log('componentDidMount');
+			}
+			render(){
+				console.log('render');
 				var me = this,
 					props = me.props,
 					state = me.state;
@@ -100,43 +127,31 @@ define(function(require, exports, module) {
 								</tr>
 							</thead>
 							<tbody>
-								{
-									state.nameList.map(function(val, key){
-										return (
-											<tr key={key}>
-												<td>{ limit.padStart( key + 1, '0', 2 ) }</td>
-												<td>{val}</td>
-												<td>
-													<ReactForm.Link className="fn-MaRi5" text="删除" data-param={key} onClick={ SchoolActions.det } />
-													<ReactForm.Link text="编辑" data-param={key}  onClick={ SchoolActions.edit }/>
-												</td>
-											</tr>
-										);
-									})
-								}
+								
 							</tbody>
 						</table>
 						<h2 className="fn-MaTo10">
-							<ReactForm.Text placeholder="请输入姓名" value={ state.personName } name="personName" 
-								onChange={ SchoolActions.input }
-								onEnterPress={ me.enterPressHandle } />
-							{
-								state.editorNum === null ? 
-								<ReactForm.Button value="新 增" className="fn-MaLe5" onClick={ SchoolActions.add } /> : 
-								<ReactForm.Button value="保 存" className="fn-MaLe5" onClick={ SchoolActions.save } />
-								
-							}
+							<ReactForm.Text placeholder="请输入姓名" value={ props.title } name="personName" />
 						</h2>
 					</div>
 				);
 			}
-		});
+		};
+		// 相当于[getDefaultProps]
+		School.defaultProps = {a: 'a1'};
+
+		let MySchool = PopupContainer(School);
+
 
 	// 置入文档
 		ReactDOM.render(
-			<School />,
+			<MySchool title="aa" />,
 		    document.getElementById('content')
 	  	);
+
+	
+
+
 
 
 });

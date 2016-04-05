@@ -2,48 +2,48 @@
 /**
  * 组件类
  */
-define(function(require, exports, module) {
+
+define(function (require, exports, module) {
 
 	// 依赖
 	var Common = require('./common'),
-		Input = require('./input'),
-		limit = require('limit'),
-		React = require('react');
+	    Input = require('./input'),
+	    limit = require('limit'),
+	    React = require('react');
 
 	// 类	
-	var Radio = React.createClass({displayName: "Radio",
-		getDefaultProps: function(){
+	var Radio = React.createClass({
+		displayName: 'Radio',
+
+		getDefaultProps: function getDefaultProps() {
 			return {
 				name: 'defaultName',
 				value: ''
 			};
 		},
 		mixins: [Common],
-		render: function(){
+		render: function render() {
 			var me = this,
-				state = me.state,
-				props = me.props;
-			return (
-				React.createElement("span", null, 
-					limit.map(me.props.options, function(val, key){
-						return (
-							React.createElement(Input, {
-								type: "radio", 
-								key: val.key, 
-								name: props.name, 
-								className: "fn-MaRi10", 
-								value: val.value, 
-								text: val.key, 
-								checked: val.value === state[props.name] && true, 
-								onChange:  limit.cb(me.changeHandler) })
-						);
-					})
-				)
+			    state = me.state,
+			    props = me.props;
+			return React.createElement(
+				'span',
+				null,
+				limit.map(me.props.options, function (val, key) {
+					return React.createElement(Input, {
+						type: 'radio',
+						key: val.key,
+						name: props.name,
+						className: 'fn-MaRi10',
+						value: val.value,
+						text: val.key,
+						checked: val.value === state[props.name] && true,
+						onChange: limit.cb(me.changeHandler) });
+				})
 			);
 		}
 	});
 
 	// 接口
 	module.exports = Radio;
-
 });

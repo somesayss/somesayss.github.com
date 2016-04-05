@@ -263,11 +263,11 @@ define(function(require, exports) {
 		var isEqual = limit.isEqual = function(a, b){
 			log('log', 'limit.isEqual is called ', typeof a, ':', a, typeof b, ':', b);
 			// 类型一致，值相同
-			if(a === b) return true;
+			if( is(a, b) ) return true;
 			// 类型不一致
 			if( toString.call(a) !== toString.call(b) ) return false;
-			// 特殊类型 NaN 
-			if( limitIsNaN(a) ) return true;
+			// 特殊值 0 -0 
+			if(a == 0 && b == 0) return false;
 			// 基础类型String Number Boolean
 			var type;
 			if( type = isBase(a, equalBaseArr) ) return equalBase(a, b, type);
@@ -700,16 +700,16 @@ define(function(require, exports) {
 			return isArrayLike(obj) ? keys( toArray(obj) ) : keys(obj);
 		};
 
-		// 私有遍历
-		function loop(obj, iterator, context, isBreak, begin){
-			// 循环遍历
-			var target = getLoopKey(obj),
-				key, num = ~~begin, len = target.length;
-			for(; num < len; num++){
-				key = target[num];
-				if( iterator.call(context, obj[key], key, obj) === false && isBreak ) break;
+			// 私有遍历
+			function loop(obj, iterator, context, isBreak, begin){
+				// 循环遍历
+				var target = getLoopKey(obj),
+					key, num = ~~begin, len = target.length;
+				for(; num < len; num++){
+					key = target[num];
+					if( iterator.call(context, obj[key], key, obj) === false && isBreak ) break;
+				};
 			};
-		};
 
 		// 遍历
 		var each = limit.each = function(obj, iterator, context){
@@ -842,7 +842,7 @@ define(function(require, exports) {
 			return obj;
 		};
 
-		// 判断
+		// [es6]判断
 		var is = limit.is = Object.is || function(a, b){
 			// 区分NaN
 			if( limitIsNaN(a) && limitIsNaN(b)){
@@ -864,24 +864,7 @@ define(function(require, exports) {
 	// form[转化数组] of[初始化数组] includes[包含] find[查询值] findIndex[查询遍历值] fill[填充]
 	//////////////
 
-		// 转化数组 [不改变原数组]
-		var from = limit.from = Array.from || function(obj, iterator, context){
-			var arr = [];
-			// 确保是函数
-			iterator = cb(iterator);
-			if( obj && obj.length ){
-				// 不考虑IE8的话可以这样写 push.apply(arr, obj);
-				push.apply(arr, slice.call(obj));
-				return map(arr, iterator, context);
-			}else{
-				return arr;
-			};
-		};
-
-		// 正确初始化数组 [不改变原数组]
-		limit.of = Array.of || function(){
-			return slice.call(arguments);
-		};
+		
 
 		// 格式化数组 会影响的类型:string nodeList jObject arguments
 		var toArray = limit.toArray = function(obj){
@@ -908,14 +891,14 @@ define(function(require, exports) {
 			};
 		};
 
-		// 获取正序遍历值
+		// 获取正序遍历值√
 		var indexOf = limit.indexOf = function(arr, ele, formIndex){
 			// 如果是空就直接返回
 			if( isEmpty(arr) ) return -1;
 			// 控制入参
 			isArrayLike(arr) && ( arr = toArray(arr) );
 			// 如果原生的方法存在
-			if(nativeIndexOf === arr.indexOf) return nativeIndexOf.apply( arr, slice.call(arguments, 1) );
+			if(nativeIndexOf && nativeIndexOf === arr.indexOf) return nativeIndexOf.apply( arr, slice.call(arguments, 1) );
 			// 初始化返回值
 			var isArr = isArray(arr),
 				index = -1;
@@ -962,7 +945,7 @@ define(function(require, exports) {
 			// 确保是函数
 			iterator = cb(iterator);
 			// 如果有原生方法
-			if(nativeMap === arr.map) return nativeMap.call( arr, iterator, context );
+			if(nativeMap && nativeMap === arr.map) return nativeMap.call( arr, iterator, context );
 			// 初始化数组
 			var isArr = isArray(arr),
 				result = isArr ? [] : {};
@@ -982,7 +965,7 @@ define(function(require, exports) {
 			// 确保是函数
 			iterator = cb(iterator);
 			// 如果有原生方法
-			if(nativeFilter === arr.filter) return nativeFilter.call( arr, iterator, context );
+			if(nativeFilter && nativeFilter === arr.filter) return nativeFilter.call( arr, iterator, context );
 			// 初始化数组
 			var isArr = isArray(arr),
 				result = isArr ? [] : {};
@@ -1003,7 +986,7 @@ define(function(require, exports) {
 			// 确保是函数
 			iterator = cb(iterator);
 			// 如果有原生方法
-			if(nativeEvery === arr.every) return nativeEvery.call( arr, iterator, context );
+			if(nativeEvery && nativeEvery === arr.every) return nativeEvery.call( arr, iterator, context );
 			// 初始化
 			var result = true, isArr = isArray(arr);
 			breakEach(arr, function(val, key){
@@ -1021,7 +1004,7 @@ define(function(require, exports) {
 			// 确保是函数
 			iterator = cb(iterator);
 			// 如果有原生方法
-			if(nativeSome === arr.some) return nativeSome.call( arr, iterator, context );
+			if(nativeSome && nativeSome === arr.some) return nativeSome.call( arr, iterator, context );
 			// 初始化
 			var result = false, isArr = isArray(arr);
 			breakEach(arr, function(val, key){
@@ -1071,69 +1054,6 @@ define(function(require, exports) {
 			return reduce.apply(undefined, args);
 		};
 
-		// 匹配可以分辨NaN -0 +0
-		var contains = limit.contains = function(arr, target){
-			var result = false;
-			loop(arr, function(val){
-				if(is(val, target)) return result = true, false;;
-			}, undefined, true);
-			return result;
-		};
-
-		// 包含可以分辨 NaN
-		function arrayIncludes(arr, target, index){
-			if(!nativeArrayIncludes){
-				return nativeArrayIncludes.call(arr, target, index);
-			}else{
-				var result = false;
-				loop(arr, limitIsNaN(target) ? function(val){
-					if(limitIsNaN(val)) return result = true, false;;
-				} : function(val){
-					if(val === target) return result = true, false;
-				}, undefined, true, index >= 0 ? index : arr.length + index);
-				return result;
-			};
-		};
-
-		// 兼容
-		function fixFindAndFindIndex(arr, iterator, context){
-			var result = {key: -1, val: undefined};
-			breakEach(arr, function(val, key){
-				if(iterator.call(this, val, +key)){
-					result = {
-						key: key,
-						val: val
-					};
-					return false;
-				};
-			}, context);
-			return result;
-		};
-
-		// 找到第一个符合的元素
-		limit.find = function(arr, iterator, context){
-			// 控制数组
-			arr = toArray(arr);
-			// 控制函数
-			iterator = cb(iterator);
-			// 用原生方法
-			if(nativeFind) return nativeFind.call(arr, iterator, context);
-			// 兼容方法
-			return fixFindAndFindIndex(arr, iterator, context).val;
-		};
-
-		// 找到第一个符合元素的位置
-		limit.findIndex = function(arr, iterator, context){
-			// 控制数组
-			arr = toArray(arr);
-			// 控制函数
-			iterator = cb(iterator);
-			// 用原生方法
-			if(nativeFindIndex) return nativeFind.call(arr, iterator, context);
-			// 兼容方法
-			return fixFindAndFindIndex(arr, iterator, context).key;
-		};
-
 		// 不同的值 [不改变原数组]
 		var difference = limit.difference = function(arr){
 			// 控制入参
@@ -1181,21 +1101,19 @@ define(function(require, exports) {
 			return value;
 		};
 
-		// 黑白名单判断
-		function whiteBlack(factor, val1){
-			return some(factor, function(val2){
-				return every(val2, function(val3, key3){
-					return val3 === val1[key3];
+			// 黑白名单判断
+			function whiteBlack(factor, val1){
+				return some(factor, function(val2){
+					return every(val2, function(val3, key3){
+						return val3 === val1[key3];
+					});
 				});
-			});
-		};
+			};
 
 		// 数据白名单  [不改变原数组]
 		// limit.whiteList([], {}, {}, {});
 		// limit.whiteList([], [{}, {}, {}]);
 		limit.whiteList = function(arr){
-			// 控制入参
-			arr = toArray(arr);
 			// 控制条件
 			var factor = concat.apply(arrayProto, slice.call(arguments, 1));
 			if( isEmpty(factor) ) return [];
@@ -1206,8 +1124,6 @@ define(function(require, exports) {
 
 		// 数据黑名单  [不改变原数组]
 		limit.blackList = function(arr){
-			// 控制入参
-			arr = toArray(arr);
 			// 控制条件
 			var factor = concat.apply(arrayProto, slice.call(arguments, 1));
 			if( isEmpty(factor) ) return arr;
@@ -1216,7 +1132,89 @@ define(function(require, exports) {
 			});
 		};
 
-		// 填充 [改变原数组]
+		// 匹配可以分辨NaN -0 +0
+		var contains = limit.contains = function(arr, target){
+			var result = false;
+			loop(arr, function(val){
+				if(is(val, target)) return result = true, false;;
+			}, undefined, true);
+			return result;
+		};
+
+		// [es6]包含可以分辨 NaN
+		function arrayIncludes(arr, target, index){
+			if(!nativeArrayIncludes){
+				return nativeArrayIncludes.call(arr, target, index);
+			}else{
+				var result = false;
+				loop(arr, limitIsNaN(target) ? function(val){
+					if(limitIsNaN(val)) return result = true, false;;
+				} : function(val){
+					if(val === target) return result = true, false;
+				}, undefined, true, index >= 0 ? index : arr.length + index);
+				return result;
+			};
+		};
+
+		// [es6]转化数组 [不改变原数组]
+		var from = limit.from = Array.from || function(obj, iterator, context){
+			var arr = [];
+			// 确保是函数
+			iterator = cb(iterator);
+			if( obj && obj.length ){
+				// 不考虑IE8的话可以这样写 push.apply(arr, obj);
+				push.apply(arr, slice.call(obj));
+				return map(arr, iterator, context);
+			}else{
+				return arr;
+			};
+		};
+
+		// [es6]正确初始化数组 [不改变原数组]
+		limit.of = Array.of || function(){
+			return slice.call(arguments);
+		};
+
+			// 兼容find findIndex
+			function fixFindAndFindIndex(arr, iterator, context){
+				var result = {key: -1, val: undefined};
+				breakEach(arr, function(val, key){
+					if(iterator.call(this, val, +key)){
+						result = {
+							key: key,
+							val: val
+						};
+						return false;
+					};
+				}, context);
+				return result;
+			};
+
+		// [es6]找到第一个符合的元素
+		limit.find = function(arr, iterator, context){
+			// 控制数组
+			arr = toArray(arr);
+			// 控制函数
+			iterator = cb(iterator);
+			// 用原生方法
+			if(nativeFind) return nativeFind.call(arr, iterator, context);
+			// 兼容方法
+			return fixFindAndFindIndex(arr, iterator, context).val;
+		};
+
+		// [es6]找到第一个符合元素的位置
+		limit.findIndex = function(arr, iterator, context){
+			// 控制数组
+			arr = toArray(arr);
+			// 控制函数
+			iterator = cb(iterator);
+			// 用原生方法
+			if(nativeFindIndex) return nativeFind.call(arr, iterator, context);
+			// 兼容方法
+			return fixFindAndFindIndex(arr, iterator, context).key;
+		};
+
+		// [es6]填充 [改变原数组]
 		limit.fill = function(arr, target, start, end){
 			// 控制入参
 			arr = toArray(arr);
@@ -1242,7 +1240,7 @@ define(function(require, exports) {
 			return arr;
 		};
 
-		// 内部复制
+		// [es6]内部复制
 		limit.copyWithin = function(arr, target, start, end){
 			// 控制入参
 			arr = toArray(arr);

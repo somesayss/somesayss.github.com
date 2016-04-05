@@ -2,15 +2,16 @@
 /**
  * 组件类
  */
-define(function(require, exports, module) {
+
+define(function (require, exports, module) {
 
 	// 依赖
 	var React = require('react'),
-		limit = require('limit'),
-		typeList = ['blue'];
+	    limit = require('limit'),
+	    typeList = ['blue'];
 
 	// 特指方法
-	function reWriteClassName(val, type){
+	function reWriteClassName(val, type) {
 		var arr = [];
 		limit.contains(typeList, type) ? arr.push('fn-link-' + type) : arr.push('fn-link-blue');
 		val && arr.push(val);
@@ -18,26 +19,29 @@ define(function(require, exports, module) {
 	};
 
 	// 类	
-	var Link = React.createClass({displayName: "Link",
-		getDefaultProps: function(){
+	var Link = React.createClass({
+		displayName: 'Link',
+
+		getDefaultProps: function getDefaultProps() {
 			return {
 				href: 'javascript:;',
 				text: 'link'
 			};
 		},
-		render: function(){
+		render: function render() {
 			var me = this,
-				props = limit.clone(me.props);
+			    props = limit.clone(me.props);
 			// 重写属性
 			props.className = reWriteClassName(props.className, props.type);
 			// 渲染DOM
-			return (
-				React.createElement("a", React.__spread({},  props), props.text)
+			return React.createElement(
+				'a',
+				props,
+				props.text
 			);
 		}
 	});
 
 	// 接口
 	module.exports = Link;
-
 });
