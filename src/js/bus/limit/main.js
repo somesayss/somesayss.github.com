@@ -7,6 +7,8 @@ define(function(require, exports, module) {
 	// 依赖
 	var limit = require('common/limit2.0');
 
+	// limit.limitFixed = true;
+
 	// var a = limit.test('a1', 'a2')
 
 	// console.log(limit.getProp());
@@ -18,9 +20,9 @@ define(function(require, exports, module) {
 
 	var a = new main;
 
-	var b = Object.assign({}, a, {'c': 'c1'});
-
-	console.log(a, b);
+	limit.each(['a1', 'a2'], function(val, key){
+		console.log(val, key);
+	})
 
 
 });

@@ -43,7 +43,7 @@ define(function (require, exports, module) {
 			return React.createElement(
 				'label',
 				props,
-				React.createElement('input', _extends({}, labelProps, { style: { marginTop: "2px" } })),
+				React.createElement('input', _extends({}, labelProps, { ref: 'input', style: { marginTop: "2px" } })),
 				' ',
 				props.text
 			);

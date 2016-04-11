@@ -19,7 +19,8 @@ define(function(require, exports, module) {
 
 	// 对象的定义
 	let obj = {
-		aaa(){ },
+		b,
+		aaa: () => { },
 		bbb(){ },
 		ccc: 'ccc3'
 	}; 

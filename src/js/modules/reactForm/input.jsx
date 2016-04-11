@@ -37,7 +37,7 @@ define(function(require, exports, module) {
 				labelProps = filterProps(props);
 			return (
 				<label {...props}>
-					<input {...labelProps} style={ {marginTop: "2px"} } /> {props.text}
+					<input {...labelProps} ref="input" style={ {marginTop: "2px"} } /> {props.text}
 				</label>
 			);
 		}

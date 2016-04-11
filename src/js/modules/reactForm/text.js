@@ -44,7 +44,7 @@ define(function (require, exports, module) {
 			props.value = state[props.name];
 			props.onChange = me.changeHandler;
 			props.onKeyPress = me.enterPress;
-			return React.createElement('input', _extends({}, props, { type: 'text' }));
+			return React.createElement('input', _extends({}, props, { type: 'text', ref: 'input' }));
 		}
 	});
 

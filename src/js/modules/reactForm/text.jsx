@@ -40,7 +40,7 @@ define(function(require, exports, module) {
 			props.onChange = me.changeHandler;
 			props.onKeyPress = me.enterPress;
 			return (
-				<input {...props} type="text" />
+				<input {...props} type="text" ref="input" />
 			);
 		}
 	});

@@ -34,6 +34,7 @@ define(function (require, exports, module) {
 
 	// 对象的定义
 	var obj = {
+		b: b,
 		aaa: function aaa() {},
 		bbb: function bbb() {},
 
