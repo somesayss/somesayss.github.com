@@ -1,0 +1,40 @@
+"use strict";
+/**
+ * 模型
+ */
+define(function(require, exports, module) {
+
+	// 依赖
+	const limit = require('common/limit2.0');
+
+	
+
+	// 
+	let main = () => {
+		return new Promise((resolve, reject) => {
+			resolve();	
+		});
+	};
+
+	main().then(() => {
+		console.log('1');
+	}).then(() => {
+		console.log('success1');
+		return 'a';
+	}, (err) => {
+		console.log('error1', err);
+	}).then((...args) => {
+		console.log('success2', args);
+		throw 'error bbb'
+	}, (err) => {
+		console.log('error2', err);
+	}).catch(() => {
+		console.log('error3');
+	}).then(()=>{
+		console.log('error4');
+	});
+
+	console.log('2');
+
+
+});

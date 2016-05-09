@@ -7,9 +7,6 @@
  */
 define(function(require, exports) {
 
-	// 依赖
-	const limitDom = require('./limit-dom'); 
-
 	// 变量
 	const [limit, WIN, DOC, BODY, objectProto, arrayProto] = [{}, window, window.document, document.body, Object.prototype, Array.prototype];
 

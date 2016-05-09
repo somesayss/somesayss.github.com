@@ -13,9 +13,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 define(function (require, exports) {
 	var _this = this;
 
-	// 依赖
-	var limitDom = require('./limit-dom');
-
 	// 变量
 	var limit = {};
 	var WIN = window;
