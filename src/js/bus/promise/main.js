@@ -24,7 +24,7 @@ define(function (require, exports, module) {
 			this.PromiseValue = undefined;
 			// 栈区
 			this.Stack = [];
-			if (typeof (arguments.length <= 0 ? undefined : arguments[0]) === 'function') {
+			if (limit.isFunction(arguments.length <= 0 ? undefined : arguments[0])) {
 				var fun = arguments.length <= 0 ? undefined : arguments[0];
 				var resolve = function resolve(val) {
 					_this.PromiseStatus = 'resolved';
@@ -63,6 +63,11 @@ define(function (require, exports, module) {
 				return me;
 			}
 		}, {
+			key: 'Catch',
+			value: function Catch(err) {
+				return this.then(null, err);
+			}
+		}, {
 			key: '_clean',
 			value: function _clean() {
 				var me = this,
@@ -96,12 +101,19 @@ define(function (require, exports, module) {
 				};
 				return me;
 			}
+		}], [{
+			key: 'all',
+			value: function all() {}
 		}]);
 
 		return MyPromise;
 	}();
 
 	;
+
+	Promise.prototype.Catch = function () {
+		return this.catch.apply(this, arguments);
+	};
 
 	var pro = function pro(resolve, reject) {
 		// d = 0;
@@ -117,7 +129,7 @@ define(function (require, exports, module) {
 	};
 
 	var suc1Call = function suc1Call(val) {
-		console.log('success1', val);d = 'd';return 456;
+		console.log('success1', val);var a = d;return 456;
 	};
 
 	var suc2Call = function suc2Call(val) {
@@ -132,21 +144,28 @@ define(function (require, exports, module) {
 		console.log('success3', val);
 	};
 
-	var a = main1().then(suc1Call); //.then(undefined, err2Call)
+	// let a = main1().then(suc1Call)//.then(undefined, err2Call)
 
-	var b = main2().then(suc1Call); //.then(undefined, err2Call)
+	// let b = main2().then(suc1Call)//.then(undefined, err2Call)
 
 	// console.log(a.then(suc1Call).then(undefined, err2Call));
 
 	// console.log(b.then(suc1Call).then(undefined, err2Call));
 
-	console.log('123');
+	// console.log('123');
 
-	setTimeout(function () {
-		a.then(undefined, err2Call);
-		b.then(undefined, err2Call);
+	// setTimeout(() => {
+	// 	a.Catch(err2Call);
+	// 	b.Catch(err2Call);
 
-		// console.log(a);
-		// console.log(b);
-	}, 1000);
+	// 	// console.log(a);
+	// 	// console.log(b);
+
+	// }, 1000);
+
+	Promise.all([function () {
+		return 123;
+	}, 213]).then(function (a) {
+		console.log(a);
+	});
 });

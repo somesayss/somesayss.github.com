@@ -15,7 +15,7 @@ define(function(require, exports, module) {
 			this.PromiseValue = undefined;
 			// 栈区
 			this.Stack = [];
-			if(typeof args[0] === 'function'){
+			if( limit.isFunction(args[0]) ){
 				let fun = args[0];
 				let resolve = (val) => {
 					this.PromiseStatus = 'resolved';
@@ -50,6 +50,9 @@ define(function(require, exports, module) {
 			};
 			return me;
 		}
+		Catch(err){
+			return this.then(null, err);
+		}
 		_clean(){
 			let me = this,
 				one = me.Stack.shift();
@@ -82,6 +85,13 @@ define(function(require, exports, module) {
 			};
 			return me;
 		}
+		static all(){
+
+		}
+	};
+
+	Promise.prototype.Catch = function(...args){
+		return this.catch(...args);
 	};
 
 	let pro = (resolve, reject) => {
@@ -97,7 +107,7 @@ define(function(require, exports, module) {
 		return new Promise(pro);
 	};
 
-	let suc1Call = (val) => { console.log('success1', val); d = 'd'; return 456; };
+	let suc1Call = (val) => { console.log('success1', val); var a = d; return 456; };
 
 	let suc2Call = (val) => { console.log('success2', val); return 456; };
 
@@ -105,27 +115,32 @@ define(function(require, exports, module) {
 
 	let suc3Call = (val) => { console.log('success3', val);};
 
-	let a = main1().then(suc1Call)//.then(undefined, err2Call)
+	// let a = main1().then(suc1Call)//.then(undefined, err2Call)
 
-	let b = main2().then(suc1Call)//.then(undefined, err2Call)
+	// let b = main2().then(suc1Call)//.then(undefined, err2Call)
 
 
 	// console.log(a.then(suc1Call).then(undefined, err2Call));
 
 	// console.log(b.then(suc1Call).then(undefined, err2Call));
 
-	console.log('123');
+	// console.log('123');
 
 
-	setTimeout(() => {
-		a.then(undefined, err2Call);
-		b.then(undefined, err2Call);
+	// setTimeout(() => {
+	// 	a.Catch(err2Call);
+	// 	b.Catch(err2Call);
 
-		// console.log(a);
-		// console.log(b);
+	// 	// console.log(a);
+	// 	// console.log(b);
 
-	}, 1000);
+	// }, 1000);
 
+
+
+	Promise.all([function(){return 123}, 213]).then((a) => {
+		console.log(a);
+	});
 
 
 
