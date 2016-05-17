@@ -27,12 +27,16 @@ define(function (require, exports, module) {
 			if (limit.isFunction(arguments.length <= 0 ? undefined : arguments[0])) {
 				var fun = arguments.length <= 0 ? undefined : arguments[0];
 				var resolve = function resolve(val) {
-					_this.PromiseStatus = 'resolved';
-					_this.PromiseValue = val;
+					var promise = _this.promise || _this;
+					promise.PromiseStatus = 'resolved';
+					promise.PromiseValue = val;
+					promise._clean();
 				};
 				var reject = function reject(val) {
-					_this.PromiseStatus = 'rejected';
-					_this.PromiseValue = val;
+					var promise = _this.promise || _this;
+					promise.PromiseStatus = 'rejected';
+					promise.PromiseValue = val;
+					promise._clean();
 				};
 				try {
 					fun(resolve, reject);
@@ -54,10 +58,12 @@ define(function (require, exports, module) {
 				err = limit.cb(err);
 				var me = this;
 				if (!me.flag) {
-					me = new MyPromise(this.PromiseStatus, this.PromiseValue);
+					var originMe = me;
+					me = new MyPromise(me.PromiseStatus, me.PromiseValue);
+					originMe.promise = me;
 				};
 				me.Stack.push({ suc: suc, err: err });
-				if (!me.cleanStatus) {
+				if (me.PromiseStatus !== 'pedding' && !me.cleanStatus) {
 					me._clean();
 				};
 				return me;
@@ -103,7 +109,33 @@ define(function (require, exports, module) {
 			}
 		}], [{
 			key: 'all',
-			value: function all() {}
+			value: function all(list) {
+				var guid = list.length,
+				    back = void 0,
+				    args = [];
+				function main(arg, key) {
+					args[key] = arg;
+					if (! --guid) {
+						back(args);
+					};
+				};
+				return new MyPromise(function (resolve, reject) {
+					back = resolve;
+					limit.each(list, function (val, key) {
+						// Promise对象
+						if (val.PromiseStatus) {
+							val.then(function (sucVal) {
+								main(sucVal, key);
+							}, function (errVal) {
+								back = reject;
+								main(errVal, key);
+							});
+						} else {
+							main(val, key);
+						};
+					});
+				});
+			}
 		}]);
 
 		return MyPromise;
@@ -163,9 +195,19 @@ define(function (require, exports, module) {
 
 	// }, 1000);
 
-	Promise.all([function () {
-		return 123;
-	}, 213]).then(function (a) {
-		console.log(a);
+	var kiss = function kiss() {
+		return new MyPromise(function (resolve, reject) {
+			setTimeout(function () {
+				resolve('kiss');
+			}, 1000);
+		});
+	};
+
+	MyPromise.all([kiss(), 213]).then(function (list) {
+		console.log(list);
 	});
+
+	// kiss().then((arg) => {
+	// 	console.log(arg);
+	// })
 });
