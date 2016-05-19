@@ -7,182 +7,85 @@ define(function(require, exports, module) {
 	// 依赖
 	const limit = require('common/limit2.0');
 
-	class MyPromise {
-		constructor(...args){
-			// 状态值
-			this.PromiseStatus = 'pedding';
-			// 返回值
-			this.PromiseValue = undefined;
-			// 栈区
-			this.Stack = [];
-			if( limit.isFunction(args[0]) ){
-				let fun = args[0];
-				let resolve = (val) => {
-					let promise = this.promise || this;
-					promise.PromiseStatus = 'resolved';
-					promise.PromiseValue = val;
-					promise._clean();
-				};
-				let reject = (val) => {
-					let promise = this.promise || this;
-					promise.PromiseStatus = 'rejected';
-					promise.PromiseValue = val;
-					promise._clean();
-				};
-				try{
-					fun(resolve, reject);
-				}catch(e){
-					this.PromiseStatus = 'rejected';
-					this.PromiseValue = e;
-				};
-			}else{
-				this.PromiseStatus = args[0];
-				this.PromiseValue = args[1];
-				this.flag = true;
-			};
-		}
-		then(suc, err){
-			suc = limit.cb(suc);
-			err = limit.cb(err);
-			let me = this;
-			if(!me.flag){
-				let originMe = me;
-				me = new MyPromise(me.PromiseStatus, me.PromiseValue);
-				originMe.promise = me;
-			};
-			me.Stack.push({suc, err});
-			if(me.PromiseStatus !== 'pedding' && !me.cleanStatus){
-				me._clean();	
-			};
-			return me;
-		}
-		Catch(err){
-			return this.then(null, err);
-		}
-		_clean(){
-			let me = this,
-				one = me.Stack.shift();
-			me.cleanStatus = 'init';
-			if(one){
-				setTimeout(() => {
-					try{
-						switch(me.PromiseStatus){
-							case 'resolved':
-								me.PromiseValue = one.suc(me.PromiseValue);
-							break;
-							case 'rejected':
-								me.PromiseValue = one.err(me.PromiseValue);
-							break;
-						};
-						me.PromiseStatus = 'resolved';
-					}catch(e){
-						me.PromiseStatus = 'rejected';
-						me.PromiseValue = e;
-						if(!me.Stack.length){
-							setTimeout(() => {
-								throw '(in promise) ' + e;
-							}, 0);
-						};
-					};
-					me._clean();
-				}, 0);
-			}else{
-				delete me.cleanStatus;
-			};
-			return me;
-		}
-		static all(list){
-			let guid = list.length,
-				back,
-				args = [];
-			function main(arg, key){
-				args[key] = arg;
-				if(!--guid){
-					back(args);
-				};
-			};
-			return new MyPromise((resolve, reject) => {
-				back = resolve;
-				limit.each(list, (val, key) => {
-					// Promise对象
-					if(val.PromiseStatus){
-						val.then(sucVal => {
-							main(sucVal, key);
-						}, errVal => {
-							back = reject;
-							main(errVal, key);
-						});
-					}else{
-						main(val, key);
-					};
-				});
-			});
-		}
-	};
-
-	Promise.prototype.Catch = function(...args){
-		return this.catch(...args);
-	};
-
-	let pro = (resolve, reject) => {
-		// d = 0;
-		resolve(123);
-	};
-
-	let main1 = () => {
-		return new MyPromise(pro);
-	};
-
-	let main2 = () => {
-		return new Promise(pro);
-	};
-
-	let suc1Call = (val) => { console.log('success1', val); var a = d; return 456; };
-
-	let suc2Call = (val) => { console.log('success2', val); return 456; };
-
-	let err2Call = (val) => { console.log('error2', val); return 789; };
-
-	let suc3Call = (val) => { console.log('success3', val);};
-
-	// let a = main1().then(suc1Call)//.then(undefined, err2Call)
-
-	// let b = main2().then(suc1Call)//.then(undefined, err2Call)
+	limit.limitFixed = true;
+	
+	let Promise = limit.promise();
 
 
-	// console.log(a.then(suc1Call).then(undefined, err2Call));
+	// var A = limit.promise();
 
-	// console.log(b.then(suc1Call).then(undefined, err2Call));
-
-	// console.log('123');
-
-
-	// setTimeout(() => {
-	// 	a.Catch(err2Call);
-	// 	b.Catch(err2Call);
-
-	// 	// console.log(a);
-	// 	// console.log(b);
-
-	// }, 1000);
-
-	let kiss = () => new MyPromise((resolve, reject) => {
+	let kiss = () => new Promise((resolve, reject) => {
 		setTimeout(() => {
 			resolve('kiss');
 		}, 1000);
 	});
 
-	MyPromise.all([kiss(), 213]).then((list) => {
-		console.log(list);
+	let err1 = () => new Promise((resolve, reject) => {
+		setTimeout(() => {
+			reject('err1');
+		}, 1000);
 	});
+
+	let err2 = () => new Promise((resolve, reject) => {
+		// setTimeout(() => {
+			reject('err2');
+		// }, 800);
+	});
+
+	var bbbbb = Promise.all([err2(), kiss()]);
+
+	// bbbbb.then(list => {
+	// 	console.log('success', list);
+	// }, list => {
+	// 	console.log('error', list);
+	// });
+
+	setTimeout(() => {
+		console.log(bbbbb);
+	}, 2000);
+
+
+	// var aaa = err1();
+
+
+	// aaa.Catch((v) => {
+	// 	console.log('success', v);
+	// 	return '123'
+	// });
+
+	// aaa.Catch((v) => {
+	// 	console.log('success', v);
+	// 	return '456'
+	// })
+
+	// setTimeout(() => {
+	// 	console.log(aaa);
+	// }, 1500);
 
 	
 	// kiss().then((arg) => {
 	// 	console.log(arg);
-	// })
+	// 	throw 'aaaa'
+	// }).Catch((e) => {
+	// 	console.log(e);
+	// 	return 'bbbb'
+	// }).then((val) => {
+	// 	console.log(val);
+	// });
+	
+	// var aa = err1();
 
+	// A.reject(aa).then((val) => {
+	// 	console.log('success', val);
+	// }, (val) => {
+	// 	console.log('error', val);
+	// });
 
-
+	// var a = err2().then((val) => {
+	// 	console.log('success', val);
+	// }, (val) => {
+	// 	console.log('error', val);
+	// });
 
 
 
