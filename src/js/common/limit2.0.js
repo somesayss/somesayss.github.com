@@ -178,6 +178,11 @@ define(function (require, exports) {
 		return target == null ? [{}].concat(args) : [target].concat(args);
 	};
 
+	// 确定第一个参数是对象，第二个参数函数
+	var checkObjFunction = function checkObjFunction(obj, iterator, context) {
+		return checkTargetNoEqualNull(obj, limit.cb(iterator), context);
+	};
+
 	// --判定方法-- //
 	// 是否是DOM元素
 	defineIt('isElement', { value: function value(n) {
@@ -201,7 +206,7 @@ define(function (require, exports) {
 
 	// 是否是定义
 	defineIt('isDefined', { value: function value(n) {
-			return !isUndefined(n);
+			return !limit.isUndefined(n);
 		} });
 
 	// 是否是空null
@@ -330,7 +335,7 @@ define(function (require, exports) {
 
 	// 遍历
 	defineIt('forin', {
-		format: checkTargetNoEqualNull,
+		format: checkObjFunction,
 		fixed: function fixed(obj, iterator, context) {
 			for (var key in obj) {
 				iterator.call(context, obj[key], key, obj);
@@ -340,9 +345,7 @@ define(function (require, exports) {
 
 	// 循环
 	defineIt('each', {
-		format: function format(obj, iterator, context) {
-			return [obj, limit.cb(iterator), context];
-		},
+		format: checkObjFunction,
 		when: function when(obj) {
 			return isArrayLike(obj) && !!forEach;
 		},
@@ -409,6 +412,7 @@ define(function (require, exports) {
 	});
 
 	// --数组-- //
+
 	// toArray
 	defineIt('toArray', {
 		value: function value(obj) {

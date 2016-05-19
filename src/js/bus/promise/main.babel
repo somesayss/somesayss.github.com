@@ -7,6 +7,8 @@ define(function(require, exports, module) {
 	// 依赖
 	const limit = require('common/limit2.0');
 
+	window.limit = limit;
+
 	limit.limitFixed = true;
 	
 	let Promise = limit.promise();

@@ -119,6 +119,9 @@ define(function(require, exports) {
 		// 如果是null undefined 返回空对象
 		const checkTargetNoEqualNull = (target, ...args) => target == null ? [{}, ...args] : [target, ...args];
 
+		// 确定第一个参数是对象，第二个参数函数
+		const checkObjFunction = (obj, iterator, context) => checkTargetNoEqualNull(obj, limit.cb(iterator), context);
+
 	// --判定方法-- //
 		// 是否是DOM元素
 		defineIt('isElement', { value: n => !!n && n.nodeType === 1 });
@@ -133,7 +136,7 @@ define(function(require, exports) {
 		defineIt('isUndefined', { value: n => n === void 0 });
 
 		// 是否是定义
-		defineIt('isDefined', { value: n => !isUndefined(n) });
+		defineIt('isDefined', { value: n => !limit.isUndefined(n) });
 
 		// 是否是空null
 		defineIt('isNull', { value: n => n === null });
@@ -185,7 +188,6 @@ define(function(require, exports) {
 		});
 
 	// --工具方法-- //
-		
 
 		// 私有遍历
 		defineIt('_loop', {
@@ -214,7 +216,7 @@ define(function(require, exports) {
 
 		// 遍历
 		defineIt('forin', {
-			format: checkTargetNoEqualNull,
+			format: checkObjFunction,
 			fixed(obj, iterator, context){
 				for(let key in obj){
 					iterator.call(context, obj[key], key, obj);
@@ -224,7 +226,7 @@ define(function(require, exports) {
 
 		// 循环
 		defineIt('each', {
-			format: (obj, iterator, context) => [obj, limit.cb(iterator), context],
+			format: checkObjFunction,
 			when: (obj) => isArrayLike(obj) && !!forEach,
 			priority: (obj, iterator, context) => forEach.call(obj, (val, key) => { iterator.call(this, val, ''+key) }, context),
 			value: (obj, iterator, context) => limit._loop(obj, iterator, context)
@@ -271,6 +273,7 @@ define(function(require, exports) {
 		});
 
 	// --数组-- //
+
 		// toArray
 		defineIt('toArray', {
 			value: obj => {
