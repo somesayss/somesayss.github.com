@@ -119,6 +119,9 @@ define(function(require, exports) {
 		// 如果是null undefined 返回空对象
 		const checkTargetNoEqualNull = (target, ...args) => target == null ? [{}, ...args] : [target, ...args];
 
+		// 确定第一个参数是对象，第二个参数函数
+		const checkObjFunction = (obj, iterator, context) => checkTargetNoEqualNull(obj, limit.cb(iterator), context);
+
 	// --判定方法-- //
 		// 是否是DOM元素
 		defineIt('isElement', { value: n => !!n && n.nodeType === 1 });
@@ -133,7 +136,7 @@ define(function(require, exports) {
 		defineIt('isUndefined', { value: n => n === void 0 });
 
 		// 是否是定义
-		defineIt('isDefined', { value: n => !isUndefined(n) });
+		defineIt('isDefined', { value: n => !limit.isUndefined(n) });
 
 		// 是否是空null
 		defineIt('isNull', { value: n => n === null });
@@ -151,7 +154,7 @@ define(function(require, exports) {
 		defineIt('isObject', { value: n => limit.isFunction(n) || typeof n === 'object' && !!n });
 
 		// 是否是参数
-		defineIt('isArguments', { value: n => has(n, 'callee') });
+		defineIt('isArguments', { value: n => limit.has(n, 'callee') });
 
 		// string array arguments nodeList jObject window[排除] function[排除]
 		defineIt('isArrayLike', { value: n => !!n && limit.isNumber(n.length) && !limit.isFunction(n) && !limit.isWin(n) });
@@ -185,7 +188,6 @@ define(function(require, exports) {
 		});
 
 	// --工具方法-- //
-		
 
 		// 私有遍历
 		defineIt('_loop', {
@@ -214,7 +216,7 @@ define(function(require, exports) {
 
 		// 遍历
 		defineIt('forin', {
-			format: checkTargetNoEqualNull,
+			format: checkObjFunction,
 			fixed(obj, iterator, context){
 				for(let key in obj){
 					iterator.call(context, obj[key], key, obj);
@@ -224,7 +226,7 @@ define(function(require, exports) {
 
 		// 循环
 		defineIt('each', {
-			format: (obj, iterator, context) => [obj, limit.cb(iterator), context],
+			format: checkObjFunction,
 			when: (obj) => isArrayLike(obj) && !!forEach,
 			priority: (obj, iterator, context) => forEach.call(obj, (val, key) => { iterator.call(this, val, ''+key) }, context),
 			value: (obj, iterator, context) => limit._loop(obj, iterator, context)
@@ -257,7 +259,7 @@ define(function(require, exports) {
 			format: checkTargetNoEqualNull,
 			fixed(obj){
 				let arr = [];
-				forin(obj, (val, key) => has(obj, key) && arr.push(key) );
+				limit.forin(obj, (val, key) => limit.has(obj, key) && arr.push(key) );
 				return arr;
 			}
 		});
@@ -271,6 +273,7 @@ define(function(require, exports) {
 		});
 
 	// --数组-- //
+
 		// toArray
 		defineIt('toArray', {
 			value: obj => {
@@ -291,6 +294,164 @@ define(function(require, exports) {
 
 		// 
 
+	// --函数-- //
+
+		// Promise
+		class MyPromise {
+			constructor(...args){
+				// 状态值
+				this.PromiseStatus = 'pedding';
+				// 返回值
+				this.PromiseValue = undefined;
+				// 栈区
+				this.Stack = [];
+				if( limit.isFunction(args[0]) ){
+					this.promiseList = [];
+					let fun = args[0];
+					let resolve = (val) => {
+						limit.each([this].concat(this.promiseList), promise => {
+							if(promise.PromiseStatus === 'pedding'){
+								promise.PromiseStatus = 'resolved';
+								promise.PromiseValue = val;
+								promise._clean();
+							};
+						});
+					};
+					let reject = (val) => {
+						limit.each([this].concat(this.promiseList), promise => {
+							if(promise.PromiseStatus === 'pedding'){
+								promise.PromiseStatus = 'rejected';
+								promise.PromiseValue = val;
+								promise._clean();
+							};
+						});
+						setTimeout(() => {
+							if(!this.promiseList.length){
+								throw '(in promise) ' + val; 
+							};
+						}, 0);
+					};
+					try{
+						fun(resolve, reject);
+					}catch(e){
+						this.PromiseStatus = 'rejected';
+						this.PromiseValue = e;
+					};
+				}else{
+					this.PromiseStatus = args[0];
+					this.PromiseValue = args[1];
+				};
+			}
+			then(suc, err){
+				suc = limit.cb(suc);
+				err = limit.cb(err);
+				let me = this;
+				if(me.promiseList){
+					let originMe = me;
+					me = new MyPromise(me.PromiseStatus, me.PromiseValue);
+					originMe.promiseList.push(me);
+				};
+				me.Stack.push({suc, err});
+				if(me.PromiseStatus !== 'pedding' && !me.cleanStatus){
+					me._clean();	
+				};
+				return me;
+			}
+			Catch(err){
+				return this.then(null, err);
+			}
+			_clean(){
+				let me = this,
+					one = me.Stack.shift();
+				me.cleanStatus = 'init';
+				if(one){
+					setTimeout(() => {
+						try{
+							switch(me.PromiseStatus){
+								case 'resolved':
+									me.PromiseValue = one.suc(me.PromiseValue);
+								break;
+								case 'rejected':
+									me.PromiseValue = one.err(me.PromiseValue);
+								break;
+							};
+							me.PromiseStatus = 'resolved';
+						}catch(e){
+							me.PromiseStatus = 'rejected';
+							me.PromiseValue = e;
+							if(!me.Stack.length){
+								setTimeout(() => {
+									throw '(in promise) ' + e;
+								}, 0);
+							};
+						};
+						me._clean();
+					}, 0);
+				}else{
+					delete me.cleanStatus;
+				};
+				return me;
+			}
+			static all(list){
+				let guid = list.length,
+					back,
+					args = [];
+				function main(arg, key){
+					args[key] = arg;
+					if(!--guid){
+						back(args);
+					};
+				};
+				return new MyPromise((resolve, reject) => {
+					back = resolve;
+					limit.each(list, (val, key) => {
+						// Promise对象
+						if(val.PromiseStatus){
+							val.then(sucVal => {
+								main(sucVal, key);
+							}, errVal => {
+								reject(errVal);
+							});
+						}else{
+							main(val, key);
+						};
+					});
+				});
+			}
+			static race(list){
+				return new MyPromise((resolve, reject) => {
+					limit.each(list, val => {
+						MyPromise.resolve(val).then( sucVal => resolve(sucVal), errVal => reject(errVal) );
+					});
+				});
+			}
+			static resolve(val){
+				if(val && val.then){
+					return new MyPromise((resolve, reject) => {
+						val.then(resolve, reject);
+					});
+				};
+				return new MyPromise((resolve, reject) => {
+					resolve(val);
+				});
+			}
+			static reject(val){
+				return new MyPromise((resolve, reject) => {
+					reject(val);
+				});
+			}
+		};
+		// 
+		if(WIN.Promise){
+			Promise.prototype.Catch = function(fn){
+				return this.then(null, fn);
+			};
+		};
+		defineIt('promise', {
+			when: () => !!WIN.Promise,
+			priority: () => Promise,
+			fixed: () => MyPromise
+		});
 
 	// 返回主体
 	return limit;

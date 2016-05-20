@@ -6,7 +6,11 @@
  * 更加优美的构造，入口的统一，ES6语法
  */
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
@@ -174,6 +178,11 @@ define(function (require, exports) {
 		return target == null ? [{}].concat(args) : [target].concat(args);
 	};
 
+	// 确定第一个参数是对象，第二个参数函数
+	var checkObjFunction = function checkObjFunction(obj, iterator, context) {
+		return checkTargetNoEqualNull(obj, limit.cb(iterator), context);
+	};
+
 	// --判定方法-- //
 	// 是否是DOM元素
 	defineIt('isElement', { value: function value(n) {
@@ -197,7 +206,7 @@ define(function (require, exports) {
 
 	// 是否是定义
 	defineIt('isDefined', { value: function value(n) {
-			return !isUndefined(n);
+			return !limit.isUndefined(n);
 		} });
 
 	// 是否是空null
@@ -229,7 +238,7 @@ define(function (require, exports) {
 
 	// 是否是参数
 	defineIt('isArguments', { value: function value(n) {
-			return has(n, 'callee');
+			return limit.has(n, 'callee');
 		} });
 
 	// string array arguments nodeList jObject window[排除] function[排除]
@@ -326,7 +335,7 @@ define(function (require, exports) {
 
 	// 遍历
 	defineIt('forin', {
-		format: checkTargetNoEqualNull,
+		format: checkObjFunction,
 		fixed: function fixed(obj, iterator, context) {
 			for (var key in obj) {
 				iterator.call(context, obj[key], key, obj);
@@ -336,9 +345,7 @@ define(function (require, exports) {
 
 	// 循环
 	defineIt('each', {
-		format: function format(obj, iterator, context) {
-			return [obj, limit.cb(iterator), context];
-		},
+		format: checkObjFunction,
 		when: function when(obj) {
 			return isArrayLike(obj) && !!forEach;
 		},
@@ -389,8 +396,8 @@ define(function (require, exports) {
 		format: checkTargetNoEqualNull,
 		fixed: function fixed(obj) {
 			var arr = [];
-			forin(obj, function (val, key) {
-				return has(obj, key) && arr.push(key);
+			limit.forin(obj, function (val, key) {
+				return limit.has(obj, key) && arr.push(key);
 			});
 			return arr;
 		}
@@ -405,6 +412,7 @@ define(function (require, exports) {
 	});
 
 	// --数组-- //
+
 	// toArray
 	defineIt('toArray', {
 		value: function value(obj) {
@@ -424,6 +432,200 @@ define(function (require, exports) {
 	// forEach
 
 	//
+
+	// --函数-- //
+
+	// Promise
+
+	var MyPromise = function () {
+		function MyPromise() {
+			var _this2 = this;
+
+			_classCallCheck(this, MyPromise);
+
+			// 状态值
+			this.PromiseStatus = 'pedding';
+			// 返回值
+			this.PromiseValue = undefined;
+			// 栈区
+			this.Stack = [];
+			if (limit.isFunction(arguments.length <= 0 ? undefined : arguments[0])) {
+				this.promiseList = [];
+				var _fun = arguments.length <= 0 ? undefined : arguments[0];
+				var resolve = function resolve(val) {
+					limit.each([_this2].concat(_this2.promiseList), function (promise) {
+						if (promise.PromiseStatus === 'pedding') {
+							promise.PromiseStatus = 'resolved';
+							promise.PromiseValue = val;
+							promise._clean();
+						};
+					});
+				};
+				var reject = function reject(val) {
+					limit.each([_this2].concat(_this2.promiseList), function (promise) {
+						if (promise.PromiseStatus === 'pedding') {
+							promise.PromiseStatus = 'rejected';
+							promise.PromiseValue = val;
+							promise._clean();
+						};
+					});
+					setTimeout(function () {
+						if (!_this2.promiseList.length) {
+							throw '(in promise) ' + val;
+						};
+					}, 0);
+				};
+				try {
+					_fun(resolve, reject);
+				} catch (e) {
+					this.PromiseStatus = 'rejected';
+					this.PromiseValue = e;
+				};
+			} else {
+				this.PromiseStatus = arguments.length <= 0 ? undefined : arguments[0];
+				this.PromiseValue = arguments.length <= 1 ? undefined : arguments[1];
+			};
+		}
+
+		_createClass(MyPromise, [{
+			key: 'then',
+			value: function then(suc, err) {
+				suc = limit.cb(suc);
+				err = limit.cb(err);
+				var me = this;
+				if (me.promiseList) {
+					var originMe = me;
+					me = new MyPromise(me.PromiseStatus, me.PromiseValue);
+					originMe.promiseList.push(me);
+				};
+				me.Stack.push({ suc: suc, err: err });
+				if (me.PromiseStatus !== 'pedding' && !me.cleanStatus) {
+					me._clean();
+				};
+				return me;
+			}
+		}, {
+			key: 'Catch',
+			value: function Catch(err) {
+				return this.then(null, err);
+			}
+		}, {
+			key: '_clean',
+			value: function _clean() {
+				var me = this,
+				    one = me.Stack.shift();
+				me.cleanStatus = 'init';
+				if (one) {
+					setTimeout(function () {
+						try {
+							switch (me.PromiseStatus) {
+								case 'resolved':
+									me.PromiseValue = one.suc(me.PromiseValue);
+									break;
+								case 'rejected':
+									me.PromiseValue = one.err(me.PromiseValue);
+									break;
+							};
+							me.PromiseStatus = 'resolved';
+						} catch (e) {
+							me.PromiseStatus = 'rejected';
+							me.PromiseValue = e;
+							if (!me.Stack.length) {
+								setTimeout(function () {
+									throw '(in promise) ' + e;
+								}, 0);
+							};
+						};
+						me._clean();
+					}, 0);
+				} else {
+					delete me.cleanStatus;
+				};
+				return me;
+			}
+		}], [{
+			key: 'all',
+			value: function all(list) {
+				var guid = list.length,
+				    back = void 0,
+				    args = [];
+				function main(arg, key) {
+					args[key] = arg;
+					if (! --guid) {
+						back(args);
+					};
+				};
+				return new MyPromise(function (resolve, reject) {
+					back = resolve;
+					limit.each(list, function (val, key) {
+						// Promise对象
+						if (val.PromiseStatus) {
+							val.then(function (sucVal) {
+								main(sucVal, key);
+							}, function (errVal) {
+								reject(errVal);
+							});
+						} else {
+							main(val, key);
+						};
+					});
+				});
+			}
+		}, {
+			key: 'race',
+			value: function race(list) {
+				return new MyPromise(function (resolve, reject) {
+					limit.each(list, function (val) {
+						MyPromise.resolve(val).then(function (sucVal) {
+							return resolve(sucVal);
+						}, function (errVal) {
+							return reject(errVal);
+						});
+					});
+				});
+			}
+		}, {
+			key: 'resolve',
+			value: function resolve(val) {
+				if (val && val.then) {
+					return new MyPromise(function (resolve, reject) {
+						val.then(resolve, reject);
+					});
+				};
+				return new MyPromise(function (resolve, reject) {
+					resolve(val);
+				});
+			}
+		}, {
+			key: 'reject',
+			value: function reject(val) {
+				return new MyPromise(function (resolve, reject) {
+					reject(val);
+				});
+			}
+		}]);
+
+		return MyPromise;
+	}();
+
+	;
+	//
+	if (WIN.Promise) {
+		Promise.prototype.Catch = function (fn) {
+			return this.then(null, fn);
+		};
+	};
+	defineIt('promise', {
+		when: function when() {
+			return !!WIN.Promise;
+		},
+		priority: function priority() {
+			return Promise;
+		},
+		fixed: function fixed() {
+			return MyPromise;
+		}
+	});
 
 	// 返回主体
 	return limit;
