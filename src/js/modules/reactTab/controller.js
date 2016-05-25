@@ -9,16 +9,9 @@ define(function (require, exports, module) {
 
 	var $ = require('$');
 
-	var Reflux = require('reflux');
+	var Control = require('common/control');
 
-	// 行为
-
-
-	var Actions = Reflux.createActions(['add', 'get', 'det', 'edit', 'save', 'input']);
-
-	// 存储
-	var Store = Reflux.createStore({
-		listenables: [Actions],
+	return Control({
 		store: {
 			nameList: ['张三', '李四'],
 			personName: '',
@@ -32,7 +25,7 @@ define(function (require, exports, module) {
 			    store = me.store;
 			store.nameList.push(store.personName);
 			store.personName = '';
-			me.trigger(store);
+			me.updateComponent();
 		},
 		onGet: function onGet() {},
 		onDet: function onDet(e) {
@@ -40,7 +33,7 @@ define(function (require, exports, module) {
 			    store = me.store,
 			    index = $(e.target).data('param');
 			store.nameList.splice(index, 1);
-			me.trigger(store);
+			me.updateComponent();
 		},
 		onEdit: function onEdit(e) {
 			var me = this,
@@ -48,23 +41,25 @@ define(function (require, exports, module) {
 			    index = $(e.target).data('param');
 			store.editorNum = index;
 			store.personName = store.nameList[index];
-			me.trigger(store);
+			me.updateComponent();
 		},
 		onSave: function onSave() {
 			var me = this,
 			    store = me.store;
-			store.nameList[store.editorNum] = store.personName;
+			if (store.nameList[store.editorNum] !== void 0) {
+				store.nameList[store.editorNum] = store.personName;
+			} else {
+				store.nameList.push(store.personName);
+			};
 			store.personName = '';
 			store.editorNum = null;
-			me.trigger(store);
+			me.updateComponent();
 		},
 		onInput: function onInput(key) {
 			var me = this,
 			    store = me.store;
 			store.personName = key.personName;
-			me.trigger(store);
+			me.updateComponent();
 		}
 	});
-
-	return { Actions: Actions, Store: Store };
 });

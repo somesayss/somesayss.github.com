@@ -10,6 +10,7 @@ define(function(require, exports, module) {
 	window.limit = limit;
 
 	limit.limitFixed = true;
+	limit.logClosed = true;
 	
 	let Promise = limit.promise();
 
@@ -34,7 +35,19 @@ define(function(require, exports, module) {
 		// }, 800);
 	});
 
-	var bbbbb = Promise.all([err2(), kiss()]);
+	let a = kiss();
+
+	a.then(v => {
+		console.log(v);
+	}, e => {
+		console.log(e);
+	})
+
+	setTimeout(() => {
+		console.log(a);
+	}, 1000);
+
+	// var bbbbb = Promise.all([err2(), kiss()]);
 
 	// bbbbb.then(list => {
 	// 	console.log('success', list);
@@ -42,9 +55,9 @@ define(function(require, exports, module) {
 	// 	console.log('error', list);
 	// });
 
-	setTimeout(() => {
-		console.log(bbbbb);
-	}, 2000);
+	// setTimeout(() => {
+	// 	console.log(bbbbb);
+	// }, 2000);
 
 
 	// var aaa = err1();
@@ -88,7 +101,6 @@ define(function(require, exports, module) {
 	// }, (val) => {
 	// 	console.log('error', val);
 	// });
-
 
 
 

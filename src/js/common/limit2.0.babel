@@ -8,11 +8,16 @@
 define(function(require, exports) {
 
 	// 变量
-	const [limit, WIN, DOC, BODY, objectProto, arrayProto] = [{}, window, window.document, document.body, Object.prototype, Array.prototype];
+	const limit = {};
+	const WIN = window;
+	const DOC = WIN.document;
+	const BODY = DOC.body;
+	const objectProto = Object.prototype;
+	const arrayProto = Array.prototype;
 
 	// 确定全局是否用兼容方法
 	limit.limitFixed = false;
-	limit.logClosed = false;
+	limit.logClosed = true;
 
 	// 自有属性
 	const {defineProperty, is, assign, keys} = Object;
@@ -83,10 +88,10 @@ define(function(require, exports) {
 
 		// 错误提醒
 		let typeWarn = {
-			toString: obj => log('warn', obj, 'change into', '\''+obj+'\'', 'limit.toString is called'),
-			toArray: obj => log('warn', obj, 'change into []', 'limit.toArray is called'),
-			formatDate: obj => log('warn', 'timestamp:', timestamp, 'date:', date, 'limit.formatDate is called'),
-			bind: obj => log('warn', fun, 'type is not function, limit.bind is called')
+			toString: obj => limit.log('warn', obj, 'change into', '\''+obj+'\'', 'limit.toString is called'),
+			toArray: obj => limit.log('warn', obj, 'change into []', 'limit.toArray is called'),
+			formatDate: obj => limit.log('warn', 'timestamp:', timestamp, 'date:', date, 'limit.formatDate is called'),
+			bind: obj => limit.log('warn', fun, 'type is not function, limit.bind is called')
 		};
 
 		// log
@@ -99,7 +104,7 @@ define(function(require, exports) {
 					isChrome = WIN.chrome;
 				// 对type的处理可选值 'error'[默认]|'log'|'warn'
 				// 这里可以优化用
-				if( !contains(['error', 'log', 'warn'], type) ){
+				if( !limit.contains(['error', 'log', 'warn'], type) ){
 					args.unshift(type);
 					type = 'error';
 				};
@@ -115,14 +120,8 @@ define(function(require, exports) {
 			}
 		});
 
-	// --检查参数-- //
-		// 如果是null undefined 返回空对象
-		const checkTargetNoEqualNull = (target, ...args) => target == null ? [{}, ...args] : [target, ...args];
-
-		// 确定第一个参数是对象，第二个参数函数
-		const checkObjFunction = (obj, iterator, context) => checkTargetNoEqualNull(obj, limit.cb(iterator), context);
-
 	// --判定方法-- //
+
 		// 是否是DOM元素
 		defineIt('isElement', { value: n => !!n && n.nodeType === 1 });
 
@@ -156,8 +155,8 @@ define(function(require, exports) {
 		// 是否是参数
 		defineIt('isArguments', { value: n => limit.has(n, 'callee') });
 
-		// string array arguments nodeList jObject window[排除] function[排除]
-		defineIt('isArrayLike', { value: n => !!n && limit.isNumber(n.length) && !limit.isFunction(n) && !limit.isWin(n) });
+		// array arguments nodeList jObject string[排除] window[排除] function[排除]
+		defineIt('isArrayLike', { value: n => !!n && limit.isNumber(n.length) && !limit.isFunction(n) && !limit.isWin(n) && !limit.isString(n) });
 
 		// 是否是NaN
 		defineIt('isNaN', { 
@@ -186,6 +185,18 @@ define(function(require, exports) {
 			priority: (...args) => Number.isSafeInteger(...args), 
 			fixed: n => limit.isInteger(n) && -9007199254740992 < n && n < 9007199254740992 
 		});
+
+		// 是否为空
+		defineIt('isEmpty', {
+			value: n => n == null || limit.size(n) === 0
+		});
+
+	// --检查参数-- //
+		// 如果是null undefined 返回空对象
+		const checkTargetNoEqualNull = (target, ...args) => target == null ? [{}, ...args] : [target, ...args];
+
+		// 确定第一个参数是对象，第二个参数函数
+		const checkObjFunction = (obj, iterator, context) => checkTargetNoEqualNull(obj, limit.cb(iterator), context);
 
 	// --工具方法-- //
 
@@ -237,8 +248,16 @@ define(function(require, exports) {
 		defineIt('is', {
 			when: () => !!is,
 			priority: (...args) => is(...args),
-			fixed(...args){
-
+			fixed(a, b){
+				// 区分NaN
+				if( limit.isNaN(a) && limit.isNaN(b)){
+					return true;
+				};
+				// 区分 +0 -0
+				if( a === 0 && b === 0){
+					return 1/a === 1/b;
+				};
+				return a === b;
 			}
 		});
 
@@ -247,8 +266,13 @@ define(function(require, exports) {
 			when: () => !!assign,
 			priority: (...args) => assign(...args),
 			format: checkTargetNoEqualNull,
-			fixed(...args){
-				console.log(123);
+			fixed(target, ...args){
+				limit.each(args, val => {
+					limit.each(val, (val, key) => {
+						target[key] = val;
+					});
+				});
+				return target;
 			}
 		});
 
@@ -267,9 +291,19 @@ define(function(require, exports) {
 		// mix: extend
 		defineIt('extend', {
 			format: checkTargetNoEqualNull,
-			fixed(...args){
-				console.log(123);
+			fixed(target, ...args){
+				limit.each(args, val => {
+					limit.forin(val, (val, key) => {
+						target[key] = val;
+					});
+				});
+				return target;
 			}
+		});
+
+		// mix: size
+		defineIt('size', {
+			value: n => limit._getLoopKey(n).length
 		});
 
 	// --数组-- //
@@ -279,11 +313,9 @@ define(function(require, exports) {
 			value: obj => {
 				// 如果是数组原始返回
 				if( limit.isArray(obj) ){
-					return obj
-				}
-				// 如果是类数组对象的话就格式化数组
-				else if( limit.isArrayLike(obj) ){
-					return slice.call(obj)
+					return obj;
+				}else if( limit.isArrayLike(obj) ){ // 如果是类数组对象的话就格式化数组
+					return slice.call(obj);
 				}else{
 					return ( typeWarn.toArray(obj), [] );
 				};
@@ -291,7 +323,9 @@ define(function(require, exports) {
 		});
 
 		// forEach
-
+		defineIt('forEach', {
+				
+		});
 		// 
 
 	// --函数-- //

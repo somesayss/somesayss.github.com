@@ -122,11 +122,6 @@ define(function (require, exports, module) {
 					)
 				);
 			}
-		}, {
-			key: 'componentDidMount',
-			value: function componentDidMount() {
-				// console.log( this.refs.aaa.refs.input );
-			}
 		}]);
 
 		return School;

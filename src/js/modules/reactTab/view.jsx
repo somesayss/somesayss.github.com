@@ -4,7 +4,19 @@
  */
 define(function(require, exports, module) {
 
-	const [React, ReactDOM, ReactForm, limit, SchoolActions] = [require('react'), require('reactDOM'), require('modules/reactForm/main'), require('limit'), require('./controller').Actions];
+	const [
+		React, 
+		ReactDOM, 
+		ReactForm, 
+		limit, 
+		SchoolActions
+		] = [
+			require('react'), 
+			require('reactDOM'), 
+			require('modules/reactForm/main'), 
+			require('limit'), 
+			require('./controller').Actions
+		];
 
 	limit.logClosed = true;
 
@@ -65,9 +77,6 @@ define(function(require, exports, module) {
 					</h2>
 				</div>
 			);
-		}
-		componentDidMount(){
-			// console.log( this.refs.aaa.refs.input );
 		}
 	};
 
