@@ -11,6 +11,7 @@ define(function (require, exports, module) {
 	window.limit = limit;
 
 	limit.limitFixed = true;
+	limit.logClosed = true;
 
 	var Promise = limit.promise();
 
@@ -40,7 +41,19 @@ define(function (require, exports, module) {
 		});
 	};
 
-	var bbbbb = Promise.all([err2(), kiss()]);
+	var a = kiss();
+
+	a.then(function (v) {
+		console.log(v);
+	}, function (e) {
+		console.log(e);
+	});
+
+	setTimeout(function () {
+		console.log(a);
+	}, 1000);
+
+	// var bbbbb = Promise.all([err2(), kiss()]);
 
 	// bbbbb.then(list => {
 	// 	console.log('success', list);
@@ -48,9 +61,9 @@ define(function (require, exports, module) {
 	// 	console.log('error', list);
 	// });
 
-	setTimeout(function () {
-		console.log(bbbbb);
-	}, 2000);
+	// setTimeout(() => {
+	// 	console.log(bbbbb);
+	// }, 2000);
 
 	// var aaa = err1();
 
