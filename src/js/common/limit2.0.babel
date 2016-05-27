@@ -22,7 +22,7 @@ define(function(require, exports) {
 	// 自有属性
 	const {defineProperty, is, assign, keys} = Object;
 	const {toString, hasOwnProperty} = objectProto;
-	const {concat, slice, forEach} = arrayProto;
+	const {concat, slice, forEach, map, filter, some, every} = arrayProto;
 
 	// 传递器
 	const K = (...args) => args.length <= 1 ? args[0] : args;
@@ -238,7 +238,7 @@ define(function(require, exports) {
 		// 循环
 		defineIt('each', {
 			format: checkObjFunction,
-			when: (obj) => isArrayLike(obj) && !!forEach,
+			when: (obj) => isArrayLike(obj) && forEach,
 			priority: (obj, iterator, context) => forEach.call(obj, (val, key) => { iterator.call(this, val, ''+key) }, context),
 			value: (obj, iterator, context) => limit._loop(obj, iterator, context)
 		});
@@ -308,7 +308,7 @@ define(function(require, exports) {
 
 	// --数组-- //
 
-		// toArray
+		// mix: toArray
 		defineIt('toArray', {
 			value: obj => {
 				// 如果是数组原始返回
@@ -322,11 +322,80 @@ define(function(require, exports) {
 			}
 		});
 
-		// forEach
+		// ES5: forEach [支持obj]
 		defineIt('forEach', {
-				
+			format: checkObjFunction,
+			when: (arr) => arr.forEach && forEach,
+			priority: (arr, iterator, context) => forEach.call(arr, iterator, context),
+			fixed: (arr, iterator, context) => {
+				return limit.isArrayLike(arr) ? limit.each(arr, (val, key) => {
+					iterator.call(context, val, +key, arr);	
+				}, context) : limit.each(arr, iterator, context);
+			}
 		});
+
+		// ES5: map [支持obj]
+		defineIt('map', {
+			format: checkObjFunction,
+			when: (arr) => arr.map && map,
+			priority: (arr, iterator, context) => map.call(arr, iterator, context),
+			fixed: (arr, iterator, context) => {
+				// 初始化数组
+				let result = limit.isArray(arr) ? [] : {};
+				// 遍历
+				limit.each(arr, function(val, key){
+					result[key] = iterator.call(this, val, key, arr);
+				}, context);
+				return result;
+			}
+		});
+
+		// ES5: filter [支持obj]
+		defineIt('filter', {
+			format: checkObjFunction,
+			when: (arr) => arr.filter && filter,
+			priority: (arr, iterator, context) => filter.call(arr, iterator, context),
+			fixed: (arr, iterator, context) => {
+				// 初始化数组
+				let isArr = limit.isArray(arr),
+					result = isArr ? [] : {};
+				isArr ? limit.each(arr, function(val, key){
+					iterator.call(this, val, key, arr) && result.push(val);
+				}, context) : limit.each(arr, function(val, key){
+					iterator.call(this, val, key, arr) && (result[key] = val);
+				});
+				return result;
+			}
+		});
+
+		// ES5: some [支持obj]
+		defineIt('some', {
+			format: checkObjFunction,
+			when: (arr) => arr.some && some,
+			priority: (arr, iterator, context) => some.call(arr, iterator, context),
+			fixed: (arr, iterator, context) => {
+				// 初始化
+				let result = false;
+				limit.isArray(arr) ? limit._loop(arr, (val, key) => {
+					if( iterator.call(context, val, +key, arr) ) return result = true, false;
+				}, undefined, true) : limit._loop(arr, (val, key) => {
+					if( iterator.call(context, val, key, arr) ) return result = true, false;
+				}, undefined, true);
+				return result;
+			}
+		});
+
 		// 
+		defineIt('every', {
+			format: checkObjFunction,
+			when: (arr) => arr.every && every,
+			priority: (arr, iterator, context) => every.call(arr, iterator, context),
+			fixed: (arr, iterator, context) => {
+				return limit.some(arr, iterator, context);
+			}
+		});
+
+
 
 	// --函数-- //
 

@@ -7,7 +7,7 @@ define(function(require, exports, module) {
 	// 依赖
 	var limit = require('common/limit2.0');
 
-	limit.limitFixed = true;
+	// limit.limitFixed = true;
 	// limit.logClosed = false;
 
 	// var a = limit.test('a1', 'a2')
@@ -20,21 +20,23 @@ define(function(require, exports, module) {
 	// 	console.log(val, key);
 	// });
 	
-	var a = new Number(123)
+	var a = new Number(123);
 
 	// console.log(a);
 	// console.log(limit.isEmpty(a));
 
+	var n = ['a1', 'b1'];
+	// var n = {a: 'a1', b: 'b1'};
 
-	var fn = JSON.stringify;
+	// ['a1', 'b1']
+	// {a: 'a1', b: 'b1'}
 
-	JSON.stringify = function(json){
-		return fn(json).replace(/(\\u\w{4})/g, function(a){
-			return new Function('return "'+a+'"')();
-		});
-	};
+	var b = limit.every(n, function(val, key){
+		console.log(val, key);
+		return;
+	});
 
-	console.log(JSON.stringify(JSON.stringify({a: '啊𠮷西'})));
+	console.log(b);
 
 
 });
