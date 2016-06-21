@@ -1,6 +1,6 @@
 "use strict";
 /**
- * 2015.10.8
+ * 2016.6.16
  * 对ES的增强
  * version: 2.0.0
  * 更加优美的构造，入口的统一，ES6语法
@@ -36,6 +36,8 @@ define(function (require, exports) {
 	var is = Object.is;
 	var assign = Object.assign;
 	var keys = Object.keys;
+	var values = Object.values;
+	var entries = Object.entries;
 	var toString = objectProto.toString;
 	var hasOwnProperty = objectProto.hasOwnProperty;
 	var from = Array.from;
@@ -57,6 +59,7 @@ define(function (require, exports) {
 	var find = arrayProto.find;
 	var findIndex = arrayProto.findIndex;
 	var fill = arrayProto.fill;
+	var copyWithin = arrayProto.copyWithin;
 	var fromCodePoint = String.fromCodePoint;
 	var trim = stringProto.trim;
 	var codePointAt = stringProto.codePointAt;
@@ -127,6 +130,9 @@ define(function (require, exports) {
 		} else {
 			value = config.value;
 		};
+		typeof value === 'function' && (value.toString = function () {
+			return 'function () { [native code] }';
+		});
 		if (defineProperty) {
 			defineProperty(limit, name, {
 				value: value,
@@ -208,6 +214,35 @@ define(function (require, exports) {
 			} catch (e) {
 				log('日志 ', args);
 			};
+		}
+	});
+
+	// 快捷方法
+	defineIt('T.T', {
+		value: function value() {
+			for (var _len3 = arguments.length, args = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+				args[_key3] = arguments[_key3];
+			}
+
+			return limit.log.apply(null, ['error'].concat(args));
+		}
+	});
+	defineIt('!!!', {
+		value: function value() {
+			for (var _len4 = arguments.length, args = Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
+				args[_key4] = arguments[_key4];
+			}
+
+			return limit.log.apply(null, ['warn'].concat(args));
+		}
+	});
+	defineIt('...', {
+		value: function value() {
+			for (var _len5 = arguments.length, args = Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
+				args[_key5] = arguments[_key5];
+			}
+
+			return limit.log.apply(null, ['log'].concat(args));
 		}
 	});
 
@@ -338,8 +373,8 @@ define(function (require, exports) {
 
 	// 如果是null undefined 返回空对象
 	var checkTargetNoEqualNull = function checkTargetNoEqualNull(target) {
-		for (var _len3 = arguments.length, args = Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
-			args[_key3 - 1] = arguments[_key3];
+		for (var _len6 = arguments.length, args = Array(_len6 > 1 ? _len6 - 1 : 0), _key6 = 1; _key6 < _len6; _key6++) {
+			args[_key6 - 1] = arguments[_key6];
 		}
 
 		return target == null ? [{}].concat(args) : [target].concat(args);
@@ -347,8 +382,8 @@ define(function (require, exports) {
 
 	// 如果是控制为array
 	var checkTargetWithArray = function checkTargetWithArray(target) {
-		for (var _len4 = arguments.length, args = Array(_len4 > 1 ? _len4 - 1 : 0), _key4 = 1; _key4 < _len4; _key4++) {
-			args[_key4 - 1] = arguments[_key4];
+		for (var _len7 = arguments.length, args = Array(_len7 > 1 ? _len7 - 1 : 0), _key7 = 1; _key7 < _len7; _key7++) {
+			args[_key7 - 1] = arguments[_key7];
 		}
 
 		return [limit.toArray(target)].concat(args);
@@ -356,8 +391,8 @@ define(function (require, exports) {
 
 	// 控制参数为字符串
 	var checkTargetWithString = function checkTargetWithString(target) {
-		for (var _len5 = arguments.length, args = Array(_len5 > 1 ? _len5 - 1 : 0), _key5 = 1; _key5 < _len5; _key5++) {
-			args[_key5 - 1] = arguments[_key5];
+		for (var _len8 = arguments.length, args = Array(_len8 > 1 ? _len8 - 1 : 0), _key8 = 1; _key8 < _len8; _key8++) {
+			args[_key8 - 1] = arguments[_key8];
 		}
 
 		return [limit.toString(target)].concat(args);
@@ -365,8 +400,8 @@ define(function (require, exports) {
 
 	// 控制参数为数字
 	var checkTargetWithNumber = function checkTargetWithNumber(target) {
-		for (var _len6 = arguments.length, args = Array(_len6 > 1 ? _len6 - 1 : 0), _key6 = 1; _key6 < _len6; _key6++) {
-			args[_key6 - 1] = arguments[_key6];
+		for (var _len9 = arguments.length, args = Array(_len9 > 1 ? _len9 - 1 : 0), _key9 = 1; _key9 < _len9; _key9++) {
+			args[_key9 - 1] = arguments[_key9];
 		}
 
 		return [limit.toNumber(target)].concat(args);
@@ -374,8 +409,8 @@ define(function (require, exports) {
 
 	// 确定第一个参数是对象，第二个参数函数
 	var checkObjFunction = function checkObjFunction(obj, iterator) {
-		for (var _len7 = arguments.length, args = Array(_len7 > 2 ? _len7 - 2 : 0), _key7 = 2; _key7 < _len7; _key7++) {
-			args[_key7 - 2] = arguments[_key7];
+		for (var _len10 = arguments.length, args = Array(_len10 > 2 ? _len10 - 2 : 0), _key10 = 2; _key10 < _len10; _key10++) {
+			args[_key10 - 2] = arguments[_key10];
 		}
 
 		return checkTargetNoEqualNull.apply(undefined, [obj, limit.cb(iterator)].concat(args));
@@ -383,8 +418,8 @@ define(function (require, exports) {
 
 	// 确定第一个参数是数组，第二个参数函数
 	var checkArrFunction = function checkArrFunction(arr, iterator) {
-		for (var _len8 = arguments.length, args = Array(_len8 > 2 ? _len8 - 2 : 0), _key8 = 2; _key8 < _len8; _key8++) {
-			args[_key8 - 2] = arguments[_key8];
+		for (var _len11 = arguments.length, args = Array(_len11 > 2 ? _len11 - 2 : 0), _key11 = 2; _key11 < _len11; _key11++) {
+			args[_key11 - 2] = arguments[_key11];
 		}
 
 		return checkTargetWithArray.apply(undefined, [arr, limit.cb(iterator)].concat(args));
@@ -423,8 +458,8 @@ define(function (require, exports) {
 
 	// 确定有限数
 	var checkFiniteNum = function checkFiniteNum() {
-		for (var _len9 = arguments.length, args = Array(_len9), _key9 = 0; _key9 < _len9; _key9++) {
-			args[_key9] = arguments[_key9];
+		for (var _len12 = arguments.length, args = Array(_len12), _key12 = 0; _key12 < _len12; _key12++) {
+			args[_key12] = arguments[_key12];
 		}
 
 		return limit.every(limit.flatten(args), function (val) {
@@ -438,8 +473,8 @@ define(function (require, exports) {
 
 	// 参数降位
 	var checkFlattenArgs = function checkFlattenArgs() {
-		for (var _len10 = arguments.length, args = Array(_len10), _key10 = 0; _key10 < _len10; _key10++) {
-			args[_key10] = arguments[_key10];
+		for (var _len13 = arguments.length, args = Array(_len13), _key13 = 0; _key13 < _len13; _key13++) {
+			args[_key13] = arguments[_key13];
 		}
 
 		return limit.flatten(args);
@@ -506,7 +541,7 @@ define(function (require, exports) {
 		}
 	});
 
-	// --对象方法-- //
+	// --对象-- //
 	// ES6: Object.is();
 	defineIt('is', {
 		when: function when() {
@@ -538,8 +573,8 @@ define(function (require, exports) {
 		},
 		format: checkTargetNoEqualNull,
 		fixed: function fixed(target) {
-			for (var _len11 = arguments.length, args = Array(_len11 > 1 ? _len11 - 1 : 0), _key11 = 1; _key11 < _len11; _key11++) {
-				args[_key11 - 1] = arguments[_key11];
+			for (var _len14 = arguments.length, args = Array(_len14 > 1 ? _len14 - 1 : 0), _key14 = 1; _key14 < _len14; _key14++) {
+				args[_key14 - 1] = arguments[_key14];
 			}
 
 			limit.each(args, function (val) {
@@ -551,7 +586,43 @@ define(function (require, exports) {
 		}
 	});
 
-	// ES5: Object.keys
+	// ES6: Object.values();
+	defineIt('values', {
+		when: function when() {
+			return !!values;
+		},
+		priority: function priority() {
+			return values.apply(undefined, arguments);
+		},
+		format: checkTargetNoEqualNull,
+		fixed: function fixed(target) {
+			var result = [];
+			limit.each(target, function (val) {
+				result.push(val);
+			});
+			return result;
+		}
+	});
+
+	// ES6: Object.entries();
+	defineIt('entries', {
+		when: function when() {
+			return !!entries;
+		},
+		priority: function priority() {
+			return entries.apply(undefined, arguments);
+		},
+		format: checkTargetNoEqualNull,
+		fixed: function fixed(target) {
+			var result = [];
+			limit.each(target, function (val, key) {
+				result.push([key, val]);
+			});
+			return result;
+		}
+	});
+
+	// ES5: Object.keys();
 	defineIt('keys', {
 		when: function when() {
 			return !!keys;
@@ -573,8 +644,8 @@ define(function (require, exports) {
 	defineIt('extend', {
 		format: checkTargetNoEqualNull,
 		fixed: function fixed(target) {
-			for (var _len12 = arguments.length, args = Array(_len12 > 1 ? _len12 - 1 : 0), _key12 = 1; _key12 < _len12; _key12++) {
-				args[_key12 - 1] = arguments[_key12];
+			for (var _len15 = arguments.length, args = Array(_len15 > 1 ? _len15 - 1 : 0), _key15 = 1; _key15 < _len15; _key15++) {
+				args[_key15 - 1] = arguments[_key15];
 			}
 
 			limit.each(args, function (val) {
@@ -590,8 +661,8 @@ define(function (require, exports) {
 	defineIt('getValueInObject', {
 		format: checkTargetNoEqualNull,
 		fixed: function fixed(obj) {
-			for (var _len13 = arguments.length, args = Array(_len13 > 1 ? _len13 - 1 : 0), _key13 = 1; _key13 < _len13; _key13++) {
-				args[_key13 - 1] = arguments[_key13];
+			for (var _len16 = arguments.length, args = Array(_len16 > 1 ? _len16 - 1 : 0), _key16 = 1; _key16 < _len16; _key16++) {
+				args[_key16 - 1] = arguments[_key16];
 			}
 
 			limit.some(args, function (val) {
@@ -644,8 +715,8 @@ define(function (require, exports) {
 		value: function value() {
 			var value = [];
 
-			for (var _len14 = arguments.length, args = Array(_len14), _key14 = 0; _key14 < _len14; _key14++) {
-				args[_key14] = arguments[_key14];
+			for (var _len17 = arguments.length, args = Array(_len17), _key17 = 0; _key17 < _len17; _key17++) {
+				args[_key17] = arguments[_key17];
 			}
 
 			limit.forEach(args, function (val) {
@@ -695,8 +766,8 @@ define(function (require, exports) {
 	defineIt('whiteList', {
 		format: checkTargetWithArray,
 		fixed: function fixed(arr) {
-			for (var _len15 = arguments.length, args = Array(_len15 > 1 ? _len15 - 1 : 0), _key15 = 1; _key15 < _len15; _key15++) {
-				args[_key15 - 1] = arguments[_key15];
+			for (var _len18 = arguments.length, args = Array(_len18 > 1 ? _len18 - 1 : 0), _key18 = 1; _key18 < _len18; _key18++) {
+				args[_key18 - 1] = arguments[_key18];
 			}
 
 			args = limit.flatten(args);
@@ -709,8 +780,8 @@ define(function (require, exports) {
 	defineIt('blackList', {
 		format: checkTargetWithArray,
 		fixed: function fixed(arr) {
-			for (var _len16 = arguments.length, args = Array(_len16 > 1 ? _len16 - 1 : 0), _key16 = 1; _key16 < _len16; _key16++) {
-				args[_key16 - 1] = arguments[_key16];
+			for (var _len19 = arguments.length, args = Array(_len19 > 1 ? _len19 - 1 : 0), _key19 = 1; _key19 < _len19; _key19++) {
+				args[_key19 - 1] = arguments[_key19];
 			}
 
 			args = limit.flatten(args);
@@ -723,8 +794,8 @@ define(function (require, exports) {
 	// mix: difference [支持obj]
 	defineIt('difference', {
 		value: function value(arr) {
-			for (var _len17 = arguments.length, args = Array(_len17 > 1 ? _len17 - 1 : 0), _key17 = 1; _key17 < _len17; _key17++) {
-				args[_key17 - 1] = arguments[_key17];
+			for (var _len20 = arguments.length, args = Array(_len20 > 1 ? _len20 - 1 : 0), _key20 = 1; _key20 < _len20; _key20++) {
+				args[_key20 - 1] = arguments[_key20];
 			}
 
 			args = limit.flatten(args);
@@ -914,8 +985,8 @@ define(function (require, exports) {
 			return Function.call.apply(reduceRight, arguments);
 		},
 		fixed: function fixed() {
-			for (var _len18 = arguments.length, args = Array(_len18), _key18 = 0; _key18 < _len18; _key18++) {
-				args[_key18] = arguments[_key18];
+			for (var _len21 = arguments.length, args = Array(_len21), _key21 = 0; _key21 < _len21; _key21++) {
+				args[_key21] = arguments[_key21];
 			}
 
 			var len = args[0].length - 1,
@@ -959,8 +1030,8 @@ define(function (require, exports) {
 			return of.apply(undefined, arguments);
 		},
 		fixed: function fixed() {
-			for (var _len19 = arguments.length, args = Array(_len19), _key19 = 0; _key19 < _len19; _key19++) {
-				args[_key19] = arguments[_key19];
+			for (var _len22 = arguments.length, args = Array(_len22), _key22 = 0; _key22 < _len22; _key22++) {
+				args[_key22] = arguments[_key22];
 			}
 
 			return slice.call(args);
@@ -1065,6 +1136,24 @@ define(function (require, exports) {
 					return result;
 				};
 			};
+		}
+	});
+
+	// ES6: copyWithin
+	defineIt('copyWithin', {
+		format: checkTargetWithArray,
+		when: function when(arr) {
+			return copyWithin && arr.copyWithin === copyWithin;
+		},
+		priority: function priority() {
+			return Function.call.apply(copyWithin, arguments);
+		},
+
+		fixed: function fixed(arr, target, start, end) {
+			var args = arr.slice(start, end);
+			args.unshift(target, args.length);
+			splice.apply(arr, args);
+			return arr;
 		}
 	});
 
@@ -1265,8 +1354,8 @@ define(function (require, exports) {
 	// mix: bind 对bind做了统一兼容处理
 	defineIt('bind', {
 		format: function format(fn) {
-			for (var _len20 = arguments.length, args = Array(_len20 > 1 ? _len20 - 1 : 0), _key20 = 1; _key20 < _len20; _key20++) {
-				args[_key20 - 1] = arguments[_key20];
+			for (var _len23 = arguments.length, args = Array(_len23 > 1 ? _len23 - 1 : 0), _key23 = 1; _key23 < _len23; _key23++) {
+				args[_key23 - 1] = arguments[_key23];
 			}
 
 			return [limit.cb(fn)].concat(args);
@@ -1275,13 +1364,13 @@ define(function (require, exports) {
 			return bind && fn.bind === bind;
 		},
 		priority: function priority() {
-			for (var _len21 = arguments.length, args1 = Array(_len21), _key21 = 0; _key21 < _len21; _key21++) {
-				args1[_key21] = arguments[_key21];
+			for (var _len24 = arguments.length, args1 = Array(_len24), _key24 = 0; _key24 < _len24; _key24++) {
+				args1[_key24] = arguments[_key24];
 			}
 
 			function main() {
-				for (var _len22 = arguments.length, args2 = Array(_len22), _key22 = 0; _key22 < _len22; _key22++) {
-					args2[_key22] = arguments[_key22];
+				for (var _len25 = arguments.length, args2 = Array(_len25), _key25 = 0; _key25 < _len25; _key25++) {
+					args2[_key25] = arguments[_key25];
 				}
 
 				return Function.call.apply(bind, [].concat(args1, args2))();
@@ -1293,14 +1382,14 @@ define(function (require, exports) {
 			return main;
 		},
 		fixed: function fixed(fn) {
-			for (var _len23 = arguments.length, args1 = Array(_len23 > 1 ? _len23 - 1 : 0), _key23 = 1; _key23 < _len23; _key23++) {
-				args1[_key23 - 1] = arguments[_key23];
+			for (var _len26 = arguments.length, args1 = Array(_len26 > 1 ? _len26 - 1 : 0), _key26 = 1; _key26 < _len26; _key26++) {
+				args1[_key26 - 1] = arguments[_key26];
 			}
 
 			// 兼容的方法
 			function main() {
-				for (var _len24 = arguments.length, args2 = Array(_len24), _key24 = 0; _key24 < _len24; _key24++) {
-					args2[_key24] = arguments[_key24];
+				for (var _len27 = arguments.length, args2 = Array(_len27), _key27 = 0; _key27 < _len27; _key27++) {
+					args2[_key27] = arguments[_key27];
 				}
 
 				return Function.call.apply(fn, [].concat(args1, args2));
@@ -1328,6 +1417,10 @@ define(function (require, exports) {
 			};
 			// 如果是对象的话，就出log
 			limit.isObject(obj) && typeWarn.toString(obj);
+			// 如果是-0的话toString会不正确
+			if (limit.is(obj, -0)) {
+				return '-0';
+			};
 			return '' + obj;
 		}
 	});
@@ -1626,8 +1719,8 @@ define(function (require, exports) {
 
 	// 获取最大的小数位
 	var getMaxScale = function getMaxScale() {
-		for (var _len25 = arguments.length, args = Array(_len25), _key25 = 0; _key25 < _len25; _key25++) {
-			args[_key25] = arguments[_key25];
+		for (var _len28 = arguments.length, args = Array(_len28), _key28 = 0; _key28 < _len28; _key28++) {
+			args[_key28] = arguments[_key28];
 		}
 
 		if (!checkFiniteNum(args)) {
@@ -1642,8 +1735,8 @@ define(function (require, exports) {
 	defineIt('plus,+', {
 		format: checkFlattenArgs,
 		fixed: function fixed() {
-			for (var _len26 = arguments.length, args = Array(_len26), _key26 = 0; _key26 < _len26; _key26++) {
-				args[_key26] = arguments[_key26];
+			for (var _len29 = arguments.length, args = Array(_len29), _key29 = 0; _key29 < _len29; _key29++) {
+				args[_key29] = arguments[_key29];
 			}
 
 			var maxScale = getMaxScale(args);
@@ -1660,8 +1753,8 @@ define(function (require, exports) {
 	defineIt('minus,-', {
 		format: checkFlattenArgs,
 		fixed: function fixed() {
-			for (var _len27 = arguments.length, args = Array(_len27), _key27 = 0; _key27 < _len27; _key27++) {
-				args[_key27] = arguments[_key27];
+			for (var _len30 = arguments.length, args = Array(_len30), _key30 = 0; _key30 < _len30; _key30++) {
+				args[_key30] = arguments[_key30];
 			}
 
 			var maxScale = getMaxScale(args);
@@ -1679,8 +1772,8 @@ define(function (require, exports) {
 		var tar = limit.toString(args[0]),
 		    arg = limit.toString(args[1]),
 		    medTar = (tar.split('.')[1] || '').length,
-		    medArg = (arg.split('.')[1] || '').length,
-		    num = falg ? +movePoint(+tar.replace('.', '') * +arg.replace('.', ''), -(medTar + medArg)) : +movePoint(+tar.replace('.', '') / +arg.replace('.', ''), medArg - medTar);
+		    medArg = (arg.split('.')[1] || '').length;
+		var num = falg ? +movePoint(+tar.replace('.', '') * +arg.replace('.', ''), -(medTar + medArg)) : +movePoint(+tar.replace('.', '') / +arg.replace('.', ''), medArg - medTar);
 		args.splice(0, 2, num);
 		return num;
 	};
@@ -1689,8 +1782,8 @@ define(function (require, exports) {
 	defineIt('multiply,*', {
 		format: checkFlattenArgs,
 		fixed: function fixed() {
-			for (var _len28 = arguments.length, args = Array(_len28), _key28 = 0; _key28 < _len28; _key28++) {
-				args[_key28] = arguments[_key28];
+			for (var _len31 = arguments.length, args = Array(_len31), _key31 = 0; _key31 < _len31; _key31++) {
+				args[_key31] = arguments[_key31];
 			}
 
 			if (!checkFiniteNum(args)) {
@@ -1706,8 +1799,8 @@ define(function (require, exports) {
 	defineIt('except,/', {
 		format: checkFlattenArgs,
 		fixed: function fixed() {
-			for (var _len29 = arguments.length, args = Array(_len29), _key29 = 0; _key29 < _len29; _key29++) {
-				args[_key29] = arguments[_key29];
+			for (var _len32 = arguments.length, args = Array(_len32), _key32 = 0; _key32 < _len32; _key32++) {
+				args[_key32] = arguments[_key32];
 			}
 
 			if (!checkFiniteNum(args)) {
@@ -1716,6 +1809,19 @@ define(function (require, exports) {
 			//格式化数字为字符串
 			var num = getNeedNum(args, false);
 			return args.length <= 1 ? num : limit['/'](args);
+		}
+	});
+
+	// mix:
+	var EXPRESS_REG = /^(?:\s*)(-?\d+(?:\.\d+)?)(?:\s*)([\+\-\*\/])(?:\s*)(-?\d+(?:\.\d+)?)(?:\s*)/;
+	defineIt('express,?', {
+		value: function value(exp) {
+			if (!EXPRESS_REG.test(exp)) {
+				return limit.toNumber(exp);
+			};
+			return limit.express(exp.replace(EXPRESS_REG, function (a, b, c, d) {
+				return limit[c](+b, +d);
+			}));
 		}
 	});
 
@@ -1734,8 +1840,8 @@ define(function (require, exports) {
 			};
 			// 正常入参
 			return formatStr.replace(REG_EXP_DATA, function () {
-				for (var _len30 = arguments.length, args = Array(_len30), _key30 = 0; _key30 < _len30; _key30++) {
-					args[_key30] = arguments[_key30];
+				for (var _len33 = arguments.length, args = Array(_len33), _key33 = 0; _key33 < _len33; _key33++) {
+					args[_key33] = arguments[_key33];
 				}
 
 				var arr = [];

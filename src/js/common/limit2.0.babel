@@ -1,6 +1,6 @@
 "use strict";
 /**
- * 2015.10.8
+ * 2016.6.16
  * 对ES的增强
  * version: 2.0.0
  * 更加优美的构造，入口的统一，ES6语法
@@ -22,12 +22,12 @@ define(function(require, exports) {
 	limit.logClosed = false;
 
 	// 自有属性
-	const { defineProperty, is, assign, keys } = Object;
+	const { defineProperty, is, assign, keys, values, entries } = Object;
 	const { toString, hasOwnProperty } = objectProto;
 	const { from, of } = Array;
 	const {	concat, push, slice, unshift, splice,
 			forEach, map, filter, some, every, indexOf, lastIndexOf, reduce, reduceRight,
-			find, findIndex, fill } = arrayProto;
+			find, findIndex, fill, copyWithin } = arrayProto;
 	const { fromCodePoint } = String;
 	const { trim, codePointAt, startsWith, endsWith, repeat, padStart, padEnd } = stringProto;
 	const { bind } = functionProto;
@@ -72,6 +72,7 @@ define(function(require, exports) {
 		}else{
 			value = config.value;
 		};
+		typeof value === 'function' && (value.toString = () => 'function () { [native code] }');
 		if( defineProperty ){
 			defineProperty(limit, name, {
 				value,
@@ -137,6 +138,17 @@ define(function(require, exports) {
 					log('日志 ', args);
 				};
 			}
+		});
+
+		// 快捷方法
+		defineIt('T.T', {
+			value: (...args) => limit.log.apply(null, ['error', ...args])
+		});
+		defineIt('!!!', {
+			value: (...args) => limit.log.apply(null, ['warn', ...args])
+		});
+		defineIt('...', {
+			value: (...args) => limit.log.apply(null, ['log', ...args])
 		});
 
 	// --判定方法-- //
@@ -318,7 +330,7 @@ define(function(require, exports) {
 			value: (obj, iterator, context) => limit._loop(obj, iterator, context)
 		});
 
-	// --对象方法-- //
+	// --对象-- //
 		// ES6: Object.is();
 		defineIt('is', {
 			when: () => !!is,
@@ -351,7 +363,35 @@ define(function(require, exports) {
 			}
 		});
 
-		// ES5: Object.keys
+		// ES6: Object.values();
+		defineIt('values', {
+			when: () => !!values,
+			priority: (...args) => values(...args),
+			format: checkTargetNoEqualNull,
+			fixed(target){
+				let result = [];
+				limit.each(target, val => {
+					result.push(val);
+				});
+				return result;
+			}
+		});
+
+		// ES6: Object.entries();
+		defineIt('entries', {
+			when: () => !!entries,
+			priority: (...args) => entries(...args),
+			format: checkTargetNoEqualNull,
+			fixed(target){
+				let result = [];
+				limit.each(target, (val, key) => {
+					result.push([key, val]);
+				});
+				return result;
+			}
+		});
+
+		// ES5: Object.keys();
 		defineIt('keys', {
 			when: () => !!keys,
 			priority: (...args) => keys(...args),
@@ -455,8 +495,8 @@ define(function(require, exports) {
 
 		// mix: whiteList
 		const whiteBlack = (factor, val1) => {
-			return limit.some(factor, function(val2){
-				return limit.every(val2, function(val3, key3){
+			return limit.some(factor, (val2) => {
+				return limit.every(val2, (val3, key3) => {
 					return limit.is(val3, val1[key3]);
 				});
 			});
@@ -486,7 +526,7 @@ define(function(require, exports) {
 		defineIt('difference', {
 			value(arr, ...args){
 				args = limit.flatten(args);
-				return limit.filter(arr, function(val){
+				return limit.filter(arr, (val) => {
 					return !limit.contains(args, val);
 				});
 			}
@@ -767,6 +807,21 @@ define(function(require, exports) {
 			}
 		});
 
+		// ES6: copyWithin
+		defineIt('copyWithin', {
+			format: checkTargetWithArray,
+			when: (arr) => copyWithin && arr.copyWithin === copyWithin,
+			priority(){
+				return Function.call.apply(copyWithin, arguments);
+			},
+			fixed: (arr, target, start, end) => {
+				let args = arr.slice(start, end);
+				args.unshift(target, args.length);
+				splice.apply(arr, args);
+				return arr;
+			}
+		});
+
 	// --函数-- //
 
 		// Promise
@@ -935,7 +990,7 @@ define(function(require, exports) {
 					return Function.call.apply(bind, [...args1, ...args2])();
 				};
 				// 咋骗，可以让兼容方法伪装的更像
-				main.toString = function(){ return 'function () { [native code] }'};
+				main.toString = () => 'function () { [native code] }';
 				return main;
 			},
 			fixed(fn, ...args1){
@@ -944,7 +999,7 @@ define(function(require, exports) {
 					return Function.call.apply( fn, [...args1, ...args2] );
 				};
 				// 咋骗，可以让兼容方法伪装的更像
-				main.toString = function(){ return 'function () { [native code] }'};
+				main.toString = () => 'function () { [native code] }';
 				return main;
 			}
 		});
@@ -964,6 +1019,10 @@ define(function(require, exports) {
 				};
 				// 如果是对象的话，就出log
 				limit.isObject(obj) && typeWarn.toString(obj);
+				// 如果是-0的话toString会不正确
+				if( limit.is(obj, -0) ){
+					return '-0';
+				};
 				return ''+obj;
 			}
 		});
@@ -1272,8 +1331,8 @@ define(function(require, exports) {
 			let tar = limit.toString(args[0]),
 				arg = limit.toString(args[1]),
 				medTar = ( tar.split('.')[1] || '').length,
-				medArg = ( arg.split('.')[1] || '').length,
-				num = falg ? 
+				medArg = ( arg.split('.')[1] || '').length;
+			let	num = falg ? 
 					+movePoint( +tar.replace('.', '') * +arg.replace('.', ''), -(medTar + medArg) ) : 
 					+movePoint( +tar.replace('.', '') / +arg.replace('.', ''), (medArg - medTar) );
 			args.splice(0, 2 ,num);
@@ -1303,6 +1362,19 @@ define(function(require, exports) {
 				//格式化数字为字符串
 				let num = getNeedNum(args, false);
 				return args.length <= 1 ? num : limit['/'](args);
+			}
+		});
+
+		// mix: 
+		const EXPRESS_REG = /^(?:\s*)(-?\d+(?:\.\d+)?)(?:\s*)([\+\-\*\/])(?:\s*)(-?\d+(?:\.\d+)?)(?:\s*)/;
+		defineIt('express,?', {
+			value(exp){
+				if(!EXPRESS_REG.test(exp)){
+					return limit.toNumber(exp);
+				};
+				return limit.express( exp.replace(EXPRESS_REG, (a, b, c, d) => {
+					return limit[c](+b, +d);
+				}) );
 			}
 		});
 
@@ -1343,28 +1415,3 @@ define(function(require, exports) {
 	return limit;
 
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

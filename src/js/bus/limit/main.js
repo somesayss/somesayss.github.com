@@ -13,40 +13,23 @@ define(function(require, exports, module) {
 
 	window.limit = limit;
 
-	// limit.limitFixed = true;
+	limit.limitFixed = true;
 	limit.logClosed = false;
 
-	// var a = limit.test('a1', 'a2')
-
-	// console.log(limit.getProp());
-
-	// limit.K = 123;
-
-	// limit.each('abcd', (val, key) => {
-	// 	console.log(val, key);
-	// });
-	
-	// var a = new Number(123);
-
-	// console.log(a);
-	// console.log(limit.isEmpty(a));
-
-	// var n = ['a1', 'b1'];
-	// var n = {a: 'a1', b: 'b1'};
-
-	// ['a1', 'b1']
-	// {a: 'a1', b: 'b1'}
-
-	// var a = [+0, -0, +0, -0, NaN, 'a2', 'a1'];
-
-	// var b = limit.getValueInObject({a: 'a1'}, 'a', '1');
-	// console.log(b);
-
-	function main(){
-		console.log(this, arguments);
+	function main(a, b){
+		a = a || 1.8;
+		b = b || 9;
+		var arr = limit.from(new Array(b), function(val, key){
+			return limit['*']( a, Math.pow(2, key) );
+		});
+		limit['!!!'](arr);
+		return limit.reduce( arr , function(res, val){
+			return limit['+']( res, val );
+		});
 	};
 
-	var a = limit.bind(main, 'aaa', 'bbb');
+	console.log( main(1.8) );
+	
 
 });
 
