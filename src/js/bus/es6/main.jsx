@@ -12,6 +12,8 @@ define(function(require, exports, module) {
 		EsNumber = require('./EsNumber'),
 		EsArray = require('./EsArray');
 
+	window.limit = require('common/limit');
+
 	let Es6 = React.createClass({
 		render: function(){
 			var me = this,

@@ -89,6 +89,7 @@ hr {
 /** 功能 */
 * {
   -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box;
   vertical-align: top; }
 
 .fn-tran-100 {

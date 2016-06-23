@@ -88,6 +88,30 @@ define(function(require, exports, module) {
 
 	console.log( 0o767 === 503 );
 
+	let arr = [1, 2];
+
+	let [x, y] = [y, x]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 });

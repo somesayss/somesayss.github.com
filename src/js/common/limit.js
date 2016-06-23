@@ -368,7 +368,7 @@ define(function(require, exports) {
 		limit.fromCodePoint = function(code){
 			// 必须是有限的数字
 			if(!isFinite(code)) return log('warn', code, 'the code must be a number'), '';
-			if(nativeFromCodePoint){
+			if(!nativeFromCodePoint){
 				return nativeFromCodePoint.call(String, code);
 			}else{
 				code = map(parseUnicode(code.toString(16)), function(val){

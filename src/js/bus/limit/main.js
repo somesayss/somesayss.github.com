@@ -7,34 +7,45 @@ define(function(require, exports, module) {
 	// 依赖
 	var limit = require('common/limit2.0');
 
-	limit.limitFixed = true;
-	// limit.logClosed = false;
+	var Class = require('class');
 
-	// var a = limit.test('a1', 'a2')
-
-	// console.log(limit.getProp());
-
-	// limit.K = 123;
-
-	// limit.each('abcd', (val, key) => {
-	// 	console.log(val, key);
-	// });
 	
-	var a = new Number(123)
 
-	// console.log(a);
-	// console.log(limit.isEmpty(a));
+	window.limit = limit;
 
+	limit.limitFixed = true;
+	limit.logClosed = false;
 
-	var fn = JSON.stringify;
-
-	JSON.stringify = function(json){
-		return fn(json).replace(/(\\u\w{4})/g, function(a){
-			return new Function('return "'+a+'"')();
+	function main(a, b){
+		a = a || 1.8;
+		b = b || 9;
+		var arr = limit.from(new Array(b), function(val, key){
+			return limit['*']( a, Math.pow(2, key) );
+		});
+		limit['!!!'](arr);
+		return limit.reduce( arr , function(res, val){
+			return limit['+']( res, val );
 		});
 	};
 
-	console.log(JSON.stringify(JSON.stringify({a: '啊𠮷西'})));
-
+	console.log( main(180, 9) );
+	
 
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
