@@ -138,4 +138,10 @@ define(function (require, exports, module) {
 	per2.apply(undefined, i);
 
 	console.log(503 === 503);
+
+	var arr = [1, 2];
+
+	var _ref = [y, x];
+	var x = _ref[0];
+	var y = _ref[1];
 });

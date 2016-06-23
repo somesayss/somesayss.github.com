@@ -28,7 +28,7 @@ define(function(require, exports, module) {
 		});
 	};
 
-	console.log( main(1.8) );
+	console.log( main(180, 9) );
 	
 
 });
