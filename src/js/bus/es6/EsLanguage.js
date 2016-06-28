@@ -27,7 +27,7 @@ define(function (require, exports, module) {
 					React.createElement(
 						Code,
 						null,
-						'const a = \'a1\'; ==> var a = \'a1\' ',
+						'const a = \'a1\'; ==> var a = \'a1\'',
 						React.createElement('br', null),
 						'let b = \'b1\'; ==> var b = \'b1\''
 					)

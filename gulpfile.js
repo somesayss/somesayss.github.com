@@ -22,6 +22,9 @@ gulp.task('watch', () => {
         });
 });
 
+// 打包
+
+
 // 静态服务
 gulp.task('brow', () => {
     browserSync({

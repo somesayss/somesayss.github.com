@@ -687,6 +687,14 @@ define(function (require, exports) {
 	// --数组-- //
 
 	// mix: toArray
+	var sliceFix = function sliceFix(obj) {
+		var arr = [],
+		    i = 0;
+		for (; i < obj.length; i++) {
+			arr[i] = obj[i];
+		};
+		return arr;
+	};
 	defineIt('toArray', {
 		value: function value(obj) {
 			// 如果是数组原始返回
@@ -694,7 +702,11 @@ define(function (require, exports) {
 				return obj;
 			} else if (limit.isArrayLike(obj)) {
 				// 如果是类数组对象的话就格式化数组
-				return slice.call(obj);
+				try {
+					return slice.call(obj);
+				} catch (e) {
+					return sliceFix(obj);
+				};
 			} else {
 				return typeWarn.toArray(obj), [];
 			};
@@ -1013,7 +1025,7 @@ define(function (require, exports) {
 			// 确保是函数
 			if (obj && obj.length) {
 				// 不考虑IE8的话可以这样写 push.apply(arr, obj);
-				push.apply(arr, slice.call(obj));
+				push.apply(arr, limit.toArray(obj));
 				return limit.map(arr, iterator, context);
 			} else {
 				return arr;
@@ -1404,7 +1416,7 @@ define(function (require, exports) {
 
 	// --字符-- //
 
-	// mix: toArray
+	// mix: toString
 	defineIt('toString', {
 		value: function value(obj) {
 			// 如果是null或者undefined
@@ -1813,9 +1825,24 @@ define(function (require, exports) {
 	});
 
 	// mix:
-	var EXPRESS_REG = /^(?:\s*)(-?\d+(?:\.\d+)?)(?:\s*)([\+\-\*\/])(?:\s*)(-?\d+(?:\.\d+)?)(?:\s*)/;
+	// const BRACKETS_REG = /\(((?!.*\().*?)\)/;
+	var BRACKETS_REG = /\(([^()]*)\)/;
+	var MULTANDDIVISION_REG = /(-?\d+(?:\.\d+)?)(?:\s*)([\*\/])(?:\s*)(-?\d+(?:\.\d+)?)(?:\s*)/;
+	var EXPRESS_REG = /^(?:\s*)(-?\d+(?:\.\d+)?)(?:\s*)([\+\-])(?:\s*)(-?\d+(?:\.\d+)?)(?:\s*)/;
 	defineIt('express,?', {
 		value: function value(exp) {
+			// 优先计算*/
+			if (MULTANDDIVISION_REG.test(exp)) {
+				return limit.express(exp.replace(MULTANDDIVISION_REG, function (a, b, c, d) {
+					return limit[c](+b, +d);
+				}));
+			};
+			// 如果存在()
+			if (BRACKETS_REG.test(exp)) {
+				return limit.express(exp.replace(BRACKETS_REG, function (a, b, c, d) {
+					return limit.express(b);
+				}));
+			};
 			if (!EXPRESS_REG.test(exp)) {
 				return limit.toNumber(exp);
 			};

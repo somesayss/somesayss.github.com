@@ -6,10 +6,8 @@ define(function(require, exports, module) {
 
 	// 依赖
 	var limit = require('common/limit2.0');
-
+	var $ = require('$');
 	var Class = require('class');
-
-	
 
 	window.limit = limit;
 
@@ -28,20 +26,20 @@ define(function(require, exports, module) {
 		});
 	};
 
-	console.log( main(180, 9) );
+	console.log( limit['?'](' 1 + 6 * ( 2 + ( 2 + ( 8 + 7 ) ) ) ') );
+
+
+	// var a = '1111,222,333,444';
+
+	// var b = a.match(/(\d+)/g);
+
+	// a.replace(/\d+/g, function(){
+	// 	// console.log(arguments);
+	// 	return '';
+	// });
+	// console.log(b);
 	
-
 });
-
-
-
-
-
-
-
-
-
-
 
 
 

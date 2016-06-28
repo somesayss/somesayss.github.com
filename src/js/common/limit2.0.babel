@@ -718,7 +718,7 @@ define(function(require, exports) {
 				// 确保是函数
 				if( obj && obj.length ){
 					// 不考虑IE8的话可以这样写 push.apply(arr, obj);
-					push.apply(arr, slice.call(obj));
+					push.apply(arr, limit.toArray(obj));
 					return limit.map(arr, iterator, context);
 				}else{
 					return arr;
@@ -1018,7 +1018,7 @@ define(function(require, exports) {
 
 	// --字符-- //
 
-		// mix: toArray
+		// mix: toString
 		defineIt('toString', {
 			value(obj){
 				// 如果是null或者undefined
@@ -1378,10 +1378,25 @@ define(function(require, exports) {
 		});
 
 		// mix: 
-		const EXPRESS_REG = /^(?:\s*)(-?\d+(?:\.\d+)?)(?:\s*)([\+\-\*\/])(?:\s*)(-?\d+(?:\.\d+)?)(?:\s*)/;
+		// const BRACKETS_REG = /\(((?!.*\().*?)\)/;
+		const BRACKETS_REG = /\(([^()]*)\)/;
+		const MULTANDDIVISION_REG = /(-?\d+(?:\.\d+)?)(?:\s*)([\*\/])(?:\s*)(-?\d+(?:\.\d+)?)(?:\s*)/;
+		const EXPRESS_REG = /^(?:\s*)(-?\d+(?:\.\d+)?)(?:\s*)([\+\-])(?:\s*)(-?\d+(?:\.\d+)?)(?:\s*)/;
 		defineIt('express,?', {
 			value(exp){
-				if(!EXPRESS_REG.test(exp)){
+				// 优先计算*/
+				if( MULTANDDIVISION_REG.test(exp) ){
+					return limit.express( exp.replace(MULTANDDIVISION_REG, (a, b, c, d) => {
+						return limit[c](+b, +d);
+					}) );
+				};
+				// 如果存在()
+				if( BRACKETS_REG.test(exp) ){
+					return limit.express( exp.replace(BRACKETS_REG, (a, b, c, d) => {
+						return limit.express(b);
+					}) );
+				};
+				if( !EXPRESS_REG.test(exp) ){
 					return limit.toNumber(exp);
 				};
 				return limit.express( exp.replace(EXPRESS_REG, (a, b, c, d) => {

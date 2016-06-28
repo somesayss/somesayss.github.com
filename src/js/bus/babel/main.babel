@@ -62,10 +62,15 @@ define(function(require, exports, module) {
 			super.show();
 			console.log(this.age);
 		}
+		static xixi(){
+			return 'xi1xi1'
+		}
 	};
 
 	var bbb = new B('shao2', 28);
 	bbb.show();
+
+	// console.log( A.xixi(), 'aaaaaaa' );
 
 	// console.log(bb, bb instanceof B, bb instanceof A); // true true
 	// console.log(bb.constructor, bb.constructor === B, bb.constructor === A); // true false

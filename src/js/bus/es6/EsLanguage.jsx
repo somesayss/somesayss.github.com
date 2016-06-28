@@ -19,7 +19,7 @@ define(function(require, exports, module) {
 				<div>
 					<Template title={props.title} attr="const  & let">
 						<Code>
-							const a = 'a1'; ==> var a = 'a1' <br />
+							const a = 'a1'; ==> var a = 'a1'<br />
 							let b = 'b1'; ==> var b = 'b1'
 						</Code>
 					</Template>

@@ -101,6 +101,11 @@ define(function (require, exports, module) {
 				_get(Object.getPrototypeOf(B.prototype), 'show', this).call(this);
 				console.log(this.age);
 			}
+		}], [{
+			key: 'xixi',
+			value: function xixi() {
+				return 'xi1xi1';
+			}
 		}]);
 
 		return B;
@@ -110,6 +115,8 @@ define(function (require, exports, module) {
 
 	var bbb = new B('shao2', 28);
 	bbb.show();
+
+	// console.log( A.xixi(), 'aaaaaaa' );
 
 	// console.log(bb, bb instanceof B, bb instanceof A); // true true
 	// console.log(bb.constructor, bb.constructor === B, bb.constructor === A); // true false
