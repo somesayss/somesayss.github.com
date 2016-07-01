@@ -11,7 +11,7 @@ define(function(require, exports, module) {
 
 	window.limit = limit;
 
-	limit.limitFixed = true;
+	// limit.limitFixed = true;
 	limit.logClosed = false;
 
 	function main(a, b){
@@ -26,19 +26,7 @@ define(function(require, exports, module) {
 		});
 	};
 
-	console.log( limit['?'](' 1 + 6 * ( 2 + ( 2 + ( 8 + 7 ) ) ) ') );
 
-
-	// var a = '1111,222,333,444';
-
-	// var b = a.match(/(\d+)/g);
-
-	// a.replace(/\d+/g, function(){
-	// 	// console.log(arguments);
-	// 	return '';
-	// });
-	// console.log(b);
-	
 });
 
 

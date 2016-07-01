@@ -51,10 +51,6 @@ define(function(require, exports) {
 		// 对name进行处理
 		let arr = name.split(',');
 		name = arr.shift();
-		if(!name) return;
-		if(arr.length){
-			defineIt(arr.join(','), config);
-		};
 		if( config.value === void 0 ){
 			// 新方法
 			priority = getProp(config, 'priority', F);
@@ -86,7 +82,11 @@ define(function(require, exports) {
 			};
 			limit[name] = value;
 		};
-		return value;
+		if(arr.length){
+			return defineIt(arr.join(','), config);
+		}else{
+			return value;
+		};
 	};
 
 	// 传递器
@@ -287,6 +287,27 @@ define(function(require, exports) {
 
 	// --工具方法-- //
 
+		// 获取uid
+		const UID = [0, 0, 0];
+		defineIt('getUid', {
+			value(){
+				let index = UID.length,
+					code;
+				while(index--){
+					code = UID[index];
+					if(code === 9){
+						UID[index] = 0;
+					};
+					if(code < 9){
+						UID[index]++;
+						return UID.join('.');
+					};
+				};
+				UID.unshift(1);
+				return UID.join('.');
+			}
+		});
+
 		// 私有遍历
 		defineIt('_loop', {
 			value: (obj, iterator, context, isBreak, begin) => {
@@ -403,6 +424,19 @@ define(function(require, exports) {
 			}
 		});
 
+		// mix: assignSave
+		defineIt('assignSave', {
+			format: checkTargetNoEqualNull,
+			fixed(target, ...args){
+				limit.each(args, val => {
+					limit.each(val, (val, key) => {
+						limit.isDefined(val) && (target[key] = val);
+					});
+				});
+				return target;
+			}
+		});
+
 		// mix: extend
 		defineIt('extend', {
 			format: checkTargetNoEqualNull,
@@ -410,6 +444,19 @@ define(function(require, exports) {
 				limit.each(args, val => {
 					limit.forin(val, (val, key) => {
 						target[key] = val;
+					});
+				});
+				return target;
+			}
+		});
+
+		// mix: extendSave
+		defineIt('extendSave', {
+			format: checkTargetNoEqualNull,
+			fixed(target, ...args){
+				limit.each(args, val => {
+					limit.forin(val, (val, key) => {
+						limit.isDefined(val) && (target[key] = val);
 					});
 				});
 				return target;

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1"><!-- 手机头部设置 -->
 <meta name="description" content="" />
 <meta name="keywords" content=""  />
-<title>limit.js 2.0</title>
+<title>flex</title>
 <!-- #公用静态资源 -->
 	<!-- 未打包CSS --> 
 	<!-- 已打包CSS -->
@@ -28,16 +28,45 @@
 		<!--script type="text/javascript" charset="utf-8" src="/dist/js/libs/main-sea.min.js"></script-->
 	<!-- seaJS -->
 <!-- /脚本入口 -->
-<style>
-div#DemoArea
-{
-/*width:400px;*/
-text-align:justify;
-}
+<style type="text/css">
+	/*http://www.ruanyifeng.com/blog/2015/07/flex-grammar.html*/
+	.container{
+		display: flex;
+		padding:5px;
+		background:#F2F2F2;
+		height:400px;
+		/*width:200px;*/
+		/* 对齐方向 row row-reverse column  column-reverse; */
+		flex-direction: row;
+		/* 换行 nowrap wrap wrap-reverse */
+		flex-wrap: nowrap;
+		/* flex-flow:row nowrap; */
+		/* 内容对齐 flex-start | flex-end | center | space-between | space-around; */
+		justify-content: flex-start;
+		/* 垂直对齐 flex-start | flex-end | center | baseline | stretch;*/
+		align-items: center;
+
+
+
+	}
+	.item{
+		width:50px;
+		height:50px;
+		border:5px solid #000;
+		background:#F70;
+		color:#FFF;
+		margin:5px;
+	}
 </style>
 </head>
-<body class="fn-PaLe20 fn-PaTo20 fn-PaRi20 fn-PaBo20" data-debug="true" data-limit-fixed="true">
-	limit.js 2.0
-	<p id="aaa" class="bbb">你好</p>
+<body class="fn-PaLe20 fn-PaTo20 fn-PaRi20 fn-PaBo20" data-debug="true">
+	<div class="container">
+		1
+		<span class="item">1</span>
+		<span class="item">2</span>
+		<span class="item">3</span>
+		<span class="item">4</span>
+		<span class="item">5</span>
+	</div>
 </body>
 </html>

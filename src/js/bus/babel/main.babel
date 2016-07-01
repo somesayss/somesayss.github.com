@@ -71,7 +71,6 @@ define(function(require, exports, module) {
 	bbb.show();
 
 	// console.log( A.xixi(), 'aaaaaaa' );
-
 	// console.log(bb, bb instanceof B, bb instanceof A); // true true
 	// console.log(bb.constructor, bb.constructor === B, bb.constructor === A); // true false
 
@@ -91,20 +90,18 @@ define(function(require, exports, module) {
 
 	per2(...i);
 
+	// 8进制
 	console.log( 0o767 === 503 );
 
-	let arr = [1, 2];
-
-	let [x, y] = [y, x]
-
-
-
-
-
-
-
-
-
+	// 绑定上下文
+	let content = ['a1', 'a2', 'a3'];
+	let { map, forEach } = Array.prototype;
+	content::map((val, key) => { });
+	
+	let conEachFn = content::forEach;
+	conEachFn((val) => {
+		console.log(val);
+	});
 
 
 

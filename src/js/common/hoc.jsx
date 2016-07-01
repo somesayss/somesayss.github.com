@@ -2,9 +2,9 @@
 define(function(require, exports) {
 
 	// 依赖
-	const [React, Reflux, limit] = [require('react'), require('reflux'), require('limit')];
-
-	
+	const React = require('react');
+	const Reflux = require('reflux');
+	const limit = require('common/limit2.0');
 
 	return (Wrapper, Controller) => {
 		Controller = Reflux.connect(Controller.Store);
@@ -16,11 +16,11 @@ define(function(require, exports) {
 				// getInitialState
 				this.state = state;
 			}
-		    render() {
-		      return <Wrapper {...this.state} />;
+		    render(){
+		      	return <Wrapper {...limit.assignSave(this.state, this.props)}/>;
 		    }
 		};
-		limit.extend(WrapperComponent.prototype, Controller);
+		limit.assign(WrapperComponent.prototype, Controller);
 		return WrapperComponent;
 	};
 

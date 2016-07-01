@@ -117,7 +117,6 @@ define(function (require, exports, module) {
 	bbb.show();
 
 	// console.log( A.xixi(), 'aaaaaaa' );
-
 	// console.log(bb, bb instanceof B, bb instanceof A); // true true
 	// console.log(bb.constructor, bb.constructor === B, bb.constructor === A); // true false
 
@@ -144,11 +143,19 @@ define(function (require, exports, module) {
 
 	per2.apply(undefined, i);
 
+	// 8进制
 	console.log(503 === 503);
 
-	var arr = [1, 2];
+	// 绑定上下文
+	var content = ['a1', 'a2', 'a3'];
+	var _Array$prototype = Array.prototype;
+	var map = _Array$prototype.map;
+	var forEach = _Array$prototype.forEach;
 
-	var _ref = [y, x];
-	var x = _ref[0];
-	var y = _ref[1];
+	map.call(content, function (val, key) {});
+
+	var conEachFn = forEach.bind(content);
+	conEachFn(function (val) {
+		console.log(val);
+	});
 });

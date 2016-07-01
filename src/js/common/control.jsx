@@ -2,16 +2,21 @@
 define(function(require, exports) {
 
 	// 依赖
-	const [Reflux, limit, limit2, REX] = [require('reflux'), require('limit'), require('common/limit2.0'), /on([A-Z]\w*)/];
+	const Reflux = require('reflux');
+	const limit = require('common/limit2.0');
 
-	const Promise = limit2.promise();
+	const REX = /on([A-Z])(\w*)/;
+	const Promise = limit.promise();
 
 	return (config) => {
-		let Actions = Reflux.createActions( limit.map(limit.filter(limit.keys(config), (val) => {
-			return REX.test(val);
-		}), (val) => {
-			return val.replace(REX, '$1').toLowerCase();
-		}) );
+		let Actions = Reflux.createActions(
+			limit.map( 
+				limit.filter(
+					limit.keys(config), (val) => REX.test(val)), 
+					(val) =>  val.replace(REX, (a, b, c) => b.toLowerCase() + c
+				)
+			) 
+		);
 		config.listenables = [Actions];
 		config.updateComponent = function(){
 	    	let me = this,
