@@ -17,7 +17,7 @@ define(function(require, exports, module) {
 				props = me.props;
 			return (
 				<div>
-					{props.title}
+					{props.title} {props.name} <a href="javascript:;" onClick={Actions.change}>改变</a>
 				</div>
 			);
 		}

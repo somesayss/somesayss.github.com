@@ -3,13 +3,12 @@ define(function(require, exports) {
 
 	// 依赖
 	const React = require('react');
-	const Reflux = require('reflux');
 	const limit = require('common/limit2.0');
 
 	return (Wrapper, Controller) => {
-		Controller = Reflux.connect(Controller.Store);
-		let state = Controller.getInitialState();
-		delete Controller.getInitialState;
+		let interfaces = Controller.getReactInterface();
+		let state = interfaces.getInitialState();
+		delete interfaces.getInitialState;
 		class WrapperComponent extends React.Component {
 			constructor(...args){
 				super(...args);
@@ -20,14 +19,16 @@ define(function(require, exports) {
 		      	return <Wrapper {...limit.assignSuper(this.state, this.props)}/>;
 		    }
 		};
-		limit.assign(WrapperComponent.prototype, Controller);
+		limit.assign(WrapperComponent.prototype, interfaces);
 		return WrapperComponent;
 	};
 
 });
 
-/*
-				┌	control.js( controller.js )	=> [ Action, Store ]	┐
+/**
+							extends
+							   ↑
+				┌	control.js => controller.js	=> [ Action, Store ]	┐
 	HOC.js	=>	¦									   ↓				¦	=> main.js => [ React ]
 				└  	view.js						=> [ React 		   ]	┘		
  */

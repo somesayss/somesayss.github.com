@@ -43,7 +43,7 @@ define(function (require, exports) {
 			_createClass(WrapperComponent, [{
 				key: 'render',
 				value: function render() {
-					return React.createElement(Wrapper, limit.assignSave(this.state, this.props));
+					return React.createElement(Wrapper, limit.assignSuper(this.state, this.props));
 				}
 			}]);
 
@@ -55,3 +55,9 @@ define(function (require, exports) {
 		return WrapperComponent;
 	};
 });
+
+/*
+				┌	control.js( controller.js )	=> [ Action, Store ]	┐
+	HOC.js	=>	¦									   ↓				¦	=> main.js => [ React ]
+				└  	view.js						=> [ React 		   ]	┘		
+ */

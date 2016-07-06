@@ -9,11 +9,11 @@ define(function(require, exports, module) {
 	const ReactDOM = require('reactDOM');
 
 	// 组件类
-	let Widget1 = require('./widget1/main');
+	let Widget3 = require('./widget1/main');
  
 	// 置入文档
 	ReactDOM.render(
-		<Widget1 />,
+		<Widget3 />,
 	   	document.getElementById('container')
  	);
 

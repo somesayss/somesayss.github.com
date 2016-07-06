@@ -41,13 +41,23 @@ define(function (require, exports, module) {
 				return React.createElement(
 					'div',
 					null,
-					React.createElement(Title, props),
+					props.show ? React.createElement(Title, { title: props.title }) : void 0,
 					props.name,
 					' ',
 					React.createElement(
 						'a',
 						{ href: 'javascript:;', onClick: Actions.change },
 						'改变'
+					),
+					React.createElement(
+						'a',
+						{ href: 'javascript:;', onClick: Actions.show },
+						'显示'
+					),
+					React.createElement(
+						'a',
+						{ href: 'javascript:;', onClick: Actions.hide },
+						'隐藏'
 					),
 					React.createElement(List, { list: props.list })
 				);

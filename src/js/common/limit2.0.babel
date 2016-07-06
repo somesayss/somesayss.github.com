@@ -22,7 +22,7 @@ define(function(require, exports) {
 	limit.logClosed = false;
 
 	// 自有属性
-	const { defineProperty, is, assign, keys, values, entries } = Object;
+	const { defineProperty, is, assign, keys, values, entries, getOwnPropertyNames } = Object;
 	const { toString, hasOwnProperty } = objectProto;
 	const { from, of } = Array;
 	const {	concat, push, slice, unshift, splice,
@@ -413,19 +413,29 @@ define(function(require, exports) {
 		});
 
 		// ES5: Object.keys();
+		const keysFixed = (obj) => {
+			let arr = [];
+			limit.forin(obj, (val, key) => limit.has(obj, key) && arr.push(key) );
+			return arr;
+		};
+		
 		defineIt('keys', {
 			when: () => !!keys,
 			priority: (...args) => keys(...args),
 			format: checkTargetNoEqualNull,
-			fixed(obj){
-				let arr = [];
-				limit.forin(obj, (val, key) => limit.has(obj, key) && arr.push(key) );
-				return arr;
-			}
+			fixed: keysFixed
 		});
 
-		// mix: assignSave
-		defineIt('assignSave', {
+		// mix: keysSuper
+		defineIt('keysSuper', {
+			when: () => !!getOwnPropertyNames,
+			priority: (...args) => getOwnPropertyNames(...args),
+			format: checkTargetNoEqualNull,
+			fixed: keysFixed
+		});
+
+		// mix: assignSuper
+		defineIt('assignSuper', {
 			format: checkTargetNoEqualNull,
 			fixed(target, ...args){
 				limit.each(args, val => {
@@ -450,8 +460,8 @@ define(function(require, exports) {
 			}
 		});
 
-		// mix: extendSave
-		defineIt('extendSave', {
+		// mix: extendSuper
+		defineIt('extendSuper', {
 			format: checkTargetNoEqualNull,
 			fixed(target, ...args){
 				limit.each(args, val => {
@@ -591,6 +601,38 @@ define(function(require, exports) {
 			}
 		});
 
+		// mix: remove 
+		defineIt('remove', {
+			format: checkTargetNoEqualNull,
+			fixed(arr, tar, formIndex){
+				let index = limit.indexOfSuper(arr, tar, formIndex);
+				if(index !== -1){
+					try{
+						if(limit.isArray(arr)){
+							arr.splice(index, 1);
+						}else{
+							delete arr[index];
+						};
+						return true;
+					}catch(e){
+						limit['T.T'](e);
+					};
+				};
+				return false;
+			}
+		});
+
+		// mix: removeAll
+		defineIt('removeAll', {
+			value(arr, tar){
+				if(limit.remove(arr, tar)){
+					return limit.removeAll(arr, tar);
+				}else{
+					return arr; 
+				};
+			}
+		});
+
 		// ES5: forEach [支持obj]
 		defineIt('forEach', {
 			format: checkObjFunction,
@@ -693,6 +735,20 @@ define(function(require, exports) {
 				let index = -1;
 				limit._loop(arr, (val, key) => {
 					if(val === ele) return index = key, false;
+				}, undefined, true, checkTrueIndex(arr.length, formIndex));
+				// loop为了兼容返回值是string
+				return limit.isArrayLike(arr) ? +index : index;
+			}
+		});
+
+		// ES5: indexOfSuper [支持obj]
+		defineIt('indexOfSuper', {
+			format: checkTargetNoEqualNull,
+			fixed: (arr, ele, formIndex) => {
+				// 初始化返回值
+				let index = -1;
+				limit._loop(arr, (val, key) => {
+					if( limit.is(val, ele) ) return index = key, false;
 				}, undefined, true, checkTrueIndex(arr.length, formIndex));
 				// loop为了兼容返回值是string
 				return limit.isArrayLike(arr) ? +index : index;
@@ -1060,6 +1116,19 @@ define(function(require, exports) {
 				// 咋骗，可以让兼容方法伪装的更像
 				main.toString = () => 'function () { [native code] }';
 				return main;
+			}
+		});
+
+		// mix: compose 组合 a(b(c())) => (a(), b(), c());
+		defineIt('compose', {
+			value(...args1){
+				return function(...args2){
+					let result = args2;
+					for(let i = args1.length - 1; i >= 0; i--){
+						result = [].concat( args1[i].apply(this, result) );
+					};
+					return result.length <= 1 ? result[0] : result;
+				};
 			}
 		});
 

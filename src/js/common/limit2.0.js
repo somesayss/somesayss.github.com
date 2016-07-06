@@ -38,6 +38,7 @@ define(function (require, exports) {
 	var keys = Object.keys;
 	var values = Object.values;
 	var entries = Object.entries;
+	var getOwnPropertyNames = Object.getOwnPropertyNames;
 	var toString = objectProto.toString;
 	var hasOwnProperty = objectProto.hasOwnProperty;
 	var from = Array.from;
@@ -644,6 +645,14 @@ define(function (require, exports) {
 	});
 
 	// ES5: Object.keys();
+	var keysFixed = function keysFixed(obj) {
+		var arr = [];
+		limit.forin(obj, function (val, key) {
+			return limit.has(obj, key) && arr.push(key);
+		});
+		return arr;
+	};
+
 	defineIt('keys', {
 		when: function when() {
 			return !!keys;
@@ -652,17 +661,23 @@ define(function (require, exports) {
 			return keys.apply(undefined, arguments);
 		},
 		format: checkTargetNoEqualNull,
-		fixed: function fixed(obj) {
-			var arr = [];
-			limit.forin(obj, function (val, key) {
-				return limit.has(obj, key) && arr.push(key);
-			});
-			return arr;
-		}
+		fixed: keysFixed
 	});
 
-	// mix: assignSave
-	defineIt('assignSave', {
+	// mix: keysSuper
+	defineIt('keysSuper', {
+		when: function when() {
+			return !!getOwnPropertyNames;
+		},
+		priority: function priority() {
+			return getOwnPropertyNames.apply(undefined, arguments);
+		},
+		format: checkTargetNoEqualNull,
+		fixed: keysFixed
+	});
+
+	// mix: assignSuper
+	defineIt('assignSuper', {
 		format: checkTargetNoEqualNull,
 		fixed: function fixed(target) {
 			for (var _len15 = arguments.length, args = Array(_len15 > 1 ? _len15 - 1 : 0), _key15 = 1; _key15 < _len15; _key15++) {
@@ -695,8 +710,8 @@ define(function (require, exports) {
 		}
 	});
 
-	// mix: extendSave
-	defineIt('extendSave', {
+	// mix: extendSuper
+	defineIt('extendSuper', {
 		format: checkTargetNoEqualNull,
 		fixed: function fixed(target) {
 			for (var _len17 = arguments.length, args = Array(_len17 > 1 ? _len17 - 1 : 0), _key17 = 1; _key17 < _len17; _key17++) {
@@ -872,6 +887,38 @@ define(function (require, exports) {
 		}
 	});
 
+	// mix: remove
+	defineIt('remove', {
+		format: checkTargetNoEqualNull,
+		fixed: function fixed(arr, tar, formIndex) {
+			var index = limit.indexOfSuper(arr, tar, formIndex);
+			if (index !== -1) {
+				try {
+					if (limit.isArray(arr)) {
+						arr.splice(index, 1);
+					} else {
+						delete arr[index];
+					};
+					return true;
+				} catch (e) {
+					limit['T.T'](e);
+				};
+			};
+			return false;
+		}
+	});
+
+	// mix: removeAll
+	defineIt('removeAll', {
+		value: function value(arr, tar) {
+			if (limit.remove(arr, tar)) {
+				return limit.removeAll(arr, tar);
+			} else {
+				return arr;
+			};
+		}
+	});
+
 	// ES5: forEach [支持obj]
 	defineIt('forEach', {
 		format: checkObjFunction,
@@ -992,6 +1039,20 @@ define(function (require, exports) {
 			var index = -1;
 			limit._loop(arr, function (val, key) {
 				if (val === ele) return index = key, false;
+			}, undefined, true, checkTrueIndex(arr.length, formIndex));
+			// loop为了兼容返回值是string
+			return limit.isArrayLike(arr) ? +index : index;
+		}
+	});
+
+	// ES5: indexOfSuper [支持obj]
+	defineIt('indexOfSuper', {
+		format: checkTargetNoEqualNull,
+		fixed: function fixed(arr, ele, formIndex) {
+			// 初始化返回值
+			var index = -1;
+			limit._loop(arr, function (val, key) {
+				if (limit.is(val, ele)) return index = key, false;
 			}, undefined, true, checkTrueIndex(arr.length, formIndex));
 			// loop为了兼容返回值是string
 			return limit.isArrayLike(arr) ? +index : index;
@@ -1469,6 +1530,27 @@ define(function (require, exports) {
 		}
 	});
 
+	// mix: compose 组合 a(b(c())) => (a(), b(), c());
+	defineIt('compose', {
+		value: function value() {
+			for (var _len30 = arguments.length, args1 = Array(_len30), _key30 = 0; _key30 < _len30; _key30++) {
+				args1[_key30] = arguments[_key30];
+			}
+
+			return function () {
+				for (var _len31 = arguments.length, args2 = Array(_len31), _key31 = 0; _key31 < _len31; _key31++) {
+					args2[_key31] = arguments[_key31];
+				}
+
+				var result = args2;
+				for (var i = args1.length - 1; i >= 0; i--) {
+					result = [].concat(args1[i].apply(this, result));
+				};
+				return result.length <= 1 ? result[0] : result;
+			};
+		}
+	});
+
 	// --字符-- //
 
 	// mix: toString
@@ -1786,8 +1868,8 @@ define(function (require, exports) {
 
 	// 获取最大的小数位
 	var getMaxScale = function getMaxScale() {
-		for (var _len30 = arguments.length, args = Array(_len30), _key30 = 0; _key30 < _len30; _key30++) {
-			args[_key30] = arguments[_key30];
+		for (var _len32 = arguments.length, args = Array(_len32), _key32 = 0; _key32 < _len32; _key32++) {
+			args[_key32] = arguments[_key32];
 		}
 
 		if (!checkFiniteNum(args)) {
@@ -1802,8 +1884,8 @@ define(function (require, exports) {
 	defineIt('plus,+', {
 		format: checkFlattenArgs,
 		fixed: function fixed() {
-			for (var _len31 = arguments.length, args = Array(_len31), _key31 = 0; _key31 < _len31; _key31++) {
-				args[_key31] = arguments[_key31];
+			for (var _len33 = arguments.length, args = Array(_len33), _key33 = 0; _key33 < _len33; _key33++) {
+				args[_key33] = arguments[_key33];
 			}
 
 			var maxScale = getMaxScale(args);
@@ -1820,8 +1902,8 @@ define(function (require, exports) {
 	defineIt('minus,-', {
 		format: checkFlattenArgs,
 		fixed: function fixed() {
-			for (var _len32 = arguments.length, args = Array(_len32), _key32 = 0; _key32 < _len32; _key32++) {
-				args[_key32] = arguments[_key32];
+			for (var _len34 = arguments.length, args = Array(_len34), _key34 = 0; _key34 < _len34; _key34++) {
+				args[_key34] = arguments[_key34];
 			}
 
 			var maxScale = getMaxScale(args);
@@ -1849,8 +1931,8 @@ define(function (require, exports) {
 	defineIt('multiply,*', {
 		format: checkFlattenArgs,
 		fixed: function fixed() {
-			for (var _len33 = arguments.length, args = Array(_len33), _key33 = 0; _key33 < _len33; _key33++) {
-				args[_key33] = arguments[_key33];
+			for (var _len35 = arguments.length, args = Array(_len35), _key35 = 0; _key35 < _len35; _key35++) {
+				args[_key35] = arguments[_key35];
 			}
 
 			if (!checkFiniteNum(args)) {
@@ -1866,8 +1948,8 @@ define(function (require, exports) {
 	defineIt('except,/', {
 		format: checkFlattenArgs,
 		fixed: function fixed() {
-			for (var _len34 = arguments.length, args = Array(_len34), _key34 = 0; _key34 < _len34; _key34++) {
-				args[_key34] = arguments[_key34];
+			for (var _len36 = arguments.length, args = Array(_len36), _key36 = 0; _key36 < _len36; _key36++) {
+				args[_key36] = arguments[_key36];
 			}
 
 			if (!checkFiniteNum(args)) {
@@ -1922,8 +2004,8 @@ define(function (require, exports) {
 			};
 			// 正常入参
 			return formatStr.replace(REG_EXP_DATA, function () {
-				for (var _len35 = arguments.length, args = Array(_len35), _key35 = 0; _key35 < _len35; _key35++) {
-					args[_key35] = arguments[_key35];
+				for (var _len37 = arguments.length, args = Array(_len37), _key37 = 0; _key37 < _len37; _key37++) {
+					args[_key37] = arguments[_key37];
 				}
 
 				var arr = [];

@@ -14,17 +14,15 @@ define(function(require, exports, module) {
 	// limit.limitFixed = true;
 	limit.logClosed = false;
 
-	function main(a, b){
-		a = a || 1.8;
-		b = b || 9;
-		var arr = limit.from(new Array(b), function(val, key){
-			return limit['*']( a, Math.pow(2, key) );
-		});
-		limit['!!!'](arr);
-		return limit.reduce( arr , function(res, val){
-			return limit['+']( res, val );
-		});
-	};
+	var a = limit.compose(function(a){
+		return a + 1;
+	}, function(a, b){
+		return a + 2 + b;
+	}, function(a){
+		return [a + 3, 4];
+	})('1');
+
+	console.log(a);
 
 
 });

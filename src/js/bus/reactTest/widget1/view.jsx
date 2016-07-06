@@ -21,8 +21,14 @@ define(function(require, exports, module) {
 				props = me.props;
 			return (
 				<div>
-					<Title {...props} />
+					{do{
+						if(props.show){
+							<Title title={props.title} />
+						}
+					}}
 					{props.name} <a href="javascript:;" onClick={Actions.change}>改变</a>
+					<a href="javascript:;" onClick={Actions.show}>显示</a>
+					<a href="javascript:;" onClick={Actions.hide}>隐藏</a> 
 					<List list={props.list} />
 				</div>
 			);

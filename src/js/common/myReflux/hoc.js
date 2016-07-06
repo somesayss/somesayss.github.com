@@ -1,7 +1,4 @@
 "use strict";
-/**
- * 模型
- */
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -11,50 +8,57 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-define(function (require, exports, module) {
+define(function (require, exports) {
 
 	// 依赖
 	var React = require('react');
-	var ReactDOM = require('reactDOM');
 	var limit = require('common/limit2.0');
-	var Actions = require('./controller').Actions;
 
-	// 组件
+	return function (Wrapper, Controller) {
+		var interfaces = Controller.getReactInterface();
+		var state = interfaces.getInitialState();
+		delete interfaces.getInitialState;
 
-	var School = function (_React$Component) {
-		_inherits(School, _React$Component);
+		var WrapperComponent = function (_React$Component) {
+			_inherits(WrapperComponent, _React$Component);
 
-		function School() {
-			_classCallCheck(this, School);
+			function WrapperComponent() {
+				var _Object$getPrototypeO;
 
-			return _possibleConstructorReturn(this, Object.getPrototypeOf(School).apply(this, arguments));
-		}
+				_classCallCheck(this, WrapperComponent);
 
-		_createClass(School, [{
-			key: 'render',
-			value: function render() {
-				var me = this,
-				    props = me.props;
-				return React.createElement(
-					'div',
-					null,
-					props.title,
-					' ',
-					props.name,
-					' ',
-					React.createElement(
-						'a',
-						{ href: 'javascript:;', onClick: Actions.change },
-						'改变'
-					)
-				);
+				for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+					args[_key] = arguments[_key];
+				}
+
+				// getInitialState
+
+				var _this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(WrapperComponent)).call.apply(_Object$getPrototypeO, [this].concat(args)));
+
+				_this.state = state;
+				return _this;
 			}
-		}]);
 
-		return School;
-	}(React.Component);
+			_createClass(WrapperComponent, [{
+				key: 'render',
+				value: function render() {
+					return React.createElement(Wrapper, limit.assignSuper(this.state, this.props));
+				}
+			}]);
 
-	;
+			return WrapperComponent;
+		}(React.Component);
 
-	return School;
+		;
+		limit.assign(WrapperComponent.prototype, interfaces);
+		return WrapperComponent;
+	};
 });
+
+/**
+							extends
+							   ↑
+				┌	control.js => controller.js	=> [ Action, Store ]	┐
+	HOC.js	=>	¦									   ↓				¦	=> main.js => [ React ]
+				└  	view.js						=> [ React 		   ]	┘		
+ */
