@@ -1461,7 +1461,6 @@ define(function (require, exports) {
 	}();
 
 	;
-
 	//
 	if (WIN.Promise) {
 		Promise.prototype.Catch = function (fn) {

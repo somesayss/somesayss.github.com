@@ -6,7 +6,6 @@ define(function(require, exports, module) {
 
   	// 依赖
   	const React = require('react');
-  	const ReactDOM = require('reactDOM');
   	const limit = require('common/limit2.0');
   	const Actions = require('./controller').Actions;
 
