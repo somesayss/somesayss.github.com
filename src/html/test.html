@@ -1,41 +1,534 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!doctype html>
+<html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="renderer" content="webkit"><!-- 360浏览器切换内核 webkit | ie-comp[IE6/7]? | ie-stand[IE8910]? -->
-<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1"><!-- 手机头部设置 -->
-<meta name="description" content="" />
-<meta name="keywords" content=""  />
-<title>grunt 开发 测试</title>
-<!-- #公用静态资源 -->
-	<!-- 未打包CSS -->
-	<!-- 已打包CSS -->
-	<link rel="stylesheet" type="text/css" href="/src/css/main.css" />
-<!-- /公用静态资源 -->
-<!-- 脚本入口 -->
-	<!-- requireJS -->
-		<!-- <script type="text/javascript" charset="utf-8" src="/src/js/libs/jquery.js"></script>
-		<script type="text/javascript" charset="utf-8" src="/src/js/libs/require.js"></script>
-		<script type="text/javascript" charset="utf-8" src="/src/js/libs/requireCfg.js"></script> -->
-		<!-- <script type="text/javascript" charset="utf-8" src="/dist/js/libs/main-require.min.js"></script> -->
-	<!-- requireJS -->
-	<script type="text/javascript" charset="utf-8" src="/src/js/libs/jquery.js"></script>
-	<script type="text/javascript" charset="utf-8" src="/src/js/libs/sea.js"></script>
-	<script type="text/javascript" charset="utf-8" src="/src/js/libs/seaCfg.js"></script>
+    <meta charset="gbk"/>
+    <meta name="data-spm" content="a215a" charset="gbk">
+    <title>智能机器人</title>
+    <link rel="stylesheet" type="text/css" href="//assets.alicdn.com/s/kissy/1.2.0/cssreset-min.css">
+    <link rel="stylesheet" type="text/css" href="//assets.alicdn.com/s/kissy/gallery/kscroll/1.0/assets/clear.css">
+    <link rel="stylesheet" type="text/css" href="//g.alicdn.com/tb/aphrodite/1.5.2/pages/robot/style/robot-min.css">
 
-	<!-- seaJS -->
-		<!--script type="text/javascript" charset="utf-8" src="/dist/js/libs/main-sea.min.js"></script-->
-	<!-- seaJS -->
-<!-- /脚本入口 -->
+
 </head>
-<body data-debug="true">
-<a href="testKiss.html">this is test heheh!</a>
+<body data-spm="6974569"><script>
+with(document)with(body)with(insertBefore(createElement("script"),firstChild))setAttribute("exparams","category=&userid=78677678&aplus&yunid=&XvmWMqItg65z75&trid=0ab59a3014635542758025336e&asid=Aa6GsATjEDxXwe+lQAAAAACSif1p8JgwVQ==",id="tb-beacon-aplus",src=(location>"https"?"//g":"//g")+".alicdn.com/alilog/mlog/aplus_v2.js")
+</script>
+
+
+
+<div id="applogin" style="position: absolute;z-index: 9999;top:0;left: 0;width:100%;height: 100%;background-color: #fff;font-size:14px;padding:10px;">正在登录...</div>
+
+<script>
+    (function(load){
+        window.setTimeout(function(){
+            if(div=document.getElementById(load)){
+                div.innerHTML='连接智能机器人超时，请<a href="javascript:location.reload()">重新登录</a>..';
+            }
+        },5000);
+    })("applogin");
+</script>
+
+<!-- header -->
+<div id="header">
+
+    <!-- otherservice -->
+    <ul class="otherservice">
+                    <li class="yun"><a target="_blank" href="http://service.taobao.com/support/onlinecs/ocs.htm?source_id=520&_pvf=r2hr&q=">人工云客服</a></li>
+                            <li class="help"><a target="_blank" href="//service.taobao.com/support/main/service_center.htm?_pvf=r2sc">服务中心</a></li>
+        
+
+
+    </ul>
+    <!-- otherservice end -->
+
+    <!--robot info-->
+    <div class="appinfo">
+        <textarea id="tpl-userinfo" style="display: none">
+            <div class="logo"><a href="#" title="智能机器人：为您解答经常遇到的咨询性问题，找回账户密码等自助服务。无需等待，您的服务首选。"><img src="{{logo}}" /></a></div>
+            <h1><a href="#" title="关于{{}">{{name}}</a></h1>
+            <p class="welcomemsg">{{tip}}</p>
+        </textarea>
+    </div>
+    <!--robot end-->
+
+</div>
+
+<!-- header end -->
+
+
+<div id="content" class="layout grid-chat">
+<div id="main" class="col-main">
+    <div class="main-wrap">
+        <div class="appraise-box">
+            <form id="appraise-form">
+                <input name='_tb_token_' type='hidden' value='XvmWMqItg65z75'>
+                <span class='appraise-close'>x</span>
+                <h4>智能机器人需要您的评价</h4>
+                <div class="must-checkbox">
+                    <p><span>*</span>您对淘宝智能机器人目前给您提供的服务满意吗？</p>
+                    <p class='appraise-hint'>请您先给机器人评价哦~~</p>
+                    <label><input type="radio" name="satisfaction" value="5" class="s1"/>非常满意</label>
+                    <label><input type="radio" name="satisfaction" value="4" class="s2"/>满意</label>
+                    <label><input type="radio" name="satisfaction" value="3" class="s3"/>一般</label>
+                    <label><input type="radio" name="satisfaction" value="2" class="s4"/>不满意</label>
+                    <label><input type="radio" name="satisfaction" value="1" class="s5"/>非常不满意</label>
+                </div>
+                <div class="pick-checkbox">
+                                            <p>智能机器人听懂了您问题的程度：</p>
+                                                    <label><input type="radio" name="feedback-智能机器人听懂了您问题的程度" value="5" />非常满意</label>
+                            <label><input type="radio" name="feedback-智能机器人听懂了您问题的程度" value="4" />满意</label>
+                            <label><input type="radio" name="feedback-智能机器人听懂了您问题的程度" value="3" />一般</label>
+                            <label><input type="radio" name="feedback-智能机器人听懂了您问题的程度" value="2" />不满意</label>
+                            <label><input type="radio" name="feedback-智能机器人听懂了您问题的程度" value="1" />非常不满意</label>
+                                                                    <p>智能机器人给的答案是否有助于解决您的问题：</p>
+                                                    <label><input type="radio" name="feedback-智能机器人给的答案是否有助于解决您的问题" value="1" />是</label>
+                            <label><input type="radio" name="feedback-智能机器人给的答案是否有助于解决您的问题" value="0" />否</label>
+                                                            </div>
+                <textarea class="aphrodite-textarea" name="suggestion" placeholder="欢迎给我们的服务提建议"></textarea>
+                <div>
+                    <div class="handle">
+                        <input type="button" class="aphrodite-submit" value="提交">
+                        <input type="button" class="aphrodite-cancle" value="取消">
+                        <span class="aphrodite-submit-fail"></span>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div style="border:10px solid #fff;">
+            <!--聊天面板-->
+            <div id="chatpanel">
+
+                <div id="chatlist">
+
+                    <textarea id="tpl-systips" style="display:none">
+                        <div class="chattips">
+                            <a href="#" class="close">x</a>
+                            <dl>
+                                <dt>温馨提示：</dt>
+                                {{#each tips}}
+                                <dd>{{_ks_value}}</dd>
+                                {{/each}}
+                            </dl>
+                        </div>
+                    </textarea>
+
+                    <textarea id="tpl-question" style="display:none">
+                        <div class="talk-item talk-a">
+                            <div class="layout grid-talkf">
+                                <div class="col-main">
+                                    <div class="main-wrap info-talk">
+                                        <div class="msg">
+                                            <s class="arrow"></s>
+                                            <div class="J_content">{{question}}</div>
+                                        </div>
+                                        <div class="time"><img src="//img.alicdn.com/tps/i3/T19mCQXbJdXXXXXXXX-60-9.gif"/></div>
+                                    </div>
+                                </div>
+                                <div class="col-sub info-user">
+                                    <a href="#" title="{{nickname}}"><img src="{{logo}}" alt="{{nickname}}" /></a>
+                                </div>
+                            </div>
+                        </div>
+                    </textarea>
+
+                    <textarea id="tpl-answer" style="display:none">
+                        <div class="talk-item talk-b" data-robot-chatlog-id="{{robotChatLogId}}" data-logid="{{logid}}" data-question="{{question}}">
+                            <div class="layout grid-talk">
+                                <div class="col-main">
+                                    <div class="main-wrap info-talk">
+                                        <div class="msg">
+                                            <div class="hank"></div>
+                                            <s class="arrow"></s>
+                                            <ul class="J_feedback fun">
+                                                <li>以上内容对您有帮助吗？</li>
+                                                <li data-result="good" class="good"><a href="#"><s></s>有</a></li>
+                                                <li data-result="bad" class="bad"><a href="#"><s></s>没有</a></li>
+                                            </ul>
+                                            <div class="J_content">{{answer}}</div>
+                                        </div>
+                                        <div class="time"></div>
+                                    </div>
+                                </div>
+                                <div class="col-sub info-user">
+                                    <a href="#" title="{{name}}"><img src="{{logo}}" alt="{{name}}" /></a>
+                                </div>
+                            </div>
+                        </div>
+                    </textarea>
 
 
 
 
+                </div>
+            </div>
 
+        </div>
+
+        <!--输入面板-->
+        <div id="inputpanel">
+
+            <div class="chatform">
+                <input type="text" name="msg" id="chat-input" x-webkit-speech lang="zh-CN" />
+                <button type="button" class="chatbtn" id="chat-btn"><s>发送</s></button>
+            </div>
+            <div class="chatextfun">
+
+                <ul id="toolbar" class="toolbar">
+                    <li><a href="#">保存聊天记录</a></li>
+                    <li id='toolbar-appraise'>满意度评价</li>
+                </ul>
+                <div class="chkinput">还可以输入<em id="inputcount">30</em>字</div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+<div id="side" class="col-sub appside">
+
+    <div class="skin-side" id="ext-panel">
+
+        <!--热点问题-->
+        <div class="box">
+            <div class="hd"><h3>热点问题</h3></div>
+            <div class="bd">
+                <textarea id="tpl-exthot" style="display:none">
+                    <div class="exthot">
+                        <ul>
+                            {{#each list as item}}
+                            <li><a class="J_TopKnowledge" href="{{item.url}}" title="{{item.title}}">{{item.title}}</a></li>
+                            {{/each}}
+                        </ul>
+                    </div>
+                </textarea>
+
+            </div>
+        </div>
+
+        <!--相关内容-->
+        <div class="box">
+            <div class="hd"><h3>相关内容</h3></div>
+            <div class="bd extabout">
+                <div>暂时没有相关内容，请继续提问！</div>
+                <!--
+                <div class="item">
+                    <h4>相关问题</h4>
+                    <ul class="list">
+                        <li><a href="#">相关问题</a></li>
+                    </ul>
+                </div>
+                <div class="item">
+                    <h4>自助服务</h4>
+                    <ul class="list">
+                        <li><a href="#">搜索诊断助手</a></li>
+                    </ul>
+                </div>
+                <div class="item">
+                    <h4>淘宝客服务电话</h4>
+                    <ul>
+                        <li>买家热线：0571-88157858</li>
+                    </ul>
+                </div>
+                -->
+
+            </div>
+        </div>
+
+        <!--相关小贴士-->
+        <div class="tipbox">
+            <!-- <div class="hd hdext"><h3>相关小贴士</h3></div> -->
+            <div class="bd exttipsbg">
+                <textarea id="tpl-exttips" style="display:none">
+                    <div class="exttips">
+                        <h3>小贴士</h3>
+                        <ul>
+                            {{#each tips as item}}
+                            <li><a target="_blank" href="{{item.url}}">{{item.title}}</a></li>
+                            {{/each}}
+                        </ul>
+                    </div>
+                </textarea>
+            </div>
+                                                                <div style='padding-left:12px'  data-spm="1890030529">
+                    <a href="//bbs.taobao.com/catalog/12549510.htm?spm=a215a.6974569.1890030529.McSvyL" target="_blank"><img src="//img.alicdn.com/tps/i1/T1H6v7Fe0cXXci3mYl-190-82.png"></a>
+                </div>
+
+                                                                    </div>
+
+    </div>
+
+</div>
+</div>
+
+
+
+<form id="save-form" target="_blank" method="post" action="//service.taobao.com/support/minerva/robot_save_chat_record.htm">
+    <input name='_tb_token_' type='hidden' value='XvmWMqItg65z75'>
+    <input type="hidden" id="msg-record" name="chatRecord" />
+</form>
+
+
+
+<!--登录-->
+<textarea id="tpl-robot-login" style="display:none">
+    <div id="loginmodule">
+        <div class="loginframe">
+            <div class="title">为保证服务质量，请您登录：</div>
+            <iframe style="display: none1" width="326" scrolling="no" height="230" frameborder="0" src="about:blank" id="cs_login_frame" data-login-url="https://login.taobao.com/member/login.jhtml?is_ignore=true&from=onlinecs&style=minisimple&minititle=%CE%D2%CA%C7%CC%D4%B1%A6%BB%E1%D4%B1"  data-redirect-url="//service.taobao.com/support/minerva/beta_minerva_login_success.htm?version=2"> </iframe>
+            <ul class="extfun">
+                <li class="J_userinput"><a href="#">账户无法登录</a></li>
+                <li class="J_nomember"><a href="#">我不是淘宝会员</a></li>
+            </ul>
+        </div>
+
+        <div class="userinput" style="display:none">
+            <div class="title">账户无法登录</div>
+            <div>
+                <div class="form">
+                    <label>请输入淘宝账户名: <input type="text" class="cs_username" /></label>
+                    <div class="button-area"><button type="button" class="usernamecheck">连接机器人</button></div>
+                </div>
+            </div>
+            <ul class="extfun">
+                <li class="J_member"><a href="#">我是淘宝会员</a></li>
+                <li class="J_nomember"><a href="#">我不是淘宝会员</a></li>
+            </ul>
+        </div>
+    </div>
+</textarea>
+
+
+<!-- 分页模板 -->
+<textarea id="tpl-default-paging" style="display:none;">
+    <span class="pg-num">{{ currentPage }} / {{ endPage }}</span>
+
+    {{@! 显示上一页 }}
+    {{@if currentPage === startPage }}
+    <a class="pg-prev pg-disabled">上一页</a>
+    {{@else}}
+    <a class="pg-prev" href="#" data-page="{{ currentPage - 1 }}">上一页</a>
+    {{/if}}
+
+    {{@! 显示下一页 }}
+    {{@if currentPage === endPage }}
+    <a class="pg-next pg-disabled">下一页</a>
+    {{@else}}
+    <a class="pg-next" href="#" data-page="{{ currentPage + 1 }}">下一页</a>
+    {{/if}}
+</textarea>
+
+<!--[if IE 6]>
+<script>document.execCommand("BackgroundImageCache", false, true);</script>
+<![endif]-->
+
+<script src="//assets.alicdn.com/s/kissy/1.2.0/??kissy-min.js,sizzle-min.js,suggest-min.js,overlay-min.js,template-min.js,calendar-min.js" charset="utf-8"></script>
+<!-- <script src="//assets.alicdn.com/apps/support/aphrodite/kscroll/index.js" charset="utf-8"></script> -->
+
+<script >
+    var env = "online";
+    var h = window.location.href.split("?")[0];
+    var hr=~h.indexOf("service.daily.taobao.net");
+    if(hr){
+        env = "daily";
+    }else{
+        env = "online";
+    }
+</script>
+
+        <script src="//g.alicdn.com/tb/aphrodite/1.5.2/pages/robot/robot-min.js" charset="UTF-8"></script>
+    
+<script>
+
+    var initData = {};
+    var robotconfig={"moduleGroupId":"taobaocrm","robotHotConfig":[{"hotUrl":"https://service.taobao.com/support/knowledge-6685884.htm","hotTitle":"收到商品描述不符，怎么办？"},{"hotUrl":"https://service.taobao.com/support/knowledge-6682054.htm","hotTitle":"如何申请淘宝客服介入？"},{"hotUrl":"https://service.taobao.com/support/knowledge-1120931.htm","hotTitle":"如何申请退款？"},{"hotUrl":"https://service.taobao.com/support/knowledge-6685881.htm","hotTitle":"收到商品有质量问题，怎么办？"},{"hotUrl":"https://service.taobao.com/support/knowledge-6682063.htm","hotTitle":"卖家不退邮费，怎么办？"},{"hotUrl":"https://service.taobao.com/support/knowledge-6682466.htm","hotTitle":"联系不上卖家，怎么办？"}],"defaultNoticeMsg":"请用一句话简要描述您的问题，比如'账户被盗怎么开通？","robotTipsConfig":[{"content":"\u003cp\u003e\u003cstrong\u003e\u003cspan style\u003d\"font-size:12px;\"\u003e\u003cspan style\u003d\"font-size:14px;\"\u003e\u003cspan style\u003d\"color:rgb(255, 0, 0);\"\u003e\u003c/span\u003e\u003c/span\u003e话费充值未到账怎么办？\u003ca href\u003d\"https://service.taobao.com/support/knowledge-6679191.htm?spm\u003da215a.7752463.1998605958.d1.unz7GR\u0026dkey\u003dsearchview\" target\u003d\"_blank\" title\u003d\"点此\"\u003e点此\u003c/a\u003e查看哦~\u003c/span\u003e\u003c/strong\u003e\u003c/p\u003e \u003cp\u003e   \u003cspan style\u003d\"font-size:12px;\"\u003e\u0026nbsp;\u003c/span\u003e\u003c/p\u003e\t\t\t"}],"lang":"zh_CN","userTimeOut":"3","noPrecisePos2Ocs":"false","sourceId":203,"version":"0.0","ocs":"true","robotToolbarConfig":[],"willOcs2Robot":"true","sourceName":"服务中心联系客服智能机器人  消费者和商家","countDownTime":"60","inputNumber":"30","isCanComplaint":"false","connectType":"1","initAnswer":"您好，有什么可以帮助您的吗？","robotPlug":"refundPlug","robot":"true","belongDepartmentId":"0","personalMsg":"为了更好的帮助智能淘小二成长，请您对我们的答案给予评价哦^_^","isNeedListenUser":"true","robotNoticeConfig":[{"noticeUrl":"https://service.taobao.com/support/knowledge-6685518.htm","noticeTitle":"我的维权处理的怎么样了？"},{"noticeUrl":"https://service.taobao.com/support/knowledge-6685870.htm","noticeTitle":"卖家拒绝退款给我，怎么办？"},{"noticeUrl":"https://service.taobao.com/support/knowledge-6685897.htm","noticeTitle":"卖家不发货，怎么办？"},{"noticeUrl":"https://service.taobao.com/support/knowledge-6685461.htm","noticeTitle":"申请退款后，钱款什么时候退回？"},{"noticeUrl":"https://service.taobao.com/support/knowledge-6685892.htm","noticeTitle":"未收到货，怎么办？"}],"robotChannelConfig":[],"willRobot2Ocs":"false","robotOcsUrl":"http://service.taobao.com/support/onlinecs/ocs.htm?source_id\u003d520"};
+
+    //温馨提示
+    //initData.sysTips =["1、使用关键词，问题尽量简单。比如“怎样修改店铺的所在地”。","2、一次只能提问一个完整问题。比如“怎么解决呢”，改成“收不到激活信，怎么解决”"];
+
+    //温馨提示
+    initData.sysTips =[];
+    var warmntips = robotconfig.robotTipsConfig;
+    if(warmntips&&warmntips.length>0){
+        for(var i=0;i<warmntips.length;i++){
+            initData.sysTips.push(warmntips[i].content);
+        }
+    }
+
+
+
+    //相关贴士
+    initData.extTips = [];
+
+    var noticeconfig=robotconfig.robotNoticeConfig;
+    if(noticeconfig&&noticeconfig.length>0){
+        for(var i=0;i<noticeconfig.length;i++){
+            var noticeelement={};
+            noticeelement.title=noticeconfig[i].noticeTitle;
+            noticeelement.url=noticeconfig[i].noticeUrl;
+            initData.extTips.push(noticeelement);
+        }
+    }
+
+
+    //热点问题
+    initData.extHot = [];
+    var hotconfig=robotconfig.robotHotConfig;
+    if(hotconfig&&hotconfig.length>0){
+        for(var i=0;i<hotconfig.length;i++){
+            var hotelement={};
+            hotelement.title=hotconfig[i].hotTitle;
+            initData.extHot.push(hotelement);
+        }
+    }
+
+
+    var logoUrl = robotconfig.robotLogoUrl;
+    if(!logoUrl){
+        logoUrl="//img.alicdn.com/tps/i1/T1t74VXr8XXXcu8V6l-64-64.png";
+    }
+
+
+                var ulogo = "//wwc.alicdn.com/avatar/getAvatar.do?userId=78677678&width=120&height=120&type=sns";
+        
+
+    /**
+     * 初始化入参
+     */
+    var initParameter = {
+        //初始要渲染到页面的数据
+        initData:initData,
+        //用户信息
+        userInfo: {
+            username:'somesayss',
+            nickname:'somesayss',
+            logo:ulogo
+        },
+        //机器人信息
+        appInfo: {
+            //logo
+            logo:logoUrl,
+            //名称
+            name: robotconfig.robotShowName ? robotconfig.robotShowName : "智能机器人",
+            //签名
+            tip: robotconfig.personalMsg
+        },
+        //输入框配置
+        inputSetting: {
+            //placeholder
+            defaultNoticeMsg: robotconfig.defaultNoticeMsg ? robotconfig.defaultNoticeMsg : "请用一句话简要的描述你的问题，比如“如何开店”",
+            //输入字数限制
+            inputNumber: robotconfig.inputNumber ? robotconfig.inputNumber : "30"
+        },
+        appConfig: {
+            //来源标示
+            sourceId:robotconfig.sourceId,
+            feedbackRate:25,
+            greetingRate:0,
+                            type : 1 ,
+                                    //机器人类型
+            moduleId:robotconfig.moduleGroupId,
+            //是否强制登录
+            mustLogin: false
+        }
+    };
+
+    //组件配置
+
+    initParameter['loadPlug'] = [];
+    var robotPlug = robotconfig.robotPlug;
+    if(robotPlug && robotPlug=='refundPlug'){
+
+        var refundUid = 'null';
+        var refundId = 'null';
+
+        if(refundUid && refundUid!='null'){
+            initParameter['loadPlug'].push({
+                name:"refund",
+                data:{
+                    refundUrl: "/support/minerva/ajax/refundPlugAjax.htm",
+                    listUrl:"/support/minerva/ajax/refundListAjax.htm",
+                    refundId:refundId
+                }
+            });
+        }
+    }
+    if(robotconfig.sourceId && (robotconfig.sourceId == 187 || robotconfig.sourceId == 456) ){
+
+        var linkUrl = "//service.taobao.com/support/onlinecs/ocs.htm?source_id=1774213283";
+        if(robotconfig.sourceId == 187){
+            linkUrl = "//service.taobao.com/support/onlinecs/ocs.htm?source_id=187";
+        }
+        initParameter['loadPlug'].push({
+            name:"recomroute",
+            data:{
+                linkUrl: linkUrl
+            }
+        });
+    }
+
+    var initQues = 'null';
+    if(initQues && initQues!='null'){
+        initParameter['loadPlug'].push({
+            name:"firstquestion",
+            data:{
+            }
+        });
+    }
+
+
+
+
+    function appInit(){
+        var path = '',
+                version = '1.5.2';
+        if(~window.location.host.toLowerCase().indexOf("taobao.com"))
+            path = '//g.alicdn.com/tb/aphrodite/' + version + '/pages/';
+        else if(~window.location.host.toLowerCase().indexOf("daily.taobao.net"))
+            path = '//g-assets.daily.taobao.net/tb/aphrodite/' + version + '/pages/';
+        else
+            path = "./";
+
+        KISSY.config({
+            packages:[
+                {
+                    name:"robot",
+                    tag:"201403101523",
+                    path:path,
+                    charset:"UTF-8"
+                },{
+                    name:"gallery",
+                    path:"//assets.alicdn.com/s/kissy/",
+                    tag:(new Date).getTime()
+                }
+            ]
+        });
+
+        KISSY.Config.debug = true;
+        KISSY.use("robot/init", function(S,Robot){
+            Robot.init(initParameter);
+            S.all("#applogin").remove();
+
+
+
+
+        });
+    }
+
+
+
+    KISSY.ready(function(){
+        appInit();
+
+
+
+    });
+
+
+
+
+</script>
 
 </body>
 </html>

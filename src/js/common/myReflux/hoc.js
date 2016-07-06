@@ -12,13 +12,12 @@ define(function (require, exports) {
 
 	// 依赖
 	var React = require('react');
-	var Reflux = require('reflux');
 	var limit = require('common/limit2.0');
 
 	return function (Wrapper, Controller) {
-		Controller = Reflux.connect(Controller.Store);
-		var state = Controller.getInitialState();
-		delete Controller.getInitialState;
+		var interfaces = Controller.getReactInterface();
+		var state = interfaces.getInitialState();
+		delete interfaces.getInitialState;
 
 		var WrapperComponent = function (_React$Component) {
 			_inherits(WrapperComponent, _React$Component);
@@ -51,13 +50,15 @@ define(function (require, exports) {
 		}(React.Component);
 
 		;
-		limit.assign(WrapperComponent.prototype, Controller);
+		limit.assign(WrapperComponent.prototype, interfaces);
 		return WrapperComponent;
 	};
 });
 
-/*
-				┌	control.js( controller.js )	=> [ Action, Store ]	┐
+/**
+							extends
+							   ↑
+				┌	control.js => controller.js	=> [ Action, Store ]	┐
 	HOC.js	=>	¦									   ↓				¦	=> main.js => [ React ]
 				└  	view.js						=> [ React 		   ]	┘		
  */

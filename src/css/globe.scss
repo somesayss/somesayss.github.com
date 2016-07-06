@@ -28,7 +28,7 @@ $COLOR_ORANGE:	 	#F60; 		/** 橙色 */
 }
 
 /** 功能 */
-	*{-webkit-tap-highlight-color:rgba(0,0,0,0);vertical-align:top;}
+	*{-webkit-tap-highlight-color:rgba(0,0,0,0);vertical-align:top;box-sizing:border-box;}
 	.fn-tran-100{transition:all .1s ease-in 0s;}
 	.fn-tran-200{transition:all .2s ease-in 0s;}
 	.fn-tran{transition:all 1s cubic-bezier(0, 1, .1, 1) 0s;}

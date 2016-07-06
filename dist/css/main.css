@@ -18,7 +18,7 @@ button::-moz-focus-inner, input[type="reset"]::-moz-focus-inner, input[type="but
 input[type="submit"],input[type="reset"],input[type="button"],input[type="text"],input[type="number"],button,select{-webkit-appearance:none;}
 @charset "utf-8";
 /* 功能 */
-*{-webkit-tap-highlight-color:rgba(0,0,0,0);vertical-align:top;}
+*{-webkit-tap-highlight-color:rgba(0,0,0,0);vertical-align:top;box-sizing:border-box;}
 .fn-tran-100{transition:all .1s ease-in 0s;}
 .fn-tran-200{transition:all .2s ease-in 0s;}
 .fn-tran{transition:all 1s cubic-bezier(0, 1, .1, 1) 0s;}

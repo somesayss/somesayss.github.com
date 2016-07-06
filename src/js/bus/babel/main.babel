@@ -62,11 +62,15 @@ define(function(require, exports, module) {
 			super.show();
 			console.log(this.age);
 		}
+		static xixi(){
+			return 'xi1xi1'
+		}
 	};
 
 	var bbb = new B('shao2', 28);
 	bbb.show();
 
+	// console.log( A.xixi(), 'aaaaaaa' );
 	// console.log(bb, bb instanceof B, bb instanceof A); // true true
 	// console.log(bb.constructor, bb.constructor === B, bb.constructor === A); // true false
 
@@ -86,7 +90,29 @@ define(function(require, exports, module) {
 
 	per2(...i);
 
+	// 8进制
 	console.log( 0o767 === 503 );
+
+	// 绑定上下文
+	let content = ['a1', 'a2', 'a3'];
+	let { map, forEach } = Array.prototype;
+	content::map((val, key) => { });
+	
+	let conEachFn = content::forEach;
+	conEachFn((val) => {
+		console.log(val);
+	});
+
+
+
+
+
+
+
+
+
+
+
 
 
 

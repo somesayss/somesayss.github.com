@@ -1,4 +1,7 @@
 "use strict";
+/**
+ * 模型
+ */
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -8,56 +11,71 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-define(function (require, exports) {
+define(function (require, exports, module) {
 
 	// 依赖
-	var React = require('react');
-	var Reflux = require('reflux');
-	var limit = require('common/limit2.0');
+	var $ = require('$');
+	var Control = require('common/myReflux/control');
 
-	return function (Wrapper, Controller) {
-		Controller = Reflux.connect(Controller.Store);
-		var state = Controller.getInitialState();
-		delete Controller.getInitialState;
+	var Controller = function (_Control) {
+		_inherits(Controller, _Control);
 
-		var WrapperComponent = function (_React$Component) {
-			_inherits(WrapperComponent, _React$Component);
+		function Controller() {
+			var _Object$getPrototypeO;
 
-			function WrapperComponent() {
-				var _Object$getPrototypeO;
+			_classCallCheck(this, Controller);
 
-				_classCallCheck(this, WrapperComponent);
-
-				for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-					args[_key] = arguments[_key];
-				}
-
-				// getInitialState
-
-				var _this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(WrapperComponent)).call.apply(_Object$getPrototypeO, [this].concat(args)));
-
-				_this.state = state;
-				return _this;
+			for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+				args[_key] = arguments[_key];
 			}
 
-			_createClass(WrapperComponent, [{
-				key: 'render',
-				value: function render() {
-					return React.createElement(Wrapper, limit.assignSuper(this.state, this.props));
-				}
-			}]);
+			var _this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(Controller)).call.apply(_Object$getPrototypeO, [this].concat(args)));
 
-			return WrapperComponent;
-		}(React.Component);
+			_this.store = {
+				name: 'shao',
+				list: ['a1', 'a2', 'a3'],
+				show: true
+			};
+			return _this;
+		}
 
-		;
-		limit.assign(WrapperComponent.prototype, Controller);
-		return WrapperComponent;
-	};
+		_createClass(Controller, [{
+			key: 'onShow',
+			value: function onShow() {
+				var me = this;
+				me.store.show = true;
+				me.updateComponent();
+			}
+		}, {
+			key: 'onHide',
+			value: function onHide() {
+				var me = this;
+				me.store.show = false;
+				me.updateComponent();
+			}
+		}, {
+			key: 'onChange',
+			value: function onChange() {
+				var me = this,
+				    store = me.store;
+				store.name += ' hong';
+				store.title = 'aaa';
+				me.updateComponent();
+			}
+		}, {
+			key: 'onListChange',
+			value: function onListChange(key) {
+				var me = this,
+				    store = me.store;
+				store.list[key] += ' xixi';
+				me.updateComponent();
+			}
+		}]);
+
+		return Controller;
+	}(Control);
+
+	;
+
+	return new Controller();
 });
-
-/*
-				┌	control.js( controller.js )	=> [ Action, Store ]	┐
-	HOC.js	=>	¦									   ↓				¦	=> main.js => [ React ]
-				└  	view.js						=> [ React 		   ]	┘		
- */

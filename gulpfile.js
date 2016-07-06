@@ -15,12 +15,15 @@ gulp.task('watch', () => {
                 file = match[0];
             // console.log('File ' + file + ' was ' + e.type);
             gulp.src( file )
-                .pipe( babel( { presets: ['es2015', 'react'] } ).on('error', (e) => {
+                .pipe( babel( { presets: ['es2015', 'react', 'stage-0'] } ).on('error', (e) => {
                     console.error('error', e.message);
                 }) )
                 .pipe(gulp.dest( match[1] ));
         });
 });
+
+// 打包
+
 
 // 静态服务
 gulp.task('brow', () => {
