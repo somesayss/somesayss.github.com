@@ -9,12 +9,9 @@ define(function(require, exports, module) {
 	const Control = require('common/myReflux/control');
 
 	class Controller extends Control {
-		constructor(...args){
-			super(...args);
-			this.store = {
-				title: '默认',
-				name: 'aaa'
-			};
+		store = {
+			title: '默认',
+			name: 'aaa'
 		}
 		onChange(){
 			var me = this;

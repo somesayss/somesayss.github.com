@@ -12,18 +12,30 @@ define(function(require, exports, module) {
 	window.limit = limit;
 
 	// limit.limitFixed = true;
-	limit.logClosed = false;
 
-	var a = limit.compose(function(a){
-		return a + 1;
-	}, function(a, b){
-		return a + 2 + b;
-	}, function(a){
-		return [a + 3, 4];
-	})('1');
+	// function main(val){
+	// 	this.value = val;
+	// };
 
-	console.log(a);
+	// main.prototype.map = function(){
+	// 	this.value = limit.map.apply(null, [this.value].concat(limit.toArray(arguments)));
+	// 	return this;
+	// };
 
+	// main.prototype.filter = function(){
+	// 	this.value = limit.filter.apply(null, [this.value].concat(limit.toArray(arguments)));
+	// 	return this;
+	// };
+
+	// var a = new main(['a1', 'a2', 'a3']).map(function(val){
+	// 	return val + 4;
+	// }).filter(function(val, key){
+	// 	return !!key;
+	// });
+
+	// console.log(a.value);
+
+	
 
 });
 

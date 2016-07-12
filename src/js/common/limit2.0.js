@@ -18,7 +18,12 @@ define(function (require, exports) {
 	var _this = this;
 
 	// 变量
-	var limit = {};
+	var limit = function limit(val) {
+		if (!(this instanceof limit)) {
+			return new limit(val);
+		};
+		this.__value__ = [val];
+	};
 	var WIN = window;
 	var DOC = WIN.document;
 	var BODY = DOC.body;
@@ -225,7 +230,7 @@ define(function (require, exports) {
 				args[_key3] = arguments[_key3];
 			}
 
-			return limit.log.apply(null, ['error'].concat(args));
+			return limit.log.apply(limit, ['error'].concat(args));
 		}
 	});
 	defineIt('!!!', {
@@ -234,7 +239,7 @@ define(function (require, exports) {
 				args[_key4] = arguments[_key4];
 			}
 
-			return limit.log.apply(null, ['warn'].concat(args));
+			return limit.log.apply(limit, ['warn'].concat(args));
 		}
 	});
 	defineIt('...', {
@@ -243,7 +248,7 @@ define(function (require, exports) {
 				args[_key5] = arguments[_key5];
 			}
 
-			return limit.log.apply(null, ['log'].concat(args));
+			return limit.log.apply(limit, ['log'].concat(args));
 		}
 	});
 
@@ -916,6 +921,36 @@ define(function (require, exports) {
 			} else {
 				return arr;
 			};
+		}
+	});
+
+	// mix: first [支持obj]
+	defineIt('first', {
+		format: checkTargetNoEqualNull,
+		when: function when(arr) {
+			return limit.isArrayLike(arr);
+		},
+		priority: function priority(arr) {
+			return arr[0];
+		},
+		fixed: function fixed(obj) {
+			var keys = limit.keys(obj);
+			return obj[keys[0]];
+		}
+	});
+
+	// mix: last [支持obj]
+	defineIt('last', {
+		format: checkTargetNoEqualNull,
+		when: function when(arr) {
+			return limit.isArrayLike(arr);
+		},
+		priority: function priority(arr) {
+			return arr[arr.length - 1];
+		},
+		fixed: function fixed(obj) {
+			var keys = limit.keys(obj);
+			return obj[keys[keys.length - 1]];
 		}
 	});
 
@@ -2026,6 +2061,31 @@ define(function (require, exports) {
 				});
 				return arr.join('');
 			});
+		}
+	});
+
+	// 重构limit函数
+	limit.each(limit, function (val, key) {
+		if (limit.isFunction(val)) {
+			limit.prototype[key] = function () {
+				for (var _len38 = arguments.length, args = Array(_len38), _key38 = 0; _key38 < _len38; _key38++) {
+					args[_key38] = arguments[_key38];
+				}
+
+				this.__value__.push(limit[key].apply(limit, [limit.last(this.__value__)].concat(args)));
+				return this;
+			};
+		} else {
+			limit.prototype[key] = val;
+		};
+	});
+	limit.assign(limit.prototype, {
+		end: function end() {
+			this.__value__.pop();
+			return this;
+		},
+		valueOf: function valueOf() {
+			return limit.last(this.__value__);
 		}
 	});
 

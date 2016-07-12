@@ -14,15 +14,13 @@ define(function(require, exports) {
 		bindEvent(){
 			let me = this,
 				Actions = me.Actions = {};
-			limit.compose((keys) => {
-				limit.each(keys, (val) => {
+			// 对第一层的对象的原型属性进行处理
+			limit(me.constructor.prototype)
+				.keysSuper()
+				.filter((val) => REX.test(val))
+				.each((val) => {
 					Actions[val.replace(REX, (a, b, c) => b.toLowerCase() + c)] = me[val].bind(me);
 				});
-			}, (keys) => {
-				return [limit.filter( keys, (val) => REX.test(val) )];
-			}, (obj) => {
-				return [limit.keysSuper(obj)];
-			})(me.constructor.prototype);
 		}
 		getInitialState(){
 			return this.store || (this.store = {});

@@ -40,6 +40,9 @@ define(function(require, exports, module) {
 
 	// 类
 	class A {
+		store = {
+			a: 'a1'
+		}
 		constructor(name){
 			this.name = name;
 		}
@@ -49,11 +52,15 @@ define(function(require, exports, module) {
 		static xixi(){
 			return 'xixi';
 		}
+		static a = 'a1'
 	};
 	
 
 	// 继承
 	class B extends A {
+		store = {
+			b: 'b2'
+		}
 		constructor(name, age){
 			super(...arguments);
 			this.age = age;
@@ -65,9 +72,13 @@ define(function(require, exports, module) {
 		static xixi(){
 			return 'xi1xi1'
 		}
+		// static a = 'a2'
 	};
 
+	
+
 	var bbb = new B('shao2', 28);
+	console.log(B.a, 'i want');
 	bbb.show();
 
 	// console.log( A.xixi(), 'aaaaaaa' );

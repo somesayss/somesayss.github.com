@@ -55,7 +55,7 @@ define(function (require, exports, module) {
 					React.createElement(
 						Code,
 						null,
-						'\'𠮷\'.length //2'
+						'\'𠀋\'.length //2'
 					),
 					'正确获取字符串长度应该这样写',
 					React.createElement(

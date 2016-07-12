@@ -24,19 +24,14 @@ define(function (require, exports) {
 			value: function bindEvent() {
 				var me = this,
 				    Actions = me.Actions = {};
-				limit.compose(function (keys) {
-					limit.each(keys, function (val) {
-						Actions[val.replace(REX, function (a, b, c) {
-							return b.toLowerCase() + c;
-						})] = me[val].bind(me);
-					});
-				}, function (keys) {
-					return [limit.filter(keys, function (val) {
-						return REX.test(val);
-					})];
-				}, function (obj) {
-					return [limit.keysSuper(obj)];
-				})(me.constructor.prototype);
+				// 对第一层的对象的原型属性进行处理
+				limit(me.constructor.prototype).keysSuper().filter(function (val) {
+					return REX.test(val);
+				}).each(function (val) {
+					Actions[val.replace(REX, function (a, b, c) {
+						return b.toLowerCase() + c;
+					})] = me[val].bind(me);
+				});
 			}
 		}, {
 			key: "getInitialState",

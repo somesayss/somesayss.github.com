@@ -61,6 +61,10 @@ define(function (require, exports, module) {
 		function A(name) {
 			_classCallCheck(this, A);
 
+			this.store = {
+				a: 'a1'
+			};
+
 			this.name = name;
 		}
 
@@ -79,6 +83,7 @@ define(function (require, exports, module) {
 		return A;
 	}();
 
+	A.a = 'a1';
 	;
 
 	// 继承
@@ -90,6 +95,10 @@ define(function (require, exports, module) {
 			_classCallCheck(this, B);
 
 			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(B).apply(this, arguments));
+
+			_this.store = {
+				b: 'b2'
+			};
 
 			_this.age = age;
 			return _this;
@@ -106,6 +115,8 @@ define(function (require, exports, module) {
 			value: function xixi() {
 				return 'xi1xi1';
 			}
+			// static a = 'a2'
+
 		}]);
 
 		return B;
@@ -114,6 +125,7 @@ define(function (require, exports, module) {
 	;
 
 	var bbb = new B('shao2', 28);
+	console.log(B.a, 'i want');
 	bbb.show();
 
 	// console.log( A.xixi(), 'aaaaaaa' );

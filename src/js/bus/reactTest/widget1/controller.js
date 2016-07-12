@@ -23,20 +23,19 @@ define(function (require, exports, module) {
 		function Controller() {
 			var _Object$getPrototypeO;
 
+			var _temp, _this, _ret;
+
 			_classCallCheck(this, Controller);
 
 			for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
 				args[_key] = arguments[_key];
 			}
 
-			var _this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(Controller)).call.apply(_Object$getPrototypeO, [this].concat(args)));
-
-			_this.store = {
+			return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(Controller)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this), _this.store = {
 				name: 'shao',
 				list: ['a1', 'a2', 'a3'],
 				show: true
-			};
-			return _this;
+			}, _temp), _possibleConstructorReturn(_this, _ret);
 		}
 
 		_createClass(Controller, [{

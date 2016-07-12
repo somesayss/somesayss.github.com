@@ -8,7 +8,12 @@
 define(function(require, exports) {
 
 	// 变量
-	const limit = {};
+	const limit = function(val){
+		if( !(this instanceof limit) ){
+			return new limit(val);
+		};
+		this.__value__ = [val];
+	};
 	const WIN = window;
 	const DOC = WIN.document;
 	const BODY = DOC.body;
@@ -142,13 +147,13 @@ define(function(require, exports) {
 
 		// 快捷方法
 		defineIt('T.T', {
-			value: (...args) => limit.log.apply(null, ['error', ...args])
+			value: (...args) => limit.log(...['error', ...args])
 		});
 		defineIt('!!!', {
-			value: (...args) => limit.log.apply(null, ['warn', ...args])
+			value: (...args) => limit.log(...['warn', ...args])
 		});
 		defineIt('...', {
-			value: (...args) => limit.log.apply(null, ['log', ...args])
+			value: (...args) => limit.log(...['log', ...args])
 		});
 
 	// --判定方法-- //
@@ -630,6 +635,32 @@ define(function(require, exports) {
 				}else{
 					return arr; 
 				};
+			}
+		});
+
+		// mix: first [支持obj]
+		defineIt('first', {
+			format: checkTargetNoEqualNull,
+			when: (arr) => limit.isArrayLike(arr),
+			priority(arr){
+				return arr[0];
+			},
+			fixed(obj){
+				let keys = limit.keys(obj);
+				return obj[keys[0]];
+			}
+		});
+
+		// mix: last [支持obj]
+		defineIt('last', {
+			format: checkTargetNoEqualNull,
+			when: (arr) => limit.isArrayLike(arr),
+			priority(arr){
+				return arr[arr.length - 1];
+			},
+			fixed(obj){
+				let keys = limit.keys(obj);
+				return obj[keys[keys.length - 1]];
 			}
 		});
 
@@ -1553,6 +1584,27 @@ define(function(require, exports) {
 				});
 			}
 		});
+
+	// 重构limit函数
+	limit.each(limit, (val, key) => {
+		if( limit.isFunction(val) ){
+			limit.prototype[key] = function(...args){
+				this.__value__.push( limit[key]( ...[limit.last(this.__value__), ...args] ) );
+				return this;
+			};
+		}else{
+			limit.prototype[key] = val;
+		};
+	});
+	limit.assign(limit.prototype, {
+		end(){
+			this.__value__.pop();
+			return this;
+		},
+		valueOf(){
+			return limit.last(this.__value__);
+		}
+	});
 
 	// 返回主体
 	return limit;
