@@ -624,6 +624,7 @@ define(function(require, exports) {
 					}catch(e1){
 						try{
 							arr[index] = undefined;
+							return true;
 						}catch(e2){
 							limit['T.T'](e1, e2);
 						};
