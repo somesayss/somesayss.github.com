@@ -777,11 +777,13 @@ define(function (require, exports) {
 				return obj;
 			} else if (limit.isArrayLike(obj)) {
 				// 如果是类数组对象的话就格式化数组
+				var arr = void 0;
 				try {
-					return slice.call(obj);
+					arr = slice.call(obj);
 				} catch (e) {
-					return sliceFix(obj);
+					arr = sliceFix(obj);
 				};
+				return limit.from(arr);
 			} else {
 				return typeWarn.toArray(obj), [];
 			};
