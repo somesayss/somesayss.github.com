@@ -35,6 +35,8 @@ define(function(require, exports, module) {
 
 	// console.log(a.value);
 
+	console.log(limit.toArray({a: 'a1', length: 1}));
+	console.log(limit.isEmpty({a: 'a1', length: 1}));
 	
 
 });

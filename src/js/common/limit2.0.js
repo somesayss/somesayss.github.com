@@ -907,8 +907,12 @@ define(function (require, exports) {
 						delete arr[index];
 					};
 					return true;
-				} catch (e) {
-					limit['T.T'](e);
+				} catch (e1) {
+					try {
+						arr[index] = undefined;
+					} catch (e2) {
+						limit['T.T'](e1, e2);
+					};
 				};
 			};
 			return false;
