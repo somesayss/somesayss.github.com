@@ -23,7 +23,7 @@ define(function(require, exports) {
 				});
 		}
 		getInitialState(){
-			return this.store || (this.store = {});
+			return this.state || (this.state = {});
 		}
 		componentDidMount(com){
 			this.com = com;
@@ -41,9 +41,9 @@ define(function(require, exports) {
 		}
 		updateComponent(){
 			let me = this,
-	    		store = me.getInitialState();
+	    		state = me.getInitialState();
 	    	return new Promise(resolve => {
-	    		me.trigger(store, resolve);
+	    		me.trigger(state, resolve);
 	    	});
 		}
 		getReactInterface(){

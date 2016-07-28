@@ -825,17 +825,23 @@ define(function (require, exports) {
 		}
 	});
 
-	// mix: unionSuper PS: -0 0 -0 0 的排序有问题
+	// mix: unionSuper PS: -0 0 -0 0 的排序有问题 如果不需要排序可以用这个
 	var UNION_SORT = function UNION_SORT(a, b) {
-		if (a === 0 && b === 0) {
-			return 1 / a > 1 / b;
-		}
+		if (a > b) {
+			return 1;
+		} else if (a === b) {
+			if (a === 0 && b === 0) {
+				return 1 / a > 1 / b;
+			};
+		} else {
+			return -1;
+		};
 	};
 	defineIt('unionSuper', {
 		format: checkTargetWithArray,
-		fixed: function fixed(arr) {
+		fixed: function fixed(arr, fn) {
 			var target = void 0;
-			return limit.filter(arr.slice().sort().sort(UNION_SORT), function (val, key) {
+			return limit.filter(arr.slice().sort(fn).sort(UNION_SORT), function (val, key) {
 				return (!key || !limit.is(target, val)) && (target = val, true);
 			});
 		}
@@ -2025,7 +2031,7 @@ define(function (require, exports) {
 	});
 
 	// --日期-- //
-	var REG_EXP_DATA = /^(yyyy)(?:(.+)(MM))?(?:(.+)(dd))?(?:(.+)(HH))?(?:(.+)(mm))?(?:(.+)(ss))?(.+)?$/;
+	var REG_EXP_DATA = /^(yyyy)?(?:(.*)(MM))?(?:(.*)(dd))?(?:(.*)(HH))?(?:(.*)(mm))?(?:(.*)(ss))?(.*)?$/;
 	var FUN_DATAS = ['getFullYear', 'getMonth', 'getDate', 'getHours', 'getMinutes', 'getSeconds'];
 	defineIt('formatDate', {
 		value: function value() {
