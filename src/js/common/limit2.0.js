@@ -774,7 +774,7 @@ define(function (require, exports) {
 		value: function value(obj) {
 			// 如果是数组原始返回
 			if (limit.isArray(obj)) {
-				return obj;
+				return limit.from(obj);
 			} else if (limit.isArrayLike(obj)) {
 				// 如果是类数组对象的话就格式化数组
 				var arr = void 0;
@@ -910,6 +910,7 @@ define(function (require, exports) {
 				} catch (e1) {
 					try {
 						arr[index] = undefined;
+						return true;
 					} catch (e2) {
 						limit['T.T'](e1, e2);
 					};

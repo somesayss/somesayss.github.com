@@ -514,7 +514,7 @@ define(function(require, exports) {
 			value: obj => {
 				// 如果是数组原始返回
 				if( limit.isArray(obj) ){
-					return obj;
+					return limit.from(obj);
 				}else if( limit.isArrayLike(obj) ){ // 如果是类数组对象的话就格式化数组
 					let arr;
 					try{
