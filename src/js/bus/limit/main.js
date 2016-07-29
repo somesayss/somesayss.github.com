@@ -13,30 +13,10 @@ define(function(require, exports, module) {
 
 	// limit.limitFixed = true;
 
-	// function main(val){
-	// 	this.value = val;
-	// };
+	var Promise = limit.promise();
 
-	// main.prototype.map = function(){
-	// 	this.value = limit.map.apply(null, [this.value].concat(limit.toArray(arguments)));
-	// 	return this;
-	// };
+	
 
-	// main.prototype.filter = function(){
-	// 	this.value = limit.filter.apply(null, [this.value].concat(limit.toArray(arguments)));
-	// 	return this;
-	// };
-
-	// var a = new main(['a1', 'a2', 'a3']).map(function(val){
-	// 	return val + 4;
-	// }).filter(function(val, key){
-	// 	return !!key;
-	// });
-
-	// console.log(a.value);
-
-	console.log(limit.toArray({a: 'a1', length: 1}));
-	console.log(limit.isEmpty({a: 'a1', length: 1}));
 	
 
 });

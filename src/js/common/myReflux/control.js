@@ -36,7 +36,7 @@ define(function (require, exports) {
 		}, {
 			key: "getInitialState",
 			value: function getInitialState() {
-				return this.store || (this.store = {});
+				return this.state || (this.state = {});
 			}
 		}, {
 			key: "componentDidMount",
@@ -62,9 +62,9 @@ define(function (require, exports) {
 			key: "updateComponent",
 			value: function updateComponent() {
 				var me = this,
-				    store = me.getInitialState();
+				    state = me.getInitialState();
 				return new Promise(function (resolve) {
-					me.trigger(store, resolve);
+					me.trigger(state, resolve);
 				});
 			}
 		}, {

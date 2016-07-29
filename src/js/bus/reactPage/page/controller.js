@@ -1,4 +1,7 @@
 "use strict";
+/**
+ * 模型
+ */
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -8,54 +11,59 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-define(function (require, exports) {
+define(function (require, exports, module) {
 
 	// 依赖
+	var $ = require('$');
 	var React = require('react');
+	var Control = require('common/myReflux/control');
 	var limit = require('common/limit2.0');
 
-	return function (Wrapper, Class) {
-		var Controller = new Class();
-		var interfaces = Controller.getReactInterface();
-		var state = interfaces.getInitialState();
-		delete interfaces.getInitialState;
+	var Controller = function (_Control) {
+		_inherits(Controller, _Control);
 
-		var WrapperComponent = function (_React$Component) {
-			_inherits(WrapperComponent, _React$Component);
+		function Controller() {
+			var _Object$getPrototypeO;
 
-			function WrapperComponent() {
-				_classCallCheck(this, WrapperComponent);
+			var _temp, _this, _ret;
 
-				var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(WrapperComponent).apply(this, arguments));
+			_classCallCheck(this, Controller);
 
-				_this.state = limit.assignSuper(state, _this.props);
-
-				_this.Action = Controller.Action;
-				return _this;
+			for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+				args[_key] = arguments[_key];
 			}
 
-			_createClass(WrapperComponent, [{
-				key: 'render',
-				value: function render() {
-					return React.createElement(Wrapper, this.state);
-				}
-			}]);
+			return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(Controller)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this), _this.state = {
+				// 当前在第几页
+				page: 1
+			}, _temp), _possibleConstructorReturn(_this, _ret);
+		}
 
-			return WrapperComponent;
-		}(React.Component);
+		_createClass(Controller, [{
+			key: 'onChange',
+			value: function onChange(page) {
+				var me = this,
+				    state = me.state;
+				state.page = page;
+				me.updateComponent().then(state.onChange.bind(me, page));
+			}
+		}]);
 
-		WrapperComponent.defaultProps = Class.defaultProps;
-		WrapperComponent.propTypes = Class.propTypes;
-		;
-		limit.assign(WrapperComponent.prototype, interfaces);
-		return WrapperComponent;
+		return Controller;
+	}(Control);
+
+	Controller.defaultProps = {
+		// 总页数
+		totle: 100,
+		// 偏差值
+		diff: 2,
+		// 抛出接口
+		onChange: limit.K
 	};
-});
+	Controller.propTypes = {
+		onChange: React.PropTypes.func
+	};
+	;
 
-/**
-							extends
-							   ↑
-				┌	control.js => controller.js	=> [ Action, Store ]	┐
-	HOC.js	=>	¦									   ↓				¦	=> main.js => [ React ]
-				└  	view.js						=> [ React 		   ]	┘		
- */
+	return Controller;
+});

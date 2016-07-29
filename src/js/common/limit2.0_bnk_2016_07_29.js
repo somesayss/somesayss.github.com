@@ -827,6 +827,24 @@ define(function (require, exports) {
 		}
 	});
 
+	// mix: unionSuper PS: 不建议使用!!
+	var UNION_SORT_STRING = function UNION_SORT_STRING(a, b) {
+		if (limit.toString(a) < limit.toString(b)) {
+			return 1;
+		} else {
+			return -1;
+		};
+	};
+	defineIt('unionSuper', {
+		format: checkTargetWithArray,
+		fixed: function fixed(arr, fn) {
+			var target = void 0;
+			return limit.filter(arr.slice().sort(UNION_SORT_STRING), function (val, key) {
+				return (!key || !limit.is(target, val)) && (target = val, true);
+			});
+		}
+	});
+
 	// mix: whiteList
 	var whiteBlack = function whiteBlack(factor, val1) {
 		return limit.some(factor, function (val2) {

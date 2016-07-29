@@ -557,18 +557,6 @@ define(function(require, exports) {
 			}
 		});
 
-		// mix: unionSuper PS: -0 0 -0 0 的排序有问题
-		const UNION_SORT = (a, b) => { if(a === 0 && b === 0){ return 1/a > 1/b } };
-		defineIt('unionSuper', {
-			format: checkTargetWithArray,
-			fixed(arr){
-				let target;
-				return limit.filter(arr.slice().sort().sort( UNION_SORT ), (val, key) => {
-					return (!key || !limit.is(target, val)) && (target = val, true);
-				});
-			}
-		});
-
 		// mix: whiteList
 		const whiteBlack = (factor, val1) => {
 			return limit.some(factor, (val2) => {
@@ -1560,7 +1548,7 @@ define(function(require, exports) {
 		});
 
 	// --日期-- //
-		const REG_EXP_DATA = /^(yyyy)(?:(.+)(MM))?(?:(.+)(dd))?(?:(.+)(HH))?(?:(.+)(mm))?(?:(.+)(ss))?(.+)?$/;
+		const REG_EXP_DATA = /^(yyyy)?(?:(.*)(MM))?(?:(.*)(dd))?(?:(.*)(HH))?(?:(.*)(mm))?(?:(.*)(ss))?(.*)?$/;
     	const FUN_DATAS = ['getFullYear', 'getMonth', 'getDate', 'getHours', 'getMinutes', 'getSeconds'];
 		defineIt('formatDate', {
 			value(timestamp = new Date().getTime(), formatStr = 'yyyy-MM-dd HH:mm:ss'){

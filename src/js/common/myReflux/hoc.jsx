@@ -5,19 +5,22 @@ define(function(require, exports) {
 	const React = require('react');
 	const limit = require('common/limit2.0');
 
-	return (Wrapper, Controller) => {
+	return (Wrapper, Class) => {
+		let Controller = new Class();
 		let interfaces = Controller.getReactInterface();
 		let state = interfaces.getInitialState();
 		delete interfaces.getInitialState;
 		class WrapperComponent extends React.Component {
-			constructor(...args){
-				super(...args);
-				// getInitialState
-				this.state = state;
+			state = limit.assignSuper(state, this.props)
+			constructor(){
+				super(...arguments);
+				this.Action = Controller.Action;
 			}
 		    render(){
-		      	return <Wrapper {...limit.assignSuper(this.state, this.props)}/>;
+		      	return <Wrapper {...this.state}/>;
 		    }
+		    static defaultProps = Class.defaultProps
+		    static propTypes = Class.propTypes
 		};
 		limit.assign(WrapperComponent.prototype, interfaces);
 		return WrapperComponent;
