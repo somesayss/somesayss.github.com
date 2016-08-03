@@ -56,7 +56,7 @@ define(function (require, exports, module) {
 		// 总页数
 		totle: 100,
 		// 偏差值
-		diff: 2,
+		diff: 1,
 		// 抛出接口
 		onChange: limit.K
 	};

@@ -7,9 +7,8 @@ define(function(require, exports, module) {
   	// 依赖
   	const React = require('react');
   	const limit = require('common/limit2.0');
-  	// const Actions = require('./controller').Actions;
 
-
+  	// 组件类
 	class Page extends React.Component {
 		constructor(){
 			super(...arguments);
@@ -34,16 +33,14 @@ define(function(require, exports, module) {
 					{me.getAllList().map((val, key) => {
 						return (
 							val === '...' ? 
-								<span key={key}>{val}</span> 
-							: 
-								<a key={key} href="javascript:;"  className={page === val ? 'active' : null}>{val}</a>
+								<span key={key}>{val}</span> : 
+								<a key={key} 
+									href="javascript:;" 
+									className={page === val ? 'active' : null} 
+									onClick={props.Actions.change.bind(me, val)} >{val}</a> 
 						)
 					})}
 				</div>
-
-				/*
-				onClick={me.Actions.change.bind(me, val)}
-				 */
 			);
 		}
 		getDiffList(){

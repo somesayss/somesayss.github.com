@@ -24,18 +24,37 @@ define(function (require, exports, module) {
     _inherits(Page1, _React$Component);
 
     function Page1() {
+      var _Object$getPrototypeO;
+
+      var _temp, _this, _ret;
+
       _classCallCheck(this, Page1);
 
-      return _possibleConstructorReturn(this, Object.getPrototypeOf(Page1).apply(this, arguments));
+      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+
+      return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(Page1)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this), _this.state = {
+        isShow: true
+      }, _temp), _possibleConstructorReturn(_this, _ret);
     }
 
     _createClass(Page1, [{
+      key: 'toggle',
+      value: function toggle() {
+        var me = this,
+            state = me.state;
+        state.isShow = !state.isShow;
+        me.setState(state);
+      }
+    }, {
       key: 'render',
       value: function render() {
+        var me = this,
+            state = me.state;
         return React.createElement(
           'div',
           null,
-          React.createElement(Page, null),
           React.createElement(Page, null)
         );
       }

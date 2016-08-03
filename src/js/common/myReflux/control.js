@@ -67,18 +67,6 @@ define(function (require, exports) {
 					me.trigger(state, resolve);
 				});
 			}
-		}, {
-			key: "getReactInterface",
-			value: function getReactInterface() {
-				var me = this,
-				    getInitialState = me.getInitialState.bind(me);
-				return {
-					getInitialState: getInitialState,
-					componentDidMount: function componentDidMount() {
-						me.componentDidMount(this);
-					}
-				};
-			}
 		}]);
 
 		return Control;

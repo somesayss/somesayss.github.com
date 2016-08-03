@@ -9,19 +9,28 @@ define(function(require, exports, module) {
 	const ReactDOM = require('reactDOM');
 
 	// 组件类
-	let Page = require('./page/main');
- 	
+	const Page = require('./page/main');
+
  	class Page1 extends React.Component {
+ 		state = {
+ 			isShow: true
+ 		}
+ 		toggle(){
+ 			let me = this,
+ 				state = me.state;
+ 			state.isShow = !state.isShow;
+ 			me.setState(state);
+ 		}
  		render(){
+ 			let me = this,
+ 				state = me.state;
  			return (
  				<div>
- 					<Page />
- 					<Page />
+ 					<Page  />
  				</div>
  			)
  		}
  	}
-
 
 	// 置入文档
 	ReactDOM.render(

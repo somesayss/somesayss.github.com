@@ -16,7 +16,8 @@ define(function (require, exports, module) {
 	// 依赖
 	var React = require('react');
 	var limit = require('common/limit2.0');
-	// const Actions = require('./controller').Actions;
+
+	// 组件类
 
 	var Page = function (_React$Component) {
 		_inherits(Page, _React$Component);
@@ -56,16 +57,14 @@ define(function (require, exports, module) {
 							val
 						) : React.createElement(
 							'a',
-							{ key: key, href: 'javascript:;', className: page === val ? 'active' : null },
+							{ key: key,
+								href: 'javascript:;',
+								className: page === val ? 'active' : null,
+								onClick: props.Actions.change.bind(me, val) },
 							val
 						);
 					})
-				)
-
-				/*
-    onClick={me.Actions.change.bind(me, val)}
-     */
-				;
+				);
 			}
 		}, {
 			key: 'getDiffList',

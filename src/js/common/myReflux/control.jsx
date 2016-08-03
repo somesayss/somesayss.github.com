@@ -46,16 +46,6 @@ define(function(require, exports) {
 	    		me.trigger(state, resolve);
 	    	});
 		}
-		getReactInterface(){
-			let me = this,
-				getInitialState = me.getInitialState.bind(me);
-			return {
-				getInitialState,
-				componentDidMount(){
-					me.componentDidMount(this);
-				}
-			};
-		}
 	};
 
 	return Control;

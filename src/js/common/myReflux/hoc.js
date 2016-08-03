@@ -1,5 +1,7 @@
 "use strict";
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -15,11 +17,6 @@ define(function (require, exports) {
 	var limit = require('common/limit2.0');
 
 	return function (Wrapper, Class) {
-		var Controller = new Class();
-		var interfaces = Controller.getReactInterface();
-		var state = interfaces.getInitialState();
-		delete interfaces.getInitialState;
-
 		var WrapperComponent = function (_React$Component) {
 			_inherits(WrapperComponent, _React$Component);
 
@@ -28,16 +25,28 @@ define(function (require, exports) {
 
 				var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(WrapperComponent).apply(this, arguments));
 
-				_this.state = limit.assignSuper(state, _this.props);
-
-				_this.Action = Controller.Action;
+				var me = _this,
+				    __controller__ = void 0;
+				me.__controller__ = __controller__ = new Class();
+				me.state = limit.assignSuper(__controller__.getInitialState(), _this.props);
 				return _this;
 			}
 
 			_createClass(WrapperComponent, [{
 				key: 'render',
 				value: function render() {
-					return React.createElement(Wrapper, this.state);
+					var me = this;
+					return React.createElement(Wrapper, _extends({}, me.state, { Actions: me.__controller__.Actions }));
+				}
+			}, {
+				key: 'componentDidMount',
+				value: function componentDidMount() {
+					this.__controller__.componentDidMount(this);
+				}
+			}, {
+				key: 'componentWillUnmount',
+				value: function componentWillUnmount() {
+					this.__controller__.destroy();
 				}
 			}]);
 
@@ -47,7 +56,6 @@ define(function (require, exports) {
 		WrapperComponent.defaultProps = Class.defaultProps;
 		WrapperComponent.propTypes = Class.propTypes;
 		;
-		limit.assign(WrapperComponent.prototype, interfaces);
 		return WrapperComponent;
 	};
 });
