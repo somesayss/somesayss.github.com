@@ -55,6 +55,7 @@ define(function (require, exports, module) {
         return React.createElement(
           'div',
           null,
+          React.createElement(Page, null),
           React.createElement(Page, null)
         );
       }

@@ -27,6 +27,7 @@ define(function(require, exports, module) {
  			return (
  				<div>
  					<Page />
+ 					<Page />
  				</div>
  			)
  		}
