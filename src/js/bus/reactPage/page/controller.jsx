@@ -27,10 +27,10 @@ define(function(require, exports, module) {
 			onChange: React.PropTypes.func
 		}
 		onChange(page){
-			let me = this,
-				state = me.state;
+			let me = this;
+			let {state, props} = me.getAttr();
 			state.page = page;
-			me.updateComponent().then(state.onChange.bind(me, page));
+			me.updateComponent().then(props.onChange.bind(me, page));
 		}
 	};
 

@@ -12,7 +12,8 @@ define(function(require, exports) {
 		    	let me = this,
 		    		__controller__;
 		    	me.__controller__ = __controller__ = new Class();
-		    	me.state = limit.assignSuper(__controller__.getInitialState(), this.props)
+		    	limit.assignSuper(Class.defaultProps, this.props);
+		    	me.state = limit.assignSuper({}, __controller__.getInitialState(), this.props);
 		    }
 		    render(){
 		    	let me = this;

@@ -39,6 +39,14 @@ define(function (require, exports) {
 				return this.state || (this.state = {});
 			}
 		}, {
+			key: "getAttr",
+			value: function getAttr() {
+				var me = this,
+				    state = me.state,
+				    props = me.constructor.defaultProps || {};
+				return { state: state, props: props };
+			}
+		}, {
 			key: "componentDidMount",
 			value: function componentDidMount(com) {
 				this.com = com;

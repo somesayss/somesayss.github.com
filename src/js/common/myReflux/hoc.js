@@ -28,7 +28,8 @@ define(function (require, exports) {
 				var me = _this,
 				    __controller__ = void 0;
 				me.__controller__ = __controller__ = new Class();
-				me.state = limit.assignSuper(__controller__.getInitialState(), _this.props);
+				limit.assignSuper(Class.defaultProps, _this.props);
+				me.state = limit.assignSuper({}, __controller__.getInitialState(), _this.props);
 				return _this;
 			}
 

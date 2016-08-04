@@ -42,10 +42,15 @@ define(function (require, exports, module) {
 		_createClass(Controller, [{
 			key: 'onChange',
 			value: function onChange(page) {
-				var me = this,
-				    state = me.state;
+				var me = this;
+
+				var _me$getAttr = me.getAttr();
+
+				var state = _me$getAttr.state;
+				var props = _me$getAttr.props;
+
 				state.page = page;
-				me.updateComponent().then(state.onChange.bind(me, page));
+				me.updateComponent().then(props.onChange.bind(me, page));
 			}
 		}]);
 

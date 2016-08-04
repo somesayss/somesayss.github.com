@@ -26,7 +26,7 @@ define(function(require, exports, module) {
  				state = me.state;
  			return (
  				<div>
- 					<Page  />
+ 					<Page />
  				</div>
  			)
  		}
