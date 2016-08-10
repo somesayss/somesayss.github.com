@@ -14,61 +14,75 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 define(function (require, exports, module) {
 
 	// 依赖
-	var $ = require('$');
 	var React = require('react');
-	var Control = require('common/myReflux/control');
 	var limit = require('common/limit2.0');
 
-	var Controller = function (_Control) {
-		_inherits(Controller, _Control);
+	// 组件类
 
-		function Controller() {
-			var _Object$getPrototypeO;
+	var Page = function (_React$Component) {
+		_inherits(Page, _React$Component);
 
-			var _temp, _this, _ret;
+		function Page() {
+			_classCallCheck(this, Page);
 
-			_classCallCheck(this, Controller);
+			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Page).apply(this, arguments));
 
-			for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-				args[_key] = arguments[_key];
-			}
-
-			return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(Controller)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this), _this.state = {
-				// 当前在第几页
-				page: 1
-			}, _temp), _possibleConstructorReturn(_this, _ret);
+			var me = _this,
+			    props = me.props;
+			//
+			me.style = { overflow: 'hidden', position: 'relative' };
+			me.style.width = props.width;
+			me.style.height = props.height;
+			//
+			me.listWidth = props.width * props.imgList.length;
+			return _this;
 		}
 
-		_createClass(Controller, [{
-			key: 'onChange',
-			value: function onChange(page) {
-				var me = this;
+		_createClass(Page, [{
+			key: 'render',
+			value: function render() {
+				var me = this,
+				    props = me.props;
 
-				var _me$getAttr = me.getAttr();
-
-				var state = _me$getAttr.state;
-				var props = _me$getAttr.props;
-
-				state.page = page;
-				me.updateComponent().then(props.onChange.bind(me, page));
+				return React.createElement(
+					'div',
+					{ className: 'react-banner', style: me.style },
+					React.createElement(
+						'ul',
+						{ style: { float: 'left', width: me.listWidth, position: 'relative', left: -props.index * props.width } },
+						props.imgList.map(function (val, key) {
+							return React.createElement(
+								'li',
+								{ key: key, style: { float: 'left' } },
+								React.createElement('img', { src: val, width: props.width })
+							);
+						})
+					),
+					React.createElement(
+						'div',
+						{ className: 'ch-btn' },
+						React.createElement(
+							'span',
+							null,
+							'«'
+						),
+						props.imgList.map(function (val, key) {
+							return React.createElement('span', { key: key, onClick: props.Actions.change.bind(me, key) });
+						}),
+						React.createElement(
+							'span',
+							null,
+							'»'
+						)
+					)
+				);
 			}
 		}]);
 
-		return Controller;
-	}(Control);
+		return Page;
+	}(React.Component);
 
-	Controller.defaultProps = {
-		// 总页数
-		totle: 100,
-		// 偏差值
-		diff: 2,
-		// 抛出接口
-		onChange: limit.K
-	};
-	Controller.propTypes = {
-		onChange: React.PropTypes.func
-	};
 	;
 
-	return Controller;
+	return Page;
 });

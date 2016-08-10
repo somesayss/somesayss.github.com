@@ -12,8 +12,7 @@ define(function(require, exports, module) {
 	class Page extends React.Component {
 		constructor(){
 			super(...arguments);
-			let me = this,
-				props = me.props;
+			let me = this;
 			me.diffList = me.getDiffList();
 		}
 		render(){

@@ -13,24 +13,28 @@ define(function(require, exports, module) {
 	class Controller extends Control {
 		state = {
 			// 当前在第几页
-			page: 1
+			index: 0
 		}
 		static defaultProps = {
 			// 总页数
-			totle: 100,
-			// 偏差值
-			diff: 2,
+			imgList: [
+				'http://img2.imgtn.bdimg.com/it/u=1838667359,2037109965&fm=11&gp=0.jpg',
+				'http://car0.autoimg.cn/car/upload/2015/2/4/2015020408241038726411.jpg',
+				'http://car3.autoimg.cn/cardfs/product/g16/M0E/D8/EC/autohomecar__wKgH5lZBfjaAZVScAALkdGd87AQ374.jpg'
+			],
+			width: 400,
+			height: 250,
 			// 抛出接口
 			onChange: limit.K
 		}
 		static propTypes = {
 			onChange: React.PropTypes.func
 		}
-		onChange(page){
+		onChange(index){
 			let me = this;
 			let {state, props} = me.getAttr();
-			state.page = page;
-			me.updateComponent().then(props.onChange.bind(me, page));
+			state.index = index;
+			me.updateComponent().then(props.onChange.bind(me, index));
 		}
 	};
 

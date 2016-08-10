@@ -9,7 +9,7 @@ define(function(require, exports, module) {
 	const ReactDOM = require('reactDOM');
 
 	// 组件类
-	const Page = require('./page/main');
+	const Page = require('./banner/main');
 
 	// 置入文档
 	ReactDOM.render(

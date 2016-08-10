@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1"><!-- 手机头部设置 -->
 <meta name="description" content="" />
 <meta name="keywords" content=""  />
-<title>limit.js 2.0</title>
+<title>reactBanner</title>
 <!-- #公用静态资源 -->
 	<!-- 未打包CSS --> 
 	<!-- 已打包CSS -->
@@ -29,16 +29,14 @@
 	<!-- seaJS -->
 <!-- /脚本入口 -->
 <style>
-div#DemoArea
-{
-/*width:400px;*/
-text-align:justify;
-}
+.react-banner .ch-btn{position:absolute;width:100%;text-align:center;bottom:5px;line-height:8px;color:#FFF;}
+.react-banner .ch-btn span{display:inline-block;width:10px;height:10px;background:#F70;margin:0 2px;}
+.react-banner .ch-btn span:hover{background:#F30;}
+.react-banner .ch-btn span.active{background:#F00;}
 </style>
 </head>
-<body class="fn-PaLe20 fn-PaTo20 fn-PaRi20 fn-PaBo20" data-limit-fixed="true">
-	limit.js 2.0
-	<p id="aaa" class="bbb">你好</p>
-	<a href="https://localhost:8002/src/html/limit1.html">123</a>
+<body class="fn-PaLe20 fn-PaTo20 fn-PaRi20 fn-PaBo20" data-debug="true">
+	reactBanner
+	<div id="container"></div>
 </body>
 </html>

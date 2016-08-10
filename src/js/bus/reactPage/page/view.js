@@ -27,8 +27,7 @@ define(function (require, exports, module) {
 
 			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Page).apply(this, arguments));
 
-			var me = _this,
-			    props = me.props;
+			var me = _this;
 			me.diffList = me.getDiffList();
 			return _this;
 		}

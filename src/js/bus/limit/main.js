@@ -13,9 +13,9 @@ define(function(require, exports, module) {
 
 	// limit.limitFixed = true;
 
-	var Promise = limit.promise();
+	const Promise = limit.promise();
 
-	
+	limit['...']('xixi');
 
 	
 

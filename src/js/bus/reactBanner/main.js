@@ -10,7 +10,7 @@ define(function (require, exports, module) {
 	var ReactDOM = require('reactDOM');
 
 	// 组件类
-	var Page = require('./page/main');
+	var Page = require('./banner/main');
 
 	// 置入文档
 	ReactDOM.render(React.createElement(Page, null), document.getElementById('container'));

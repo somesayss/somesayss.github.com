@@ -1,7 +1,10 @@
 // 定义
-const gulp = require('gulp'),
+const 
+    gulp = require('gulp'),
     babel = require('gulp-babel'),
-    browserSync = require('browser-sync');
+    browserSync = require('browser-sync'),
+    webpack = require('webpack-stream'),
+    named = require('vinyl-named');
  
 // 任务
 gulp.task('default', ['watch', 'brow']);
@@ -22,13 +25,21 @@ gulp.task('watch', () => {
         });
 });
 
-// 打包
+// 全量打包
+
+gulp.task('webpack', () => {
+    return gulp.src(['src/js/bus/limit/main.js'])
+        .pipe(named())
+        .pipe(webpack( require('./webpack.config') ))
+        .pipe(gulp.dest('dist/js/bus/limit'));
+})
 
 
 // 静态服务
 gulp.task('brow', () => {
     browserSync({
-        files: ['src/css/**/*.css', 'src/js/**/*.js', 'src/html/**/*.html'],
+        // files: ['src/css/**/*.css', 'src/js/**/*.js', 'src/html/**/*.html'],
+        files: ['src/css/**/*.css', 'dist/js/**/*.js', 'src/html/**/*.html'],
         server: {
             baseDir: "./"
         }
