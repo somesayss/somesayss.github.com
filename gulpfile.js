@@ -4,10 +4,12 @@ const
     babel = require('gulp-babel'),
     browserSync = require('browser-sync'),
     webpack = require('webpack-stream'),
-    named = require('vinyl-named');
+    named = require('vinyl-named'),
+    paths = require('vinyl-paths');
  
 // 任务
-gulp.task('default', ['watch', 'brow']);
+gulp.task('default', []);
+gulp.task('server', ['webpack', 'brow']);
 
 // 观察者
 var matchRex = /(src.*)\/.*\.*/;
@@ -25,14 +27,23 @@ gulp.task('watch', () => {
         });
 });
 
-// 全量打包
 
+
+// 全量打包
+var matchRex = /src(.*)\/.*\.*/;
 gulp.task('webpack', () => {
-    return gulp.src(['src/js/bus/limit/main.js'])
-        .pipe(named())
-        .pipe(webpack( require('./webpack.config') ))
-        .pipe(gulp.dest('dist/js/bus/limit'));
-})
+    return gulp.src(['src/**/main.js'])
+        .pipe(paths((path) => {
+            var matchPath = path.match(matchRex)[1];
+            gulp.src(path)
+                .pipe(named())
+                .pipe(webpack( require('./webpack.config') ).on('error', e => {
+                    console.error('error', e.message);
+                }))
+                .pipe(gulp.dest('dist'+matchPath));
+            return Promise.resolve();
+        }))
+});
 
 
 // 静态服务

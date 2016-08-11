@@ -15,7 +15,7 @@ define(function(require, exports, module) {
 
 	const Promise = limit.promise();
 
-	limit['...']('xixi');
+	limit['...']('xixi10');
 
 	
 
