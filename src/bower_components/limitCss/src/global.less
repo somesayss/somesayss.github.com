@@ -1,0 +1,157 @@
+@charset "UTF-8";
+/* 依赖 */
+@import url('./macros.less');
+
+/* 全局变量 */
+@goNameSpace: fn-; // 命名空间
+@goFontSizeEnd: 40; // 字体大小的最终值
+@goWidthEnd: 100; // 宽度的最终值
+@goHeightEnd: 100; // 高度的最终值
+@goMaginPaddingEnd: 100; //内外补白的最终值
+
+/* 默认样式 */
+.@{goNameSpace}clear{
+	zoom:1;
+	&:after{
+		visibility:hidden;
+		display:block;
+		font-size:0;
+		content:"1";
+		clear:both;
+		height:0;
+	}
+}
+.@{goNameSpace}hide{
+	display:none;
+}
+.@{goNameSpace}left{
+	float:left;
+}
+.@{goNameSpace}right{
+	float:right;
+}
+.@{goNameSpace}TAJ{
+	text-align:justify !important;
+	text-justify:inter-ideograph;
+}
+.@{goNameSpace}TAC{
+	text-align:center !important;
+}
+.@{goNameSpace}VAM{
+	vertical-align:middle !important;
+}
+.@{goNameSpace}VAB{
+	vertical-align:bottom !important;
+}
+.@{goNameSpace}MLRA{
+	margin-left:auto;
+	margin-right:auto;
+}
+.@{goNameSpace}wrap{
+	word-wrap:break-word;
+	word-break:break-all;
+	white-space:normal;
+}
+.@{goNameSpace}ellipsis{
+	text-overflow:ellipsis;
+	white-space:nowrap;
+	overflow:hidden;
+}
+
+/* 字体大小['fn-FS12', 'fn-FS12px'] */
+.loop-font-size( @begin: 12, @end: @goFontSizeEnd ) when ( @begin <= @end ){
+	.@{goNameSpace}FS@{begin}{
+		font-size: @begin/12em;
+	}
+	.@{goNameSpace}FS@{begin}px{
+		font-size: @begin * 1px;
+	}
+	.loop-font-size( @begin + 2 );	
+}
+.loop-font-size();
+
+/* 宽度['fn-width5'] */
+.loop-width( @begin: 5, @end: @goWidthEnd ) when ( @begin <= @end ) {
+	.@{goNameSpace}width@{begin}{
+		width: @begin * 1px;
+	}
+	.loop-width( @begin + 5 );
+}
+.loop-width();
+
+/* 高度['fn-height5'] */
+.loop-height( @begin: 5, @end: @goHeightEnd ) when ( @begin <= @end ) {
+	.@{goNameSpace}height@{begin}{
+		height: @begin * 1px;
+	}
+	.loop-height( @begin + 5 );
+}
+.loop-height();
+
+/* 外补白,内补白,外全补白,内全补白['fn-MT5'] */
+.loop-margin( @begin: 5, @end: @goMaginPaddingEnd ) when ( @begin <= @end ) {
+	.@{goNameSpace}MT@{begin}{
+		margin-top: @begin * 1px;
+	}
+	.@{goNameSpace}MR@{begin}{
+		margin-right: @begin * 1px;
+	}
+	.@{goNameSpace}MB@{begin}{
+		margin-bottom: @begin * 1px;
+	}
+	.@{goNameSpace}ML@{begin}{
+		margin-left: @begin * 1px;
+	}
+	.@{goNameSpace}PT@{begin}{
+		padding-top: @begin * 1px;
+	}
+	.@{goNameSpace}PR@{begin}{
+		padding-right: @begin * 1px;
+	}
+	.@{goNameSpace}PB@{begin}{
+		padding-bottom: @begin * 1px;
+	}
+	.@{goNameSpace}PL@{begin}{
+		padding-left: @begin * 1px;
+	}
+	.@{goNameSpace}MA@{begin}{
+		margin: @begin * 1px;
+	}
+	.@{goNameSpace}PA@{begin}{
+		padding: @begin * 1px;
+	}
+	.loop-margin( @begin + 5 );
+}
+.loop-margin();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

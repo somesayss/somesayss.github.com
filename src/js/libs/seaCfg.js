@@ -22,7 +22,7 @@
             'react'         : 'common/react',
             'reactDOM'      : 'common/react-dom',
             'reflux'        : 'common/reflux',
-            'jQuery'        : 'common/jQuery',
+            '$'             : 'common/jQuery',
             '_'             : 'common/underscore1.8',
             //arale Base
             'araleBase'     : "arale/base/1.1.1/base",

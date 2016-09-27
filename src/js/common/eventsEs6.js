@@ -7,7 +7,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 define(function (require, exports) {
 
 	// 依赖
-	var limit = require('common/limit2.0');
+	var limit = require('limit');
 
 	var Events = function () {
 		function Events() {

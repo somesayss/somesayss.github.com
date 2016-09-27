@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="renderer" content="webkit"><!-- 360浏览器切换内核 webkit | ie-comp[IE6/7]? | ie-stand[IE8910]? -->
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1"><!-- 手机头部设置 -->
+<meta name="description" content="" />
+<meta name="keywords" content=""  />
+<title>limit.js</title>
+<script type="text/javascript" charset="utf-8" src="/libs/es5.js"></script>
+<script type="text/javascript" charset="utf-8" src="/dist/limit.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+"use strict";
+;(function(){
+
+	// 类型
+	var typeList = [
+		// 5种基础
+		'a1',
+		123,
+		true,
+		null,
+		undefined,
+		// 引用类型
+		new String('a1'),
+		new Number(123),
+		new Boolean(1),
+		{a: 'a1'},
+		[1,2,3],
+		function(){},
+		new Date(),
+		/a1/,
+		new Error('123'),
+		Math,
+		window,
+		document,
+		document.body,
+		document.body.childNodes
+	];
+
+	limit(typeList).each(function(val){
+		console.log( 
+			Object.prototype.toString.call(val), '|', 
+			''+val, '|', 
+			limit.toString(val), '|', 
+			limit.isObject( limit.valueOf(val) ) 
+			// Object.prototype.valueOf.call(val)
+		);
+	});
+
+	// console.log( limit.toString(null) );
+
+})();
+</script>
+</body>
+</html>

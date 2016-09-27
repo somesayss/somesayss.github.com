@@ -1,86 +1,62 @@
 "use strict";
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+// 依赖
+const limit = require('limit');
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+const Promise = limit.promise();
+const REX = /on([A-Z])(\w*)/;
 
-define(function (require, exports) {
+class Control {
+	constructor(){
+		this.bindEvent();
+	}
+	bindEvent(){
+		let me = this,
+			Actions = me.Actions = {};
+		// 对第一层的对象的原型属性进行处理
+		limit(me.constructor.prototype)
+			.keysSuper()
+			.filter((val) => REX.test(val))
+			.each((val) => {
+				Actions[val.replace(REX, (a, b, c) => b.toLowerCase() + c)] = me[val].bind(me);
+			});
+	}
+	getInitialState(){
+		return this.state || (this.state = {});
+	}
+	getAttr(){
+		let me = this,
+			state = me.state,
+			props = me.constructor.defaultProps || {};
+		return {state, props};
+	}
+	componentDidMount(com){
+		this.com = com;
+	}
+	destroy(){
+		let me = this;
+		limit.each(me, (val, key) => {
+			delete me[key];
+		});
+		return me;
+	}
+	trigger(data, callback){
+		let me = this;
+		me.com.setState(data, callback);
+	}
+	updateComponent(){
+		let me = this,
+    		state = me.getInitialState();
+    	return new Promise(resolve => {
+    		me.trigger(state, resolve);
+    	});
+	}
+};
 
-	// 依赖
-	var limit = require('common/limit2.0');
+module.exports = Control;
 
-	var Promise = limit.promise();
-	var REX = /on([A-Z])(\w*)/;
 
-	var Control = function () {
-		function Control() {
-			_classCallCheck(this, Control);
 
-			this.bindEvent();
-		}
 
-		_createClass(Control, [{
-			key: "bindEvent",
-			value: function bindEvent() {
-				var me = this,
-				    Actions = me.Actions = {};
-				// 对第一层的对象的原型属性进行处理
-				limit(me.constructor.prototype).keysSuper().filter(function (val) {
-					return REX.test(val);
-				}).each(function (val) {
-					Actions[val.replace(REX, function (a, b, c) {
-						return b.toLowerCase() + c;
-					})] = me[val].bind(me);
-				});
-			}
-		}, {
-			key: "getInitialState",
-			value: function getInitialState() {
-				return this.state || (this.state = {});
-			}
-		}, {
-			key: "getAttr",
-			value: function getAttr() {
-				var me = this,
-				    state = me.state,
-				    props = me.constructor.defaultProps || {};
-				return { state: state, props: props };
-			}
-		}, {
-			key: "componentDidMount",
-			value: function componentDidMount(com) {
-				this.com = com;
-			}
-		}, {
-			key: "destroy",
-			value: function destroy() {
-				var me = this;
-				limit.each(me, function (val, key) {
-					delete me[key];
-				});
-				return me;
-			}
-		}, {
-			key: "trigger",
-			value: function trigger(data, callback) {
-				var me = this;
-				me.com.setState(data, callback);
-			}
-		}, {
-			key: "updateComponent",
-			value: function updateComponent() {
-				var me = this,
-				    state = me.getInitialState();
-				return new Promise(function (resolve) {
-					me.trigger(state, resolve);
-				});
-			}
-		}]);
 
-		return Control;
-	}();
 
-	;
-
-	return Control;
-});

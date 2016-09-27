@@ -1,0 +1,13 @@
+{
+  "name": "limit",
+  "homepage": "https://github.com/somesayss/limit",
+  "_release": "eb2d122265",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "eb2d1222652b8dc55dfc1a6028af8b33a8e81898"
+  },
+  "_source": "git@github.com:somesayss/limit.git",
+  "_target": "*",
+  "_originalSource": "git@github.com:somesayss/limit.git"
+}
