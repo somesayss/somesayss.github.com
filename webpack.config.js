@@ -79,8 +79,6 @@ setConfig.commonCssList = [
     'src/bower_components/limitCss/dist/global.min.css'
 ];
 
-// 
-
 module.exports = setConfig;
 
 

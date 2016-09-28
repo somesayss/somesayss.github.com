@@ -41,9 +41,9 @@ function webpackCall(config){
         .pipe( webpack(config) )
         .pipe( gulp.dest('dist') );
 };
-gulp.task( 'webpackOnceNomin', () => webpackCall( webpackConfig() ) );
-gulp.task( 'webpackOnce', () => webpackCall( webpackConfig(null, true) ) );
-gulp.task( 'webpack', () => webpackCall( webpackConfig(true) ) );
+gulp.task( 'webpackOnceNomin', () => webpackCall( webpackConfig(false, false) ) );
+gulp.task( 'webpackOnce', () => webpackCall( webpackConfig(false, true) ) );
+gulp.task( 'webpack', () => webpackCall( webpackConfig(true, false) ) );
 
 // 静态服务
 const browConfig = {

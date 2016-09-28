@@ -1,2 +1,219 @@
-!function(e){function r(n){if(t[n])return t[n].exports;var a=t[n]={exports:{},id:n,loaded:!1};return e[n].call(a.exports,a,a.exports,r),a.loaded=!0,a.exports}var t={};return r.m=e,r.c=t,r.p="/dist/",r(0)}([function(e,r,t){e.exports=t(1)},function(e,r,t){"use strict";var n=(t(2),t(3));t(4);n().isUndefined().toLog()},function(e,r){e.exports=jQuery},function(e,r){e.exports=limit},function(e,r,t){"use strict";function n(e,r){if(!(e instanceof r))throw new TypeError("Cannot call a class as a function")}var a=function(){function e(e,r){for(var t=0;t<r.length;t++){var n=r[t];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}return function(r,t,n){return t&&e(r.prototype,t),n&&e(r,n),r}}(),i=t(2),o=t(3),s=i(window),u=/^#([^?]*)(?:\?(.*))?/,c=function(){function e(r){n(this,e);var t=this;t.routerMap={};t.eventUid="hashchange.router"+o.getUid(),o.each(r,function(e,r){t.add(t.addPathForKey(r),e)}),t.bindHashChange()}return a(e,[{key:"add",value:function(e,r){var t=this,n=t.routerMap;return o.isDefined(n[e])&&o["!!!"](e+" is defined before;"),n[e]=o.cb(r),t}},{key:"remove",value:function(e){var r=this,t=r.routerMap;return delete t[e],r}},{key:"setSearch",value:function(e){var r=this,t=r.parseHash(),n=void 0;return o.isFunction(e)&&(n=o.cb(e)(o.parseString(t.search))),n=(n=o.unParseString(n))?t.hash+"?"+n:""+t.hash,location.hash=n,r}},{key:"setHash",value:function(e){var r=this,t=void 0;if(o.isFunction(e)){var n=r.parseHash();t=o.toString(o.cb(e)(n.hash,o.parseString(n.search)))}else t=o.toString(e);return location.hash=t,r}},{key:"bindHashChange",value:function(){var e=this;s.on(e.eventUid,function(r){var t=e.parseHash(),n=void 0;t&&(n=e.routerMap[e.addPathForKey(t.hash)])&&n(o.parseString(t.search))}),s.trigger(e.eventUid)}},{key:"addPathForKey",value:function(e){return"/"!==e.charAt(0)?"/"+e:e}},{key:"destroy",value:function(){var e=this;s.off(e.eventUid)}},{key:"parseHash",value:function(){var e=location.hash,r=e.match(u);if(r){var t=r[1],n=r[2];return{hash:t,search:n}}return{hash:""}}}],[{key:"creatRouter",value:function(r){return new e(r)}}]),e}();e.exports=c}]);
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId])
+/******/ 			return installedModules[moduleId].exports;
+/******/
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			exports: {},
+/******/ 			id: moduleId,
+/******/ 			loaded: false
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.loaded = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "/dist/";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(0);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(1);
+
+
+/***/ },
+/* 1 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	// 依赖
+	
+	var $ = __webpack_require__(2);
+	var limit = __webpack_require__(3);
+	var Router = __webpack_require__(4);
+	
+	limit().isUndefined().toLog();
+
+/***/ },
+/* 2 */
+/***/ function(module, exports) {
+
+	module.exports = jQuery;
+
+/***/ },
+/* 3 */
+/***/ function(module, exports) {
+
+	module.exports = limit;
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	// 依赖
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var $ = __webpack_require__(2);
+	var limit = __webpack_require__(3);
+	
+	// 变量
+	var WIN = $(window);
+	var REX_HASH = /^#([^?]*)(?:\?(.*))?/;
+	
+	// 类
+	
+	var Router = function () {
+		function Router(config) {
+			_classCallCheck(this, Router);
+	
+			var me = this;
+			var routerMap = me.routerMap = {};
+			me.eventUid = 'hashchange.router' + limit.getUid();
+			limit.each(config, function (val, key) {
+				me.add(me.addPathForKey(key), val);
+			});
+			me.bindHashChange();
+		}
+	
+		_createClass(Router, [{
+			key: 'add',
+			value: function add(key, cb) {
+				var me = this;
+				var routerMap = me.routerMap;
+				if (limit.isDefined(routerMap[key])) {
+					limit['!!!'](key + ' is defined before;');
+				};
+				routerMap[key] = limit.cb(cb);
+				return me;
+			}
+		}, {
+			key: 'remove',
+			value: function remove(key) {
+				var me = this;
+				var routerMap = me.routerMap;
+				delete routerMap[key];
+				return me;
+			}
+		}, {
+			key: 'setSearch',
+			value: function setSearch(arg) {
+				var me = this;
+				var hashParse = me.parseHash();
+				var needHash = void 0;
+				if (limit.isFunction(arg)) {
+					needHash = limit.cb(arg)(limit.parseString(hashParse.search));
+				};
+				if (needHash = limit.unParseString(needHash)) {
+					needHash = hashParse.hash + '?' + needHash;
+				} else {
+					needHash = '' + hashParse.hash;
+				};
+				location.hash = needHash;
+				return me;
+			}
+		}, {
+			key: 'setHash',
+			value: function setHash(arg) {
+				var me = this;
+				var needHash = void 0;
+				if (limit.isFunction(arg)) {
+					var hashParse = me.parseHash();
+					needHash = limit.toString(limit.cb(arg)(hashParse.hash, limit.parseString(hashParse.search)));
+				} else {
+					needHash = limit.toString(arg);
+				};
+				location.hash = needHash;
+				return me;
+			}
+		}, {
+			key: 'bindHashChange',
+			value: function bindHashChange() {
+				var me = this;
+				WIN.on(me.eventUid, function (e) {
+					var hashParse = me.parseHash();
+					var hashBack = void 0;
+					if (hashParse && (hashBack = me.routerMap[me.addPathForKey(hashParse.hash)])) {
+						hashBack(limit.parseString(hashParse.search));
+					};
+				});
+				WIN.trigger(me.eventUid);
+			}
+		}, {
+			key: 'addPathForKey',
+			value: function addPathForKey(key) {
+				if (key.charAt(0) !== '/') {
+					return '/' + key;
+				} else {
+					return key;
+				};
+			}
+		}, {
+			key: 'destroy',
+			value: function destroy() {
+				var me = this;
+				WIN.off(me.eventUid);
+			}
+		}, {
+			key: 'parseHash',
+			value: function parseHash() {
+				var me = this;
+				var hash = location.hash;
+				var hashMatch = hash.match(REX_HASH);
+				if (hashMatch) {
+					var _hash = hashMatch[1];
+					var search = hashMatch[2];
+					return { hash: _hash, search: search };
+				} else {
+					return { hash: '' };
+				};
+			}
+		}], [{
+			key: 'creatRouter',
+			value: function creatRouter(config) {
+				return new Router(config);
+			}
+		}]);
+	
+		return Router;
+	}();
+	
+	// 接口
+	
+	
+	module.exports = Router;
+
+/***/ }
+/******/ ]);
 //# sourceMappingURL=main.js.map
