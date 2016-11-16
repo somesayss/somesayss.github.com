@@ -15,7 +15,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 define(function (require, exports, module) {
+	var _obj, _context, _ref;
 
 	// 定义局部变量
 	var a = 'a1';
@@ -35,13 +38,7 @@ define(function (require, exports, module) {
 	};
 
 	// 对象的定义
-	var obj = {
-		b: b,
-		aaa: function aaa() {},
-		bbb: function bbb() {},
-
-		ccc: 'ccc3'
-	};
+	var obj = (_obj = {}, _defineProperty(_obj, 'a1', 'a1'), _defineProperty(_obj, 'b', b), _defineProperty(_obj, 'aaa', function aaa() {}), _defineProperty(_obj, 'bbb', function bbb() {}), _defineProperty(_obj, 'ccc', 'ccc3'), _obj);
 
 	// 字符串模板
 	var c = 'c1';
@@ -96,7 +93,7 @@ define(function (require, exports, module) {
 		function B(name, age) {
 			_classCallCheck(this, B);
 
-			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(B).apply(this, arguments));
+			var _this = _possibleConstructorReturn(this, (B.__proto__ || Object.getPrototypeOf(B)).apply(this, arguments));
 
 			_this.store = {
 				b: 'b2'
@@ -109,7 +106,7 @@ define(function (require, exports, module) {
 		_createClass(B, [{
 			key: 'show',
 			value: function show() {
-				_get(Object.getPrototypeOf(B.prototype), 'show', this).call(this);
+				_get(B.prototype.__proto__ || Object.getPrototypeOf(B.prototype), 'show', this).call(this);
 				console.log(this.age);
 			}
 		}], [{
@@ -142,7 +139,7 @@ define(function (require, exports, module) {
 		console.log(name, age);
 	};
 
-	//
+	// 
 	var i = ['i1', 'i2', 'i3'];
 
 	var j = [].concat(i);
@@ -152,10 +149,11 @@ define(function (require, exports, module) {
 			x[_key - 1] = arguments[_key];
 		}
 
-		console.log('x', x);
+		console.log(this, 'x', x);
 	};
 
 	per2.apply(undefined, i);
+	(_ref = (_context = '111', per2)).call.apply(_ref, [_context].concat(i));
 
 	// 8进制
 	console.log(503 === 503);

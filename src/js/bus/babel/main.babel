@@ -19,6 +19,7 @@ define(function(require, exports, module) {
 
 	// 对象的定义
 	let obj = {
+		['a1']: 'a1',
 		b,
 		aaa: () => { },
 		bbb(){ },
@@ -96,10 +97,11 @@ define(function(require, exports, module) {
 	let j = [...i];
 
 	function per2(y, ...x){
-		console.log('x', x);
+		console.log(this, 'x', x);
 	};
 
-	per2(...i);
+	per2(...i); 
+	'111'::per2(...i); 
 
 	// 8进制
 	console.log( 0o767 === 503 );
