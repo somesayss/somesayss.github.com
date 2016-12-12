@@ -79,6 +79,11 @@ setConfig.commonCssList = [
     'src/bower_components/limitCss/dist/global.min.css'
 ];
 
+// 整个文件夹移动
+setConfig.staticList = [
+    'imgs'
+];
+
 module.exports = setConfig;
 
 

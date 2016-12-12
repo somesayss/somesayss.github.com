@@ -6,7 +6,7 @@ import './style.less';
 const React = require('react');
 const limit = require('limit');
 
-	// 组件类
+// 组件类
 class Page extends React.Component {
 	constructor(){
 		super(...arguments);
@@ -74,7 +74,7 @@ class Page extends React.Component {
 		arr = limit(arr)
 				.filter( (val) => val > 0 && val < length + 1 )
 				.union()
-				.valueOf();
+				.getValue();
 		if(arr.length > 1){
 			// 如果补值
 			if(arr[1] - arr[0] !== 1){
@@ -84,6 +84,7 @@ class Page extends React.Component {
 				arr.splice(-1,0,'...');
 			};
 		};
+
 		return arr;
 	}
 	

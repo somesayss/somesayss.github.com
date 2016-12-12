@@ -3,7 +3,7 @@
     //配置
     seajs.config({
         //基础路径
-        base: "/dist/js/",
+        // base: "http://localhost:3000/dist/js/",
         //配置路径
         paths: {
             'github'        : 'http://somesayss.github.io/src/js',
@@ -32,7 +32,7 @@
     });
 
     // 路由 http://localhost:9000/src/html/ang.html => ang
-    var REX = /\/html\/(.+)\./;
+    var REX = /((?:http|https):\/\/[^\/]*)(.+)\./;
 
     var useList = [],
         arrPro  = Array.prototype,
@@ -43,14 +43,26 @@
         return useList = concat.apply( useList, slice.call(arguments) );
     };
 
+    // 设置入口
+    function setBaseUrl(){
+        var scripts = document.getElementsByTagName('script');
+        var lastScript = scripts[scripts.length - 1];
+        var src = lastScript.src;
+        var base = '';
+        if( REX.test(src) ){
+            base = RegExp.$1;
+        };
+        seajs.config({base: base + '/dist/js/'});
+    };
+
+    setBaseUrl();
+
     // DOM加载完成
     $(function(){
         var $body = $('body'),
             init = seajs.init || $body.data('init'),
             widgetMap = [],
             widgetArr = [];
-        // 如果是线上地址
-        ( seajs.debug || $body.data('debug') ) && seajs.config({base: "/src/js/"});
         // 遍历节点
         $('[widget]').each(function(){
             var self = $(this);
@@ -63,7 +75,7 @@
         // 2. sea.add('x');
         // 3. sea.init('x');
         useList = widgetArr.concat(useList);
-        init !== false && useList.push( typeof init === 'string' ? init : 'bus/'+location.href.match(REX)[1]+'/main' );
+        init !== false && useList.push( typeof init === 'string' ? init : 'bus'+location.href.match(REX)[2]+'/main' );
         seajs.use(useList, function(){
             $.each(arguments, function(i){
                 var element = widgetMap[i],

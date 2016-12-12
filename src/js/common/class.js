@@ -54,18 +54,20 @@ define(function(require, exports) {
 	 * @return {Object} [对象]
 	 */
 	function createPro(PRO) {
-		var create = Object.create;
-		//新的API
-		if (create) {
-			return create(PRO);
-		} else if (PRO.__proto__) {
-			return {
-				__proto__: PRO
-			}
-		} else {
+		// var create = Object.create;
+		// //新的API
+		// if (create) {
+		// 	return create(PRO);
+		// } else if (PRO.__proto__) {
+		// 	return {
+		// 		__proto__: PRO
+		// 	}
+		// } else {
 			E.prototype = PRO;
-			return new E();
-		}
+			var pro = new E();
+			pro.__proto__ = PRO;
+			return pro;
+		// }
 	}
 
 	/**

@@ -44,7 +44,7 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(5);
+	module.exports = __webpack_require__(23);
 
 
 /***/ },
@@ -62,46 +62,27 @@
 
 /***/ },
 /* 4 */,
-/* 5 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	// 依赖
-	
-	var React = __webpack_require__(6);
-	var ReactDOM = __webpack_require__(7);
-	
-	// 组件类
-	var Page = __webpack_require__(8);
-	
-	// 置入文档
-	ReactDOM.render(React.createElement(Page, null), document.getElementById('container'));
-
-/***/ },
-/* 6 */
+/* 5 */,
+/* 6 */,
+/* 7 */,
+/* 8 */,
+/* 9 */,
+/* 10 */,
+/* 11 */,
+/* 12 */
 /***/ function(module, exports) {
 
 	module.exports = React;
 
 /***/ },
-/* 7 */
+/* 13 */
 /***/ function(module, exports) {
 
 	module.exports = ReactDOM;
 
 /***/ },
-/* 8 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	// 依赖
-	
-	module.exports = __webpack_require__(9)(__webpack_require__(10), __webpack_require__(15));
-
-/***/ },
-/* 9 */
+/* 14 */,
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -118,7 +99,7 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var React = __webpack_require__(6);
+	var React = __webpack_require__(12);
 	var limit = __webpack_require__(3);
 	
 	module.exports = function (Wrapper, Class) {
@@ -174,175 +155,10 @@
 	 */
 
 /***/ },
-/* 10 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	__webpack_require__(11);
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	// 依赖
-	var React = __webpack_require__(6);
-	var limit = __webpack_require__(3);
-	
-	// 组件类
-	
-	var Page = function (_React$Component) {
-		_inherits(Page, _React$Component);
-	
-		function Page() {
-			_classCallCheck(this, Page);
-	
-			var _this = _possibleConstructorReturn(this, (Page.__proto__ || Object.getPrototypeOf(Page)).apply(this, arguments));
-	
-			var me = _this;
-			me.diffList = me.getDiffList();
-			return _this;
-		}
-	
-		_createClass(Page, [{
-			key: 'render',
-			value: function render() {
-				var me = this,
-				    props = me.props,
-				    length = ~~props.totle,
-				    page = ~~props.page;
-				// 如果length是0
-				if (length <= 0) {
-					return React.createElement('div', null);
-				};
-				if (page <= 0) {
-					page = 1;
-				};
-				return React.createElement(
-					'div',
-					{ className: 'react-page' },
-					me.getAllList().map(function (val, key) {
-						return val === '...' ? React.createElement(
-							'span',
-							{ key: key },
-							val
-						) : React.createElement(
-							'a',
-							{ key: key,
-								href: 'javascript:;',
-								className: page === val ? 'active' : null,
-								onClick: props.Actions.change.bind(me, val) },
-							val
-						);
-					})
-				);
-			}
-		}, {
-			key: 'getDiffList',
-			value: function getDiffList() {
-				var me = this,
-				    props = me.props,
-				    diff = ~~props.diff,
-				    temp = void 0,
-				    arr = [];
-				if (diff <= 0) {
-					diff = 1;
-				};
-				temp = -diff;
-				do {
-					arr.push(temp);
-				} while (temp++ < diff);
-				return arr;
-			}
-		}, {
-			key: 'getAllList',
-			value: function getAllList() {
-				var me = this,
-				    props = me.props,
-				    page = ~~props.page,
-				    length = ~~props.totle,
-				    arr = [];
-				if (page <= 0) {
-					page = 1;
-				};
-				// 对page做的
-				// 拿到中间值
-				arr = limit.map(me.diffList, function (val) {
-					return page + val;
-				});
-				// 开头和结尾
-				arr.unshift(1);
-				arr.push(length);
-				// 去重
-				arr = limit(arr).filter(function (val) {
-					return val > 0 && val < length + 1;
-				}).union().valueOf();
-				if (arr.length > 1) {
-					// 如果补值
-					if (arr[1] - arr[0] !== 1) {
-						arr.splice(1, 0, '...');
-					};
-					if (arr[arr.length - 1] - arr[arr.length - 2] !== 1) {
-						arr.splice(-1, 0, '...');
-					};
-				};
-				return arr;
-			}
-		}]);
-	
-		return Page;
-	}(React.Component);
-	
-	;
-	
-	module.exports = Page;
-
-/***/ },
-/* 11 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-	
-	// load the styles
-	var content = __webpack_require__(12);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(14)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../../../../node_modules/css-loader/index.js!./../../../../../node_modules/less-loader/index.js!./style.less", function() {
-				var newContent = require("!!./../../../../../node_modules/css-loader/index.js!./../../../../../node_modules/less-loader/index.js!./style.less");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 12 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(13)();
-	// imports
-	
-	
-	// module
-	exports.push([module.id, ".react-page a {\n  padding: 2px 5px;\n  background: #CCC;\n  margin: 2px;\n}\n.react-page a:hover {\n  background: #F30;\n}\n.react-page .active {\n  background: #F00;\n}\n", ""]);
-	
-	// exports
-
-
-/***/ },
-/* 13 */
+/* 16 */,
+/* 17 */,
+/* 18 */,
+/* 19 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -397,7 +213,7 @@
 	};
 
 /***/ },
-/* 14 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -649,7 +465,314 @@
 
 
 /***/ },
-/* 15 */
+/* 21 */,
+/* 22 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	// 依赖
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var limit = __webpack_require__(3);
+	
+	var Promise = limit.promise();
+	var REX = /on([A-Z])(\w*)/;
+	
+	var Control = function () {
+		function Control() {
+			_classCallCheck(this, Control);
+	
+			this.bindEvent();
+		}
+	
+		_createClass(Control, [{
+			key: 'bindEvent',
+			value: function bindEvent() {
+				var me = this,
+				    Actions = me.Actions = {};
+				// 对第一层的对象的原型属性进行处理
+				limit(me.findAllPro()).filter(function (val) {
+					return REX.test(val);
+				}).each(function (val, key) {
+					Actions[key.replace(REX, function (a, b, c) {
+						return b.toLowerCase() + c;
+					})] = val.bind(me);
+				});
+			}
+		}, {
+			key: 'findAllPro',
+			value: function findAllPro() {
+				var me = this;
+				var rtv = {};
+				var pro = me.constructor.prototype;
+				while (pro) {
+					// 如果到最底层的Object跳出
+					if (pro.constructor === Object) {
+						break;
+					};
+					limit(pro).keysSuper().each(function (val) {
+						// 隔离__proto__
+						if (val !== '__proto__' && !rtv[val]) {
+							rtv[val] = pro[val];
+						};
+					});
+					pro = pro.__proto__;
+				};
+				return rtv;
+			}
+		}, {
+			key: 'getInitialState',
+			value: function getInitialState() {
+				return this.state || (this.state = {});
+			}
+		}, {
+			key: 'getAttr',
+			value: function getAttr() {
+				var me = this,
+				    state = me.state,
+				    props = me.constructor.defaultProps || {};
+				return { state: state, props: props };
+			}
+		}, {
+			key: 'componentDidMount',
+			value: function componentDidMount(com) {
+				this.com = com;
+			}
+		}, {
+			key: 'destroy',
+			value: function destroy() {
+				var me = this;
+				limit.each(me, function (val, key) {
+					delete me[key];
+				});
+				return me;
+			}
+		}, {
+			key: 'trigger',
+			value: function trigger(data, callback) {
+				var me = this;
+				me.com.setState(data, callback);
+			}
+		}, {
+			key: 'updateComponent',
+			value: function updateComponent() {
+				var me = this,
+				    state = me.getInitialState();
+				return new Promise(function (resolve) {
+					me.trigger(state, resolve);
+				});
+			}
+		}]);
+	
+		return Control;
+	}();
+	
+	;
+	
+	module.exports = Control;
+
+/***/ },
+/* 23 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	// 依赖
+	
+	var React = __webpack_require__(12);
+	var ReactDOM = __webpack_require__(13);
+	
+	// 组件类
+	var Page = __webpack_require__(24);
+	
+	// 置入文档
+	ReactDOM.render(React.createElement(Page, null), document.getElementById('container'));
+
+/***/ },
+/* 24 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	// 依赖
+	
+	module.exports = __webpack_require__(15)(__webpack_require__(25), __webpack_require__(28));
+
+/***/ },
+/* 25 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	__webpack_require__(26);
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	// 依赖
+	var React = __webpack_require__(12);
+	var limit = __webpack_require__(3);
+	
+	// 组件类
+	
+	var Page = function (_React$Component) {
+		_inherits(Page, _React$Component);
+	
+		function Page() {
+			_classCallCheck(this, Page);
+	
+			var _this = _possibleConstructorReturn(this, (Page.__proto__ || Object.getPrototypeOf(Page)).apply(this, arguments));
+	
+			var me = _this;
+			me.diffList = me.getDiffList();
+			return _this;
+		}
+	
+		_createClass(Page, [{
+			key: 'render',
+			value: function render() {
+				var me = this,
+				    props = me.props,
+				    length = ~~props.totle,
+				    page = ~~props.page;
+				// 如果length是0
+				if (length <= 0) {
+					return React.createElement('div', null);
+				};
+				if (page <= 0) {
+					page = 1;
+				};
+				return React.createElement(
+					'div',
+					{ className: 'react-page' },
+					me.getAllList().map(function (val, key) {
+						return val === '...' ? React.createElement(
+							'span',
+							{ key: key },
+							val
+						) : React.createElement(
+							'a',
+							{ key: key,
+								href: 'javascript:;',
+								className: page === val ? 'active' : null,
+								onClick: props.Actions.change.bind(me, val) },
+							val
+						);
+					})
+				);
+			}
+		}, {
+			key: 'getDiffList',
+			value: function getDiffList() {
+				var me = this,
+				    props = me.props,
+				    diff = ~~props.diff,
+				    temp = void 0,
+				    arr = [];
+				if (diff <= 0) {
+					diff = 1;
+				};
+				temp = -diff;
+				do {
+					arr.push(temp);
+				} while (temp++ < diff);
+				return arr;
+			}
+		}, {
+			key: 'getAllList',
+			value: function getAllList() {
+				var me = this,
+				    props = me.props,
+				    page = ~~props.page,
+				    length = ~~props.totle,
+				    arr = [];
+				if (page <= 0) {
+					page = 1;
+				};
+				// 对page做的
+				// 拿到中间值
+				arr = limit.map(me.diffList, function (val) {
+					return page + val;
+				});
+				// 开头和结尾
+				arr.unshift(1);
+				arr.push(length);
+				// 去重
+				arr = limit(arr).filter(function (val) {
+					return val > 0 && val < length + 1;
+				}).union().getValue();
+				if (arr.length > 1) {
+					// 如果补值
+					if (arr[1] - arr[0] !== 1) {
+						arr.splice(1, 0, '...');
+					};
+					if (arr[arr.length - 1] - arr[arr.length - 2] !== 1) {
+						arr.splice(-1, 0, '...');
+					};
+				};
+	
+				return arr;
+			}
+		}]);
+	
+		return Page;
+	}(React.Component);
+	
+	;
+	
+	module.exports = Page;
+
+/***/ },
+/* 26 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(27);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(20)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../../../node_modules/css-loader/index.js!./../../../../../node_modules/less-loader/index.js!./style.less", function() {
+				var newContent = require("!!./../../../../../node_modules/css-loader/index.js!./../../../../../node_modules/less-loader/index.js!./style.less");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 27 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(19)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, ".react-page a {\n  padding: 2px 5px;\n  background: #CCC;\n  margin: 2px;\n}\n.react-page a:hover {\n  background: #F30;\n}\n.react-page .active {\n  background: #F00;\n}\n", ""]);
+	
+	// exports
+
+
+/***/ },
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -665,8 +788,8 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var $ = __webpack_require__(2);
-	var React = __webpack_require__(6);
-	var Control = __webpack_require__(16);
+	var React = __webpack_require__(12);
+	var Control = __webpack_require__(22);
 	var limit = __webpack_require__(3);
 	
 	var Controller = function (_Control) {
@@ -721,95 +844,6 @@
 	;
 	
 	module.exports = Controller;
-
-/***/ },
-/* 16 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	// 依赖
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	var limit = __webpack_require__(3);
-	
-	var Promise = limit.promise();
-	var REX = /on([A-Z])(\w*)/;
-	
-	var Control = function () {
-		function Control() {
-			_classCallCheck(this, Control);
-	
-			this.bindEvent();
-		}
-	
-		_createClass(Control, [{
-			key: "bindEvent",
-			value: function bindEvent() {
-				var me = this,
-				    Actions = me.Actions = {};
-				// 对第一层的对象的原型属性进行处理
-				limit(me.constructor.prototype).keysSuper().filter(function (val) {
-					return REX.test(val);
-				}).each(function (val) {
-					Actions[val.replace(REX, function (a, b, c) {
-						return b.toLowerCase() + c;
-					})] = me[val].bind(me);
-				});
-			}
-		}, {
-			key: "getInitialState",
-			value: function getInitialState() {
-				return this.state || (this.state = {});
-			}
-		}, {
-			key: "getAttr",
-			value: function getAttr() {
-				var me = this,
-				    state = me.state,
-				    props = me.constructor.defaultProps || {};
-				return { state: state, props: props };
-			}
-		}, {
-			key: "componentDidMount",
-			value: function componentDidMount(com) {
-				this.com = com;
-			}
-		}, {
-			key: "destroy",
-			value: function destroy() {
-				var me = this;
-				limit.each(me, function (val, key) {
-					delete me[key];
-				});
-				return me;
-			}
-		}, {
-			key: "trigger",
-			value: function trigger(data, callback) {
-				var me = this;
-				me.com.setState(data, callback);
-			}
-		}, {
-			key: "updateComponent",
-			value: function updateComponent() {
-				var me = this,
-				    state = me.getInitialState();
-				return new Promise(function (resolve) {
-					me.trigger(state, resolve);
-				});
-			}
-		}]);
-	
-		return Control;
-	}();
-	
-	;
-	
-	module.exports = Control;
 
 /***/ }
 /******/ ]);

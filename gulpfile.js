@@ -31,6 +31,11 @@ gulp.task('zip', () => {
         .pipe( less() )
         .pipe( cssmin() )
         .pipe( gulp.dest('dist/css') );
+    // 静态文件
+    webpackConfig.staticList.forEach((val) => {
+        gulp.src([`src/${val}/**/*`])
+            .pipe( gulp.dest(`dist/${val}`) )
+    });
 });
 
 // webpack打包
