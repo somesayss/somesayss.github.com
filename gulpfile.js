@@ -52,7 +52,7 @@ gulp.task( 'webpack', () => webpackCall( webpackConfig(true, false) ) );
 
 // 静态服务
 const browConfig = {
-    files: ['dist/css/**/*.css', 'dist/js/**/*.js', 'src/html/**/*.html'],
+    files: ['dist/css/**/*.css', 'dist/js/**/*.js', 'html/**/*.html'],
     server: {
         baseDir: "./"
     }

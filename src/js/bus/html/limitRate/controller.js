@@ -6,7 +6,7 @@ const limit = require('limit');
 
 class Controller extends Control {
 	state = {
-		amount: 120000
+		amount: 130000
 		,rate: 0.04
 	}
 	onChangeAmount(e){

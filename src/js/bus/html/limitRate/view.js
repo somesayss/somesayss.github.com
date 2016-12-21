@@ -30,10 +30,14 @@ class Rate extends React.Component {
 					<br /><br />
 				<span className="ch-txt">月收入：</span>
 				<input ref="inputText4" className="rate-input" title="月收入" placeholder="月收入" 
-					value={ limit.toFixed(me.getMountByMouth(), 2) } onChange={limit.K} readOnly="readOnly" />
+					value={ limit.toFixed(me.getMountByMouth(30), 2) } onChange={limit.K} readOnly="readOnly" />
+					<br /><br />
+				<span className="ch-txt">季收入：</span>
+				<input ref="inputText5" className="rate-input" title="季收入" placeholder="季收入" 
+					value={ limit.toFixed(me.getMountByMouth(91), 2) } onChange={limit.K} readOnly="readOnly" />
 					<br /><br />
 				<span className="ch-txt">年收入：</span>
-				<input ref="inputText5" className="rate-input" title="年收入" placeholder="年收入" 
+				<input ref="inputText6" className="rate-input" title="年收入" placeholder="年收入" 
 					value={ limit.toFixed(me.getMountByYear()) } onChange={props.Actions.changeAmountYear} />
 					<br /><br />
 			</div>
@@ -58,10 +62,10 @@ class Rate extends React.Component {
 		let props = me.props;
 		return limit['?'](`${props.amount} * ${props.rate} / 365`);
 	}
-	getMountByMouth(){
+	getMountByMouth(num){
 		let me = this;
 		let props = me.props;
-		return limit['?'](`${props.amount} * ${props.rate} / 365 * 91`);
+		return limit['?'](`${props.amount} * ${props.rate} / 365 * ${num}`);
 	}
 	getMountByYear(){
 		let me = this;
