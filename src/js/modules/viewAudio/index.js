@@ -12,7 +12,7 @@ class viewAudio extends Audio{
 		,part: 10 //个数
 		,space: 5 //间隔
 		,radius: 4 //半角
-		,increase: 30 //增强[0~50]
+		,increase: 0 //增强[0~50]
 		,color: '#4d90fe' //颜色
 		,changeArray(arr){
 			let me = this;
@@ -43,9 +43,7 @@ class viewAudio extends Audio{
 	viewCanvas(){
 		let me = this;
 		me.initCanvas();
-		me.getUserMediaArray().then(() => {
-			me.start();
-		});
+		me.getUserMediaArray();
 	}
 	initElement(){
 		let me = this;

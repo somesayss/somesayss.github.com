@@ -1,6 +1,7 @@
 "use strict";
 
 // 参考 http://www.cnblogs.com/Wayou/p/3543577.html
+// https://mdn.github.io/voice-change-o-matic/
 
 // 依赖
 const limit = require('limit');
@@ -20,7 +21,9 @@ class Audio{
 	}
 	start(){
 		let me = this;
-		me.frameId = requestAnimationFrame(me.getArrayByAnalyser.bind(me));
+		if( me.analyser ){
+			me.getArrayByAnalyser()
+		};
 	}
 	stop(){
 		let me = this;
@@ -74,9 +77,10 @@ class Audio{
 	getUserMediaArray(){
 		let me = this;
 		return me.getUserMediaStream().then((stream) => {
-			console.log(stream);
 			me.stream = stream;
 			return me.getAnalyserByStream();
+		}).then(() => {
+			me.getArrayByAnalyser();
 		}).catch((e) => {
 			limit.err(e);
 		});

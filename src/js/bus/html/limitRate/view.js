@@ -34,7 +34,7 @@ class Rate extends React.Component {
 					<br /><br />
 				<span className="ch-txt">季收入：</span>
 				<input ref="inputText5" className="rate-input" title="季收入" placeholder="季收入" 
-					value={ limit.toFixed(me.getMountByMouth(91), 2) } onChange={limit.K} readOnly="readOnly" />
+					value={ limit.toFixed(me.getMountByMouth(63), 2) } onChange={limit.K} readOnly="readOnly" />
 					<br /><br />
 				<span className="ch-txt">年收入：</span>
 				<input ref="inputText6" className="rate-input" title="年收入" placeholder="年收入" 
