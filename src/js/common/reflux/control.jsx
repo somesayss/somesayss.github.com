@@ -3,7 +3,7 @@ define(function(require, exports) {
 
 	// 依赖
 	const Reflux = require('reflux');
-	const limit = require('common/limit2.0');
+	const limit = require('limit');
 
 	const REX = /on([A-Z])(\w*)/;
 	const Promise = limit.promise();

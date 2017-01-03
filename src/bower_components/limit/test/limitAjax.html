@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="renderer" content="webkit"><!-- 360浏览器切换内核 webkit | ie-comp[IE6/7]? | ie-stand[IE8910]? -->
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1"><!-- 手机头部设置 -->
+<meta name="description" content="" />
+<meta name="keywords" content=""  />
+<title>limitAjax.js</title>
+<script type="text/javascript" charset="utf-8" src="/libs/es5.js"></script>
+<script type="text/javascript" charset="utf-8" src="/libs/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="/dist/limit.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+"use strict";
+;(function(){
+
+	// 参考https://www.w3cmm.com/ajax/progress-events.html
+
+	// 测试 ajax 的 progress 事件
+
+	function creatAjax(){
+		try{
+			return new XMLHttpRequest();
+		}catch(e){
+			return new ActiveXObject('Microsoft.XMLHTTP');
+		};
+	};
+
+	var AJAX = creatAjax();
+
+	AJAX.onloadstart = function(){
+		console.log('loadstart1', arguments);
+	};
+
+	AJAX.onload = function(){
+		console.log('onload3', arguments);
+	};
+
+	// 跨域AJAX可以抛出这个错误
+	AJAX.onerror = function(){
+		console.log('error', arguments);
+	};
+
+	AJAX.onprogress = function(){
+		console.log('progress2', arguments);
+	};
+
+	AJAX.onloadend = function(){
+		console.log('loadend4', arguments);
+	};
+
+	// 手动触发abort的时候触发
+	AJAX.onabort = function(){
+		console.log('abort', arguments);
+	};
+
+	// 兼容性事件
+	AJAX.onreadystatechange = function(){
+		console.log('onreadystatechange', AJAX.readyState, AJAX.status);
+	};
+
+	AJAX.open('get', './limit.html');
+
+	AJAX.send(null);
+
+})();
+</script>
+</body>
+</html>

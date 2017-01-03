@@ -13,7 +13,7 @@ define(function (require, exports) {
 	// 依赖
 	var React = require('react');
 	var Reflux = require('reflux');
-	var limit = require('common/limit2.0');
+	var limit = require('limit');
 
 	return function (Wrapper, Controller) {
 		Controller = Reflux.connect(Controller.Store);

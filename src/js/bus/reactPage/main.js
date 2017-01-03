@@ -1,17 +1,14 @@
 "use strict";
-/**
- * 模型
- */
 
-define(function (require, exports, module) {
+// 依赖
+const React = require('react');
+const ReactDOM = require('reactDOM');
 
-	// 依赖
-	var React = require('react');
-	var ReactDOM = require('reactDOM');
+// 组件类
+const Page = require('./page/main');
 
-	// 组件类
-	var Page = require('./page/main');
-
-	// 置入文档
-	ReactDOM.render(React.createElement(Page, null), document.getElementById('container'));
-});
+// 置入文档
+ReactDOM.render(
+	<Page />, 
+	document.getElementById('container')
+);

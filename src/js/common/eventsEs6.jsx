@@ -2,7 +2,7 @@
 define(function(require, exports) {
 
 	// 依赖
-	const limit = require('common/limit2.0');
+	const limit = require('limit');
 
 	class Events {		//单个注册
 		add(type, callback){
