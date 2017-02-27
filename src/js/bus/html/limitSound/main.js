@@ -15,6 +15,7 @@ const AudioBuffer = require('./audioBuffer');
 
 let DC = new DrawCanvas({rotate: -90});
 let RB = new Rainbow({totle: 360});
+console.log(RB);
 // new AudioBuffer({
 // 	onAnalyser(arr){
 // 		DC.clearRect();

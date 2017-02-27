@@ -6,7 +6,6 @@ const limit = require('limit');
 const Router = require('common/router');
 const Class = require('common/class');
 
-
 class A {
 	className: 'A'
 	a(){}
@@ -72,6 +71,4 @@ function findAllPro(obj){
 limit.each( findAllPro(f), (val, key) => {
 	console.log( key, val+'' );
 } );
-
-
 

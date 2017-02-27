@@ -5,6 +5,7 @@ const limit = require('limit');
 
 function pullSome(){
 	let AJAX = new XMLHttpRequest();
+	let BT = new Date().getTime();
 
 	AJAX.open('GET', '/file/1.gif');
 
@@ -12,11 +13,12 @@ function pullSome(){
 
 	AJAX.onprogress = function(e){
 		let total = e.total || AJAX.getResponseHeader('Conent-Length');
-		console.log('progress', limit(e.loaded / total, e.timeStamp).toFixed(2).val());
+		console.log('progress', limit(e.loaded / total).toFixed(2).val());
 	};
 
 	AJAX.onload = function(e){
-		console.log('onload', limit(e.timeStamp).toFixed().val());
+		let ET = new Date().getTime();
+		console.log('onload', limit(ET - BT).toFixed().val());
 	};
 
 	AJAX.onerror = function(e){
@@ -27,6 +29,8 @@ function pullSome(){
 };
 
 pullSome();
+
+window.pullSome = pullSome;
 
 function pushSome(){
 	let AJAX = new XMLHttpRequest();

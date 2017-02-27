@@ -7,7 +7,6 @@ const Rainbow = require('modules/color/index');
 
 let html = '';
 let arr = new Rainbow();
-console.log(arr.length);
 arr.forEach((val) => {
 	html += `<p style="background:rgb(${val.join(',')});height:10px;"></p>`;
 });
@@ -15,4 +14,9 @@ arr.forEach((val) => {
 // 	html += `<p style="background:rgb(${val.join(',')});height:10px;"></p>`;
 // });
 
-$('body').html(html);
+// $('body').html(html);
+
+
+// window.onfocus = function(){
+// 	alert(123)
+// }

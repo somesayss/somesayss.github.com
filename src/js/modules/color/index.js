@@ -14,7 +14,7 @@ class Rainbow {
 			,[0, 0, 255] //蓝
 			,[255, 0, 255] //紫
 		],
-		totle: 100
+		totle: 50
 	}
 	state = {}
 	constructor(config){
@@ -37,17 +37,19 @@ class Rainbow {
 			}else{
 				rev.push(val);
 			};
-		});
-		return rev;
+		});		return rev;
 	}
 	getColorRange(range = 10, from = [255, 0, 0], to = [0, 255, 0]){
 		range--;
-		let dif = limit.from(new Array(from.length), (val, key) => {
-			return Math.floor( (from[key] - to[key]) / range );
+		let leg = from.length;
+		let dif = limit.from(new Array(leg), (val, key) => {
+			return (from[key] - to[key]) / range ;
 		});
 		return limit.from(new Array(--range), (val, key) => {
 			key++;
-			return [from[0] - dif[0] * key, from[1] - dif[1] * key, from[2] - dif[2] * key]
+			return limit.from(new Array(leg), (val, k) => {
+				return Math.floor( from[k] - dif[k] * key );
+			});
 		});
 	}
 }
