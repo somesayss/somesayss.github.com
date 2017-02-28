@@ -14,7 +14,7 @@ class Controller extends Control {
 	}
 	onInitWS(){
 		let me = this;
-		let WS = me.WS = new Websocket({host: '198.98.102.230'});
+		let WS = me.WS = new Websocket({host: '198.98.102.230'}); 
 		WS.on('messageFromSys', me.onMessageFromSys.bind(me));
 		WS.on('messageFromThem', me.onMessageFromThem.bind(me));
 	}
