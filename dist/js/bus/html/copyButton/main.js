@@ -1,2 +1,144 @@
-!function(e){function t(r){if(n[r])return n[r].exports;var i=n[r]={exports:{},id:r,loaded:!1};return e[r].call(i.exports,i,i.exports,t),i.loaded=!0,i.exports}var n={};return t.m=e,t.c=n,t.p="/dist/",t(0)}([function(e,t,n){e.exports=n(2)},,function(e,t,n){"use strict";var r=n(3),i=(n(4),n(5));r("#copy").on("click",function(){new i(r("#list").html())})},function(e,t){e.exports=jQuery},function(e,t){e.exports=limit},function(e,t,n){"use strict";function r(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}var i=function(){function e(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}}(),o=n(4),a=function(){function e(t){return r(this,e),this.init(o.toString(t))}return i(e,[{key:"init",value:function(e){var t=this;return new Promise(function(n,r){t.creatHideArea();try{t.area.value=e,t.area.select(),document.execCommand("copy"),n()}catch(i){r(i)}t.removeHideArea()})}},{key:"creatHideArea",value:function(){var e=this,t=e.area=document.createElement("textarea");t.style.position="absolute",t.style.left="-99999px",document.body.appendChild(t)}},{key:"removeHideArea",value:function(){var e=this,t=document.createElement("div");t.appendChild(e.area),t.innerHTML="",t=null}}]),e}();e.exports=a}]);
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId])
+/******/ 			return installedModules[moduleId].exports;
+/******/
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			exports: {},
+/******/ 			id: moduleId,
+/******/ 			loaded: false
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.loaded = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "/dist/";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(0);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(2);
+
+
+/***/ },
+/* 1 */,
+/* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	// 依赖
+	
+	var $ = __webpack_require__(3);
+	var limit = __webpack_require__(4);
+	var PaseBoard = __webpack_require__(5);
+	
+	$('#copy').on('click', function () {
+		new PaseBoard($('#list').html());
+	});
+
+/***/ },
+/* 3 */
+/***/ function(module, exports) {
+
+	module.exports = jQuery;
+
+/***/ },
+/* 4 */
+/***/ function(module, exports) {
+
+	module.exports = limit;
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	// 依赖
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var limit = __webpack_require__(4);
+	
+	var PaseBoard = function () {
+		function PaseBoard(text) {
+			_classCallCheck(this, PaseBoard);
+	
+			return this.init(limit.toString(text));
+		}
+	
+		_createClass(PaseBoard, [{
+			key: 'init',
+			value: function init(text) {
+				var me = this;
+				return new Promise(function (resolve, reject) {
+					me.creatHideArea();
+					try {
+						me.area.value = text;
+						me.area.select();
+						document.execCommand('copy');
+						resolve();
+					} catch (e) {
+						reject(e);
+					};
+					me.removeHideArea();
+				});
+			}
+		}, {
+			key: 'creatHideArea',
+			value: function creatHideArea() {
+				var me = this;
+				var area = me.area = document.createElement('textarea');
+				area.style['position'] = 'absolute';
+				area.style['left'] = '-99999px';
+				document.body.appendChild(area);
+			}
+		}, {
+			key: 'removeHideArea',
+			value: function removeHideArea() {
+				var me = this;
+				var div = document.createElement('div');
+				div.appendChild(me.area);
+				div.innerHTML = '';
+				div = null;
+			}
+		}]);
+	
+		return PaseBoard;
+	}();
+	
+	module.exports = PaseBoard;
+
+/***/ }
+/******/ ]);
 //# sourceMappingURL=main.js.map
