@@ -9,28 +9,32 @@ class Controller extends Control {
 	state = {
 		strList: [],
 		message: [],
-		myName: '1',
+		myId: '',
+		myDisplayName: '',
 		sysName: 'Websocket聊天测试'
 	}
 	onInitWS(){
 		let me = this;
-		let WS = me.WS = new Websocket({host: '198.98.102.230'}); 
-		WS.on('messageFromSys', me.onMessageFromSys.bind(me));
-		WS.on('messageFromThem', me.onMessageFromThem.bind(me));
+		let WS = me.WS = new Websocket();
+		limit(['Others', 'Thesys']).each((val) => {
+			WS.on(`messageFrom${val}`, me[`onMessageFrom${val}`].bind(me));
+		});
 	}
-	onMessageFromSys(data){
+	onMessageFromThesys(data){
 		let me = this;
 		let {state} = me;
-		if( data.type === 'setName' ){
-			state.myName = data.val;
+		if( data.type === 'tellId' ){
+			state.myId = data.value;
 		};
 		me.updateComponent();
 	}
-	onMessageFromThem(data){
+	onMessageFromOthers(data){
 		let me = this;
 		let {state} = me;
 		state.strList.push(data);
-		me.updateComponent();
+		me.updateComponent().then(() => {
+			me.scrollBottom();
+		});
 	}
 	onInput(e){
 		let me = this;
@@ -60,9 +64,11 @@ class Controller extends Control {
 		let {WS} = me;
 		let {props, state} = me.getAttr();
 		let message = state.message.join('');
-		state.strList.push({fromName: state.myName, val: message});
-		state.message.length = 0;
-		WS.tellThem(message);
+		if( message ){
+			state.strList.push({id: state.myId, displayName: state.myDisplayName, value: message});
+			state.message.length = 0;
+			WS.tellOthers(message);
+		};
 	}
 	scrollBottom(){
 		let WH = window.innerHeight;

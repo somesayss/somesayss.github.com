@@ -570,7 +570,7 @@
 						'季收入：'
 					),
 					React.createElement('input', { ref: 'inputText5', className: 'rate-input', title: '季收入', placeholder: '季收入',
-						value: limit.toFixed(me.getMountByMouth(63), 2), onChange: limit.K, readOnly: 'readOnly' }),
+						value: limit.toFixed(me.getMountByMouth(35), 2), onChange: limit.K, readOnly: 'readOnly' }),
 					React.createElement('br', null),
 					React.createElement('br', null),
 					React.createElement(
@@ -708,8 +708,8 @@
 			}
 	
 			return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Controller.__proto__ || Object.getPrototypeOf(Controller)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
-				amount: 130000,
-				rate: 0.045
+				amount: 150000,
+				rate: 0.042
 			}, _temp), _possibleConstructorReturn(_this, _ret);
 		}
 	

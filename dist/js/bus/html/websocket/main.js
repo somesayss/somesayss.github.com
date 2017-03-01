@@ -65,7 +65,87 @@
 /* 10 */,
 /* 11 */,
 /* 12 */,
-/* 13 */,
+/* 13 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	// 依赖
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var limit = __webpack_require__(4);
+	
+	var Rainbow = function () {
+		function Rainbow(config) {
+			_classCallCheck(this, Rainbow);
+	
+			this.props = {
+				list: [[255, 0, 0] //红
+				, [255, 122, 0] //橙
+				, [255, 255, 0] //黄
+				, [0, 255, 0] //绿
+				, [0, 255, 255] //青
+				, [0, 0, 255] //蓝
+				, [255, 0, 255] //紫
+				],
+				totle: 50
+			};
+			this.state = {};
+	
+			var me = this;
+			limit.assign(me.state, me.props, config);
+			return me.parseList();
+		}
+	
+		_createClass(Rainbow, [{
+			key: "parseList",
+			value: function parseList() {
+				var me = this;
+				var state = me.state;
+				var list = state.list;
+				var rev = [];
+				var leg = list.length;
+				var range = Math.ceil((state.totle - leg) / (leg - 1) + 2);
+				list.forEach(function (val, key) {
+					var next = list[++key];
+					if (next) {
+						rev.push(val);
+						Array.prototype.push.apply(rev, me.getColorRange(range, val, next));
+					} else {
+						rev.push(val);
+					};
+				});return rev;
+			}
+		}, {
+			key: "getColorRange",
+			value: function getColorRange() {
+				var range = arguments.length <= 0 || arguments[0] === undefined ? 10 : arguments[0];
+				var from = arguments.length <= 1 || arguments[1] === undefined ? [255, 0, 0] : arguments[1];
+				var to = arguments.length <= 2 || arguments[2] === undefined ? [0, 255, 0] : arguments[2];
+	
+				range--;
+				var leg = from.length;
+				var dif = limit.from(new Array(leg), function (val, key) {
+					return (from[key] - to[key]) / range;
+				});
+				return limit.from(new Array(--range), function (val, key) {
+					key++;
+					return limit.from(new Array(leg), function (val, k) {
+						return Math.floor(from[k] - dif[k] * key);
+					});
+				});
+			}
+		}]);
+	
+		return Rainbow;
+	}();
+	
+	module.exports = Rainbow;
+
+/***/ },
 /* 14 */,
 /* 15 */,
 /* 16 */,
@@ -634,7 +714,9 @@
 	// 依赖
 	var React = __webpack_require__(22);
 	var limit = __webpack_require__(4);
+	var Rainbow = __webpack_require__(13);
 	
+	var colorList = ['#000', '#060', '#0C0', '#300', '#360', '#3C0', '#600', '#660', '#6C0', '#900'];
 	// 组件类
 	
 	var Rate = function (_React$Component) {
@@ -652,6 +734,10 @@
 				var me = this;
 				var props = me.props;
 				var Actions = props.Actions;
+				var color = '#666';
+				if (props.myId) {
+					color = colorList[props.myId - 1];
+				};
 				return React.createElement(
 					'div',
 					{ className: 'websocket' },
@@ -661,21 +747,19 @@
 						props.strList.map(function (val, key) {
 							return React.createElement(
 								'li',
-								{ key: key },
-								props.sysName,
-								' ',
-								val.fromName,
+								{ key: key,
+									style: { color: colorList[val.id - 1] }
+								},
+								val.displayName || '游客' + val.id,
 								'$ ',
-								val.val
+								val.value
 							);
 						})
 					),
 					React.createElement(
 						'div',
-						{ className: 'ch-edit' },
-						props.sysName,
-						' ',
-						props.myName,
+						{ className: 'ch-edit', style: { color: color } },
+						props.myName || '游客' + props.myId,
 						'$ ',
 						props.message,
 						React.createElement('input', { ref: 'input', onKeyDown: Actions.keydown })
@@ -755,7 +839,7 @@
 	
 	
 	// module
-	exports.push([module.id, "html,\nbody {\n  height: 100%;\n  cursor: text;\n}\n.websocket {\n  color: #666;\n  line-height: 20px;\n  padding: 0 5px;\n}\n.websocket .ch-edit {\n  line-height: 20px;\n}\n.websocket .ch-edit input {\n  height: 20px;\n  color: #666;\n  font-size: 12px;\n  border: none;\n}\n", ""]);
+	exports.push([module.id, "html,\nbody {\n  height: 100%;\n  cursor: text;\n}\n.websocket {\n  color: #666;\n  line-height: 20px;\n  padding: 15px 20px;\n}\n.websocket .ch-edit {\n  line-height: 20px;\n}\n.websocket .ch-edit input {\n  height: 20px;\n  color: #666;\n  font-size: 12px;\n  border: none;\n}\n", ""]);
 	
 	// exports
 
@@ -797,7 +881,8 @@
 			return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Controller.__proto__ || Object.getPrototypeOf(Controller)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
 				strList: [],
 				message: [],
-				myName: '1',
+				myId: '',
+				myDisplayName: '',
 				sysName: 'Websocket聊天测试'
 			}, _temp), _possibleConstructorReturn(_this, _ret);
 		}
@@ -806,29 +891,32 @@
 			key: 'onInitWS',
 			value: function onInitWS() {
 				var me = this;
-				var WS = me.WS = new Websocket({});
-				WS.on('messageFromSys', me.onMessageFromSys.bind(me));
-				WS.on('messageFromThem', me.onMessageFromThem.bind(me));
+				var WS = me.WS = new Websocket();
+				limit(['Others', 'Thesys']).each(function (val) {
+					WS.on('messageFrom' + val, me['onMessageFrom' + val].bind(me));
+				});
 			}
 		}, {
-			key: 'onMessageFromSys',
-			value: function onMessageFromSys(data) {
+			key: 'onMessageFromThesys',
+			value: function onMessageFromThesys(data) {
 				var me = this;
 				var state = me.state;
 	
-				if (data.type === 'setName') {
-					state.myName = data.val;
+				if (data.type === 'tellId') {
+					state.myId = data.value;
 				};
 				me.updateComponent();
 			}
 		}, {
-			key: 'onMessageFromThem',
-			value: function onMessageFromThem(data) {
+			key: 'onMessageFromOthers',
+			value: function onMessageFromOthers(data) {
 				var me = this;
 				var state = me.state;
 	
 				state.strList.push(data);
-				me.updateComponent();
+				me.updateComponent().then(function () {
+					me.scrollBottom();
+				});
 			}
 		}, {
 			key: 'onInput',
@@ -879,9 +967,11 @@
 				var state = _me$getAttr3.state;
 	
 				var message = state.message.join('');
-				state.strList.push({ fromName: state.myName, val: message });
-				state.message.length = 0;
-				WS.tellThem(message);
+				if (message) {
+					state.strList.push({ id: state.myId, displayName: state.myDisplayName, value: message });
+					state.message.length = 0;
+					WS.tellOthers(message);
+				};
 			}
 		}, {
 			key: 'scrollBottom',
@@ -929,7 +1019,7 @@
 			var _this = _possibleConstructorReturn(this, (Websocket.__proto__ || Object.getPrototypeOf(Websocket)).call(this));
 	
 			_this.state = {
-				host: '0.0.0.0',
+				host: location.hostname,
 				port: '8181',
 				ready: false
 			};
@@ -979,31 +1069,38 @@
 				var me = this;
 				try {
 					var message = JSON.parse(data.data);
-					me.emit('messageFrom' + message.from, message);
+					me.emit('messageFrom' + me.upperName(message.from), message);
 				} catch (e) {
 					limit.err(e);
 				};
 			}
 		}, {
-			key: 'tellThem',
-			value: function tellThem(message) {
+			key: 'upperName',
+			value: function upperName(name) {
+				return name.replace(/^\w/, function (a) {
+					return a.toUpperCase();
+				});
+			}
+		}, {
+			key: 'tellOthers',
+			value: function tellOthers(message) {
 				var me = this;
 				var state = me.state;
 				var WS = me.WS;
 	
 				if (state.ready) {
-					WS.send(JSON.stringify({ to: 'them', val: message }));
+					WS.send(JSON.stringify({ to: 'others', val: message }));
 				} else {};
 			}
 		}, {
-			key: 'tellMe',
-			value: function tellMe(message) {
+			key: 'tellThesys',
+			value: function tellThesys(message) {
 				var me = this;
 				var state = me.state;
 				var WS = me.WS;
 	
 				if (state.ready) {
-					WS.send(JSON.stringify({ to: 'me', val: message }));
+					WS.send(JSON.stringify({ to: 'thesys', val: message }));
 				} else {};
 			}
 		}]);

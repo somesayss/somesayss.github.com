@@ -7,7 +7,7 @@ const Events = require('events');
 // 类
 class Websocket extends Events {
 	state = {
-		host: '0.0.0.0',
+		host: location.hostname,
 		port: '8181',
 		ready: false
 	}
@@ -40,25 +40,28 @@ class Websocket extends Events {
 		let me = this;
 		try{
 			let message = JSON.parse(data.data);
-			me.emit(`messageFrom${message.from}`, message);
+			me.emit(`messageFrom${me.upperName(message.from)}`, message);
 		}catch(e){
 			limit.err(e);				
 		};
 	}
-	tellThem(message){
+	upperName(name){
+		return name.replace(/^\w/, (a) => a.toUpperCase());
+	}
+	tellOthers(message){
 		let me = this;
 		let {state, WS} = me;
 		if( state.ready ){
-			WS.send( JSON.stringify({to: 'them', val: message}) );
+			WS.send( JSON.stringify({to: 'others', val: message}) );
 		}else{
 			
 		};
 	}
-	tellMe(message){
+	tellThesys(message){
 		let me = this;
 		let {state, WS} = me;
 		if( state.ready ){
-			WS.send( JSON.stringify({to: 'me', val: message}) );
+			WS.send( JSON.stringify({to: 'thesys', val: message}) );
 		}else{
 
 		};

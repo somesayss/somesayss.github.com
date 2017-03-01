@@ -5,7 +5,20 @@ import './style.less';
 // 依赖
 const React = require('react');
 const limit = require('limit');
+const Rainbow = require('modules/color/index');
 
+const colorList = [
+	'#000',
+	'#060',
+	'#0C0',
+	'#300',
+	'#360',
+	'#3C0',
+	'#600',
+	'#660',
+	'#6C0',
+	'#900'
+];
 // 组件类
 class Rate extends React.Component {
 	constructor(){
@@ -15,15 +28,21 @@ class Rate extends React.Component {
 		let me = this;
 		let props = me.props;
 		let Actions = props.Actions;
+		let color = '#666';
+		if( props.myId ){
+			color = colorList[props.myId - 1];
+		};
 		return (
 			<div className="websocket">
 				<ul>
 					{props.strList.map((val, key) => {
-						return <li key={key}>{props.sysName} {val.fromName}$ {val.val}</li>
+						return <li key={key}
+							style={ {color:colorList[val.id - 1]} }
+							>{val.displayName || `游客${val.id}`}$ {val.value}</li>
 					})}
 				</ul>
-				<div className='ch-edit' >
-					{props.sysName} {props.myName}$ {props.message}<input ref="input" onKeyDown={Actions.keydown}  />
+				<div className='ch-edit' style={ {color: color} }>
+					{props.myName || `游客${props.myId}`}$ {props.message}<input ref="input" onKeyDown={Actions.keydown}  />
 				</div>
 			</div>
 		);

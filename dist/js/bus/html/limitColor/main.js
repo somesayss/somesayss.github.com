@@ -80,7 +80,7 @@
 	var Rainbow = __webpack_require__(13);
 	
 	var html = '';
-	var arr = new Rainbow();
+	var arr = new Rainbow({ totle: 10 });
 	arr.forEach(function (val) {
 		html += '<p style="background:rgb(' + val.join(',') + ');height:10px;"></p>';
 	});
@@ -88,8 +88,7 @@
 	// 	html += `<p style="background:rgb(${val.join(',')});height:10px;"></p>`;
 	// });
 	
-	// $('body').html(html);
-	
+	$('body').html(html);
 	
 	// window.onfocus = function(){
 	// 	alert(123)
