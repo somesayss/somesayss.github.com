@@ -34,7 +34,7 @@ class Page extends React.Component {
 							<a key={key} 
 								href="javascript:;" 
 								className={page === val ? 'active' : null} 
-								onClick={props.Actions.change.bind(me, val)} >{val}</a> 
+								onClick={Actions(me).change.bind(me, val)} >{val}</a> 
 					)
 				})}
 			</div>

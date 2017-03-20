@@ -27,7 +27,6 @@ class Rate extends React.Component {
 	render(){
 		let me = this;
 		let props = me.props;
-		let Actions = props.Actions;
 		let color = '#666';
 		if( props.myId ){
 			color = colorList[props.myId - 1];
@@ -42,7 +41,7 @@ class Rate extends React.Component {
 					})}
 				</ul>
 				<div className='ch-edit' style={ {color: color} }>
-					{props.myName || `游客${props.myId}`}$ {props.message}<input ref="input" onKeyDown={Actions.keydown}  />
+					{props.myName || `游客${props.myId}`}$ {props.message}<input ref="input" onKeyDown={Actions(me).keydown}  />
 				</div>
 			</div>
 		);
@@ -51,7 +50,6 @@ class Rate extends React.Component {
 		let me = this;
 		let {refs, props} = me;
 		let {input} = refs;
-		let Actions = props.Actions;
 		let isMark = false;
 		let WIN = $(window);
 		input = $(input);
@@ -63,14 +61,14 @@ class Rate extends React.Component {
 		});
 		input.on('input', (e) => {
 			if( !isMark ){
-				Actions.input(e);
+				Actions(me).input(e);
 				input.val('');
 			};
 		});
 		WIN.on('click', () => {
 			input.focus();
 		});
-		Actions.initWS();
+		Actions(me).initWS();
 	}
 };
 

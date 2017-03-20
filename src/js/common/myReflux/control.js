@@ -44,12 +44,6 @@ class Control {
 	getInitialState(){
 		return this.state || (this.state = {});
 	}
-	getAttr(){
-		let me = this,
-			state = me.state,
-			props = me.constructor.defaultProps || {};
-		return {state, props};
-	}
 	componentDidMount(com){
 		this.com = com;
 	}

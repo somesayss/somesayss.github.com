@@ -44,7 +44,7 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(49);
+	module.exports = __webpack_require__(50);
 
 
 /***/ },
@@ -404,8 +404,6 @@
 	
 	// 依赖
 	
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -416,6 +414,7 @@
 	
 	var React = __webpack_require__(22);
 	var limit = __webpack_require__(4);
+	var Actions = __webpack_require__(26);
 	
 	module.exports = function (Wrapper, Class) {
 		var WrapperComponent = function (_React$Component) {
@@ -426,19 +425,66 @@
 	
 				var _this = _possibleConstructorReturn(this, (WrapperComponent.__proto__ || Object.getPrototypeOf(WrapperComponent)).apply(this, arguments));
 	
-				var me = _this,
-				    __controller__ = void 0;
-				me.__controller__ = __controller__ = new Class();
-				limit.assignSuper(Class.defaultProps, _this.props);
-				me.state = limit.assignSuper({}, __controller__.getInitialState(), _this.props);
+				var me = _this;
+				var __controller__ = void 0;
+				me.__controller__ = __controller__ = new Class(me.props);
+				me.state = limit.assignSuper({}, __controller__.getInitialState(), me.props);
+				__controller__.props = me.getPerProps(me.props);
+				me.state.actionId = me.state.actionId || limit.getUid();
+				Actions.set(me.state.actionId, __controller__.Actions);
 				return _this;
 			}
 	
 			_createClass(WrapperComponent, [{
+				key: 'getPerProps',
+				value: function getPerProps(props) {
+					var outProps = {};
+					limit.each(Class.defaultProps, function (val, key) {
+						outProps[key] = props[key];
+					});
+					return outProps;
+				}
+			}, {
+				key: 'componentWillReceiveProps',
+				value: function componentWillReceiveProps(props) {
+					var me = this;
+					me.propsFromOther = true;
+				}
+			}, {
+				key: 'shouldComponentUpdate',
+				value: function shouldComponentUpdate() {
+					var me = this;
+					var propsFromOther = !!me.propsFromOther;
+					if (me.state.shouldComponentNotUpdate) {
+						if (propsFromOther) {
+							return me.propsFromOther = false;
+						} else {
+							return true;
+						};
+					} else {
+						return true;
+					};
+				}
+			}, {
+				key: 'componentWillUpdate',
+				value: function componentWillUpdate(props) {
+					var me = this;
+					me.__controller__.props = me.getPerProps(props);
+					limit.each(Class.defaultProps, function (val, key) {
+						me.state[key] = props[key];
+					});
+				}
+			}, {
+				key: 'componentDidUpdate',
+				value: function componentDidUpdate() {
+					var me = this;
+					me.propsFromOther = false;
+				}
+			}, {
 				key: 'render',
 				value: function render() {
 					var me = this;
-					return React.createElement(Wrapper, _extends({}, me.state, { Actions: me.__controller__.Actions }));
+					return React.createElement(Wrapper, me.state);
 				}
 			}, {
 				key: 'componentDidMount',
@@ -448,7 +494,9 @@
 			}, {
 				key: 'componentWillUnmount',
 				value: function componentWillUnmount() {
-					this.__controller__.destroy();
+					var me = this;
+					Actions.remove(me.state.actionId, me.__controller__.Actions);
+					me.__controller__.destroy();
 				}
 			}]);
 	
@@ -460,21 +508,64 @@
 		;
 		return WrapperComponent;
 	};
-	
-	/**
-								extends
-								   ↑
-					┌	control.js => controller.js	=> [ Action, Store ]	┐
-		HOC.js	=>	¦									   ↓				¦	=> main.js => [ React ]
-					└  	view.js						=> [ React 		   ]	┘		
-	 */
 
 /***/ },
-/* 26 */,
+/* 26 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	// 依赖
+	
+	var limit = __webpack_require__(4);
+	
+	// 变量
+	var Actions = window.Actions = function (id) {
+		return Actions.get(id);
+	};
+	
+	var ActionsPool = Actions.pool = {};
+	
+	Actions.set = function (id, action) {
+		var pool = ActionsPool[id];
+		if (pool) {
+			pool.push(action);
+		} else {
+			ActionsPool[id] = [action];
+		};
+	};
+	
+	Actions.get = function (id) {
+		if (limit.isObjectSuper(id)) {
+			id = id.props.actionId;
+		} else {
+			id = limit.toString(id);
+		};
+		var pool = ActionsPool[id];
+		if (pool) {
+			if (pool.length === 1) {
+				return pool[0];
+			} else {
+				return pool;
+			};
+		};
+	};
+	
+	Actions.remove = function (id, action) {
+		var pool = ActionsPool[id];
+		if (pool) {
+			limit.remove(pool, action);
+		};
+	};
+	
+	module.exports = Actions;
+
+/***/ },
 /* 27 */,
 /* 28 */,
 /* 29 */,
-/* 30 */
+/* 30 */,
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -538,14 +629,6 @@
 				return this.state || (this.state = {});
 			}
 		}, {
-			key: 'getAttr',
-			value: function getAttr() {
-				var me = this,
-				    state = me.state,
-				    props = me.constructor.defaultProps || {};
-				return { state: state, props: props };
-			}
-		}, {
 			key: 'componentDidMount',
 			value: function componentDidMount(com) {
 				this.com = com;
@@ -584,7 +667,6 @@
 	module.exports = Control;
 
 /***/ },
-/* 31 */,
 /* 32 */,
 /* 33 */,
 /* 34 */,
@@ -602,7 +684,8 @@
 /* 46 */,
 /* 47 */,
 /* 48 */,
-/* 49 */
+/* 49 */,
+/* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -613,20 +696,10 @@
 	var ReactDOM = __webpack_require__(23);
 	
 	// 组件类
-	var Page = __webpack_require__(50);
+	var Page = __webpack_require__(51);
 	
 	// 置入文档
 	ReactDOM.render(React.createElement(Page, null), document.getElementById('container'));
-
-/***/ },
-/* 50 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	// 依赖
-	
-	module.exports = __webpack_require__(25)(__webpack_require__(51), __webpack_require__(54));
 
 /***/ },
 /* 51 */
@@ -634,9 +707,19 @@
 
 	"use strict";
 	
+	// 依赖
+	
+	module.exports = __webpack_require__(25)(__webpack_require__(52), __webpack_require__(55));
+
+/***/ },
+/* 52 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	__webpack_require__(52);
+	__webpack_require__(53);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -690,7 +773,7 @@
 							{ key: key,
 								href: 'javascript:;',
 								className: page === val ? 'active' : null,
-								onClick: props.Actions.change.bind(me, val) },
+								onClick: Actions(me).change.bind(me, val) },
 							val
 						);
 					})
@@ -758,13 +841,13 @@
 	module.exports = Page;
 
 /***/ },
-/* 52 */
+/* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(53);
+	var content = __webpack_require__(54);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(19)(content, {});
@@ -784,7 +867,7 @@
 	}
 
 /***/ },
-/* 53 */
+/* 54 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(18)();
@@ -798,7 +881,7 @@
 
 
 /***/ },
-/* 54 */
+/* 55 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -815,7 +898,7 @@
 	
 	var $ = __webpack_require__(3);
 	var React = __webpack_require__(22);
-	var Control = __webpack_require__(30);
+	var Control = __webpack_require__(31);
 	var limit = __webpack_require__(4);
 	
 	var Controller = function (_Control) {
