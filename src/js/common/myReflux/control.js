@@ -11,14 +11,14 @@ class Control {
 		this.bindEvent();
 	}
 	bindEvent(){
-		let me = this,
-			Actions = me.Actions = {};
+		let me = this;
+		let	Actions = me.Actions = {};
 		// 对第一层的对象的原型属性进行处理
 		limit( me.findAllPro() )
-		.filter((val) => REX.test(val))
-		.each((val, key) => {
-			Actions[key.replace(REX, (a, b, c) => b.toLowerCase() + c)] = val.bind(me);
-		});
+			.filter((val) => REX.test(val))
+			.each((val, key) => {
+				Actions[key.replace(REX, (a, b, c) => b.toLowerCase() + c)] = val.bind(me);
+			});
 	}
 	findAllPro(){
 		let me = this;
@@ -44,9 +44,6 @@ class Control {
 	getInitialState(){
 		return this.state || (this.state = {});
 	}
-	componentDidMount(com){
-		this.com = com;
-	}
 	destroy(){
 		let me = this;
 		limit.each(me, (val, key) => {
@@ -59,8 +56,8 @@ class Control {
 		me.com.setState(data, callback);
 	}
 	updateComponent(){
-		let me = this,
-    		state = me.getInitialState();
+		let me = this;
+    	let	state = me.getInitialState();
     	return new Promise(resolve => {
     		me.trigger(state, resolve);
     	});

@@ -25,6 +25,9 @@ class Layout extends React.Component {
 			</div>
 		);
 	}
+	componentDidMount(){
+		
+	}
 };
 
 module.exports = Layout;

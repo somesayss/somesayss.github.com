@@ -9,7 +9,7 @@ const limit = require('limit');
 const Info = require('./info');
 const List = require('./list');
 const Page = require('modules/page/index');
-const Filter = require('../filter/index')
+const Filter = require('../filter/index');
 
 // 组件类
 class Body extends React.Component {

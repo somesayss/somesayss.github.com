@@ -1,0 +1,105 @@
+.react-dialog{
+	position:absolute;
+	background:#FFF;
+	top:0px;
+	left:50%;
+	z-index:101;
+	box-shadow:0 0 5px rgba(0,0,0,.5);
+	.ch-close{
+		position:absolute;
+		right:5px;
+		top:5px;
+		padding:0 2px;
+		color:#999;
+		&:hover{
+			background:#999;
+			color:#FFF;
+		}
+	}
+}
+
+@loadWidth:20px;
+@keyframes loading{
+	0% {left:-@loadWidth;}
+	100% {left:100%;}
+}
+.widget-loading{
+	.react-cover,.react-dialog{
+		cursor:wait;
+	}
+	.react-dialog{
+		overflow:hidden;
+		box-shadow:none;
+		background:none;
+		.ch-close{
+			display:none;
+		}
+	}
+	.ch-load{
+		position:absolute;
+		width:@loadWidth;
+		height:2px;
+		background:#4285f4;
+		opacity:.8;
+		left:-@loadWidth;
+		animation:loading 1.5s ease infinite;
+	}
+}
+
+.widget-success{
+	color:#666;
+	.ch-logo{
+		position:absolute;
+		width:25px;
+		height:25px;
+		line-height:25px;
+		border-radius:25px;
+		background:#4285f4;
+		color:#FFF;
+		text-align:center;
+		text-indent:-4px;
+		top:50%;
+		margin-top:-12px;
+		left:10px;
+	}
+	.ch-text{
+		line-height:16px;
+		padding:20px 20px 20px 40px;
+	}
+}
+
+.widget-error{
+	.widget-success;
+	.ch-logo{
+		text-indent:0;
+		font-size:16px;
+		line-height:23px;
+		background:#ea4335;
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

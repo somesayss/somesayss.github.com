@@ -427,10 +427,12 @@
 	
 				var me = _this;
 				var __controller__ = void 0;
-				me.__controller__ = __controller__ = new Class(me.props);
-				me.state = limit.assignSuper({}, __controller__.getInitialState(), me.props);
+				__controller__ = me.__controller__ = new Class(me.props);
+				__controller__.com = me;
 				__controller__.props = me.getPerProps(me.props);
-				me.state.actionId = me.state.actionId || limit.getUid();
+				me.state = limit.assignSuper({}, __controller__.getInitialState(), me.props);
+				me.state.actionId = me.state.actionId || 'uaid' + limit.getUid();
+				me.state.actionUUid = __controller__.Actions.uuid = 'uuid' + limit.getUid();
 				Actions.set(me.state.actionId, __controller__.Actions);
 				return _this;
 			}
@@ -469,10 +471,11 @@
 				key: 'componentWillUpdate',
 				value: function componentWillUpdate(props) {
 					var me = this;
+					// 如果是外部传入的属性全量更新
+					if (me.propsFromOther) {
+						limit.assignSuper(me.state, props);
+					};
 					me.__controller__.props = me.getPerProps(props);
-					limit.each(Class.defaultProps, function (val, key) {
-						me.state[key] = props[key];
-					});
 				}
 			}, {
 				key: 'componentDidUpdate',
@@ -485,11 +488,6 @@
 				value: function render() {
 					var me = this;
 					return React.createElement(Wrapper, me.state);
-				}
-			}, {
-				key: 'componentDidMount',
-				value: function componentDidMount() {
-					this.__controller__.componentDidMount(this);
 				}
 			}, {
 				key: 'componentWillUnmount',
@@ -517,6 +515,8 @@
 	
 	// 依赖
 	
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	
 	var limit = __webpack_require__(4);
 	
 	// 变量
@@ -535,18 +535,39 @@
 		};
 	};
 	
-	Actions.get = function (id) {
+	Actions.getAll = function (id) {
 		if (limit.isObjectSuper(id)) {
-			id = id.props.actionId;
+			id = id.props.actionId || id.state.actionId;
 		} else {
 			id = limit.toString(id);
 		};
 		var pool = ActionsPool[id];
+		return pool;
+	};
+	
+	Actions.get = function (id) {
+		var pool = Actions.getAll(id);
 		if (pool) {
-			if (pool.length === 1) {
-				return pool[0];
+			if (limit.isObjectSuper(id) && (id.props.actionUUid || id.state.actionUUid)) {
+				var _ret = function () {
+					var actionUUid = id.props.actionUUid || id.state.actionUUid;
+					var action = null;
+					pool.some(function (val) {
+						action = val;
+						return val.actionUUid === actionUUid;
+					});
+					return {
+						v: action
+					};
+				}();
+	
+				if ((typeof _ret === "undefined" ? "undefined" : _typeof(_ret)) === "object") return _ret.v;
 			} else {
-				return pool;
+				if (pool.length === 1) {
+					return pool[0];
+				} else {
+					return pool;
+				};
 			};
 		};
 	};
@@ -555,6 +576,9 @@
 		var pool = ActionsPool[id];
 		if (pool) {
 			limit.remove(pool, action);
+			if (!pool.length) {
+				delete ActionsPool[id];
+			};
 		};
 	};
 	
@@ -591,8 +615,8 @@
 		_createClass(Control, [{
 			key: 'bindEvent',
 			value: function bindEvent() {
-				var me = this,
-				    Actions = me.Actions = {};
+				var me = this;
+				var Actions = me.Actions = {};
 				// 对第一层的对象的原型属性进行处理
 				limit(me.findAllPro()).filter(function (val) {
 					return REX.test(val);
@@ -629,11 +653,6 @@
 				return this.state || (this.state = {});
 			}
 		}, {
-			key: 'componentDidMount',
-			value: function componentDidMount(com) {
-				this.com = com;
-			}
-		}, {
 			key: 'destroy',
 			value: function destroy() {
 				var me = this;
@@ -651,8 +670,8 @@
 		}, {
 			key: 'updateComponent',
 			value: function updateComponent() {
-				var me = this,
-				    state = me.getInitialState();
+				var me = this;
+				var state = me.getInitialState();
 				return new Promise(function (resolve) {
 					me.trigger(state, resolve);
 				});

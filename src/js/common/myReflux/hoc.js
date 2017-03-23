@@ -11,10 +11,12 @@ module.exports = (Wrapper, Class) => {
 	    	super(...arguments);
 	    	let me = this;
 	    	let	__controller__;
-	    	me.__controller__ = __controller__ = new Class(me.props);
-	    	me.state = limit.assignSuper({}, __controller__.getInitialState(), me.props);
+	    	__controller__ = me.__controller__ = new Class(me.props);
+	    	__controller__.com = me;
 	    	__controller__.props = me.getPerProps(me.props);
-	    	me.state.actionId = me.state.actionId || limit.getUid();
+	    	me.state = limit.assignSuper({}, __controller__.getInitialState(), me.props);
+	    	me.state.actionId = me.state.actionId || `uaid${limit.getUid()}`;
+	    	me.state.actionUUid = __controller__.Actions.uuid = `uuid${limit.getUid()}`;
 	    	Actions.set(me.state.actionId, __controller__.Actions);
 	    }
 	    getPerProps(props){
@@ -43,10 +45,11 @@ module.exports = (Wrapper, Class) => {
 	    }
 	    componentWillUpdate(props){
 	    	let me = this;
+	    	// 如果是外部传入的属性全量更新
+	    	if( me.propsFromOther ){
+	    		limit.assignSuper(me.state, props);
+	    	};
 	    	me.__controller__.props = me.getPerProps(props);
-	    	limit.each(Class.defaultProps, (val, key) => {
-	   			me.state[key] = props[key];
-	   		});
 	    }
 	    componentDidUpdate(){
 	    	let me = this;
@@ -55,9 +58,6 @@ module.exports = (Wrapper, Class) => {
 	    render(){
 	    	let me = this;
 	      	return <Wrapper {...me.state}/>;
-	    }
-	    componentDidMount(){
-	    	this.__controller__.componentDidMount(this);
 	    }
 	    componentWillUnmount(){
 	    	let me = this;

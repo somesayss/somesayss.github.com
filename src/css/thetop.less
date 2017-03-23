@@ -1,6 +1,6 @@
 /*全局*/
 @charset "UTF-8";
-@hHeight: 45px;
+@hHeight: 55px;
 @fHeight: 100px;
 @mWidth: 1080px;
 @mColor: #4285f4;
@@ -49,11 +49,40 @@ body, .thetop-layout{
 	height:35px;
 	line-height:35px;
 	padding:0 5px;
-	margin-top:5px;
+	margin-top:(@hHeight - 35px) / 2;
 	display:inline-block;
 	background:@mColor;
 	color:#FFF;
 	.radius(5);
+}
+
+@moveWidth:15px;
+@keyframes mymove{
+	0 {left:-@moveWidth - 1;}
+	15% {left:-@moveWidth;}
+	45% {left:100%;}
+	55% {left:100%;}
+	95% {left:-@moveWidth;}
+	100% {left:-@moveWidth - 1;}
+}
+
+.thetop-title{
+	float:right;
+	color:@mColor;
+	line-height:20px;
+	margin-top:@hHeight - 30px;
+	position:relative;
+	overflow:hidden;
+	.ch-line{
+		position:absolute;
+		width:@moveWidth;
+		height:20px;
+		background:@mColor;
+		bottom:0;
+		left:-@moveWidth;
+		opacity:.3;
+		animation:mymove 5s ease infinite;
+	}
 }
 
 .thetop-logo-min{
@@ -225,7 +254,6 @@ body, .thetop-layout{
 		}
 	}
 }
-
 
 
 

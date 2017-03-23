@@ -422,10 +422,12 @@
 	
 				var me = _this;
 				var __controller__ = void 0;
-				me.__controller__ = __controller__ = new Class(me.props);
-				me.state = limit.assignSuper({}, __controller__.getInitialState(), me.props);
+				__controller__ = me.__controller__ = new Class(me.props);
+				__controller__.com = me;
 				__controller__.props = me.getPerProps(me.props);
-				me.state.actionId = me.state.actionId || limit.getUid();
+				me.state = limit.assignSuper({}, __controller__.getInitialState(), me.props);
+				me.state.actionId = me.state.actionId || 'uaid' + limit.getUid();
+				me.state.actionUUid = __controller__.Actions.uuid = 'uuid' + limit.getUid();
 				Actions.set(me.state.actionId, __controller__.Actions);
 				return _this;
 			}
@@ -464,10 +466,11 @@
 				key: 'componentWillUpdate',
 				value: function componentWillUpdate(props) {
 					var me = this;
+					// 如果是外部传入的属性全量更新
+					if (me.propsFromOther) {
+						limit.assignSuper(me.state, props);
+					};
 					me.__controller__.props = me.getPerProps(props);
-					limit.each(Class.defaultProps, function (val, key) {
-						me.state[key] = props[key];
-					});
 				}
 			}, {
 				key: 'componentDidUpdate',
@@ -480,11 +483,6 @@
 				value: function render() {
 					var me = this;
 					return React.createElement(Wrapper, me.state);
-				}
-			}, {
-				key: 'componentDidMount',
-				value: function componentDidMount() {
-					this.__controller__.componentDidMount(this);
 				}
 			}, {
 				key: 'componentWillUnmount',
@@ -512,6 +510,8 @@
 	
 	// 依赖
 	
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	
 	var limit = __webpack_require__(4);
 	
 	// 变量
@@ -530,18 +530,39 @@
 		};
 	};
 	
-	Actions.get = function (id) {
+	Actions.getAll = function (id) {
 		if (limit.isObjectSuper(id)) {
-			id = id.props.actionId;
+			id = id.props.actionId || id.state.actionId;
 		} else {
 			id = limit.toString(id);
 		};
 		var pool = ActionsPool[id];
+		return pool;
+	};
+	
+	Actions.get = function (id) {
+		var pool = Actions.getAll(id);
 		if (pool) {
-			if (pool.length === 1) {
-				return pool[0];
+			if (limit.isObjectSuper(id) && (id.props.actionUUid || id.state.actionUUid)) {
+				var _ret = function () {
+					var actionUUid = id.props.actionUUid || id.state.actionUUid;
+					var action = null;
+					pool.some(function (val) {
+						action = val;
+						return val.actionUUid === actionUUid;
+					});
+					return {
+						v: action
+					};
+				}();
+	
+				if ((typeof _ret === "undefined" ? "undefined" : _typeof(_ret)) === "object") return _ret.v;
 			} else {
-				return pool;
+				if (pool.length === 1) {
+					return pool[0];
+				} else {
+					return pool;
+				};
 			};
 		};
 	};
@@ -550,6 +571,9 @@
 		var pool = ActionsPool[id];
 		if (pool) {
 			limit.remove(pool, action);
+			if (!pool.length) {
+				delete ActionsPool[id];
+			};
 		};
 	};
 	
@@ -586,8 +610,8 @@
 		_createClass(Control, [{
 			key: 'bindEvent',
 			value: function bindEvent() {
-				var me = this,
-				    Actions = me.Actions = {};
+				var me = this;
+				var Actions = me.Actions = {};
 				// 对第一层的对象的原型属性进行处理
 				limit(me.findAllPro()).filter(function (val) {
 					return REX.test(val);
@@ -624,11 +648,6 @@
 				return this.state || (this.state = {});
 			}
 		}, {
-			key: 'componentDidMount',
-			value: function componentDidMount(com) {
-				this.com = com;
-			}
-		}, {
 			key: 'destroy',
 			value: function destroy() {
 				var me = this;
@@ -646,8 +665,8 @@
 		}, {
 			key: 'updateComponent',
 			value: function updateComponent() {
-				var me = this,
-				    state = me.getInitialState();
+				var me = this;
+				var state = me.getInitialState();
 				return new Promise(function (resolve) {
 					me.trigger(state, resolve);
 				});
@@ -769,6 +788,9 @@
 					React.createElement(Footer, null)
 				);
 			}
+		}, {
+			key: 'componentDidMount',
+			value: function componentDidMount() {}
 		}]);
 	
 		return Layout;
@@ -867,6 +889,12 @@
 							'span',
 							{ className: 'thetop-logo' },
 							'T'
+						),
+						React.createElement(
+							'span',
+							{ className: 'thetop-title' },
+							'我们不产生数据，我们只是互联网的搬运工',
+							React.createElement('span', { className: 'ch-line' })
 						)
 					)
 				);
@@ -1590,7 +1618,6 @@
 				var state = me.state;
 				var props = me.props;
 	
-				console.log(props);
 				state.page = page;
 				me.updateComponent().then(props.onChangePage.bind(me, page));
 			}
@@ -2020,6 +2047,7 @@
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	var limit = __webpack_require__(4);
+	var DialogWidget = __webpack_require__(89);
 	
 	var Ajax = function () {
 		function Ajax(config) {
@@ -2030,6 +2058,7 @@
 				cache: false,
 				data: {},
 				dataType: 'json',
+				timeout: 5000,
 				type: 'GET',
 				theMethod: 1 // one two three
 			};
@@ -2044,22 +2073,34 @@
 			key: 'theMethod0',
 			value: function theMethod0() {
 				var me = this;
-				return new Promise(function (s, j) {
-					$.ajax(me.state).then(s, j);
-				});
+				return me.jQuertAjax();
 			}
 		}, {
 			key: 'theMethod1',
 			value: function theMethod1() {
 				var me = this;
+				var dialogExp = DialogWidget.loading();
+				return me.jQuertAjax().then(function (val) {
+					if (val.hasError) {
+						throw val.message;
+					} else {
+						return val.content;
+					};
+				}).then(function (val) {
+					dialogExp.destroy();
+					return val;
+				}, function (e) {
+					dialogExp.destroy();
+					DialogWidget.error('请求数据错误，请稍后再试');
+					throw e;
+				});
+			}
+		}, {
+			key: 'jQuertAjax',
+			value: function jQuertAjax() {
+				var me = this;
 				return new Promise(function (s, j) {
-					$.ajax(me.state).then(function (val) {
-						if (val.hasError) {
-							j(val.message);
-						} else {
-							s(val.content);
-						};
-					}, j);
+					$.ajax(me.state).then(s, j);
 				});
 			}
 		}]);
@@ -2068,6 +2109,585 @@
 	}();
 	
 	module.exports = Ajax;
+
+/***/ },
+/* 89 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	// 依赖
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Widget = __webpack_require__(90);
+	var originClass = __webpack_require__(91);
+	
+	var originWidget = function (_Widget) {
+		_inherits(originWidget, _Widget);
+	
+		function originWidget() {
+			_classCallCheck(this, originWidget);
+	
+			return _possibleConstructorReturn(this, (originWidget.__proto__ || Object.getPrototypeOf(originWidget)).apply(this, arguments));
+		}
+	
+		_createClass(originWidget, [{
+			key: 'setCenter',
+			value: function setCenter() {
+				var me = this;
+				Actions(me.componentExp).setCenter();
+			}
+		}], [{
+			key: 'loading',
+			value: function loading() {
+				return new originWidget({
+					className: 'widget-loading',
+					width: 200,
+					height: 2,
+					opacity: 0
+				}, null, React.createElement('i', { className: 'ch-load' }));
+			}
+		}, {
+			key: 'success',
+			value: function success(info) {
+				return new originWidget({
+					className: 'widget-success',
+					width: 'auto',
+					height: 'auto',
+					maxWidth: 300,
+					opacity: 0,
+					timeout: 3000
+				}, null, React.createElement(
+					'div',
+					{ className: 'ch-text' },
+					React.createElement(
+						'i',
+						{ className: 'ch-logo' },
+						'√'
+					),
+					info || '操作成功'
+				));
+			}
+		}, {
+			key: 'error',
+			value: function error(info) {
+				return new originWidget({
+					className: 'widget-error',
+					width: 'auto',
+					height: 'auto',
+					maxWidth: 300,
+					opacity: 0,
+					timeout: 3000
+				}, null, React.createElement(
+					'div',
+					{ className: 'ch-text' },
+					React.createElement(
+						'span',
+						{ className: 'ch-logo' },
+						'×'
+					),
+					info || '操作失败'
+				));
+			}
+		}]);
+	
+		return originWidget;
+	}(Widget);
+	
+	originWidget.originClass = originClass;
+	;
+	
+	module.exports = originWidget;
+
+/***/ },
+/* 90 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	// 依赖
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var limit = __webpack_require__(4);
+	
+	var Widget = function () {
+		//实例化后的组件
+		function Widget(config, parentNode, childCom) {
+			_classCallCheck(this, Widget);
+	
+			this.props = {};
+			this.state = {};
+			this.tempNode = null;
+			this.parentNode = null;
+			this.component = null;
+			this.componentExp = null;
+	
+			var me = this;
+			me.component = me.constructor.originClass;
+			me.parentNode = parentNode;
+			me.childCom = childCom;
+			limit.assignSuper(me.state, me.props, config);
+			return me.init();
+		}
+		// 初始化组件
+		//组件
+		//节点
+	
+	
+		_createClass(Widget, [{
+			key: 'init',
+			value: function init() {
+				var me = this;
+				var state = me.state;
+	
+				var node = null;
+				var Component = me.component;
+				if (me.parentNode) {
+					node = me.tempNode = me.parentNode;
+				} else {
+					node = me.tempNode = document.createElement('div');
+					node.id = 'widget' + limit.getUid();
+					document.body.appendChild(node);
+				};
+				me.componentExp = ReactDOM.render(React.createElement(Component, _extends({}, me.state, { children: me.childCom })), node);
+				Actions(me.componentExp).destroyWidget = me.destroy.bind(me);
+			}
+			// 更新组件
+	
+		}, {
+			key: 'updateComponent',
+			value: function updateComponent(props) {
+				var me = this;
+				return new Promise(function (resolve) {
+					me.componentExp.setState(props, resolve);
+				});
+			}
+			// 销毁组件
+	
+		}, {
+			key: 'destroy',
+			value: function destroy() {
+				var me = this;
+				ReactDOM.unmountComponentAtNode(me.tempNode);
+				if (!me.parentNode) {
+					var clearDiv = document.createElement('div');
+					clearDiv.appendChild(me.tempNode);
+					clearDiv.innerHTML = '';
+					clearDiv = null;
+				};
+				me.parentNode = null;
+				me.tempNode = null;
+				me.component = null;
+				me.componentExp = null;
+			}
+		}]);
+	
+		return Widget;
+	}();
+	
+	;
+	
+	module.exports = Widget;
+
+/***/ },
+/* 91 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	// 依赖
+	
+	module.exports = __webpack_require__(25)(__webpack_require__(92), __webpack_require__(100));
+
+/***/ },
+/* 92 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	__webpack_require__(93);
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	// 依赖
+	var React = __webpack_require__(22);
+	var limit = __webpack_require__(4);
+	var Cover = __webpack_require__(95);
+	
+	// 组件类
+	
+	var Dialog = function (_React$Component) {
+		_inherits(Dialog, _React$Component);
+	
+		function Dialog() {
+			_classCallCheck(this, Dialog);
+	
+			return _possibleConstructorReturn(this, (Dialog.__proto__ || Object.getPrototypeOf(Dialog)).apply(this, arguments));
+		}
+	
+		_createClass(Dialog, [{
+			key: 'render',
+			value: function render() {
+				var me = this;
+				var props = me.props;
+				var styleKeys = ['top', 'marginLeft', 'width', 'height', 'maxWidth'];
+				var style = limit.filter(props, function (val, key) {
+					return limit.contains(styleKeys, key);
+				});
+				return React.createElement(
+					'div',
+					{ className: props.className },
+					React.createElement(
+						'div',
+						{ className: 'react-dialog', ref: 'dialog', style: style },
+						React.createElement(
+							'a',
+							{ href: 'javascript:;', className: 'ch-close', onClick: me.closeDialog.bind(me) },
+							'×'
+						),
+						props.children
+					),
+					React.createElement(Cover, { opacity: props.opacity })
+				);
+			}
+		}, {
+			key: 'componentDidMount',
+			value: function componentDidMount() {
+				var me = this;
+				var props = me.props;
+	
+				Actions(me).setCenter();
+				if (props.timeout) {
+					setTimeout(function () {
+						Actions(me) && Actions(me).destroyWidget && Actions(me).destroyWidget();
+					}, props.timeout);
+				};
+			}
+		}, {
+			key: 'closeDialog',
+			value: function closeDialog() {
+				var me = this;
+				var props = me.props;
+	
+				Actions(me).destroyWidget && Actions(me).destroyWidget();
+				props.onClose();
+			}
+		}]);
+	
+		return Dialog;
+	}(React.Component);
+	
+	;
+	
+	module.exports = Dialog;
+
+/***/ },
+/* 93 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(94);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(19)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/less-loader/index.js!./style.less", function() {
+				var newContent = require("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/less-loader/index.js!./style.less");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 94 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(18)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, ".react-dialog {\n  position: absolute;\n  background: #FFF;\n  top: 0px;\n  left: 50%;\n  z-index: 101;\n  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);\n}\n.react-dialog .ch-close {\n  position: absolute;\n  right: 5px;\n  top: 5px;\n  padding: 0 2px;\n  color: #999;\n}\n.react-dialog .ch-close:hover {\n  background: #999;\n  color: #FFF;\n}\n@keyframes loading {\n  0% {\n    left: -20px;\n  }\n  100% {\n    left: 100%;\n  }\n}\n.widget-loading .react-cover,\n.widget-loading .react-dialog {\n  cursor: wait;\n}\n.widget-loading .react-dialog {\n  overflow: hidden;\n  box-shadow: none;\n  background: none;\n}\n.widget-loading .react-dialog .ch-close {\n  display: none;\n}\n.widget-loading .ch-load {\n  position: absolute;\n  width: 20px;\n  height: 2px;\n  background: #4285f4;\n  opacity: .8;\n  left: -20px;\n  animation: loading 1.5s ease infinite;\n}\n.widget-success {\n  color: #666;\n}\n.widget-success .ch-logo {\n  position: absolute;\n  width: 25px;\n  height: 25px;\n  line-height: 25px;\n  border-radius: 25px;\n  background: #4285f4;\n  color: #FFF;\n  text-align: center;\n  text-indent: -4px;\n  top: 50%;\n  margin-top: -12px;\n  left: 10px;\n}\n.widget-success .ch-text {\n  line-height: 16px;\n  padding: 20px 20px 20px 40px;\n}\n.widget-error {\n  color: #666;\n}\n.widget-error .ch-logo {\n  position: absolute;\n  width: 25px;\n  height: 25px;\n  line-height: 25px;\n  border-radius: 25px;\n  background: #4285f4;\n  color: #FFF;\n  text-align: center;\n  text-indent: -4px;\n  top: 50%;\n  margin-top: -12px;\n  left: 10px;\n}\n.widget-error .ch-text {\n  line-height: 16px;\n  padding: 20px 20px 20px 40px;\n}\n.widget-error .ch-logo {\n  text-indent: 0;\n  font-size: 16px;\n  line-height: 23px;\n  background: #ea4335;\n}\n", ""]);
+	
+	// exports
+
+
+/***/ },
+/* 95 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	// 依赖
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Widget = __webpack_require__(90);
+	var originClass = __webpack_require__(25)(__webpack_require__(96), __webpack_require__(99));
+	
+	var originWidget = function (_Widget) {
+		_inherits(originWidget, _Widget);
+	
+		function originWidget(config) {
+			var _this;
+	
+			_classCallCheck(this, originWidget);
+	
+			var me = (_this = _possibleConstructorReturn(this, (originWidget.__proto__ || Object.getPrototypeOf(originWidget)).call(this, config, originClass)), _this);
+			return _this;
+		}
+	
+		return originWidget;
+	}(Widget);
+	
+	;
+	
+	originClass.widget = originWidget;
+	module.exports = originClass;
+
+/***/ },
+/* 96 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	__webpack_require__(97);
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	// 依赖
+	var React = __webpack_require__(22);
+	var limit = __webpack_require__(4);
+	
+	// 组件类
+	
+	var Cover = function (_React$Component) {
+		_inherits(Cover, _React$Component);
+	
+		function Cover() {
+			_classCallCheck(this, Cover);
+	
+			return _possibleConstructorReturn(this, (Cover.__proto__ || Object.getPrototypeOf(Cover)).apply(this, arguments));
+		}
+	
+		_createClass(Cover, [{
+			key: 'render',
+			value: function render() {
+				var me = this;
+				var props = me.props;
+				return React.createElement(
+					'div',
+					{ className: 'react-cover', style: { opacity: props.opacity, background: props.background } },
+					props.children
+				);
+			}
+		}]);
+	
+		return Cover;
+	}(React.Component);
+	
+	;
+	
+	module.exports = Cover;
+
+/***/ },
+/* 97 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(98);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(19)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/less-loader/index.js!./style.less", function() {
+				var newContent = require("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/less-loader/index.js!./style.less");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 98 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(18)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, "html {\n  height: 100%;\n}\nbody {\n  min-height: 100%;\n  position: relative;\n}\n.react-cover {\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  background: #F00;\n  top: 0;\n  left: 0;\n  z-index: 100;\n}\n", ""]);
+	
+	// exports
+
+
+/***/ },
+/* 99 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	// 依赖
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var limit = __webpack_require__(4);
+	var Control = __webpack_require__(31);
+	
+	var Controller = function (_Control) {
+		_inherits(Controller, _Control);
+	
+		function Controller() {
+			var _ref;
+	
+			var _temp, _this, _ret;
+	
+			_classCallCheck(this, Controller);
+	
+			for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+				args[_key] = arguments[_key];
+			}
+	
+			return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Controller.__proto__ || Object.getPrototypeOf(Controller)).call.apply(_ref, [this].concat(args))), _this), _this.state = {}, _temp), _possibleConstructorReturn(_this, _ret);
+		}
+	
+		return Controller;
+	}(Control);
+	
+	Controller.defaultProps = {
+		actionId: 'Cover',
+		opacity: .3,
+		background: '#FFF'
+	};
+	;
+	
+	module.exports = Controller;
+
+/***/ },
+/* 100 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	// 依赖
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var limit = __webpack_require__(4);
+	var Control = __webpack_require__(31);
+	
+	var Controller = function (_Control) {
+		_inherits(Controller, _Control);
+	
+		function Controller() {
+			var _ref;
+	
+			var _temp, _this, _ret;
+	
+			_classCallCheck(this, Controller);
+	
+			for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+				args[_key] = arguments[_key];
+			}
+	
+			return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Controller.__proto__ || Object.getPrototypeOf(Controller)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
+				top: 0,
+				marginLeft: 0
+			}, _temp), _possibleConstructorReturn(_this, _ret);
+		}
+	
+		_createClass(Controller, [{
+			key: 'onSetCenter',
+			value: function onSetCenter() {
+				var me = this;
+				var props = me.props;
+				var state = me.state;
+	
+				var WIN = window;
+				var scrollY = WIN.scrollY;
+				var winHeight = WIN.innerHeight;
+				var height = props.height;
+				var width = props.width;
+				if (!limit.isNumber(height)) {
+					height = $(ReactDOM.findDOMNode(me.com)).find('.react-dialog').height();
+				};
+				if (!limit.isNumber(width)) {
+					width = $(ReactDOM.findDOMNode(me.com)).find('.react-dialog').width();
+				};
+				state.top = scrollY + winHeight / 2 - height / 2;
+				state.marginLeft = -width / 2;
+				me.updateComponent();
+			}
+		}]);
+	
+		return Controller;
+	}(Control);
+	
+	Controller.defaultProps = {
+		width: 400,
+		height: 200,
+		actionId: 'dialog',
+		onClose: limit.K
+	};
+	;
+	
+	module.exports = Controller;
 
 /***/ }
 /******/ ]);

@@ -19,6 +19,10 @@ class Header extends React.Component {
 			<div className="thetop-Header">
 				<div className="ch-main">
 					<span className="thetop-logo">T</span>
+					<span className="thetop-title">
+						我们不产生数据，我们只是互联网的搬运工
+						<span className="ch-line"></span>
+					</span>
 				</div>
 			</div>
 		);

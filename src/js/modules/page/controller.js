@@ -26,7 +26,6 @@ class Controller extends Control {
 	onChange(page){
 		let me = this;
 		let {state, props} = me;
-		console.log(props);
 		state.page = page;
 		me.updateComponent().then(props.onChangePage.bind(me, page));
 	}

@@ -43,17 +43,17 @@ class Controller extends Control {
 				data: me.getData(),
 				type: 'POST'
 			}).then((val) => {
-			state.totle = Math.ceil(val.count/state.number);
-			let hideMovieData = me.getLocalStorage('hideMovie');
-			val.list.forEach((val) => {
-				if( hideMovieData[val.id] ){
-					val.isHide = true;
-				}else{
-					delete val.isHide;
-				};
-			});
-			state.list = val.list;
-			return me.updateComponent();
+				state.totle = Math.ceil(val.count/state.number);
+				let hideMovieData = me.getLocalStorage('hideMovie');
+				val.list.forEach((val) => {
+					if( hideMovieData[val.id] ){
+						val.isHide = true;
+					}else{
+						delete val.isHide;
+					};
+				});
+				state.list = val.list;
+				return me.updateComponent();
 		});
 	}
 	onChangePage(val){
