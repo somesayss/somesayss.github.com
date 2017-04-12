@@ -44,7 +44,7 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(32);
+	module.exports = __webpack_require__(33);
 
 
 /***/ },
@@ -68,9 +68,7 @@
 /* 8 */,
 /* 9 */,
 /* 10 */,
-/* 11 */,
-/* 12 */,
-/* 13 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -151,11 +149,12 @@
 	module.exports = Rainbow;
 
 /***/ },
+/* 12 */,
+/* 13 */,
 /* 14 */,
 /* 15 */,
 /* 16 */,
-/* 17 */,
-/* 18 */
+/* 17 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -210,7 +209,7 @@
 	};
 
 /***/ },
-/* 19 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -462,6 +461,7 @@
 
 
 /***/ },
+/* 19 */,
 /* 20 */,
 /* 21 */,
 /* 22 */,
@@ -474,24 +474,25 @@
 /* 29 */,
 /* 30 */,
 /* 31 */,
-/* 32 */
+/* 32 */,
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	// 样式
 	
-	__webpack_require__(33);
+	__webpack_require__(34);
 	
 	// 依赖
 	var $ = __webpack_require__(3);
 	var limit = __webpack_require__(4);
 	
 	// 颜色类
-	var Rainbow = __webpack_require__(13);
+	var Rainbow = __webpack_require__(11);
 	// 画图类
-	var DrawCanvas = __webpack_require__(35);
-	var AudioBuffer = __webpack_require__(36);
+	var DrawCanvas = __webpack_require__(36);
+	var AudioBuffer = __webpack_require__(37);
 	
 	var DC = new DrawCanvas({ rotate: -90 });
 	var RB = new Rainbow({ totle: 360 });
@@ -525,16 +526,16 @@
 	});
 
 /***/ },
-/* 33 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(34);
+	var content = __webpack_require__(35);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(19)(content, {});
+	var update = __webpack_require__(18)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -551,10 +552,10 @@
 	}
 
 /***/ },
-/* 34 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(18)();
+	exports = module.exports = __webpack_require__(17)();
 	// imports
 	
 	
@@ -565,7 +566,7 @@
 
 
 /***/ },
-/* 35 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -690,7 +691,7 @@
 	module.exports = DrawCanvas;
 
 /***/ },
-/* 36 */
+/* 37 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";

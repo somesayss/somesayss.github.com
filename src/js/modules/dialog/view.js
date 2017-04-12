@@ -15,7 +15,7 @@ class Dialog extends React.Component {
 	render(){
 		let me = this;
 		let	props = me.props;
-		let styleKeys = ['top', 'marginLeft', 'width', 'height', 'maxWidth'];
+		let styleKeys = ['top', 'marginLeft', 'width', 'height', 'maxWidth', 'maxHeight', 'minWidth', 'minHeight'];
 		let style = limit.filter(props, (val, key) => {
 			return limit.contains(styleKeys, key);
 		});
@@ -25,7 +25,11 @@ class Dialog extends React.Component {
 					<a href="javascript:;" className="ch-close" onClick={me.closeDialog.bind(me)}>×</a>
 					{props.children}
 				</div>
-				<Cover opacity={props.opacity} />
+				{do{
+					if( props.hasCover ){
+						<Cover opacity={props.opacity} />
+					}
+				}}
 			</div>
 		);
 	}

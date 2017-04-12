@@ -45,7 +45,7 @@
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(56);
+	module.exports = __webpack_require__(68);
 
 
 /***/ },
@@ -57,7 +57,7 @@
 
 /***/ },
 
-/***/ 18:
+/***/ 17:
 /***/ function(module, exports) {
 
 	"use strict";
@@ -113,7 +113,7 @@
 
 /***/ },
 
-/***/ 19:
+/***/ 18:
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -366,21 +366,21 @@
 
 /***/ },
 
-/***/ 22:
+/***/ 23:
 /***/ function(module, exports) {
 
 	module.exports = React;
 
 /***/ },
 
-/***/ 23:
+/***/ 24:
 /***/ function(module, exports) {
 
 	module.exports = ReactDOM;
 
 /***/ },
 
-/***/ 25:
+/***/ 26:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -395,9 +395,9 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var React = __webpack_require__(22);
+	var React = __webpack_require__(23);
 	var limit = __webpack_require__(4);
-	var Actions = __webpack_require__(26);
+	var Actions = __webpack_require__(27);
 	
 	module.exports = function (Wrapper, Class) {
 		var WrapperComponent = function (_React$Component) {
@@ -492,7 +492,7 @@
 
 /***/ },
 
-/***/ 26:
+/***/ 27:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -538,7 +538,7 @@
 					var action = null;
 					pool.some(function (val) {
 						action = val;
-						return val.actionUUid === actionUUid;
+						return val.uuid === actionUUid;
 					});
 					return {
 						v: action
@@ -570,7 +570,7 @@
 
 /***/ },
 
-/***/ 31:
+/***/ 32:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -668,43 +668,43 @@
 
 /***/ },
 
-/***/ 56:
+/***/ 68:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	// 依赖
 	
-	var React = __webpack_require__(22);
-	var ReactDOM = __webpack_require__(23);
+	var React = __webpack_require__(23);
+	var ReactDOM = __webpack_require__(24);
 	
 	// 组件类
-	var ShowImg = __webpack_require__(57);
+	var ShowImg = __webpack_require__(69);
 	
 	// 置入文档
 	ReactDOM.render(React.createElement(ShowImg, null), document.getElementById('container'));
 
 /***/ },
 
-/***/ 57:
+/***/ 69:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	// 依赖
 	
-	module.exports = __webpack_require__(25)(__webpack_require__(58), __webpack_require__(62));
+	module.exports = __webpack_require__(26)(__webpack_require__(70), __webpack_require__(74));
 
 /***/ },
 
-/***/ 58:
+/***/ 70:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	__webpack_require__(59);
+	__webpack_require__(71);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -713,11 +713,11 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	// 依赖
-	var React = __webpack_require__(22);
+	var React = __webpack_require__(23);
 	var limit = __webpack_require__(4);
 	
 	// 图片
-	var imgShow = __webpack_require__(61);
+	var imgShow = __webpack_require__(73);
 	
 	// 组件类
 	
@@ -752,16 +752,16 @@
 
 /***/ },
 
-/***/ 59:
+/***/ 71:
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(60);
+	var content = __webpack_require__(72);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(19)(content, {});
+	var update = __webpack_require__(18)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -779,29 +779,29 @@
 
 /***/ },
 
-/***/ 60:
+/***/ 72:
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(18)();
+	exports = module.exports = __webpack_require__(17)();
 	// imports
 	
 	
 	// module
-	exports.push([module.id, ".imgshow1 {\n  width: 200px;\n  height: 200px;\n  background: url(" + __webpack_require__(61) + ");\n}\n", ""]);
+	exports.push([module.id, ".imgshow1 {\n  width: 200px;\n  height: 200px;\n  background: url(" + __webpack_require__(73) + ");\n}\n", ""]);
 	
 	// exports
 
 
 /***/ },
 
-/***/ 61:
+/***/ 73:
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__.p + "imgs/tutu.jpg";
 
 /***/ },
 
-/***/ 62:
+/***/ 74:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -814,7 +814,7 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var Control = __webpack_require__(31);
+	var Control = __webpack_require__(32);
 	var limit = __webpack_require__(4);
 	
 	var Controller = function (_Control) {

@@ -38,7 +38,7 @@ Actions.get = function(id){
 			let action = null;
 			pool.some((val) => {
 				action = val;
-				return val.actionUUid === actionUUid;
+				return val.uuid === actionUUid;
 			});
 			return action;
 		}else{

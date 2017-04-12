@@ -35,7 +35,13 @@ class Body extends React.Component {
 							{me.renderFilter()}
 						</div>
 						<div className="thetop-list">
-							<List {...props} />
+							{do{
+								if( props.list.length ){
+									<List {...props} />
+								}else{
+									<div className="ch-404">找不到，我也很绝望啊</div>
+								}
+							}}
 						</div>
 						<div className="thetop-page">
 							<Page totle={props.totle} onChangePage={Actions(me).changePage} page={props.page}/>
@@ -61,7 +67,9 @@ class Body extends React.Component {
 	}
 	componentDidMount(){
 		let me = this;
-		Actions(me).searchList().then(() => {
+		Actions(me).getFilterMap().then(() => {
+			return 	Actions(me).searchList();
+		}).then(() => {
 			Actions('layout').showLayout();
 		}).then(() => {
 			Actions('layout').setScrollTop();

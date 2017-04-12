@@ -1,8 +1,9 @@
 "use strict";
 
 // 依赖
-const Widget = require('common/myReflux/widget');
+const limit = require('limit');
 const originClass = require('./index');
+const Widget = require('common/myReflux/widget');
 
 class originWidget extends Widget {
 	static originClass = originClass
@@ -18,25 +19,25 @@ class originWidget extends Widget {
 			opacity: 0
 		}, null, <i className="ch-load"></i>);
 	}
-	static success(info){
-		return new originWidget({
+	static success(info, config){
+		return new originWidget(  limit.assignSuper({
 			className: 'widget-success',
 			width: 'auto',
 			height: 'auto',
 			maxWidth: 300,
 			opacity: 0,
 			timeout: 3000
-		}, null, <div className="ch-text"><i className="ch-logo">√</i>{info||'操作成功'}</div>);
+		}, config), null, <div className="ch-text fn-wrap"><i className="ch-logo">√</i>{info||'操作成功'}</div>);
 	}
-	static error(info){
-		return new originWidget({
+	static error(info, config){
+		return new originWidget( limit.assignSuper({
 			className: 'widget-error',
 			width: 'auto',
 			height: 'auto',
 			maxWidth: 300,
 			opacity: 0,
 			timeout: 3000
-		}, null, <div className="ch-text"><span className="ch-logo">×</span>{info||'操作失败'}</div>);
+		}, config), null, <div className="ch-text fn-wrap"><span className="ch-logo">×</span>{info||'操作失败'}</div>);
 	}
 };
 

@@ -28,13 +28,13 @@ class Widget {
 			node = me.tempNode = me.parentNode;
 		}else{
 			node = me.tempNode = document.createElement('div');
-			node.id = `widget${limit.getUid()}`;
 			document.body.appendChild(node);
 		};
 		me.componentExp = ReactDOM.render(
 			<Component {...me.state} children={me.childCom} />,
 			node
 		);
+		node.id = me.componentExp.state.actionUUid
 		Actions(me.componentExp).destroyWidget = me.destroy.bind(me);
 	}
 	// 更新组件

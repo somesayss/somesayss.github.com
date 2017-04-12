@@ -44,7 +44,7 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(12);
+	module.exports = __webpack_require__(10);
 
 
 /***/ },
@@ -67,9 +67,7 @@
 /* 7 */,
 /* 8 */,
 /* 9 */,
-/* 10 */,
-/* 11 */,
-/* 12 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -77,7 +75,7 @@
 	// 依赖
 	
 	var $ = __webpack_require__(3);
-	var Rainbow = __webpack_require__(13);
+	var Rainbow = __webpack_require__(11);
 	
 	var html = '';
 	var arr = new Rainbow({ totle: 10 });
@@ -95,7 +93,7 @@
 	// }
 
 /***/ },
-/* 13 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";

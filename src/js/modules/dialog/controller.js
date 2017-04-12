@@ -13,7 +13,8 @@ class Controller extends Control {
 		width: 400,
 		height: 200,
 		actionId: 'dialog',
-		onClose: limit.K
+		onClose: limit.K,
+		hasCover: true
 	}
 	onSetCenter(){
 		let me = this;
