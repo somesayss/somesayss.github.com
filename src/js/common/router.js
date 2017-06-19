@@ -1,9 +1,5 @@
 "use strict";
 
-// 依赖
-const $ = require('$');
-const limit = require('limit');
-
 // 变量
 const WIN = $(window);
 const REX_HASH = /^#([^?]*)(?:\?(.*))?/;
@@ -23,7 +19,7 @@ class Router {
 		let me = this;
 		let	routerMap = me.routerMap;
 		if( limit.isDefined(routerMap[key]) ){
-			limit['!!!'](`${key} is defined before;`);
+			limit.war(`${key} is defined before;`);
 		};
 		routerMap[key] = limit.cb(cb);
 		return me;

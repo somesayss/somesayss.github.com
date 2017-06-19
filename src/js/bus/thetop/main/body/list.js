@@ -41,12 +41,12 @@ class Info extends React.Component {
 								{do{
 									if( !val.isHide ){
 										<span>
-											<a href="javascript:;" className="ch-btn" onClick={Actions(me).copy.bind(me, val.name)}>复制名称</a>
+											<a href="javascript:;" className="ch-btn" onClick={Actions(me).copy.bind(me, val.id, false)}>复制地址</a>
 											<a href="javascript:;" className="ch-btn" onClick={Actions(me).hideIt.bind(me, val)}>看过</a>
 										</span>
 									}else{
 										<span>
-											<a href="javascript:;" className="ch-btn ch-btn-gray" onClick={Actions(me).copy.bind(me, val.name)}>复制名称</a>
+											<a href="javascript:;" className="ch-btn ch-btn-gray" onClick={Actions(me).copy.bind(me, val.id, false)}>复制地址</a>
 											<a href="javascript:;" className="ch-btn ch-btn-gray" onClick={Actions(me).showIt.bind(me, val)}>想看</a>
 										</span>
 									}
@@ -64,12 +64,12 @@ class Info extends React.Component {
 								if( val.thunder ){
 									<div className="ch-download">
 										{val.thunder.split(',').map((val, key) => {
-											let title = `点击复制资源地址[${val}]`;
+											let title = `点击复制迅雷资源地址[${val}]`;
 											return (
 												<a key={key} 
 													href="javascript:;" 
 													title={title}
-													onClick={Actions(me).copy.bind(me, val)}>B</a>
+													onClick={Actions(me).copy.bind(me, val, true)}>B</a>
 											);
 										})}
 									</div>

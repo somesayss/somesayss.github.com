@@ -37,8 +37,10 @@ Actions.get = function(id){
 			let actionUUid = id.props.actionUUid || id.state.actionUUid;
 			let action = null;
 			pool.some((val) => {
-				action = val;
-				return val.uuid === actionUUid;
+				if( val.uuid === actionUUid ){
+					action = val;
+					return true;
+				};
 			});
 			return action;
 		}else{

@@ -40,34 +40,31 @@
 /******/ 	return __webpack_require__(0);
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */
+/******/ ({
+
+/***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(10);
+	module.exports = __webpack_require__(87);
 
 
 /***/ },
-/* 1 */,
-/* 2 */,
-/* 3 */
+
+/***/ 3:
 /***/ function(module, exports) {
 
 	module.exports = jQuery;
 
 /***/ },
-/* 4 */
+
+/***/ 4:
 /***/ function(module, exports) {
 
 	module.exports = limit;
 
 /***/ },
-/* 5 */,
-/* 6 */,
-/* 7 */,
-/* 8 */,
-/* 9 */,
-/* 10 */
+
+/***/ 87:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -75,7 +72,7 @@
 	// 依赖
 	
 	var $ = __webpack_require__(3);
-	var Rainbow = __webpack_require__(11);
+	var Rainbow = __webpack_require__(88);
 	
 	var html = '';
 	var arr = new Rainbow({ totle: 10 });
@@ -93,7 +90,8 @@
 	// }
 
 /***/ },
-/* 11 */
+
+/***/ 88:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -174,5 +172,6 @@
 	module.exports = Rainbow;
 
 /***/ }
-/******/ ]);
+
+/******/ });
 //# sourceMappingURL=main.js.map

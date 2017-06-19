@@ -11,8 +11,7 @@ class Controller extends Control {
 		actionId: 'limit_title',
 		shouldComponentNotUpdate: true,
 		diffX: 10,
-		diffY: 10,
-		width: 300
+		diffY: 10
 	}
 };
 

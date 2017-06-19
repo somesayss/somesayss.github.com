@@ -1,19 +1,10 @@
 "use strict";
 
-// 依赖
-class A {
-	showA(){
-		
-	}
+limit.limitFixed = true;
+
+function main(a, b){
+	console.log(this, a, b);
 };
 
-class B extends A {
-	showB(){
 
-	}
-
-};
-
-var b = new B;
-
-console.log(b.__proto__);
+limit.bind(main, 'a', 'b')('c');

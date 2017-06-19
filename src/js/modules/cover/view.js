@@ -15,7 +15,10 @@ class Cover extends React.Component {
 		let me = this;
 		let	props = me.props;
 		return (
-			<div className="react-cover" style={ {opacity: props.opacity, background: props.background} }>
+			<div
+				onClick={props.onClick} 
+				className="react-cover" 
+				style={ {opacity: props.opacity, background: props.background} }>
 				{props.children}
 			</div>
 		);

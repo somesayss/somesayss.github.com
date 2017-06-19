@@ -58,10 +58,10 @@
 	
 	var $ = __webpack_require__(3);
 	var limit = __webpack_require__(4);
-	var PaseBoard = __webpack_require__(5);
+	var Copy = __webpack_require__(5);
 	
 	$('#copy').on('click', function () {
-		new PaseBoard($('#list').html());
+		new Copy({ text: $('#list').html() });
 	});
 
 /***/ },
@@ -90,54 +90,74 @@
 	
 	var limit = __webpack_require__(4);
 	
-	var PaseBoard = function () {
-		function PaseBoard(text) {
-			_classCallCheck(this, PaseBoard);
+	var Copy = function () {
+		function Copy(config) {
+			_classCallCheck(this, Copy);
 	
-			return this.init(limit.toString(text));
+			this.props = {
+				text: ''
+			};
+			this.state = {};
+	
+			var me = this;
+			limit.assign(me.state, me.props, config);
+			return me.emoveHideArea(me.creatHideArea());
 		}
 	
-		_createClass(PaseBoard, [{
-			key: 'init',
-			value: function init(text) {
-				var me = this;
-				return new Promise(function (resolve, reject) {
-					me.creatHideArea();
-					try {
-						me.area.value = text;
-						me.area.select();
-						document.execCommand('copy');
-						resolve();
-					} catch (e) {
-						reject(e);
-					};
-					me.removeHideArea();
-				});
-			}
-		}, {
+		_createClass(Copy, [{
 			key: 'creatHideArea',
 			value: function creatHideArea() {
 				var me = this;
-				var area = me.area = document.createElement('textarea');
+				var state = me.state;
+	
+				var area = document.createElement('textarea');
 				area.style['position'] = 'absolute';
 				area.style['left'] = '-99999px';
 				document.body.appendChild(area);
+				area.value = state.text;
+				area.select();
+				try {
+					me.H5copy();
+				} catch (e) {
+					state.copySuccess = false;
+				};
+				return area;
 			}
 		}, {
-			key: 'removeHideArea',
-			value: function removeHideArea() {
+			key: 'H5copy',
+			value: function H5copy() {
 				var me = this;
+				var state = me.state;
+	
+				state.copySuccess = document.execCommand('copy', false, null);
+			}
+		}, {
+			key: 'IEcopy',
+			value: function IEcopy(val) {
+				window.clipboardData.setData('text', val);
+			}
+		}, {
+			key: 'emoveHideArea',
+			value: function emoveHideArea(area) {
+				var me = this;
+				var state = me.state;
+	
 				var div = document.createElement('div');
-				div.appendChild(me.area);
+				div.appendChild(area);
 				div.innerHTML = '';
 				div = null;
 			}
+		}, {
+			key: 'isCopySuccess',
+			value: function isCopySuccess() {
+				return this.state.copySuccess;
+			}
 		}]);
 	
-		return PaseBoard;
+		return Copy;
 	}();
 	
-	module.exports = PaseBoard;
+	module.exports = Copy;
 
 /***/ }
 /******/ ]);

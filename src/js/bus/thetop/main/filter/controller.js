@@ -12,7 +12,9 @@ class Controller extends Control {
 		filterName: '年份',
 		word: ['2016', '2017', '2018'],
 		onChange: limit.K,
-		defaultWord: ['2016']
+		defaultWord: ['2016'],
+		actionId: 'filter',
+		shouldComponentNotUpdate: true
 	}
 	constructor(props){
 		super();

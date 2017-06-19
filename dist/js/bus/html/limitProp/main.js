@@ -45,7 +45,7 @@
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(19);
+	module.exports = __webpack_require__(94);
 
 
 /***/ },
@@ -64,7 +64,7 @@
 
 /***/ },
 
-/***/ 19:
+/***/ 94:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -81,8 +81,8 @@
 	
 	var $ = __webpack_require__(3);
 	var limit = __webpack_require__(4);
-	var Router = __webpack_require__(20);
-	var Class = __webpack_require__(21);
+	var Router = __webpack_require__(95);
+	var Class = __webpack_require__(96);
 	
 	var A = function () {
 		function A() {
@@ -183,21 +183,17 @@
 
 /***/ },
 
-/***/ 20:
-/***/ function(module, exports, __webpack_require__) {
+/***/ 95:
+/***/ function(module, exports) {
 
 	"use strict";
 	
-	// 依赖
+	// 变量
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-	var $ = __webpack_require__(3);
-	var limit = __webpack_require__(4);
-	
-	// 变量
 	var WIN = $(window);
 	var REX_HASH = /^#([^?]*)(?:\?(.*))?/;
 	
@@ -222,7 +218,7 @@
 				var me = this;
 				var routerMap = me.routerMap;
 				if (limit.isDefined(routerMap[key])) {
-					limit['!!!'](key + ' is defined before;');
+					limit.war(key + ' is defined before;');
 				};
 				routerMap[key] = limit.cb(cb);
 				return me;
@@ -325,7 +321,7 @@
 
 /***/ },
 
-/***/ 21:
+/***/ 96:
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;"use strict";

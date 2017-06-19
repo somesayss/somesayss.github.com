@@ -18,11 +18,11 @@ class Rate extends React.Component {
 			<div className="rate">
 				<span className="ch-txt">总金额：</span>
 				<input ref="inputText1" className="rate-input" title="总金额" placeholder="总金额" 
-					value={ limit.toFixed(props.amount) } onChange={props.Actions.changeAmount} />
+					value={ limit.toFixed(props.amount) } onChange={Actions(me).changeAmount} />
 				<br /><br />
 				<span className="ch-txt">年利率：</span>
 				<input ref="inputText2" className="rate-input" title="年利率" placeholder="年利率" 
-					value={props.rate} onChange={props.Actions.changeRate}/> 
+					value={props.rate} onChange={Actions(me).changeRate}/> 
 					<br /><br />
 				<span className="ch-txt">日收入：</span>
 				<input ref="inputText3" className="rate-input" title="日收入" placeholder="日收入" 
@@ -32,13 +32,13 @@ class Rate extends React.Component {
 				<input ref="inputText4" className="rate-input" title="月收入" placeholder="月收入" 
 					value={ limit.toFixed(me.getMountByMouth(30), 2) } onChange={limit.K} readOnly="readOnly" />
 					<br /><br />
-				<span className="ch-txt">季收入：</span>
-				<input ref="inputText5" className="rate-input" title="季收入" placeholder="季收入" 
+				<span className="ch-txt">(35日)收入：</span>
+				<input ref="inputText5" className="rate-input" title="季收入" placeholder="35收入" 
 					value={ limit.toFixed(me.getMountByMouth(35), 2) } onChange={limit.K} readOnly="readOnly" />
 					<br /><br />
 				<span className="ch-txt">年收入：</span>
 				<input ref="inputText6" className="rate-input" title="年收入" placeholder="年收入" 
-					value={ limit.toFixed(me.getMountByYear()) } onChange={props.Actions.changeAmountYear} />
+					value={ limit.toFixed(me.getMountByYear()) } onChange={Actions(me).changeAmountYear} />
 					<br /><br />
 			</div>
 		);

@@ -40,121 +40,31 @@
 /******/ 	return __webpack_require__(0);
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */
+/******/ ({
+
+/***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(33);
+	module.exports = __webpack_require__(106);
 
 
 /***/ },
-/* 1 */,
-/* 2 */,
-/* 3 */
+
+/***/ 3:
 /***/ function(module, exports) {
 
 	module.exports = jQuery;
 
 /***/ },
-/* 4 */
+
+/***/ 4:
 /***/ function(module, exports) {
 
 	module.exports = limit;
 
 /***/ },
-/* 5 */,
-/* 6 */,
-/* 7 */,
-/* 8 */,
-/* 9 */,
-/* 10 */,
-/* 11 */
-/***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
-	
-	// 依赖
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	var limit = __webpack_require__(4);
-	
-	var Rainbow = function () {
-		function Rainbow(config) {
-			_classCallCheck(this, Rainbow);
-	
-			this.props = {
-				list: [[255, 0, 0] //红
-				, [255, 122, 0] //橙
-				, [255, 255, 0] //黄
-				, [0, 255, 0] //绿
-				, [0, 255, 255] //青
-				, [0, 0, 255] //蓝
-				, [255, 0, 255] //紫
-				],
-				totle: 50
-			};
-			this.state = {};
-	
-			var me = this;
-			limit.assign(me.state, me.props, config);
-			return me.parseList();
-		}
-	
-		_createClass(Rainbow, [{
-			key: "parseList",
-			value: function parseList() {
-				var me = this;
-				var state = me.state;
-				var list = state.list;
-				var rev = [];
-				var leg = list.length;
-				var range = Math.ceil((state.totle - leg) / (leg - 1) + 2);
-				list.forEach(function (val, key) {
-					var next = list[++key];
-					if (next) {
-						rev.push(val);
-						Array.prototype.push.apply(rev, me.getColorRange(range, val, next));
-					} else {
-						rev.push(val);
-					};
-				});return rev;
-			}
-		}, {
-			key: "getColorRange",
-			value: function getColorRange() {
-				var range = arguments.length <= 0 || arguments[0] === undefined ? 10 : arguments[0];
-				var from = arguments.length <= 1 || arguments[1] === undefined ? [255, 0, 0] : arguments[1];
-				var to = arguments.length <= 2 || arguments[2] === undefined ? [0, 255, 0] : arguments[2];
-	
-				range--;
-				var leg = from.length;
-				var dif = limit.from(new Array(leg), function (val, key) {
-					return (from[key] - to[key]) / range;
-				});
-				return limit.from(new Array(--range), function (val, key) {
-					key++;
-					return limit.from(new Array(leg), function (val, k) {
-						return Math.floor(from[k] - dif[k] * key);
-					});
-				});
-			}
-		}]);
-	
-		return Rainbow;
-	}();
-	
-	module.exports = Rainbow;
-
-/***/ },
-/* 12 */,
-/* 13 */,
-/* 14 */,
-/* 15 */,
-/* 16 */,
-/* 17 */
+/***/ 17:
 /***/ function(module, exports) {
 
 	"use strict";
@@ -209,7 +119,8 @@
 	};
 
 /***/ },
-/* 18 */
+
+/***/ 18:
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -461,38 +372,107 @@
 
 
 /***/ },
-/* 19 */,
-/* 20 */,
-/* 21 */,
-/* 22 */,
-/* 23 */,
-/* 24 */,
-/* 25 */,
-/* 26 */,
-/* 27 */,
-/* 28 */,
-/* 29 */,
-/* 30 */,
-/* 31 */,
-/* 32 */,
-/* 33 */
+
+/***/ 88:
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	// 依赖
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var limit = __webpack_require__(4);
+	
+	var Rainbow = function () {
+		function Rainbow(config) {
+			_classCallCheck(this, Rainbow);
+	
+			this.props = {
+				list: [[255, 0, 0] //红
+				, [255, 122, 0] //橙
+				, [255, 255, 0] //黄
+				, [0, 255, 0] //绿
+				, [0, 255, 255] //青
+				, [0, 0, 255] //蓝
+				, [255, 0, 255] //紫
+				],
+				totle: 50
+			};
+			this.state = {};
+	
+			var me = this;
+			limit.assign(me.state, me.props, config);
+			return me.parseList();
+		}
+	
+		_createClass(Rainbow, [{
+			key: "parseList",
+			value: function parseList() {
+				var me = this;
+				var state = me.state;
+				var list = state.list;
+				var rev = [];
+				var leg = list.length;
+				var range = Math.ceil((state.totle - leg) / (leg - 1) + 2);
+				list.forEach(function (val, key) {
+					var next = list[++key];
+					if (next) {
+						rev.push(val);
+						Array.prototype.push.apply(rev, me.getColorRange(range, val, next));
+					} else {
+						rev.push(val);
+					};
+				});return rev;
+			}
+		}, {
+			key: "getColorRange",
+			value: function getColorRange() {
+				var range = arguments.length <= 0 || arguments[0] === undefined ? 10 : arguments[0];
+				var from = arguments.length <= 1 || arguments[1] === undefined ? [255, 0, 0] : arguments[1];
+				var to = arguments.length <= 2 || arguments[2] === undefined ? [0, 255, 0] : arguments[2];
+	
+				range--;
+				var leg = from.length;
+				var dif = limit.from(new Array(leg), function (val, key) {
+					return (from[key] - to[key]) / range;
+				});
+				return limit.from(new Array(--range), function (val, key) {
+					key++;
+					return limit.from(new Array(leg), function (val, k) {
+						return Math.floor(from[k] - dif[k] * key);
+					});
+				});
+			}
+		}]);
+	
+		return Rainbow;
+	}();
+	
+	module.exports = Rainbow;
+
+/***/ },
+
+/***/ 106:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	// 样式
 	
-	__webpack_require__(34);
+	__webpack_require__(107);
 	
 	// 依赖
 	var $ = __webpack_require__(3);
 	var limit = __webpack_require__(4);
 	
 	// 颜色类
-	var Rainbow = __webpack_require__(11);
+	var Rainbow = __webpack_require__(88);
 	// 画图类
-	var DrawCanvas = __webpack_require__(36);
-	var AudioBuffer = __webpack_require__(37);
+	var DrawCanvas = __webpack_require__(109);
+	var AudioBuffer = __webpack_require__(110);
 	
 	var DC = new DrawCanvas({ rotate: -90 });
 	var RB = new Rainbow({ totle: 360 });
@@ -526,13 +506,14 @@
 	});
 
 /***/ },
-/* 34 */
+
+/***/ 107:
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(35);
+	var content = __webpack_require__(108);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(18)(content, {});
@@ -552,7 +533,8 @@
 	}
 
 /***/ },
-/* 35 */
+
+/***/ 108:
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(17)();
@@ -566,7 +548,8 @@
 
 
 /***/ },
-/* 36 */
+
+/***/ 109:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -691,7 +674,8 @@
 	module.exports = DrawCanvas;
 
 /***/ },
-/* 37 */
+
+/***/ 110:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -816,5 +800,6 @@
 	module.exports = AudioBuffer;
 
 /***/ }
-/******/ ]);
+
+/******/ });
 //# sourceMappingURL=main.js.map

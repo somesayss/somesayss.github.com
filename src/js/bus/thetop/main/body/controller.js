@@ -8,8 +8,7 @@ const Control = require('common/myReflux/control');
 const Ajax = require('modules/ajax/index');
 const Copy =require('modules/copy/index');
 const Dialog = require('modules/dialog/widget');
-
-let guid = 0;
+const Router = require('modules/router/index');
 
 class Controller extends Control {
 	state = {
@@ -17,23 +16,16 @@ class Controller extends Control {
 		number: 10,
 		page: 1,
 		list: [],
-		filterMap: {
-			// '电影': {
-				// '年份': ['2012', '2013', '2014', '2015', '2016'],
-				// '类型': ['喜剧', '剧情', '战争'],
-				// '国家': ['中国大陆', '美国']
-			// }
-		},
+		filterMap: {},
 		filter: {},
 		filterName: '',
 		focus: '电影'
 	}
 	constructor(){
-		super();
-		let me = this;
+		let me = super();
 		let {state} = me;
 		if( localStorage.page ){
-			state.page = localStorage.page;
+			// state.page = localStorage.page;
 		};
 	}
 	static defaultProps = {
@@ -48,15 +40,25 @@ class Controller extends Control {
 			state.filterMap = val.filterMap;
 		}).then(() => {
 			let filter = me.getLocalStorage('filter');
+			if( me.hasClearFilter() ){
+				filter = {};
+			};
 			state.filter = limit.keys(filter).length ?  filter : limit.map(state.filterMap, (val, key) => limit.map(val, () => []));
 		});
+	}
+	onChangeFilterName(val, showLayout){
+		let me = this;
+		let {state} = me;
+		state.filterName = val;
+		me.updateComponent();
+		if( showLayout ){
+			me.onChangePage(1);
+		};
 	}
 	onInputFilterName(val){
 		let me = this;
 		let {state} = me;
-		state.page = 1;
-		state.filterName = val;
-		me.onSearchList();
+		Router.setSearch({filterName: val}, 'search');
 	}
 	onSearchList(){
 		let me = this;
@@ -103,6 +105,10 @@ class Controller extends Control {
 		filter.length = 0;
 		filter.push.apply(filter, keys);
 		localStorage['filter'] = JSON.stringify(state.filter);
+		// 如果ID查询的时候
+		if( me.hasFilterId() ){
+			Router.setHash('');
+		};
 		me.onChangePage(1);
 	}
 	getData(){
@@ -112,8 +118,35 @@ class Controller extends Control {
 		let start = number * ( state.page - 1 );
 		let filter = state.filter[state.focus];
 		let filterMap = JSON.stringify(filter);
-		let filterName = state.filterName;
-		return {start, number, filterMap, filterName};
+		if( me.hasClearFilter() ){
+			filterMap = '{}';
+			start = 0;
+			state.page = 1;
+		};
+		return limit.assign({start, number, filterMap}, me.mixSearch());
+	}
+	hasFilterId(){
+		let hashParse = Router.parseHash();
+		if( hashParse && hashParse.hash === 'search' ){
+			let search = hashParse.search;
+			return search.filterId;
+		};
+		return false;
+	}
+	hasClearFilter(){
+		let hashParse = Router.parseHash();
+		if( hashParse && hashParse.hash === 'search' ){
+			let search = hashParse.search;
+			return search.clearFilter;
+		};
+		return false;
+	}
+	mixSearch(){
+		let me = this;
+		let hashParse = Router.parseHash();
+		if( hashParse ){
+			return hashParse.search 
+		};
 	}
 	setLocalStorage(id, flag){
 		let me = this;
@@ -133,21 +166,31 @@ class Controller extends Control {
 		let me = this;
 		return limit.keys( me.getLocalStorage('hideMovie') ).length;
 	}
-	onCopy(val){
-		try{
-			new Copy({text: val});
-			Dialog.success(`成功复制:${val}`, {hasCover: false, timeout: 1000});
-		}catch(e){
-			Dialog.error('复制失败');
+	onCopy(val, isOrigin){
+		let href = null;
+		if( isOrigin ){
+			href = val;
+		}else{
+			let hash = encodeURIComponent(`search?filterId=${val}&clearFilter=true`);
+			href = `http://${location.host}/thetop/main.htm#${hash}`;
+		};
+		if( new Copy({text: href}).isCopySuccess() ){
+			Dialog.success(`成功复制，请直接粘贴`, {hasCover: false, timeout: 1000});
+		}else{
+			window.open(href);
 		};
 	}
 	onZoomIn(val){
 		let dia = new Dialog({
 			width: 'auto', 
 			height: 'auto',
-			className: 'imgview'
+			className: 'imgview',
+			onClickCover(){
+				dia.destroy()
+			}
 		}, null, <img src={val} onClick={() => { dia.destroy() }} />);
 	}
+	
 };
 
 module.exports = Controller;

@@ -45,7 +45,7 @@
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(62);
+	module.exports = __webpack_require__(173);
 
 
 /***/ },
@@ -61,6 +61,238 @@
 /***/ function(module, exports) {
 
 	module.exports = limit;
+
+/***/ },
+
+/***/ 11:
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	// 依赖
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var React = __webpack_require__(12);
+	var limit = __webpack_require__(4);
+	var Actions = __webpack_require__(13);
+	
+	module.exports = function (Wrapper, Class) {
+				var WrapperComponent = function (_React$Component) {
+							_inherits(WrapperComponent, _React$Component);
+	
+							function WrapperComponent(props) {
+										_classCallCheck(this, WrapperComponent);
+	
+										var _this = _possibleConstructorReturn(this, (WrapperComponent.__proto__ || Object.getPrototypeOf(WrapperComponent)).apply(this, arguments));
+	
+										var me = _this;
+										var __controller__ = void 0;
+										var clearProps = me.clearProps(props);
+										__controller__ = me.__controller__ = new Class(clearProps);
+										__controller__.com = me;
+										me.state = limit.assignSuper({}, __controller__.getInitialState(), clearProps);
+										__controller__.props = me.getPerProps(clearProps);
+										__controller__.state = me.getPerState(me.state);
+										me.state.actionId = me.state.actionId || 'uaid' + limit.getUid();
+										me.state.actionUUid = __controller__.Actions.uuid = 'uuid' + limit.getUid();
+										Actions.set(me.state.actionId, __controller__.Actions);
+										return _this;
+							}
+	
+							_createClass(WrapperComponent, [{
+										key: 'getPerProps',
+										value: function getPerProps(props) {
+													var outProps = {};
+													limit.each(Class.defaultProps, function (val, key) {
+																outProps[key] = props[key];
+													});
+													return outProps;
+										}
+							}, {
+										key: 'getPerState',
+										value: function getPerState(state) {
+													var me = this;
+													var outState = {};
+													limit.each(me.__controller__.state, function (val, key) {
+																outState[key] = state[key];
+													});
+													return outState;
+										}
+							}, {
+										key: 'componentWillReceiveProps',
+										value: function componentWillReceiveProps(props) {
+													var me = this;
+													me.propsFromOther = true;
+										}
+							}, {
+										key: 'shouldComponentUpdate',
+										value: function shouldComponentUpdate() {
+													var me = this;
+													var propsFromOther = !!me.propsFromOther;
+													if (me.state.shouldComponentNotUpdate) {
+																if (propsFromOther) {
+																			return me.propsFromOther = false;
+																} else {
+																			return true;
+																};
+													} else {
+																return true;
+													};
+										}
+							}, {
+										key: 'clearProps',
+										value: function clearProps(props) {
+													var newProps = limit.assign({}, props);
+													delete newProps.actionId;
+													delete newProps.actionUUid;
+													newProps.actionId = Class.defaultProps && Class.defaultProps.actionId;
+													return newProps;
+										}
+							}, {
+										key: 'componentWillUpdate',
+										value: function componentWillUpdate(props) {
+													var me = this;
+													var __controller__ = me.__controller__;
+													// 如果是外部传入的属性全量更新
+													// if( me.propsFromOther ){
+													// 	me.nextState = limit.assignSuper({}, me.state, me.clearProps(props));
+													// 	limit.cb(__controller__.componentWillUpdate).call(__controller__, me.nextState);
+													// 	__controller__.state = me.getPerState(me.nextState);
+													// 	__controller__.props = me.getPerProps(me.nextState);
+													// }else{
+													// 	delete me.nextState;
+													// };
+	
+													if (me.propsFromOther) {
+																limit.assignSuper(me.state, me.clearProps(props));
+																limit.cb(__controller__.componentWillUpdate).call(__controller__, me.state);
+																__controller__.state = me.getPerState(me.state);
+																__controller__.props = me.getPerProps(me.state);
+													};
+										}
+							}, {
+										key: 'componentDidUpdate',
+										value: function componentDidUpdate() {
+													var me = this;
+													me.propsFromOther = false;
+										}
+							}, {
+										key: 'render',
+										value: function render() {
+													var me = this;
+													return React.createElement(Wrapper, me.state);
+										}
+							}, {
+										key: 'componentWillUnmount',
+										value: function componentWillUnmount() {
+													var me = this;
+													Actions.remove(me.state.actionId, me.__controller__.Actions);
+													me.__controller__.destroy();
+										}
+							}]);
+	
+							return WrapperComponent;
+				}(React.Component);
+	
+				WrapperComponent.defaultProps = Class.defaultProps;
+				WrapperComponent.propTypes = Class.propTypes;
+				;
+				return WrapperComponent;
+	};
+
+/***/ },
+
+/***/ 12:
+/***/ function(module, exports) {
+
+	module.exports = React;
+
+/***/ },
+
+/***/ 13:
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	// 依赖
+	
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	
+	var limit = __webpack_require__(4);
+	
+	// 变量
+	var Actions = window.Actions = function (id) {
+		return Actions.get(id);
+	};
+	
+	var ActionsPool = Actions.pool = {};
+	
+	Actions.set = function (id, action) {
+		var pool = ActionsPool[id];
+		if (pool) {
+			pool.push(action);
+		} else {
+			ActionsPool[id] = [action];
+		};
+	};
+	
+	Actions.getAll = function (id) {
+		if (limit.isObjectSuper(id)) {
+			id = id.props.actionId || id.state.actionId;
+		} else {
+			id = limit.toString(id);
+		};
+		var pool = ActionsPool[id];
+		return pool;
+	};
+	
+	Actions.get = function (id) {
+		var pool = Actions.getAll(id);
+		if (pool) {
+			if (limit.isObjectSuper(id) && (id.props.actionUUid || id.state.actionUUid)) {
+				var _ret = function () {
+					var actionUUid = id.props.actionUUid || id.state.actionUUid;
+					var action = null;
+					pool.some(function (val) {
+						if (val.uuid === actionUUid) {
+							action = val;
+							return true;
+						};
+					});
+					return {
+						v: action
+					};
+				}();
+	
+				if ((typeof _ret === "undefined" ? "undefined" : _typeof(_ret)) === "object") return _ret.v;
+			} else {
+				if (pool.length === 1) {
+					return pool[0];
+				} else {
+					return pool;
+				};
+			};
+		};
+	};
+	
+	Actions.remove = function (id, action) {
+		var pool = ActionsPool[id];
+		if (pool) {
+			limit.remove(pool, action);
+			if (!pool.length) {
+				delete ActionsPool[id];
+			};
+		};
+	};
+	
+	module.exports = Actions;
 
 /***/ },
 
@@ -373,211 +605,7 @@
 
 /***/ },
 
-/***/ 23:
-/***/ function(module, exports) {
-
-	module.exports = React;
-
-/***/ },
-
-/***/ 24:
-/***/ function(module, exports) {
-
-	module.exports = ReactDOM;
-
-/***/ },
-
-/***/ 26:
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	// 依赖
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var React = __webpack_require__(23);
-	var limit = __webpack_require__(4);
-	var Actions = __webpack_require__(27);
-	
-	module.exports = function (Wrapper, Class) {
-		var WrapperComponent = function (_React$Component) {
-			_inherits(WrapperComponent, _React$Component);
-	
-			function WrapperComponent() {
-				_classCallCheck(this, WrapperComponent);
-	
-				var _this = _possibleConstructorReturn(this, (WrapperComponent.__proto__ || Object.getPrototypeOf(WrapperComponent)).apply(this, arguments));
-	
-				var me = _this;
-				var __controller__ = void 0;
-				__controller__ = me.__controller__ = new Class(me.props);
-				__controller__.com = me;
-				__controller__.props = me.getPerProps(me.props);
-				me.state = limit.assignSuper({}, __controller__.getInitialState(), me.props);
-				me.state.actionId = me.state.actionId || 'uaid' + limit.getUid();
-				me.state.actionUUid = __controller__.Actions.uuid = 'uuid' + limit.getUid();
-				Actions.set(me.state.actionId, __controller__.Actions);
-				return _this;
-			}
-	
-			_createClass(WrapperComponent, [{
-				key: 'getPerProps',
-				value: function getPerProps(props) {
-					var outProps = {};
-					limit.each(Class.defaultProps, function (val, key) {
-						outProps[key] = props[key];
-					});
-					return outProps;
-				}
-			}, {
-				key: 'componentWillReceiveProps',
-				value: function componentWillReceiveProps(props) {
-					var me = this;
-					me.propsFromOther = true;
-				}
-			}, {
-				key: 'shouldComponentUpdate',
-				value: function shouldComponentUpdate() {
-					var me = this;
-					var propsFromOther = !!me.propsFromOther;
-					if (me.state.shouldComponentNotUpdate) {
-						if (propsFromOther) {
-							return me.propsFromOther = false;
-						} else {
-							return true;
-						};
-					} else {
-						return true;
-					};
-				}
-			}, {
-				key: 'componentWillUpdate',
-				value: function componentWillUpdate(props) {
-					var me = this;
-					// 如果是外部传入的属性全量更新
-					if (me.propsFromOther) {
-						limit.assignSuper(me.state, props);
-					};
-					me.__controller__.props = me.getPerProps(props);
-				}
-			}, {
-				key: 'componentDidUpdate',
-				value: function componentDidUpdate() {
-					var me = this;
-					me.propsFromOther = false;
-				}
-			}, {
-				key: 'render',
-				value: function render() {
-					var me = this;
-					return React.createElement(Wrapper, me.state);
-				}
-			}, {
-				key: 'componentWillUnmount',
-				value: function componentWillUnmount() {
-					var me = this;
-					Actions.remove(me.state.actionId, me.__controller__.Actions);
-					me.__controller__.destroy();
-				}
-			}]);
-	
-			return WrapperComponent;
-		}(React.Component);
-	
-		WrapperComponent.defaultProps = Class.defaultProps;
-		WrapperComponent.propTypes = Class.propTypes;
-		;
-		return WrapperComponent;
-	};
-
-/***/ },
-
-/***/ 27:
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	// 依赖
-	
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
-	
-	var limit = __webpack_require__(4);
-	
-	// 变量
-	var Actions = window.Actions = function (id) {
-		return Actions.get(id);
-	};
-	
-	var ActionsPool = Actions.pool = {};
-	
-	Actions.set = function (id, action) {
-		var pool = ActionsPool[id];
-		if (pool) {
-			pool.push(action);
-		} else {
-			ActionsPool[id] = [action];
-		};
-	};
-	
-	Actions.getAll = function (id) {
-		if (limit.isObjectSuper(id)) {
-			id = id.props.actionId || id.state.actionId;
-		} else {
-			id = limit.toString(id);
-		};
-		var pool = ActionsPool[id];
-		return pool;
-	};
-	
-	Actions.get = function (id) {
-		var pool = Actions.getAll(id);
-		if (pool) {
-			if (limit.isObjectSuper(id) && (id.props.actionUUid || id.state.actionUUid)) {
-				var _ret = function () {
-					var actionUUid = id.props.actionUUid || id.state.actionUUid;
-					var action = null;
-					pool.some(function (val) {
-						action = val;
-						return val.uuid === actionUUid;
-					});
-					return {
-						v: action
-					};
-				}();
-	
-				if ((typeof _ret === "undefined" ? "undefined" : _typeof(_ret)) === "object") return _ret.v;
-			} else {
-				if (pool.length === 1) {
-					return pool[0];
-				} else {
-					return pool;
-				};
-			};
-		};
-	};
-	
-	Actions.remove = function (id, action) {
-		var pool = ActionsPool[id];
-		if (pool) {
-			limit.remove(pool, action);
-			if (!pool.length) {
-				delete ActionsPool[id];
-			};
-		};
-	};
-	
-	module.exports = Actions;
-
-/***/ },
-
-/***/ 32:
+/***/ 33:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -675,43 +703,50 @@
 
 /***/ },
 
-/***/ 62:
+/***/ 98:
+/***/ function(module, exports) {
+
+	module.exports = ReactDOM;
+
+/***/ },
+
+/***/ 173:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	// 依赖
 	
-	var React = __webpack_require__(23);
-	var ReactDOM = __webpack_require__(24);
+	var React = __webpack_require__(12);
+	var ReactDOM = __webpack_require__(98);
 	
 	// 组件类
-	var Page = __webpack_require__(63);
+	var Page = __webpack_require__(174);
 	
 	// 置入文档
 	ReactDOM.render(React.createElement(Page, null), document.getElementById('container'));
 
 /***/ },
 
-/***/ 63:
+/***/ 174:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	// 依赖
 	
-	module.exports = __webpack_require__(26)(__webpack_require__(64), __webpack_require__(67));
+	module.exports = __webpack_require__(11)(__webpack_require__(175), __webpack_require__(178));
 
 /***/ },
 
-/***/ 64:
+/***/ 175:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	__webpack_require__(65);
+	__webpack_require__(176);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -720,7 +755,7 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	// 依赖
-	var React = __webpack_require__(23);
+	var React = __webpack_require__(12);
 	var limit = __webpack_require__(4);
 	
 	// 组件类
@@ -834,13 +869,13 @@
 
 /***/ },
 
-/***/ 65:
+/***/ 176:
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(66);
+	var content = __webpack_require__(177);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(18)(content, {});
@@ -861,7 +896,7 @@
 
 /***/ },
 
-/***/ 66:
+/***/ 177:
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(17)();
@@ -876,7 +911,7 @@
 
 /***/ },
 
-/***/ 67:
+/***/ 178:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -892,8 +927,8 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var $ = __webpack_require__(3);
-	var React = __webpack_require__(23);
-	var Control = __webpack_require__(32);
+	var React = __webpack_require__(12);
+	var Control = __webpack_require__(33);
 	var limit = __webpack_require__(4);
 	
 	var Controller = function (_Control) {

@@ -1,10 +1,18 @@
 "use strict";
 /**
- * 2016.12.5
- * version: 2.1.6
+ * 2017.2.4
+ * version: 2.2.0
  * 增加了日志缓存
  * 增加了 limit.parseInt 替换 ~~ 操作符
+ * 增加了 Map 类 使用Map重构了union
  * 支持 node.js
+ * 增加了一个完美序列化 serialize
+ * 增加了简易events
+ * parseString方法删除了decodeURIComponent 格式化字符
+ * bind兼容方法的BUG修改
+ * 增加了字符串驼峰话方法
+ * 增加已时间为Key的唯一ID
+ * Eventdestroy的时候的问题[me.state={}]
  */
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -169,11 +177,12 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 	// 
 
 	// 传递器
+	defineIt('E', { value: E });
 	defineIt('K', { value: K });
 	defineIt('F', { value: F });
 
 	// 版本
-	defineIt('V', { value: '2.1.6' });
+	defineIt('V', { value: '2.2.1' });
 
 	// 获取属性
 	defineIt('getProp', { value: getProp });
@@ -575,6 +584,12 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		}
 	});
 
+	defineIt('getTimeUid', {
+		value: function value() {
+			return new Date().getTime() + limit.getUid().split('.').join('');
+		}
+	});
+
 	// 私有遍历
 	defineIt('_loop', {
 		value: function value(obj, iterator, context, isBreak, begin) {
@@ -942,9 +957,12 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 	defineIt('union', {
 		format: checkTargetWithArray,
 		fixed: function fixed(arr) {
-			var target = [];
+			var target = new Map();
 			return limit.filter(arr, function (val) {
-				return !limit.contains(target, val) && (target.push(val), true);
+				if (!target.has(val)) {
+					target.set(val, true);
+					return true;
+				};
 			});
 		}
 	});
@@ -1751,6 +1769,144 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		WIN.Promise = MyPromise;
 	};
 
+	// Map
+
+	var MyMap = function () {
+		function MyMap(arrIn) {
+			_classCallCheck(this, MyMap);
+
+			var me = this;
+			var arr = me.arr = [];
+			limit.forEach(arrIn, function (val) {
+				if (!limit.isArray(val)) {
+					throw new TypeError('Iterator value ' + val + ' is not an entry object');
+				};
+				arr.push({ key: val[0], val: val[1] });
+			});
+		}
+
+		_createClass(MyMap, [{
+			key: 'clear',
+			value: function clear() {
+				var me = this;
+				me.arr.length = 0;
+			}
+		}, {
+			key: 'forEach',
+			value: function forEach(fn, context) {
+				var me = this;
+				limit.forEach(me.arr, function (val) {
+					fn.call(context, val.val, val.key);
+				});
+			}
+		}, {
+			key: '_get',
+			value: function _get(key) {
+				var me = this;
+				var target = [];
+				limit.some(me.arr, function (val, i) {
+					if (limit.is(val.key, key)) {
+						target.push(val, i);
+						return true;
+					};
+				});
+				return target;
+			}
+		}, {
+			key: 'has',
+			value: function has(key) {
+				var me = this;
+				return limit.some(me.arr, function (val) {
+					return limit.is(val.key, key);
+				});
+			}
+		}, {
+			key: 'get',
+			value: function get(key) {
+				var me = this;
+				var target = void 0;
+				limit.some(me.arr, function (val) {
+					if (limit.is(val.key, key)) {
+						target = val.val;
+						return true;
+					};
+				});
+				return target;
+			}
+		}, {
+			key: 'set',
+			value: function set(key, val) {
+				var me = this;
+				var arr = me.arr;
+				var target = me._get(key);
+				if (target.length) {
+					target[0].val = val;
+				} else {
+					arr.push({ key: key, val: val });
+				};
+				return me;
+			}
+		}, {
+			key: 'keys',
+			value: function keys() {
+				var me = this;
+				var result = [];
+				me.forEach(function (val, key) {
+					result.push(key);
+				});
+				return result;
+			}
+		}, {
+			key: 'values',
+			value: function values() {
+				var me = this;
+				var result = [];
+				me.forEach(function (val, key) {
+					result.push(val);
+				});
+				return result;
+			}
+		}, {
+			key: 'size',
+			value: function size() {
+				var me = this;
+				return me.arr.length;
+			}
+		}]);
+
+		return MyMap;
+	}();
+
+	MyMap.prototype['delete'] = function (key) {
+		var me = this;
+		var arr = me.arr;
+		var target = me._get(key);
+		if (target.length) {
+			arr.splice(target[1], 1);
+			return true;
+		} else {
+			return false;
+		};
+	};
+
+	var winMap = WIN.Map;
+
+	defineIt('Map', {
+		when: function when() {
+			return !!winMap;
+		},
+		priority: function priority() {
+			return winMap;
+		},
+		fixed: function fixed() {
+			return MyMap;
+		}
+	});
+
+	if (!winMap) {
+		WIN.Map = MyMap;
+	}
+
 	// 创建原型
 	function C() {};
 	function classCreatePro(PRO) {
@@ -1805,7 +1961,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 				var me = this;
 				if (!(me instanceof main)) {
 					me = args1[0];
-				};
+				}
+				args1.shift();
 
 				for (var _len32 = arguments.length, args2 = Array(_len32), _key32 = 0; _key32 < _len32; _key32++) {
 					args2[_key32] = arguments[_key32];
@@ -1843,6 +2000,146 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		}
 	});
 
+	// 事件
+
+	var Events = function () {
+		function Events() {
+			_classCallCheck(this, Events);
+
+			this.state = {
+				maxListeners: 10,
+				listeners: {}
+			};
+		}
+
+		_createClass(Events, [{
+			key: 'warnListenerCount',
+			value: function warnListenerCount(eventName) {
+				var me = this;
+				var state = me.state;
+
+				var listeners = state.listeners;
+				var count = listeners[eventName].length;
+				if (count > state.maxListeners) {
+					limit.war('Possible EventEmitter memory leak detected. ' + count + ' ' + eventName + ' listeners added. Use emitter.setMaxListeners() to increase limit');
+				};
+			}
+		}, {
+			key: 'on',
+			value: function on(eventName, listener) {
+				var me = this;
+				var state = me.state;
+
+				var listeners = state.listeners;
+				if (listeners[eventName]) {
+					listeners[eventName].push(limit.cb(listener));
+					me.warnListenerCount(eventName);
+				} else {
+					listeners[eventName] = [limit.cb(listener)];
+				};
+				return me;
+			}
+		}, {
+			key: 'once',
+			value: function once(eventName, listener) {
+				var me = this;
+				var state = me.state;
+
+				var listeners = state.listeners;
+				var newListener = function newListener() {
+					var _limit$cb;
+
+					(_limit$cb = limit.cb(listener)).call.apply(_limit$cb, [me].concat(Array.prototype.slice.call(arguments)));
+					me.removeListener(eventName, newListener);
+					me.warnListenerCount(eventName);
+				};
+				if (listeners[eventName]) {
+					listeners[eventName].push(newListener);
+				} else {
+					listeners[eventName] = [newListener];
+				};
+				return me;
+			}
+		}, {
+			key: 'emit',
+			value: function emit(eventName) {
+				for (var _len35 = arguments.length, args = Array(_len35 > 1 ? _len35 - 1 : 0), _key35 = 1; _key35 < _len35; _key35++) {
+					args[_key35 - 1] = arguments[_key35];
+				}
+
+				var me = this;
+				var state = me.state;
+
+				var listeners = state.listeners;
+				if (listeners[eventName]) {
+					limit.each(listeners[eventName], function (val) {
+						val.call.apply(val, [me].concat(args));
+					});
+				};
+				return me;
+			}
+		}, {
+			key: 'removeListener',
+			value: function removeListener(eventName, listener) {
+				var me = this;
+				var state = me.state;
+
+				var listeners = state.listeners;
+				if (listeners[eventName]) {
+					limit.remove(listeners[eventName], listener);
+				};
+				return me;
+			}
+		}, {
+			key: 'removeAllListeners',
+			value: function removeAllListeners(eventName) {
+				var me = this;
+				var state = me.state;
+
+				var listeners = state.listeners;
+				if (listeners[eventName]) {
+					delete listeners[eventName];
+				} else {
+					state.listeners = {};
+				};
+				return me;
+			}
+		}, {
+			key: 'getMaxListeners',
+			value: function getMaxListeners() {
+				var me = this;
+				var state = me.state;
+
+				return state.maxListeners;
+			}
+		}, {
+			key: 'setMaxListeners',
+			value: function setMaxListeners(n) {
+				var me = this;
+				var state = me.state;
+
+				state.maxListeners = limit.parseInt(n);
+				return me;
+			}
+		}, {
+			key: 'destroy',
+			value: function destroy() {
+				var me = this;
+				me.state = { listeners: {}, maxListeners: 10 };
+				delete me.props;
+				return me;
+			}
+		}]);
+
+		return Events;
+	}();
+
+	;
+
+	defineIt('Events', {
+		value: Events
+	});
+
 	// --字符-- //
 
 	// mix: toString
@@ -1871,6 +2168,26 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 				};
 			};
 			return objStr;
+		}
+	});
+
+	// mix: parseHumpString 格式化驼峰字符
+	defineIt('parseHumpString', {
+		format: checkTargetWithString,
+		fixed: function fixed(key) {
+			for (var _len36 = arguments.length, args = Array(_len36 > 1 ? _len36 - 1 : 0), _key36 = 1; _key36 < _len36; _key36++) {
+				args[_key36 - 1] = arguments[_key36];
+			}
+
+			args = args.map(function (val) {
+				val = limit.toString(val);
+				if (val.length > 1) {
+					return '' + val.slice(0, 1).toLocaleUpperCase() + val.slice(1).toLocaleLowerCase();
+				} else {
+					return val;
+				};
+			});
+			return [key].concat(_toConsumableArray(args)).join('');
 		}
 	});
 
@@ -1915,9 +2232,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 			var val1 = arguments.length <= 1 || arguments[1] === undefined ? '&' : arguments[1];
 			var val2 = arguments.length <= 2 || arguments[2] === undefined ? '=' : arguments[2];
 
-			str = decodeURIComponent(str);
-			var obj = {},
-			    arr = str.split(val1);
+			var obj = {};
+			var arr = str.split(val1);
 			// 空判断
 			if (str === '') {
 				return obj;
@@ -1970,6 +2286,48 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 				};
 			});
 			return list.join(val1);
+		}
+	});
+
+	// 解析对象 {'a':'a1', 'a.a': 'a2', 'a[0]a': 'a3'}
+	var REX_OBJ = /^(\w+)\.(.+)/;
+	var REX_ARR = /^(\w+)\[(\d+)\](.+)/;
+	defineIt('serialize', {
+		format: checkTargetNoEqualNull,
+		fixed: function fixed(obj) {
+			limit.each(obj, function (val, key) {
+				// 对象规范
+				if (REX_OBJ.test(key)) {
+					var tempKey = RegExp.$1; //b
+					var tempVal = RegExp.$2; //a
+					var tempObj = obj[tempKey];
+					if (!tempObj) {
+						tempObj = obj[tempKey] = {};
+					};
+					tempObj[tempVal] = val;
+					delete obj[key];
+					return limit.serialize(tempObj);
+				} else if (REX_ARR.test(key)) {
+					//数组规范
+					var _tempKey = RegExp.$1; //b
+					var tempPos = RegExp.$2; //0
+					var _tempVal = RegExp.$3; //a
+					var tempArr = obj[_tempKey];
+					if (!tempArr) {
+						tempArr = obj[_tempKey] = [];
+					};
+					var _tempObj = tempArr[tempPos];
+					if (!_tempObj) {
+						_tempObj = tempArr[tempPos] = {};
+					};
+					_tempObj[_tempVal] = val;
+					delete obj[key];
+					return limit.serialize(_tempObj);
+				} else {
+					JSON[key] = val;
+				};
+			});
+			return obj;
 		}
 	});
 
@@ -2283,8 +2641,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 	// 获取最大的小数位
 	var getMaxScale = function getMaxScale() {
-		for (var _len35 = arguments.length, args = Array(_len35), _key35 = 0; _key35 < _len35; _key35++) {
-			args[_key35] = arguments[_key35];
+		for (var _len37 = arguments.length, args = Array(_len37), _key37 = 0; _key37 < _len37; _key37++) {
+			args[_key37] = arguments[_key37];
 		}
 
 		if (!checkFiniteNum(args)) {
@@ -2299,8 +2657,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 	defineIt('plus,+', {
 		format: checkFlattenArgs,
 		fixed: function fixed() {
-			for (var _len36 = arguments.length, args = Array(_len36), _key36 = 0; _key36 < _len36; _key36++) {
-				args[_key36] = arguments[_key36];
+			for (var _len38 = arguments.length, args = Array(_len38), _key38 = 0; _key38 < _len38; _key38++) {
+				args[_key38] = arguments[_key38];
 			}
 
 			var maxScale = getMaxScale.apply(undefined, args);
@@ -2317,8 +2675,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 	defineIt('minus,-', {
 		format: checkFlattenArgs,
 		fixed: function fixed() {
-			for (var _len37 = arguments.length, args = Array(_len37), _key37 = 0; _key37 < _len37; _key37++) {
-				args[_key37] = arguments[_key37];
+			for (var _len39 = arguments.length, args = Array(_len39), _key39 = 0; _key39 < _len39; _key39++) {
+				args[_key39] = arguments[_key39];
 			}
 
 			var maxScale = getMaxScale.apply(undefined, args);
@@ -2346,8 +2704,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 	defineIt('multiply,*', {
 		format: checkFlattenArgs,
 		fixed: function fixed() {
-			for (var _len38 = arguments.length, args = Array(_len38), _key38 = 0; _key38 < _len38; _key38++) {
-				args[_key38] = arguments[_key38];
+			for (var _len40 = arguments.length, args = Array(_len40), _key40 = 0; _key40 < _len40; _key40++) {
+				args[_key40] = arguments[_key40];
 			}
 
 			if (!checkFiniteNum(args)) {
@@ -2363,8 +2721,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 	defineIt('except,/', {
 		format: checkFlattenArgs,
 		fixed: function fixed() {
-			for (var _len39 = arguments.length, args = Array(_len39), _key39 = 0; _key39 < _len39; _key39++) {
-				args[_key39] = arguments[_key39];
+			for (var _len41 = arguments.length, args = Array(_len41), _key41 = 0; _key41 < _len41; _key41++) {
+				args[_key41] = arguments[_key41];
 			}
 
 			if (!checkFiniteNum(args)) {
@@ -2419,8 +2777,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 			};
 			// 正常入参
 			return formatStr.replace(REG_EXP_DATA, function () {
-				for (var _len40 = arguments.length, args = Array(_len40), _key40 = 0; _key40 < _len40; _key40++) {
-					args[_key40] = arguments[_key40];
+				for (var _len42 = arguments.length, args = Array(_len42), _key42 = 0; _key42 < _len42; _key42++) {
+					args[_key42] = arguments[_key42];
 				}
 
 				var arr = [];
@@ -2448,8 +2806,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 	limit.each(limit, function (val, key) {
 		if (limit.isFunction(val)) {
 			limit.prototype[key] = function () {
-				for (var _len41 = arguments.length, args = Array(_len41), _key41 = 0; _key41 < _len41; _key41++) {
-					args[_key41] = arguments[_key41];
+				for (var _len43 = arguments.length, args = Array(_len43), _key43 = 0; _key43 < _len43; _key43++) {
+					args[_key43] = arguments[_key43];
 				}
 
 				this.__value__.push(limit[key].apply(limit, [limit.last(this.__value__)].concat(args)));

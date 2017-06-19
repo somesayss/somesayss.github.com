@@ -11,7 +11,7 @@ class Copy {
 	constructor(config){
 		let me = this;
 		limit.assign(me.state, me.props, config);
-		me.emoveHideArea( me.creatHideArea() );
+		return me.emoveHideArea( me.creatHideArea() );
 	}
 	creatHideArea(){
 		let me = this;
@@ -22,20 +22,31 @@ class Copy {
 		document.body.appendChild(area);
 		area.value = state.text;
 		area.select();
-		me.H5copy();
+		try{
+			me.H5copy();
+		}catch(e){
+			state.copySuccess = false;
+		};
 		return area;
 	}
 	H5copy(){
-		document.execCommand('copy');
+		let me = this;
+		let {state} = me;
+		state.copySuccess = document.execCommand('copy', false, null);
 	}
 	IEcopy(val){
 		window.clipboardData.setData('text', val);
 	}
 	emoveHideArea(area){
+		let me = this;
+		let {state} = me;
 		let div = document.createElement('div');
 		div.appendChild(area);
 		div.innerHTML = '';
 		div = null;
+	}
+	isCopySuccess(){
+		return this.state.copySuccess;
 	}
 }
 

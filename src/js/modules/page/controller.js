@@ -9,16 +9,18 @@ const limit = require('limit');
 class Controller extends Control {
 	state = {
 		// 当前在第几页
-		page: 1
+		page: 1,
+		a: 'a1'
 	}
 	static defaultProps = {
 		// 总页数
-		totle: 0,
+		totle: 100,
 		// 偏差值
 		diff: 2,
 		// 抛出接口
 		onChangePage: limit.K,
-		actionId: 'page'
+		actionId: 'page',
+		b: 'b1'
 	}
 	static propTypes = {
 		onChangePage: React.PropTypes.func

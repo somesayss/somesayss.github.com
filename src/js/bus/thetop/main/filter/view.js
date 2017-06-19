@@ -6,6 +6,8 @@ import './style.less';
 const React = require('react');
 const limit = require('limit');
 
+// const
+
 // 组件类
 class Filter extends React.Component {
 	render(){

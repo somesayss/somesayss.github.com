@@ -44,7 +44,7 @@ class Body extends React.Component {
 							}}
 						</div>
 						<div className="thetop-page">
-							<Page totle={props.totle} onChangePage={Actions(me).changePage} page={props.page}/>
+							<Page totle={props.totle} onChangePage={Actions(me).changePage} page={props.page} />
 						</div>
 					</div>
 					<div className="ch-right">

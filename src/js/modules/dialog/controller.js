@@ -14,25 +14,8 @@ class Controller extends Control {
 		height: 200,
 		actionId: 'dialog',
 		onClose: limit.K,
-		hasCover: true
-	}
-	onSetCenter(){
-		let me = this;
-		let {props, state} = me;
-		let WIN = window;
-		let scrollY = WIN.scrollY;
-		let winHeight = WIN.innerHeight;
-		let height = props.height;
-		let width = props.width;
-		if( !limit.isNumber(height) ){
-			height = $(ReactDOM.findDOMNode(me.com)).find('.react-dialog').height();
-		};
-		if( !limit.isNumber(width) ){
-			width = $(ReactDOM.findDOMNode(me.com)).find('.react-dialog').width();
-		};
-		state.top = scrollY + (winHeight)/2 - height/2;
-		state.marginLeft = -width/2;
-		me.updateComponent();
+		hasCover: true,
+		hide: false
 	}
 };
 

@@ -81,7 +81,8 @@ setConfig.commonCssList = [
 
 // 整个文件夹移动
 setConfig.staticList = [
-    'imgs'
+    'imgs',
+    'assets'
 ];
 
 module.exports = setConfig;

@@ -13,6 +13,15 @@ class Page extends React.Component {
 		let me = this;
 		me.diffList = me.getDiffList();
 	}
+	getClassName(){
+		let me = this;
+		let {props} = me;
+		let arr = ['react-page'];
+		if( props.className ){
+			arr.push(props.className);
+		};
+		return arr.join(' ');
+	}
 	render(){
 		var me = this,
 			props = me.props,
@@ -26,7 +35,7 @@ class Page extends React.Component {
 			page = 1;
 		};
 		return (
-			<div className="react-page">
+			<div className={me.getClassName()}>
 				{me.getAllList().map((val, key) => {
 					return (
 						val === '...' ? 

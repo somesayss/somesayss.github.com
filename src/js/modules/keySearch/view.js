@@ -17,7 +17,7 @@ class KeySearch extends React.Component {
 		return (
 			<div className="key-search" style={{width: props.width, height: props.height}}>
 				<input placeholder={props.placeholder} 
-					onInput={Actions(me).input} 
+					onChange={Actions(me).input} 
 					onKeyDown={Actions(me).keydown}
 					value={props.value} />
 				<span className="ch-enter" style={{lineHeight: `${props.height - 10}px`}} onClick={Actions(me).search}>↵</span>

@@ -25,7 +25,7 @@ class Controller extends Control {
 		WIN.onscroll = function(){
 			clearTimeout(timeoutID);
 			timeoutID = setTimeout(() => {
-				localStorage.scrollTop = WIN.scrollY;
+				localStorage.scrollTop = WIN.scrollY || document.documentElement.scrollTop;
 			}, 100);
 		};
 		WIN.scrollTo(0, localStorage.scrollTop || 0);

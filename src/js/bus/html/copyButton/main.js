@@ -3,8 +3,8 @@
 // 依赖
 const $ = require('$');
 const limit = require('limit');
-const PaseBoard = require('modules/paseBoard/index');
+const Copy =require('modules/copy/index');
 
 $('#copy').on('click', () => {
-	new PaseBoard( $('#list').html() );
+	new Copy({text: $('#list').html()});
 });

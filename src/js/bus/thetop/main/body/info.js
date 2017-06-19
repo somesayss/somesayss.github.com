@@ -23,7 +23,7 @@ class Info extends React.Component {
 					我已经看过<span className="ch-num">{num}</span>部电影
 				</div>
 				<div className="thetop-info fn-MT10 thetop-search">
-					我想找：<KeySearch width="320" placeholder="请输入电影名字" />
+					我想找：<KeySearch width="320" placeholder="请输入电影名字" value={props.filterName} />
 				</div>
 			</div>
 		);

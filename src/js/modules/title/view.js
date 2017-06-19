@@ -2,6 +2,8 @@
 
 import './style.less';
 
+let guid = 0;
+
 // 组件类
 class Title extends React.Component {
 	constructor(){
@@ -14,7 +16,7 @@ class Title extends React.Component {
 		let me = this;
 		let {props} = me;
 		return (
-			<div className={`${limit.toString(props.className)} limit_title fn-wrap`} ref="node">
+			<div className={`${limit.toString(props.className)} limit_title fn-wrap`} ref="node" >
 				{props.children}
 			</div>
 		);
@@ -32,7 +34,11 @@ class Title extends React.Component {
 		let me = this;
 		let {refs, props} = me;
 		let {node} = refs;
-		let bodyHeight = Math.max(document.body.offsetHeight, window.innerHeight);
+		let bodyHeight = Math.max(
+								document.body.offsetHeight, 
+								document.documentElement.offsetHeight, 
+								limit.toNumber(window.innerHeight)
+								);
 		let nodeHeight = node.offsetHeight;
 		let tempTop = e.clientY + props.diffY;
 		let height = e.pageY + props.diffY + nodeHeight;

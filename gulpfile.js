@@ -43,7 +43,7 @@ const matchFileRex = /src\/(.*)\..*/;
 function webpackCall(config){
     return gulp.src(['src/**/main.js'])
         .pipe( named( (file) => file.path.match(matchFileRex)[1] ) )
-        .pipe( webpack(config) )
+        .pipe( webpack(config).on( 'error', (e) => console.log(e) ) )
         .pipe( gulp.dest('dist') );
 };
 gulp.task( 'webpackOnceNomin', () => webpackCall( webpackConfig(false, false) ) );

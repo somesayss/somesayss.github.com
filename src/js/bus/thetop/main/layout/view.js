@@ -8,6 +8,7 @@ const limit = require('limit');
 const Header = require('./header');
 const Footer = require('./footer');
 const titleWidget = require('modules/title/widget');
+const Router = require('modules/router/index');
 
 // 组件类
 class Layout extends React.Component {
@@ -27,6 +28,8 @@ class Layout extends React.Component {
 		);
 	}
 	componentDidMount(){
+		let me = this;
+		
 		let DOC = $(document);
 		let tit = null;
 		let txt = null;
@@ -40,6 +43,11 @@ class Layout extends React.Component {
 			let node = $(e.target);
 			tit && tit.destroy();
 			txt && node.prop('title', txt);
+		});
+		new Router({
+			search(param){
+				Actions('body').changeFilterName(param.filterName, me.props.showLayout);
+			}
 		});
 	}
 };

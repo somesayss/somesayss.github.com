@@ -32,7 +32,7 @@
     });
 
     // 路由 http://localhost:9000/src/html/ang.html => ang
-    var REX = /((?:http|https):\/\/[^\/]*)(.+)\./;
+    var REX = /((?:http|https):\/\/[^\/]*)(.+?)\./;
 
     var useList = [],
         arrPro  = Array.prototype,
