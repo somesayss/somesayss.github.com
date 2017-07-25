@@ -45,26 +45,26 @@
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(111);
+	module.exports = __webpack_require__(118);
 
 
 /***/ },
 
-/***/ 4:
+/***/ 8:
 /***/ function(module, exports) {
 
 	module.exports = limit;
 
 /***/ },
 
-/***/ 111:
+/***/ 118:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	// 依赖
 	
-	var limit = __webpack_require__(4);
+	var limit = __webpack_require__(8);
 	
 	function pullSome() {
 		var AJAX = new XMLHttpRequest();

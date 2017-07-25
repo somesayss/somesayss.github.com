@@ -13,6 +13,8 @@ class Controller extends Control {
 		let me = this;
 		let {state} = me;
 		state.src = src;
+		state.x = 0;
+		state.y = 0;
 		me.updateComponent();
 	}
 	onChangePos(x, y){

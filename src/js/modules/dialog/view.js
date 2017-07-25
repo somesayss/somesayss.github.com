@@ -55,7 +55,21 @@ class Dialog extends React.Component {
 				me.closeDialog();
 			}, props.timeout);
 		};
-
+		if( props.useEsc ){
+			let nameSpace = me.nameSpace = `keyup.dialog${limit.getUid()}`;
+			$(document).on(nameSpace, (e) => {
+				if( e.keyCode === 27 ){
+					me.closeDialog();
+				};
+			});
+		};
+	}
+	componentWillUnmount(){
+		let me = this;
+		let {props} = me;
+		if( props.useEsc ){
+			$(document).off(me.nameSpace);
+		};
 	}
 	componentDidUpdate(){
 		let me = this;
@@ -64,8 +78,12 @@ class Dialog extends React.Component {
 	closeDialog(){
 		let me = this;
 		let {props} = me;
-		Actions(me).destroyWidget && Actions(me).destroyWidget();
-		props.onClose();
+		let actionsExp = Actions(me);
+		actionsExp && actionsExp.destroyWidget;
+		if( actionsExp && actionsExp.destroyWidget ){
+			actionsExp.destroyWidget();
+			props.onClose();
+		};
 	}
 	setCenter(){
 		let me = this;

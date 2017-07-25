@@ -5,17 +5,16 @@ const limit = require('limit');
 const Control = require('common/myReflux/control');
 
 class Controller extends Control {
-	state = {
-		top:0,
-		marginLeft:0
-	}
+	state = {}
 	static defaultProps = {
 		width: 400,
 		height: 200,
 		actionId: 'dialog',
 		onClose: limit.K,
 		hasCover: true,
-		hide: false
+		hide: false,
+		timeout: 0,
+		useEsc: false
 	}
 };
 

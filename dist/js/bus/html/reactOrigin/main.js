@@ -45,26 +45,26 @@
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(133);
+	module.exports = __webpack_require__(147);
 
 
 /***/ },
 
-/***/ 133:
+/***/ 147:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	// 组件类
 	
-	var Title = __webpack_require__(134);
+	var Title = __webpack_require__(148);
 	
 	// 置入文档
 	ReactDOM.render(React.createElement(Title, null), document.getElementById('container'));
 
 /***/ },
 
-/***/ 134:
+/***/ 148:
 /***/ function(module, exports) {
 
 	"use strict";

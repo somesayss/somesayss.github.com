@@ -45,34 +45,34 @@
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(87);
+	module.exports = __webpack_require__(94);
 
 
 /***/ },
 
-/***/ 3:
+/***/ 7:
 /***/ function(module, exports) {
 
 	module.exports = jQuery;
 
 /***/ },
 
-/***/ 4:
+/***/ 8:
 /***/ function(module, exports) {
 
 	module.exports = limit;
 
 /***/ },
 
-/***/ 87:
+/***/ 94:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	// 依赖
 	
-	var $ = __webpack_require__(3);
-	var Rainbow = __webpack_require__(88);
+	var $ = __webpack_require__(7);
+	var Rainbow = __webpack_require__(95);
 	
 	var html = '';
 	var arr = new Rainbow({ totle: 10 });
@@ -91,7 +91,7 @@
 
 /***/ },
 
-/***/ 88:
+/***/ 95:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -102,7 +102,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-	var limit = __webpack_require__(4);
+	var limit = __webpack_require__(8);
 	
 	var Rainbow = function () {
 		function Rainbow(config) {

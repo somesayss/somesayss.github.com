@@ -12,8 +12,13 @@ body{
 .qrcode-table{
 	td{
 		padding:5px;
+		line-height:16px;
 		border-bottom:1px solid #CCC;
 		vertical-align:middle;
+		input{
+			vertical-align:middle;
+			float:left;
+		}
 	}
 	a{
 		color:#4285f4;
@@ -29,7 +34,8 @@ body{
 }
 .qrcode-add{
 	position:absolute;
-	right:-60px;
+	left:50%;
+	margin-left:440px;
 	top:8px;
 }
 .qrcode-page.react-page{
@@ -56,10 +62,15 @@ body{
 	color:#666;
 	padding:15px 30px;
 	td{
-		padding:5px;
+		padding:6px 5px;
 	}
 	.qrcode-dialog-info{
 		line-height:29px;
+	}
+	.qrcode-dialog-head{
+		height:30px;
+		line-height:30px;
+		font-size:14px;
 	}
 }
 

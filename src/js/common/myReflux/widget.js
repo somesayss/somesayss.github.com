@@ -34,8 +34,10 @@ class Widget {
 			<Component {...me.state} children={me.childCom} />,
 			node
 		);
-		node.id = me.componentExp.state.actionUUid
-		Actions(me.componentExp).destroyWidget = me.destroy.bind(me);
+		node.id = me.componentExp.state.actionUUid;
+		Actions.get(me.componentExp).forEach((val) => {
+			val.destroyWidget = me.destroy.bind(me);
+		});
 	}
 	// 更新组件
 	updateComponent(props){

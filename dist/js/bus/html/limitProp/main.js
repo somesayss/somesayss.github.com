@@ -45,26 +45,26 @@
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(94);
+	module.exports = __webpack_require__(101);
 
 
 /***/ },
 
-/***/ 3:
+/***/ 7:
 /***/ function(module, exports) {
 
 	module.exports = jQuery;
 
 /***/ },
 
-/***/ 4:
+/***/ 8:
 /***/ function(module, exports) {
 
 	module.exports = limit;
 
 /***/ },
 
-/***/ 94:
+/***/ 101:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -79,10 +79,10 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-	var $ = __webpack_require__(3);
-	var limit = __webpack_require__(4);
-	var Router = __webpack_require__(95);
-	var Class = __webpack_require__(96);
+	var $ = __webpack_require__(7);
+	var limit = __webpack_require__(8);
+	var Router = __webpack_require__(102);
+	var Class = __webpack_require__(103);
 	
 	var A = function () {
 		function A() {
@@ -183,7 +183,7 @@
 
 /***/ },
 
-/***/ 95:
+/***/ 102:
 /***/ function(module, exports) {
 
 	"use strict";
@@ -321,7 +321,7 @@
 
 /***/ },
 
-/***/ 96:
+/***/ 103:
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;"use strict";

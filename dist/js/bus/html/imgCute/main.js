@@ -44,47 +44,51 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(9);
+	module.exports = __webpack_require__(13);
 
 
 /***/ },
 /* 1 */,
 /* 2 */,
 /* 3 */,
-/* 4 */
+/* 4 */,
+/* 5 */,
+/* 6 */,
+/* 7 */,
+/* 8 */
 /***/ function(module, exports) {
 
 	module.exports = limit;
 
 /***/ },
-/* 5 */,
-/* 6 */,
-/* 7 */,
-/* 8 */,
-/* 9 */
+/* 9 */,
+/* 10 */,
+/* 11 */,
+/* 12 */,
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	// 组件类
 	
-	var Title = __webpack_require__(10);
+	var Title = __webpack_require__(14);
 	
 	// 置入文档
 	ReactDOM.render(React.createElement(Title, null), document.getElementById('container'));
 
 /***/ },
-/* 10 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	// 依赖
 	
-	module.exports = __webpack_require__(11)(__webpack_require__(14), __webpack_require__(71));
+	module.exports = __webpack_require__(15)(__webpack_require__(18), __webpack_require__(76));
 
 /***/ },
-/* 11 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -99,9 +103,9 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var React = __webpack_require__(12);
-	var limit = __webpack_require__(4);
-	var Actions = __webpack_require__(13);
+	var React = __webpack_require__(16);
+	var limit = __webpack_require__(8);
+	var Actions = __webpack_require__(17);
 	
 	module.exports = function (Wrapper, Class) {
 				var WrapperComponent = function (_React$Component) {
@@ -121,7 +125,10 @@
 										__controller__.props = me.getPerProps(clearProps);
 										__controller__.state = me.getPerState(me.state);
 										me.state.actionId = me.state.actionId || 'uaid' + limit.getUid();
-										me.state.actionUUid = __controller__.Actions.uuid = 'uuid' + limit.getUid();
+										me.state.actionUUid = __controller__.Actions.actionUUid = 'uuid' + limit.getUid();
+										if (props.actionCid) {
+													me.state.actionCid = __controller__.Actions.actionCid = props.actionCid;
+										};
 										Actions.set(me.state.actionId, __controller__.Actions);
 										return _this;
 							}
@@ -172,6 +179,7 @@
 													var newProps = limit.assign({}, props);
 													delete newProps.actionId;
 													delete newProps.actionUUid;
+													delete newProps.actionCid;
 													newProps.actionId = Class.defaultProps && Class.defaultProps.actionId;
 													return newProps;
 										}
@@ -228,13 +236,13 @@
 	};
 
 /***/ },
-/* 12 */
+/* 16 */
 /***/ function(module, exports) {
 
 	module.exports = React;
 
 /***/ },
-/* 13 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -243,11 +251,11 @@
 	
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 	
-	var limit = __webpack_require__(4);
+	var limit = __webpack_require__(8);
 	
 	// 变量
-	var Actions = window.Actions = function (id) {
-		return Actions.get(id);
+	var Actions = window.Actions = function (id, cid) {
+		return getReturnObj(id, cid);
 	};
 	
 	var ActionsPool = Actions.pool = {};
@@ -261,43 +269,73 @@
 		};
 	};
 	
-	Actions.getAll = function (id) {
-		if (limit.isObjectSuper(id)) {
-			id = id.props.actionId || id.state.actionId;
-		} else {
-			id = limit.toString(id);
+	// 获取正确的ID
+	function getPropTrueId(obj, key) {
+		if (limit.isObjectSuper(obj)) {
+			return obj.props[key] || obj.state[key];
 		};
-		var pool = ActionsPool[id];
-		return pool;
 	};
 	
-	Actions.get = function (id) {
-		var pool = Actions.getAll(id);
-		if (pool) {
-			if (limit.isObjectSuper(id) && (id.props.actionUUid || id.state.actionUUid)) {
-				var _ret = function () {
-					var actionUUid = id.props.actionUUid || id.state.actionUUid;
-					var action = null;
-					pool.some(function (val) {
-						if (val.uuid === actionUUid) {
-							action = val;
-							return true;
-						};
-					});
-					return {
-						v: action
-					};
-				}();
+	// 通过ID获取
+	function getAllPoolById(id) {
+		return ActionsPool[getPropTrueId(id, 'actionId') || id] || [];
+	};
 	
-				if ((typeof _ret === "undefined" ? "undefined" : _typeof(_ret)) === "object") return _ret.v;
-			} else {
-				if (pool.length === 1) {
-					return pool[0];
+	// 获取目标
+	function getTargetPool(id, cid) {
+		var pool = getAllPoolById(id);
+		if (cid) {
+			return pool.filter(function (val) {
+				return val.actionCid === cid;
+			});
+		} else {
+			var _ret = function () {
+				var uid = getPropTrueId(id, 'actionUUid');
+				if (uid) {
+					return {
+						v: pool.filter(function (val) {
+							return val.actionUUid === uid;
+						})
+					};
 				} else {
-					return pool;
+					return {
+						v: pool
+					};
 				};
-			};
+			}();
+	
+			if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
 		};
+	};
+	
+	// 获取对应的对象
+	function getReturnObj(id, cid) {
+		var pool = getTargetPool(id, cid);
+		var obj = {};
+		if (pool.length) {
+			limit.each(pool[0], function (val, key) {
+				if (limit.isFunction(val)) {
+					obj[key] = function () {
+						for (var _len = arguments.length, agrs = Array(_len), _key = 0; _key < _len; _key++) {
+							agrs[_key] = arguments[_key];
+						}
+	
+						return Promise.all(pool.map(function (fn) {
+							return fn[key].apply(fn, agrs);
+						}));
+					};
+				} else {
+					obj[key] = pool.map(function (val) {
+						return val[key];
+					}).join(',');
+				};
+			});
+		};
+		return obj;
+	};
+	
+	Actions.get = function (id, cid) {
+		return getTargetPool(id, cid);
 	};
 	
 	Actions.remove = function (id, action) {
@@ -313,14 +351,14 @@
 	module.exports = Actions;
 
 /***/ },
-/* 14 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	__webpack_require__(15);
+	__webpack_require__(19);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -328,12 +366,12 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var Input = __webpack_require__(19);
-	var Mousemove = __webpack_require__(31);
-	var FilesDrop = __webpack_require__(49);
-	var Ajax = __webpack_require__(64);
-	var DialogWidget = __webpack_require__(65);
-	var Cropper = __webpack_require__(66);
+	var Input = __webpack_require__(23);
+	var Mousemove = __webpack_require__(36);
+	var FilesDrop = __webpack_require__(54);
+	var Ajax = __webpack_require__(69);
+	var DialogWidget = __webpack_require__(70);
+	var Cropper = __webpack_require__(71);
 	
 	// 组件类
 	
@@ -362,7 +400,7 @@
 					React.createElement('br', null),
 					React.createElement('br', null),
 					React.createElement('canvas', { className: 'fn-hide', ref: 'theCanvas', width: '200', height: '200' }),
-					React.createElement(Cropper, { ref: 'cropper', src: props.src, top: '0', left: '0', onChangePos: Actions(me).changePos })
+					React.createElement(Cropper, { ref: 'cropper', src: props.src, top: props.y, left: props.x, onChangePos: Actions(me).changePos })
 				);
 			}
 		}, {
@@ -462,16 +500,16 @@
 	module.exports = Imgcute;
 
 /***/ },
-/* 15 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(16);
+	var content = __webpack_require__(20);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(18)(content, {});
+	var update = __webpack_require__(22)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -488,10 +526,10 @@
 	}
 
 /***/ },
-/* 16 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(17)();
+	exports = module.exports = __webpack_require__(21)();
 	// imports
 	
 	
@@ -502,7 +540,7 @@
 
 
 /***/ },
-/* 17 */
+/* 21 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -557,7 +595,7 @@
 	};
 
 /***/ },
-/* 18 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -809,17 +847,17 @@
 
 
 /***/ },
-/* 19 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	// 依赖
 	
-	module.exports = __webpack_require__(11)(__webpack_require__(20), __webpack_require__(48));
+	module.exports = __webpack_require__(15)(__webpack_require__(24), __webpack_require__(53));
 
 /***/ },
-/* 20 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -828,7 +866,7 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	__webpack_require__(21);
+	__webpack_require__(25);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -836,9 +874,10 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var Select = __webpack_require__(23);
-	var Textarea = __webpack_require__(42);
-	var File = __webpack_require__(47);
+	var domUtil = __webpack_require__(27);
+	var Select = __webpack_require__(28);
+	var Textarea = __webpack_require__(47);
+	var File = __webpack_require__(52);
 	
 	var formMap = {
 		number: 'text',
@@ -956,11 +995,11 @@
 				return React.createElement(
 					'div',
 					{ className: 'limit-form-' + me.getType() },
-					React.createElement(
+					props.value ? React.createElement(
 						'a',
 						{ href: 'javascript:;', tabIndex: '-1', className: 'ch-clear', onClick: !props.disabled ? Actions(me).clear.bind(me) : null },
 						'×'
-					),
+					) : void 0,
 					React.createElement('input', _extends({ className: props.pswShow ? '' : 'fn-hide', autoComplete: 'off' }, me.parseProps(), { ref: 'input', type: me.getType() })),
 					props.type === 'password' ? React.createElement('input', _extends({ className: props.pswShow ? 'fn-hide' : '', autoComplete: 'off' }, me.parseProps(), { ref: 'inputPwd', type: 'text', name: '' })) : void 0,
 					!props.value ? React.createElement(
@@ -968,7 +1007,7 @@
 						{ className: 'ch-placeholder' },
 						props.placeholder
 					) : void 0,
-					props.type === 'password' ? React.createElement(
+					props.value && props.type === 'password' ? React.createElement(
 						'span',
 						{ className: 'ch-container-eye', onClick: Actions(me).toggleEye },
 						React.createElement('i', { className: 'ch-eye' })
@@ -1001,7 +1040,7 @@
 				return React.createElement(
 					'div',
 					{ className: 'limit-form-' + me.getType() },
-					React.createElement('input', me.parseProps())
+					React.createElement('input', _extends({}, me.parseProps(), { ref: 'input' }))
 				);
 			}
 		}, {
@@ -1029,9 +1068,9 @@
 	
 				if (limit.contains(['text', 'password', 'number'], props.type) && props.clearSuccess) {
 					if (props.pswShow) {
-						me.refs.input.focus();
+						me.selectInput(me.refs.input);
 					} else {
-						me.refs.inputPwd.focus();
+						me.selectInput(me.refs.inputPwd);
 					};
 				};
 			}
@@ -1040,10 +1079,14 @@
 			value: function componentDidMount() {
 				var me = this;
 				var refs = me.refs;
+				var props = me.props;
 				var eye = refs.eye;
 				var input = refs.input;
 	
 				Actions(me).comDidMount();
+				if (input && props.focus) {
+					me.selectInput(input);
+				};
 			}
 		}, {
 			key: 'componentWillUnmount',
@@ -1060,6 +1103,16 @@
 					validaor.removeAllListeners(props.name + 'Reset');
 				};
 			}
+		}, {
+			key: 'selectInput',
+			value: function selectInput(input) {
+				if (limit.contains(['text', 'textarea', 'password'], input.type)) {
+					var length = input.value.length;
+					return domUtil.textSelect(input, length, length);
+				} else if (limit.contains(['button', 'reset', 'submit'], input.type)) {
+					input.focus();
+				};
+			}
 		}]);
 	
 		return Form;
@@ -1070,16 +1123,16 @@
 	module.exports = Form;
 
 /***/ },
-/* 21 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(22);
+	var content = __webpack_require__(26);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(18)(content, {});
+	var update = __webpack_require__(22)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -1096,38 +1149,64 @@
 	}
 
 /***/ },
-/* 22 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(17)();
+	exports = module.exports = __webpack_require__(21)();
 	// imports
 	
 	
 	// module
-	exports.push([module.id, ".limit-form {\n  display: inline-block;\n  position: relative;\n}\n.less-placeholder {\n  position: absolute;\n  width: 100%;\n  top: 0;\n  left: 0;\n  color: #999;\n  line-height: 16px;\n  padding: 7px;\n  padding-right: 16px;\n}\n.limit-form-text {\n  border: 1px solid #CCC;\n  padding: 6px;\n  padding-right: 15px;\n}\n.limit-form-text input {\n  border: 0;\n  height: 16px;\n  line-height: 16px;\n  color: #666;\n  font-size: 1em;\n  width: 100%;\n  position: relative;\n  z-index: 2;\n  background: none;\n}\n.limit-form-text .ch-clear {\n  position: absolute;\n  z-index: 2;\n  width: 15px;\n  height: 16px;\n  line-height: 14px;\n  text-align: center;\n  right: 1px;\n  top: 50%;\n  margin-top: -8px;\n  color: #CCC;\n}\n.limit-form-text .ch-clear:hover {\n  color: #666;\n}\n.limit-form-text .ch-placeholder {\n  position: absolute;\n  width: 100%;\n  top: 0;\n  left: 0;\n  color: #999;\n  line-height: 16px;\n  padding: 7px;\n  padding-right: 16px;\n}\n.limit-form-password {\n  border: 1px solid #CCC;\n  padding: 6px;\n  padding-right: 15px;\n  padding-right: 28px;\n}\n.limit-form-password input {\n  border: 0;\n  height: 16px;\n  line-height: 16px;\n  color: #666;\n  font-size: 1em;\n  width: 100%;\n  position: relative;\n  z-index: 2;\n  background: none;\n}\n.limit-form-password .ch-clear {\n  position: absolute;\n  z-index: 2;\n  width: 15px;\n  height: 16px;\n  line-height: 14px;\n  text-align: center;\n  right: 1px;\n  top: 50%;\n  margin-top: -8px;\n  color: #CCC;\n}\n.limit-form-password .ch-clear:hover {\n  color: #666;\n}\n.limit-form-password .ch-placeholder {\n  position: absolute;\n  width: 100%;\n  top: 0;\n  left: 0;\n  color: #999;\n  line-height: 16px;\n  padding: 7px;\n  padding-right: 16px;\n}\n.limit-form-password .ch-container-eye {\n  position: absolute;\n  z-index: 2;\n  width: 10px;\n  height: 10px;\n  top: 50%;\n  margin-top: -5px;\n  right: 15px;\n  background: #FFF;\n  text-align: center;\n  border: 1px solid #CCC;\n  border-radius: 100px;\n  cursor: pointer;\n}\n.limit-form-password .ch-container-eye:hover .ch-eye {\n  background: #666;\n}\n.limit-form-password .ch-eye {\n  display: inline-block;\n  width: 6px;\n  height: 6px;\n  border-radius: 6px;\n  background: #CCC;\n  margin-top: 1px;\n}\n.limit-form-textarea {\n  border: 1px solid #CCC;\n  padding: 6px;\n}\n.limit-form-textarea .ch-placeholder {\n  position: absolute;\n  width: 100%;\n  top: 0;\n  left: 0;\n  color: #999;\n  line-height: 16px;\n  padding: 7px;\n  padding-right: 16px;\n}\n.limit-form-textarea textarea {\n  background: transparent;\n}\n.limit-form-button input {\n  border: 1px solid #CCC;\n  background: #F2F2F2;\n  font-size: 12px;\n  padding: 0 10px;\n  height: 30px;\n  line-height: 28px;\n  width: 100%;\n  color: #666;\n}\n.limit-form-button input:active {\n  background: #DDD;\n  border-color: #BBB;\n}\n.limit-form-file input {\n  border: 1px solid #CCC;\n  background: #F2F2F2;\n  font-size: 12px;\n  padding: 0 10px;\n  height: 30px;\n  line-height: 28px;\n  width: 100%;\n  color: #666;\n}\n.limit-form-file input:active {\n  background: #DDD;\n  border-color: #BBB;\n}\n.limit-file {\n  position: absolute;\n  width: 100px;\n  height: 100px;\n  overflow: hidden;\n  background: #F00;\n  opacity: 0;\n  top: -999px;\n  left: -999px;\n  z-index: 99;\n}\n.limit-file input {\n  font-size: 100px;\n  opacity: 0;\n  cursor: pointer;\n}\n/*禁止*/\n.limit-form-disabled .limit-form-text,\n.limit-form-disabled .limit-form-password,\n.limit-form-disabled .limit-form-textarea {\n  background: #F2F2F2;\n}\n.limit-form-disabled .limit-form-text *,\n.limit-form-disabled .limit-form-password *,\n.limit-form-disabled .limit-form-textarea * {\n  cursor: not-allowed;\n}\n.limit-form-disabled .limit-form-submit input,\n.limit-form-disabled .limit-form-reset input,\n.limit-form-disabled .limit-form-button input {\n  color: #999;\n  cursor: not-allowed;\n}\n.limit-form-disabled .limit-form-select {\n  background: #F2F2F2;\n  color: #999;\n  cursor: not-allowed;\n}\n/*焦点*/\n.limit-form-focus.limit-form {\n  z-index: 2;\n}\n.limit-form-focus .limit-form-text,\n.limit-form-focus .limit-form-password,\n.limit-form-focus .limit-form-textarea {\n  border-color: #4285f4;\n  box-shadow: 0 0 3px rgba(66, 133, 244, 0.5);\n}\n.limit-form-focus .limit-form-text .ch-clear,\n.limit-form-focus .limit-form-password .ch-clear,\n.limit-form-focus .limit-form-textarea .ch-clear {\n  color: #4285f4;\n}\n.limit-form-focus .limit-form-text .ch-placeholder,\n.limit-form-focus .limit-form-password .ch-placeholder,\n.limit-form-focus .limit-form-textarea .ch-placeholder {\n  display: none;\n}\n.limit-form-focus .limit-form-password .ch-container-eye {\n  border-color: #4285f4;\n}\n.limit-form-focus .limit-form-password .ch-container-eye:hover .ch-eye {\n  background: #4285f4;\n}\n.limit-form-focus .limit-form-password .ch-eye {\n  background: #4285f4;\n}\n.limit-form-focus .limit-form-button input {\n  box-shadow: 0 0 1px rgba(0, 0, 0, 0.5);\n}\n/*错误*/\n.limit-form-error .limit-form-text,\n.limit-form-error .limit-form-password,\n.limit-form-error .limit-form-textarea {\n  border-color: #F00;\n  box-shadow: 0 0 3px rgba(255, 0, 0, 0.5);\n}\n.limit-form-error .limit-form-text .ch-clear,\n.limit-form-error .limit-form-password .ch-clear,\n.limit-form-error .limit-form-textarea .ch-clear {\n  color: #F00;\n}\n.limit-form-error .limit-form-password .ch-container-eye {\n  border-color: #F00;\n}\n.limit-form-error .limit-form-password .ch-container-eye:hover .ch-eye {\n  background: #F00;\n}\n.limit-form-error .limit-form-password .ch-eye {\n  background: #F00;\n}\n.limit-form-error .limit-form-select.limit-select .ch-show,\n.limit-form-error .limit-form-select.limit-select .ch-list {\n  border-color: #F00;\n  box-shadow: 0 0 3px rgba(255, 0, 0, 0.5);\n}\n.limit-form-error .limit-form-select.limit-select:before {\n  border-color: #F00;\n}\n.limit-form-error .limit-form-select.limit-select li:hover {\n  background: #F00;\n}\n.limit-form-error .limit-form-select.limit-select .ch-san {\n  border-top-color: #F00;\n}\n.limit-form-error .ch-error-info {\n  position: absolute;\n  height: 20px;\n  line-height: 18px;\n  border: 1px solid #F00;\n  box-shadow: 0 0 3px rgba(255, 0, 0, 0.5);\n  top: -10px;\n  right: 3px;\n  color: #F00;\n  background: #FFF;\n  padding: 0 5px;\n  z-index: 1;\n}\n", ""]);
+	exports.push([module.id, ".limit-form {\n  display: inline-block;\n  position: relative;\n}\n.less-placeholder {\n  position: absolute;\n  width: 100%;\n  top: 0;\n  left: 0;\n  color: #999;\n  line-height: 16px;\n  padding: 7px;\n  padding-right: 16px;\n}\n.limit-form-text {\n  border: 1px solid #CCC;\n  padding: 6px;\n  padding-right: 15px;\n  background: #FFF;\n}\n.limit-form-text input {\n  border: 0;\n  height: 16px;\n  line-height: 16px;\n  color: #666;\n  font-size: 1em;\n  width: 100%;\n  position: relative;\n  z-index: 2;\n  background: none;\n}\n.limit-form-text .ch-clear {\n  position: absolute;\n  z-index: 2;\n  width: 15px;\n  height: 16px;\n  line-height: 14px;\n  text-align: center;\n  right: 1px;\n  top: 50%;\n  margin-top: -8px;\n  color: #CCC;\n}\n.limit-form-text .ch-clear:hover {\n  color: #666;\n}\n.limit-form-text .ch-placeholder {\n  position: absolute;\n  width: 100%;\n  top: 0;\n  left: 0;\n  color: #999;\n  line-height: 16px;\n  padding: 7px;\n  padding-right: 16px;\n}\n.limit-form-password {\n  border: 1px solid #CCC;\n  padding: 6px;\n  padding-right: 15px;\n  background: #FFF;\n  padding-right: 28px;\n}\n.limit-form-password input {\n  border: 0;\n  height: 16px;\n  line-height: 16px;\n  color: #666;\n  font-size: 1em;\n  width: 100%;\n  position: relative;\n  z-index: 2;\n  background: none;\n}\n.limit-form-password .ch-clear {\n  position: absolute;\n  z-index: 2;\n  width: 15px;\n  height: 16px;\n  line-height: 14px;\n  text-align: center;\n  right: 1px;\n  top: 50%;\n  margin-top: -8px;\n  color: #CCC;\n}\n.limit-form-password .ch-clear:hover {\n  color: #666;\n}\n.limit-form-password .ch-placeholder {\n  position: absolute;\n  width: 100%;\n  top: 0;\n  left: 0;\n  color: #999;\n  line-height: 16px;\n  padding: 7px;\n  padding-right: 16px;\n}\n.limit-form-password .ch-container-eye {\n  position: absolute;\n  z-index: 2;\n  width: 10px;\n  height: 10px;\n  top: 50%;\n  margin-top: -5px;\n  right: 15px;\n  background: #FFF;\n  text-align: center;\n  border: 1px solid #CCC;\n  border-radius: 100px;\n  cursor: pointer;\n}\n.limit-form-password .ch-container-eye:hover .ch-eye {\n  background: #666;\n}\n.limit-form-password .ch-eye {\n  display: inline-block;\n  width: 6px;\n  height: 6px;\n  border-radius: 6px;\n  background: #CCC;\n  margin-top: 1px;\n}\n.limit-form-textarea {\n  border: 1px solid #CCC;\n  padding: 6px;\n  background: #FFF;\n}\n.limit-form-textarea .ch-placeholder {\n  position: absolute;\n  width: 100%;\n  top: 0;\n  left: 0;\n  color: #999;\n  line-height: 16px;\n  padding: 7px;\n  padding-right: 16px;\n}\n.limit-form-textarea textarea {\n  background: transparent;\n}\n.limit-form-button input {\n  border: 1px solid #CCC;\n  background: #F2F2F2;\n  font-size: 12px;\n  padding: 0 10px;\n  height: 30px;\n  line-height: 28px;\n  width: 100%;\n  color: #666;\n}\n.limit-form-button input:active {\n  background: #DDD;\n  border-color: #BBB;\n}\n.limit-form-file input {\n  border: 1px solid #CCC;\n  background: #F2F2F2;\n  font-size: 12px;\n  padding: 0 10px;\n  height: 30px;\n  line-height: 28px;\n  width: 100%;\n  color: #666;\n}\n.limit-form-file input:active {\n  background: #DDD;\n  border-color: #BBB;\n}\n.limit-file {\n  position: absolute;\n  width: 100px;\n  height: 100px;\n  overflow: hidden;\n  background: #F00;\n  opacity: 0;\n  top: -999px;\n  left: -999px;\n  z-index: 99;\n}\n.limit-file input {\n  font-size: 100px;\n  opacity: 0;\n  cursor: pointer;\n}\n/*禁止*/\n.limit-form-disabled .limit-form-text,\n.limit-form-disabled .limit-form-password,\n.limit-form-disabled .limit-form-textarea {\n  background: #F2F2F2;\n}\n.limit-form-disabled .limit-form-text *,\n.limit-form-disabled .limit-form-password *,\n.limit-form-disabled .limit-form-textarea * {\n  cursor: not-allowed;\n}\n.limit-form-disabled .limit-form-submit input,\n.limit-form-disabled .limit-form-reset input,\n.limit-form-disabled .limit-form-button input {\n  color: #999;\n  cursor: not-allowed;\n}\n.limit-form-disabled .limit-form-select {\n  background: #F2F2F2;\n  color: #999;\n  cursor: not-allowed;\n}\n/*焦点*/\n.limit-form-focus.limit-form {\n  z-index: 2;\n}\n.limit-form-focus .limit-form-text,\n.limit-form-focus .limit-form-password,\n.limit-form-focus .limit-form-textarea {\n  border-color: #4285f4;\n  box-shadow: 0 0 3px rgba(66, 133, 244, 0.5);\n}\n.limit-form-focus .limit-form-text .ch-clear,\n.limit-form-focus .limit-form-password .ch-clear,\n.limit-form-focus .limit-form-textarea .ch-clear {\n  color: #4285f4;\n}\n.limit-form-focus .limit-form-text .ch-placeholder,\n.limit-form-focus .limit-form-password .ch-placeholder,\n.limit-form-focus .limit-form-textarea .ch-placeholder {\n  display: none;\n}\n.limit-form-focus .limit-form-password .ch-container-eye {\n  border-color: #4285f4;\n}\n.limit-form-focus .limit-form-password .ch-container-eye:hover .ch-eye {\n  background: #4285f4;\n}\n.limit-form-focus .limit-form-password .ch-eye {\n  background: #4285f4;\n}\n.limit-form-focus .limit-form-button input {\n  box-shadow: 0 0 1px rgba(0, 0, 0, 0.5);\n}\n/*错误*/\n.limit-form-error .limit-form-text,\n.limit-form-error .limit-form-password,\n.limit-form-error .limit-form-textarea {\n  border-color: #F00;\n  box-shadow: 0 0 3px rgba(255, 0, 0, 0.5);\n}\n.limit-form-error .limit-form-text .ch-clear,\n.limit-form-error .limit-form-password .ch-clear,\n.limit-form-error .limit-form-textarea .ch-clear {\n  color: #F00;\n}\n.limit-form-error .limit-form-text .ch-placeholder,\n.limit-form-error .limit-form-password .ch-placeholder,\n.limit-form-error .limit-form-textarea .ch-placeholder {\n  color: #F00;\n}\n.limit-form-error .limit-form-password .ch-container-eye {\n  border-color: #F00;\n}\n.limit-form-error .limit-form-password .ch-container-eye:hover .ch-eye {\n  background: #F00;\n}\n.limit-form-error .limit-form-password .ch-eye {\n  background: #F00;\n}\n.limit-form-error .limit-form-select.limit-select .ch-show,\n.limit-form-error .limit-form-select.limit-select .ch-list {\n  border-color: #F00;\n  box-shadow: 0 0 3px rgba(255, 0, 0, 0.5);\n}\n.limit-form-error .limit-form-select.limit-select:before {\n  border-color: #F00;\n}\n.limit-form-error .limit-form-select.limit-select li:hover {\n  background: #F00;\n}\n.limit-form-error .limit-form-select.limit-select .ch-san {\n  border-top-color: #F00;\n}\n.limit-form-error .ch-error-info {\n  position: absolute;\n  height: 20px;\n  line-height: 18px;\n  border: 1px solid #F00;\n  box-shadow: 0 0 3px rgba(255, 0, 0, 0.5);\n  top: -10px;\n  right: 3px;\n  color: #F00;\n  background: #FFF;\n  padding: 0 5px;\n  z-index: 1;\n}\n", ""]);
 	
 	// exports
 
 
 /***/ },
-/* 23 */
+/* 27 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	var domUtil = {};
+	
+	// 选择input或者textarea
+	domUtil.textSelect = function (input, start, end) {
+		if (input.setSelectionRange) {
+			input.setSelectionRange(start, end);
+			input.focus();
+		} else if (input.createTextRange) {
+			var range = input.createTextRange();
+			range.moveStart("character", start);
+			range.moveEnd("character", end);
+			if (start === end) {
+				range.collapse(true);
+			};
+			range.select();
+		};
+	};
+	
+	module.exports = domUtil;
+
+/***/ },
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	// 依赖
 	
-	module.exports = __webpack_require__(11)(__webpack_require__(24), __webpack_require__(41));
+	module.exports = __webpack_require__(15)(__webpack_require__(29), __webpack_require__(46));
 
 /***/ },
-/* 24 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	__webpack_require__(25);
+	__webpack_require__(30);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -1135,8 +1214,8 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var Scroller = __webpack_require__(27);
-	var Title = __webpack_require__(34);
+	var Scroller = __webpack_require__(32);
+	var Title = __webpack_require__(39);
 	
 	// 组件类
 	
@@ -1281,16 +1360,16 @@
 	module.exports = Select;
 
 /***/ },
-/* 25 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(26);
+	var content = __webpack_require__(31);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(18)(content, {});
+	var update = __webpack_require__(22)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -1307,10 +1386,10 @@
 	}
 
 /***/ },
-/* 26 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(17)();
+	exports = module.exports = __webpack_require__(21)();
 	// imports
 	
 	
@@ -1321,24 +1400,24 @@
 
 
 /***/ },
-/* 27 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	// 依赖
 	
-	module.exports = __webpack_require__(11)(__webpack_require__(28), __webpack_require__(32));
+	module.exports = __webpack_require__(15)(__webpack_require__(33), __webpack_require__(37));
 
 /***/ },
-/* 28 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	__webpack_require__(29);
+	__webpack_require__(34);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -1346,7 +1425,7 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var Mousemove = __webpack_require__(31);
+	var Mousemove = __webpack_require__(36);
 	
 	// 组件类
 	
@@ -1488,16 +1567,16 @@
 	module.exports = Scroller;
 
 /***/ },
-/* 29 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(30);
+	var content = __webpack_require__(35);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(18)(content, {});
+	var update = __webpack_require__(22)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -1514,10 +1593,10 @@
 	}
 
 /***/ },
-/* 30 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(17)();
+	exports = module.exports = __webpack_require__(21)();
 	// imports
 	
 	
@@ -1528,7 +1607,7 @@
 
 
 /***/ },
-/* 31 */
+/* 36 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -1602,7 +1681,7 @@
 	module.exports = Mousemove;
 
 /***/ },
-/* 32 */
+/* 37 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1615,7 +1694,7 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var Control = __webpack_require__(33);
+	var Control = __webpack_require__(38);
 	
 	var Controller = function (_Control) {
 		_inherits(Controller, _Control);
@@ -1647,7 +1726,7 @@
 	module.exports = Controller;
 
 /***/ },
-/* 33 */
+/* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1658,7 +1737,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-	var limit = __webpack_require__(4);
+	var limit = __webpack_require__(8);
 	
 	var Promise = limit.promise();
 	var REX = /on([A-Z])(\w*)/;
@@ -1744,7 +1823,7 @@
 	module.exports = Control;
 
 /***/ },
-/* 34 */
+/* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1759,9 +1838,9 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var limit = __webpack_require__(4);
-	var originClass = __webpack_require__(35);
-	var Widget = __webpack_require__(40);
+	var limit = __webpack_require__(8);
+	var originClass = __webpack_require__(40);
+	var Widget = __webpack_require__(45);
 	
 	var originWidget = function (_Widget) {
 		_inherits(originWidget, _Widget);
@@ -1839,24 +1918,24 @@
 	module.exports = originWidget;
 
 /***/ },
-/* 35 */
+/* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	// 依赖
 	
-	module.exports = __webpack_require__(11)(__webpack_require__(36), __webpack_require__(39));
+	module.exports = __webpack_require__(15)(__webpack_require__(41), __webpack_require__(44));
 
 /***/ },
-/* 36 */
+/* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	__webpack_require__(37);
+	__webpack_require__(42);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -1958,16 +2037,16 @@
 	module.exports = Title;
 
 /***/ },
-/* 37 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(38);
+	var content = __webpack_require__(43);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(18)(content, {});
+	var update = __webpack_require__(22)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -1984,10 +2063,10 @@
 	}
 
 /***/ },
-/* 38 */
+/* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(17)();
+	exports = module.exports = __webpack_require__(21)();
 	// imports
 	
 	
@@ -1998,7 +2077,7 @@
 
 
 /***/ },
-/* 39 */
+/* 44 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -2011,7 +2090,7 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var Control = __webpack_require__(33);
+	var Control = __webpack_require__(38);
 	
 	var Controller = function (_Control) {
 		_inherits(Controller, _Control);
@@ -2044,7 +2123,7 @@
 	module.exports = Controller;
 
 /***/ },
-/* 40 */
+/* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -2057,7 +2136,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-	var limit = __webpack_require__(4);
+	var limit = __webpack_require__(8);
 	
 	var Widget = function () {
 		//实例化后的组件
@@ -2099,7 +2178,9 @@
 				};
 				me.componentExp = ReactDOM.render(React.createElement(Component, _extends({}, me.state, { children: me.childCom })), node);
 				node.id = me.componentExp.state.actionUUid;
-				Actions(me.componentExp).destroyWidget = me.destroy.bind(me);
+				Actions.get(me.componentExp).forEach(function (val) {
+					val.destroyWidget = me.destroy.bind(me);
+				});
 			}
 			// 更新组件
 	
@@ -2139,7 +2220,7 @@
 	module.exports = Widget;
 
 /***/ },
-/* 41 */
+/* 46 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -2154,7 +2235,7 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var Control = __webpack_require__(33);
+	var Control = __webpack_require__(38);
 	
 	var Controller = function (_Control) {
 		_inherits(Controller, _Control);
@@ -2249,24 +2330,24 @@
 	module.exports = Controller;
 
 /***/ },
-/* 42 */
+/* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	// 依赖
 	
-	module.exports = __webpack_require__(11)(__webpack_require__(43), __webpack_require__(46));
+	module.exports = __webpack_require__(15)(__webpack_require__(48), __webpack_require__(51));
 
 /***/ },
-/* 43 */
+/* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	__webpack_require__(44);
+	__webpack_require__(49);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -2274,8 +2355,8 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var Mousemove = __webpack_require__(31);
-	var ScrollerView = __webpack_require__(28);
+	var Mousemove = __webpack_require__(36);
+	var ScrollerView = __webpack_require__(33);
 	
 	// 组件类
 	
@@ -2324,16 +2405,16 @@
 	module.exports = Scroller;
 
 /***/ },
-/* 44 */
+/* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(45);
+	var content = __webpack_require__(50);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(18)(content, {});
+	var update = __webpack_require__(22)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -2350,10 +2431,10 @@
 	}
 
 /***/ },
-/* 45 */
+/* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(17)();
+	exports = module.exports = __webpack_require__(21)();
 	// imports
 	
 	
@@ -2364,7 +2445,7 @@
 
 
 /***/ },
-/* 46 */
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -2379,7 +2460,7 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var Control = __webpack_require__(33);
+	var Control = __webpack_require__(38);
 	
 	var Controller = function (_Control) {
 		_inherits(Controller, _Control);
@@ -2429,7 +2510,7 @@
 	module.exports = Controller;
 
 /***/ },
-/* 47 */
+/* 52 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -2547,7 +2628,7 @@
 	module.exports = File;
 
 /***/ },
-/* 48 */
+/* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -2562,9 +2643,9 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var Control = __webpack_require__(33);
+	var Control = __webpack_require__(38);
 	
-	var regNum = /^[\d\.]*$/;
+	var regNum = /^[\d\.-]*$/;
 	
 	var Controller = function (_Control) {
 		_inherits(Controller, _Control);
@@ -2733,7 +2814,7 @@
 	module.exports = Controller;
 
 /***/ },
-/* 49 */
+/* 54 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -2746,8 +2827,8 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var Widget = __webpack_require__(40);
-	var originClass = __webpack_require__(11)(__webpack_require__(50), __webpack_require__(63));
+	var Widget = __webpack_require__(45);
+	var originClass = __webpack_require__(15)(__webpack_require__(55), __webpack_require__(68));
 	
 	var originWidget = function (_Widget) {
 		_inherits(originWidget, _Widget);
@@ -2770,14 +2851,14 @@
 	module.exports = originClass;
 
 /***/ },
-/* 50 */
+/* 55 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	__webpack_require__(51);
+	__webpack_require__(56);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -2785,7 +2866,7 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var Dialog = __webpack_require__(53);
+	var Dialog = __webpack_require__(58);
 	
 	// 组件类
 	
@@ -2880,16 +2961,16 @@
 	module.exports = Cover;
 
 /***/ },
-/* 51 */
+/* 56 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(52);
+	var content = __webpack_require__(57);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(18)(content, {});
+	var update = __webpack_require__(22)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -2906,10 +2987,10 @@
 	}
 
 /***/ },
-/* 52 */
+/* 57 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(17)();
+	exports = module.exports = __webpack_require__(21)();
 	// imports
 	
 	
@@ -2920,24 +3001,24 @@
 
 
 /***/ },
-/* 53 */
+/* 58 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	// 依赖
 	
-	module.exports = __webpack_require__(11)(__webpack_require__(54), __webpack_require__(62));
+	module.exports = __webpack_require__(15)(__webpack_require__(59), __webpack_require__(67));
 
 /***/ },
-/* 54 */
+/* 59 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	__webpack_require__(55);
+	__webpack_require__(60);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -2946,9 +3027,9 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	// 依赖
-	var React = __webpack_require__(12);
-	var limit = __webpack_require__(4);
-	var Cover = __webpack_require__(57);
+	var React = __webpack_require__(16);
+	var limit = __webpack_require__(8);
+	var Cover = __webpack_require__(62);
 	
 	// 组件类
 	
@@ -3021,6 +3102,24 @@
 						me.closeDialog();
 					}, props.timeout);
 				};
+				if (props.useEsc) {
+					var nameSpace = me.nameSpace = 'keyup.dialog' + limit.getUid();
+					$(document).on(nameSpace, function (e) {
+						if (e.keyCode === 27) {
+							me.closeDialog();
+						};
+					});
+				};
+			}
+		}, {
+			key: 'componentWillUnmount',
+			value: function componentWillUnmount() {
+				var me = this;
+				var props = me.props;
+	
+				if (props.useEsc) {
+					$(document).off(me.nameSpace);
+				};
 			}
 		}, {
 			key: 'componentDidUpdate',
@@ -3034,8 +3133,12 @@
 				var me = this;
 				var props = me.props;
 	
-				Actions(me).destroyWidget && Actions(me).destroyWidget();
-				props.onClose();
+				var actionsExp = Actions(me);
+				actionsExp && actionsExp.destroyWidget;
+				if (actionsExp && actionsExp.destroyWidget) {
+					actionsExp.destroyWidget();
+					props.onClose();
+				};
 			}
 		}, {
 			key: 'setCenter',
@@ -3071,16 +3174,16 @@
 	module.exports = Dialog;
 
 /***/ },
-/* 55 */
+/* 60 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(56);
+	var content = __webpack_require__(61);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(18)(content, {});
+	var update = __webpack_require__(22)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -3097,21 +3200,21 @@
 	}
 
 /***/ },
-/* 56 */
+/* 61 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(17)();
+	exports = module.exports = __webpack_require__(21)();
 	// imports
 	
 	
 	// module
-	exports.push([module.id, ".react-dialog {\n  position: absolute;\n  background: #FFF;\n  top: 0px;\n  left: 50%;\n  z-index: 101;\n  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);\n}\n.react-dialog .ch-close {\n  position: absolute;\n  right: 5px;\n  top: 5px;\n  padding: 0 2px;\n  color: #999;\n}\n.react-dialog .ch-close:hover {\n  background: #999;\n  color: #FFF;\n}\n@keyframes loading {\n  0% {\n    left: -20px;\n  }\n  100% {\n    left: 100%;\n  }\n}\n.widget-loading .react-cover,\n.widget-loading .react-dialog {\n  cursor: progress;\n}\n.widget-loading .react-dialog {\n  overflow: hidden;\n  box-shadow: none;\n  background: none;\n}\n.widget-loading .react-dialog .ch-close {\n  display: none;\n}\n.widget-loading .ch-load {\n  position: absolute;\n  width: 20px;\n  height: 2px;\n  background: #4285f4;\n  opacity: .8;\n  left: -20px;\n  animation: loading 1.5s ease infinite;\n}\n.widget-success {\n  color: #666;\n}\n.widget-success .ch-logo {\n  position: absolute;\n  width: 25px;\n  height: 25px;\n  line-height: 25px;\n  border-radius: 25px;\n  background: #4285f4;\n  color: #FFF;\n  text-align: center;\n  text-indent: -4px;\n  top: 50%;\n  margin-top: -12px;\n  left: 10px;\n}\n.widget-success .ch-text {\n  line-height: 16px;\n  padding: 20px 20px 20px 40px;\n}\n.widget-error {\n  color: #666;\n}\n.widget-error .ch-logo {\n  position: absolute;\n  width: 25px;\n  height: 25px;\n  line-height: 25px;\n  border-radius: 25px;\n  background: #4285f4;\n  color: #FFF;\n  text-align: center;\n  text-indent: -4px;\n  top: 50%;\n  margin-top: -12px;\n  left: 10px;\n}\n.widget-error .ch-text {\n  line-height: 16px;\n  padding: 20px 20px 20px 40px;\n}\n.widget-error .ch-logo {\n  text-indent: 0;\n  font-size: 16px;\n  line-height: 23px;\n  background: #ea4335;\n}\n", ""]);
+	exports.push([module.id, ".react-dialog {\n  position: absolute;\n  background: #FFF;\n  top: 0px;\n  left: 50%;\n  z-index: 101;\n  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);\n}\n.react-dialog .ch-close {\n  position: absolute;\n  right: 5px;\n  top: 5px;\n  padding: 0 2px;\n  color: #999;\n}\n.react-dialog .ch-close:hover {\n  background: #999;\n  color: #FFF;\n}\n@keyframes loading {\n  0% {\n    left: -20px;\n  }\n  100% {\n    left: 100%;\n  }\n}\n.widget-loading .react-cover,\n.widget-loading .react-dialog {\n  cursor: progress;\n}\n.widget-loading .react-dialog {\n  overflow: hidden;\n  box-shadow: none;\n  background: none;\n}\n.widget-loading .react-dialog .ch-close {\n  display: none;\n}\n.widget-loading .ch-load {\n  position: absolute;\n  width: 20px;\n  height: 2px;\n  background: #4285f4;\n  opacity: .8;\n  left: -20px;\n  animation: loading 1.5s ease infinite;\n}\n.widget-success {\n  color: #666;\n}\n.widget-success .ch-logo {\n  position: absolute;\n  width: 25px;\n  height: 25px;\n  line-height: 25px;\n  color: #4285f4;\n  text-align: right;\n  text-indent: -4px;\n  top: 50%;\n  margin-top: -12px;\n  left: 10px;\n  overflow: hidden;\n  font-size: 25px;\n}\n.widget-success .ch-text {\n  line-height: 16px;\n  padding: 20px 20px 20px 40px;\n}\n.widget-error {\n  color: #666;\n}\n.widget-error .ch-logo {\n  position: absolute;\n  width: 25px;\n  height: 25px;\n  line-height: 25px;\n  color: #4285f4;\n  text-align: right;\n  text-indent: -4px;\n  top: 50%;\n  margin-top: -12px;\n  left: 10px;\n  overflow: hidden;\n  font-size: 25px;\n}\n.widget-error .ch-text {\n  line-height: 16px;\n  padding: 20px 20px 20px 40px;\n}\n.widget-error .ch-logo {\n  text-indent: 0;\n  color: #ea4335;\n}\n.widget-confirm .ch-layout {\n  color: #666;\n  padding: 0 15px 15px;\n}\n.widget-confirm .ch-head {\n  height: 30px;\n  line-height: 30px;\n  border-bottom: 1px solid #CCC;\n}\n.widget-confirm .ch-body {\n  padding: 10px;\n}\n.widget-confirm .ch-foot {\n  text-align: center;\n}\n", ""]);
 	
 	// exports
 
 
 /***/ },
-/* 57 */
+/* 62 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -3124,8 +3227,8 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var Widget = __webpack_require__(40);
-	var originClass = __webpack_require__(11)(__webpack_require__(58), __webpack_require__(61));
+	var Widget = __webpack_require__(45);
+	var originClass = __webpack_require__(15)(__webpack_require__(63), __webpack_require__(66));
 	
 	var originWidget = function (_Widget) {
 		_inherits(originWidget, _Widget);
@@ -3148,14 +3251,14 @@
 	module.exports = originClass;
 
 /***/ },
-/* 58 */
+/* 63 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	__webpack_require__(59);
+	__webpack_require__(64);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -3164,8 +3267,8 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	// 依赖
-	var React = __webpack_require__(12);
-	var limit = __webpack_require__(4);
+	var React = __webpack_require__(16);
+	var limit = __webpack_require__(8);
 	
 	// 组件类
 	
@@ -3202,16 +3305,16 @@
 	module.exports = Cover;
 
 /***/ },
-/* 59 */
+/* 64 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(60);
+	var content = __webpack_require__(65);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(18)(content, {});
+	var update = __webpack_require__(22)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -3228,10 +3331,10 @@
 	}
 
 /***/ },
-/* 60 */
+/* 65 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(17)();
+	exports = module.exports = __webpack_require__(21)();
 	// imports
 	
 	
@@ -3242,7 +3345,7 @@
 
 
 /***/ },
-/* 61 */
+/* 66 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -3255,8 +3358,8 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var limit = __webpack_require__(4);
-	var Control = __webpack_require__(33);
+	var limit = __webpack_require__(8);
+	var Control = __webpack_require__(38);
 	
 	var Controller = function (_Control) {
 		_inherits(Controller, _Control);
@@ -3288,7 +3391,7 @@
 	module.exports = Controller;
 
 /***/ },
-/* 62 */
+/* 67 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -3301,8 +3404,8 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var limit = __webpack_require__(4);
-	var Control = __webpack_require__(33);
+	var limit = __webpack_require__(8);
+	var Control = __webpack_require__(38);
 	
 	var Controller = function (_Control) {
 		_inherits(Controller, _Control);
@@ -3318,10 +3421,7 @@
 				args[_key] = arguments[_key];
 			}
 	
-			return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Controller.__proto__ || Object.getPrototypeOf(Controller)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
-				top: 0,
-				marginLeft: 0
-			}, _temp), _possibleConstructorReturn(_this, _ret);
+			return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Controller.__proto__ || Object.getPrototypeOf(Controller)).call.apply(_ref, [this].concat(args))), _this), _this.state = {}, _temp), _possibleConstructorReturn(_this, _ret);
 		}
 	
 		return Controller;
@@ -3333,14 +3433,16 @@
 		actionId: 'dialog',
 		onClose: limit.K,
 		hasCover: true,
-		hide: false
+		hide: false,
+		timeout: 0,
+		useEsc: false
 	};
 	;
 	
 	module.exports = Controller;
 
 /***/ },
-/* 63 */
+/* 68 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -3355,8 +3457,8 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var limit = __webpack_require__(4);
-	var Control = __webpack_require__(33);
+	var limit = __webpack_require__(8);
+	var Control = __webpack_require__(38);
 	
 	var Controller = function (_Control) {
 		_inherits(Controller, _Control);
@@ -3451,7 +3553,7 @@
 	module.exports = Controller;
 
 /***/ },
-/* 64 */
+/* 69 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -3462,8 +3564,8 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-	var limit = __webpack_require__(4);
-	var DialogWidget = __webpack_require__(65);
+	var limit = __webpack_require__(8);
+	var DialogWidget = __webpack_require__(70);
 	
 	var Ajax = function () {
 		function Ajax(config) {
@@ -3472,17 +3574,22 @@
 			this.props = {
 				url: '',
 				cache: false,
+				dataName: '',
 				data: {},
 				dataType: 'json',
 				timeout: 5000,
-				type: 'GET',
+				type: 'POST',
 				theMethod: 1 // one two three
 			};
 			this.state = {};
 	
 			var me = this;
 			limit.assign(me.state, me.props, config);
-			return me['theMethod' + me.state.theMethod]();
+			if (me.state.url) {
+				return me['theMethod' + me.state.theMethod]();
+			} else {
+				return me.mock();
+			};
 		}
 	
 		_createClass(Ajax, [{
@@ -3500,14 +3607,22 @@
 					if (val.hasError) {
 						throw val.message;
 					} else {
-						return val.content;
+						var content = val.content;
+						if (content.isSuccess) {
+							return content;
+						} else {
+							throw content.msg;
+						};
 					};
 				}).then(function (val) {
 					dialogExp.destroy();
 					return val;
 				}, function (e) {
+					if (!limit.isString(e)) {
+						e = '请求数据错误，请稍后再试';
+					};
 					dialogExp.destroy();
-					DialogWidget.error('请求数据错误，请稍后再试');
+					DialogWidget.error(e);
 					throw e;
 				});
 			}
@@ -3516,7 +3631,27 @@
 			value: function jQuertAjax() {
 				var me = this;
 				return new Promise(function (s, j) {
-					$.ajax(me.state).then(s, j);
+					$.ajax(me.parseData()).then(s, j);
+				});
+			}
+		}, {
+			key: 'parseData',
+			value: function parseData() {
+				var me = this;
+				var state = me.state;
+	
+				if (state.dataName) {
+					var data = {};
+					data[state.dataName] = JSON.stringify(state.data);
+					state.data = data;
+				};
+				return state;
+			}
+		}, {
+			key: 'mock',
+			value: function mock() {
+				return new Promise(function (s) {
+					setTimeout(s, limit.random(0, 1000));
 				});
 			}
 		}]);
@@ -3527,7 +3662,7 @@
 	module.exports = Ajax;
 
 /***/ },
-/* 65 */
+/* 70 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -3542,9 +3677,10 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var limit = __webpack_require__(4);
-	var originClass = __webpack_require__(53);
-	var Widget = __webpack_require__(40);
+	var limit = __webpack_require__(8);
+	var originClass = __webpack_require__(58);
+	var Input = __webpack_require__(23);
+	var Widget = __webpack_require__(45);
 	
 	var originWidget = function (_Widget) {
 		_inherits(originWidget, _Widget);
@@ -3584,11 +3720,7 @@
 				}, config), null, React.createElement(
 					'div',
 					{ className: 'ch-text fn-wrap' },
-					React.createElement(
-						'i',
-						{ className: 'ch-logo' },
-						'√'
-					),
+					React.createElement('i', { className: 'ch-logo iconfont icon-success' }),
 					info || '操作成功'
 				));
 			}
@@ -3605,13 +3737,94 @@
 				}, config), null, React.createElement(
 					'div',
 					{ className: 'ch-text fn-wrap' },
-					React.createElement(
-						'span',
-						{ className: 'ch-logo' },
-						'×'
-					),
+					React.createElement('span', { className: 'ch-logo iconfont icon-wrong' }),
 					info || '操作失败'
 				));
+			}
+		}, {
+			key: 'confirm',
+			value: function confirm(info, config) {
+				return new Promise(function (resolve, reject) {
+					var dialog = new originWidget(limit.assignSuper({
+						className: 'widget-confirm',
+						width: 'auto',
+						height: 'auto',
+						maxWidth: 300,
+						opacity: .3,
+						onClose: function onClose() {
+							reject('取消');
+						},
+	
+						useEsc: true
+					}, config), null, React.createElement(
+						'div',
+						{ className: 'ch-layout' },
+						React.createElement(
+							'div',
+							{ className: 'ch-head' },
+							'提示'
+						),
+						React.createElement(
+							'div',
+							{ className: 'ch-body' },
+							info
+						),
+						React.createElement(
+							'div',
+							{ className: 'ch-foot' },
+							React.createElement(Input, { type: 'button',
+								value: '确 定',
+								focus: 'focus',
+								onClick: function onClick() {
+									resolve('sure');dialog.destroy();
+								} }),
+							React.createElement(Input, { type: 'button', value: '取 消', onClick: function onClick() {
+									reject('cancel');dialog.destroy();
+								}, className: 'fn-ML10' })
+						)
+					));
+				});
+			}
+		}, {
+			key: 'alert',
+			value: function alert(info, config) {
+				return new Promise(function (resolve, reject) {
+					var dialog = new originWidget(limit.assignSuper({
+						className: 'widget-confirm',
+						width: 'auto',
+						height: 'auto',
+						maxWidth: 300,
+						opacity: .3,
+						onClose: function onClose() {
+							reject('取消');
+						},
+	
+						useEsc: true
+					}, config), null, React.createElement(
+						'div',
+						{ className: 'ch-layout' },
+						React.createElement(
+							'div',
+							{ className: 'ch-head' },
+							'提示'
+						),
+						React.createElement(
+							'div',
+							{ className: 'ch-body fn-wrap' },
+							info
+						),
+						React.createElement(
+							'div',
+							{ className: 'ch-foot' },
+							React.createElement(Input, { type: 'button',
+								focus: 'focus',
+								value: '确 定',
+								onClick: function onClick() {
+									resolve('sure');dialog.destroy();
+								} })
+						)
+					));
+				});
 			}
 		}]);
 	
@@ -3624,24 +3837,24 @@
 	module.exports = originWidget;
 
 /***/ },
-/* 66 */
+/* 71 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	// 依赖
 	
-	module.exports = __webpack_require__(11)(__webpack_require__(67), __webpack_require__(70));
+	module.exports = __webpack_require__(15)(__webpack_require__(72), __webpack_require__(75));
 
 /***/ },
-/* 67 */
+/* 72 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	__webpack_require__(68);
+	__webpack_require__(73);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -3649,7 +3862,7 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var Mousemove = __webpack_require__(31);
+	var Mousemove = __webpack_require__(36);
 	
 	// 组件类
 	
@@ -3762,16 +3975,16 @@
 	module.exports = Cropper;
 
 /***/ },
-/* 68 */
+/* 73 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(69);
+	var content = __webpack_require__(74);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(18)(content, {});
+	var update = __webpack_require__(22)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -3788,10 +4001,10 @@
 	}
 
 /***/ },
-/* 69 */
+/* 74 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(17)();
+	exports = module.exports = __webpack_require__(21)();
 	// imports
 	
 	
@@ -3802,7 +4015,7 @@
 
 
 /***/ },
-/* 70 */
+/* 75 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -3817,7 +4030,7 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var Control = __webpack_require__(33);
+	var Control = __webpack_require__(38);
 	
 	var Controller = function (_Control) {
 		_inherits(Controller, _Control);
@@ -3850,8 +4063,9 @@
 	
 				state.left = x;
 				state.top = y;
-				props.onChangePos(x, y);
-				me.updateComponent();
+				me.updateComponent().then(function () {
+					props.onChangePos(x, y);
+				});
 			}
 		}]);
 	
@@ -3868,7 +4082,7 @@
 	module.exports = Controller;
 
 /***/ },
-/* 71 */
+/* 76 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -3883,7 +4097,7 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var Control = __webpack_require__(33);
+	var Control = __webpack_require__(38);
 	
 	var Controller = function (_Control) {
 		_inherits(Controller, _Control);
@@ -3913,6 +4127,8 @@
 				var state = me.state;
 	
 				state.src = src;
+				state.x = 0;
+				state.y = 0;
 				me.updateComponent();
 			}
 		}, {

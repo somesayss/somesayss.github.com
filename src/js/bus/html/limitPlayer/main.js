@@ -4,6 +4,6 @@
 const AudioPlayer = require('modules/audioPlayer/index');
 
 ReactDOM.render(
-	<AudioPlayer src="./music.mp3" />, 
+	<AudioPlayer src="http://www.runoob.com/try/demo_source/movie.mp4" />, 
 	document.getElementById('container')
 );

@@ -8,17 +8,22 @@ class Ajax {
 	props = {
 		url: '',
 		cache: false,
+		dataName: '',
 		data: {},
 		dataType: 'json',
 		timeout: 5000,
-		type: 'GET',
+		type: 'POST',
 		theMethod: 1 // one two three
 	}
 	state = {}
 	constructor(config){
 		let me = this;
 		limit.assign(me.state, me.props, config);
-		return me[`theMethod${me.state.theMethod}`]();
+		if( me.state.url ){
+			return me[`theMethod${me.state.theMethod}`]();
+		}else{
+			return me.mock();
+		};
 	}
 	theMethod0(){
 		let me = this;
@@ -31,21 +36,44 @@ class Ajax {
 			if(val.hasError){
 				throw val.message;
 			}else{
-				return val.content;
+				let content = val.content;
+				if( content.isSuccess ){
+					return content;
+				}else{
+					throw content.msg;
+				};
 			};
 		}).then((val) => {
 			dialogExp.destroy();
 			return val;
 		}, (e) => {
+			if( !limit.isString(e) ){
+				e = '请求数据错误，请稍后再试';
+			};
 			dialogExp.destroy();
-			DialogWidget.error('请求数据错误，请稍后再试');
+			DialogWidget.error(e);
 			throw e;
 		});
 	}
 	jQuertAjax(){
 		let me = this;
 		return new Promise((s, j) => {
-			$.ajax(me.state).then(s, j);
+			$.ajax( me.parseData() ).then(s, j);
+		});
+	}
+	parseData(){
+		let me = this;
+		let {state} = me;
+		if( state.dataName ){
+			let data = {};
+			data[state.dataName] = JSON.stringify(state.data);
+			state.data = data;
+		};
+		return state;
+	}
+	mock(){
+		return new Promise((s) => {
+			setTimeout( s, limit.random(0,1000) );
 		});
 	}
 }

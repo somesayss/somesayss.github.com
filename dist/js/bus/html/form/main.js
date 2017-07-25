@@ -44,35 +44,39 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(6);
+	module.exports = __webpack_require__(10);
 
 
 /***/ },
 /* 1 */,
 /* 2 */,
-/* 3 */
+/* 3 */,
+/* 4 */,
+/* 5 */,
+/* 6 */,
+/* 7 */
 /***/ function(module, exports) {
 
 	module.exports = jQuery;
 
 /***/ },
-/* 4 */
+/* 8 */
 /***/ function(module, exports) {
 
 	module.exports = limit;
 
 /***/ },
-/* 5 */,
-/* 6 */
+/* 9 */,
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	// 依赖
 	
-	var $ = __webpack_require__(3);
-	var limit = __webpack_require__(4);
-	var Upload = __webpack_require__(7);
+	var $ = __webpack_require__(7);
+	var limit = __webpack_require__(8);
+	var Upload = __webpack_require__(11);
 	
 	$('#fileUpload').on('click', function () {
 		new Upload({
@@ -88,7 +92,7 @@
 	});
 
 /***/ },
-/* 7 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -103,8 +107,8 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var limit = __webpack_require__(4);
-	var ParseForm = __webpack_require__(8);
+	var limit = __webpack_require__(8);
+	var ParseForm = __webpack_require__(12);
 	
 	var Upload = function (_ParseForm) {
 		_inherits(Upload, _ParseForm);
@@ -228,7 +232,7 @@
 	module.exports = Upload;
 
 /***/ },
-/* 8 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -239,7 +243,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-	var limit = __webpack_require__(4);
+	var limit = __webpack_require__(8);
 	
 	var ParseForm = function () {
 		function ParseForm(config) {

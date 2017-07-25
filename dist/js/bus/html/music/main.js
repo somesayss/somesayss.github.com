@@ -45,26 +45,26 @@
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(115);
+	module.exports = __webpack_require__(122);
 
 
 /***/ },
 
-/***/ 3:
+/***/ 7:
 /***/ function(module, exports) {
 
 	module.exports = jQuery;
 
 /***/ },
 
-/***/ 4:
+/***/ 8:
 /***/ function(module, exports) {
 
 	module.exports = limit;
 
 /***/ },
 
-/***/ 115:
+/***/ 122:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -73,8 +73,8 @@
 	
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 	
-	var $ = __webpack_require__(3);
-	var limit = __webpack_require__(4);
+	var $ = __webpack_require__(7);
+	var limit = __webpack_require__(8);
 	
 	var file = document.getElementById('file');
 	var audio = document.getElementById('audio');

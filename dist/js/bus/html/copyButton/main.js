@@ -44,40 +44,44 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(2);
+	module.exports = __webpack_require__(6);
 
 
 /***/ },
 /* 1 */,
-/* 2 */
+/* 2 */,
+/* 3 */,
+/* 4 */,
+/* 5 */,
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	// 依赖
 	
-	var $ = __webpack_require__(3);
-	var limit = __webpack_require__(4);
-	var Copy = __webpack_require__(5);
+	var $ = __webpack_require__(7);
+	var limit = __webpack_require__(8);
+	var Copy = __webpack_require__(9);
 	
 	$('#copy').on('click', function () {
 		new Copy({ text: $('#list').html() });
 	});
 
 /***/ },
-/* 3 */
+/* 7 */
 /***/ function(module, exports) {
 
 	module.exports = jQuery;
 
 /***/ },
-/* 4 */
+/* 8 */
 /***/ function(module, exports) {
 
 	module.exports = limit;
 
 /***/ },
-/* 5 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -88,7 +92,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-	var limit = __webpack_require__(4);
+	var limit = __webpack_require__(8);
 	
 	var Copy = function () {
 		function Copy(config) {

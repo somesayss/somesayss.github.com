@@ -18,7 +18,10 @@ module.exports = (Wrapper, Class) => {
 	    	__controller__.props = me.getPerProps(clearProps);
 	    	__controller__.state = me.getPerState(me.state);
 	    	me.state.actionId = me.state.actionId || `uaid${limit.getUid()}`;
-	    	me.state.actionUUid = __controller__.Actions.uuid = `uuid${limit.getUid()}`;
+	    	me.state.actionUUid = __controller__.Actions.actionUUid = `uuid${limit.getUid()}`;
+	    	if( props.actionCid ){
+	    		me.state.actionCid = __controller__.Actions.actionCid = props.actionCid;
+	    	};
 	    	Actions.set(me.state.actionId, __controller__.Actions);
 	    }
 	    getPerProps(props){
@@ -57,6 +60,7 @@ module.exports = (Wrapper, Class) => {
 	    	let newProps = limit.assign({}, props);
 	    	delete newProps.actionId;
     		delete newProps.actionUUid;
+    		delete newProps.actionCid;
     		newProps.actionId = Class.defaultProps && Class.defaultProps.actionId;
     		return newProps;
 	    }

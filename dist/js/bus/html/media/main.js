@@ -45,41 +45,41 @@
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(112);
+	module.exports = __webpack_require__(119);
 
 
 /***/ },
 
-/***/ 3:
+/***/ 7:
 /***/ function(module, exports) {
 
 	module.exports = jQuery;
 
 /***/ },
 
-/***/ 4:
+/***/ 8:
 /***/ function(module, exports) {
 
 	module.exports = limit;
 
 /***/ },
 
-/***/ 112:
+/***/ 119:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	// 依赖
 	
-	var $ = __webpack_require__(3);
-	var limit = __webpack_require__(4);
-	var ViewAudio = __webpack_require__(113);
+	var $ = __webpack_require__(7);
+	var limit = __webpack_require__(8);
+	var ViewAudio = __webpack_require__(120);
 	
 	new ViewAudio().viewCanvas();
 
 /***/ },
 
-/***/ 113:
+/***/ 120:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -96,8 +96,8 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var limit = __webpack_require__(4);
-	var Audio = __webpack_require__(114);
+	var limit = __webpack_require__(8);
+	var Audio = __webpack_require__(121);
 	
 	var viewAudio = function (_Audio) {
 		_inherits(viewAudio, _Audio);
@@ -237,7 +237,7 @@
 
 /***/ },
 
-/***/ 114:
+/***/ 121:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -251,7 +251,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-	var limit = __webpack_require__(4);
+	var limit = __webpack_require__(8);
 	
 	var Audio = function () {
 		//定时器ID

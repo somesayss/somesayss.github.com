@@ -182,7 +182,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 	defineIt('F', { value: F });
 
 	// 版本
-	defineIt('V', { value: '2.2.1' });
+	defineIt('V', { value: '2.2.2' });
 
 	// 获取属性
 	defineIt('getProp', { value: getProp });
@@ -567,8 +567,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 	var UID = [0, 0, 0];
 	defineIt('getUid', {
 		value: function value() {
-			var index = UID.length,
-			    code = void 0;
+			var index = UID.length;
+			var code = void 0;
 			while (index--) {
 				code = UID[index];
 				if (code === 9) {
@@ -584,9 +584,16 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		}
 	});
 
+	var uidCatchTime = null;
+	var uidCatchId = null;
 	defineIt('getTimeUid', {
 		value: function value() {
-			return new Date().getTime() + limit.getUid().split('.').join('');
+			var time = new Date().getTime();
+			if (time !== uidCatchTime) {
+				uidCatchTime = time;
+				uidCatchId = 0;
+			};
+			return [uidCatchTime, limit.padStart(++uidCatchId, 3, '0')].join('');
 		}
 	});
 
@@ -2030,6 +2037,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 				var me = this;
 				var state = me.state;
 
+				if (!state || !state.listeners) return me;
 				var listeners = state.listeners;
 				if (listeners[eventName]) {
 					listeners[eventName].push(limit.cb(listener));
@@ -2045,6 +2053,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 				var me = this;
 				var state = me.state;
 
+				if (!state || !state.listeners) return me;
 				var listeners = state.listeners;
 				var newListener = function newListener() {
 					var _limit$cb;
@@ -2070,6 +2079,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 				var me = this;
 				var state = me.state;
 
+				if (!state || !state.listeners) return me;
 				var listeners = state.listeners;
 				if (listeners[eventName]) {
 					limit.each(listeners[eventName], function (val) {
@@ -2084,6 +2094,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 				var me = this;
 				var state = me.state;
 
+				if (!state || !state.listeners) return me;
 				var listeners = state.listeners;
 				if (listeners[eventName]) {
 					limit.remove(listeners[eventName], listener);
@@ -2096,6 +2107,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 				var me = this;
 				var state = me.state;
 
+				if (!state || !state.listeners) return me;
 				var listeners = state.listeners;
 				if (listeners[eventName]) {
 					delete listeners[eventName];
@@ -2110,6 +2122,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 				var me = this;
 				var state = me.state;
 
+				if (!state) return;
 				return state.maxListeners;
 			}
 		}, {
@@ -2118,6 +2131,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 				var me = this;
 				var state = me.state;
 
+				if (!state) return me;
 				state.maxListeners = limit.parseInt(n);
 				return me;
 			}
@@ -2125,7 +2139,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 			key: 'destroy',
 			value: function destroy() {
 				var me = this;
-				me.state = { listeners: {}, maxListeners: 10 };
+				delete me.state;
 				delete me.props;
 				return me;
 			}
@@ -2834,11 +2848,11 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 	// 对IE下 JSON.stringify 的修复
 	;(function (JSON) {
 		var rex = /(\\u\w{4})/g;
-		JSON.stringify = function (json) {
+		JSON.stringify = function (json, replacer, space) {
 			if (json == null) {
 				json = '';
 			};
-			var str = stringify(json);
+			var str = stringify(json, replacer, space);
 			if (str) {
 				return str.replace(rex, function (a) {
 					return new Function('return "' + a + '"')();

@@ -4,8 +4,8 @@
 const limit = require('limit');
 
 // 变量
-const Actions = window.Actions = function(id){
-	return Actions.get(id);
+const Actions = window.Actions = function(id, cid){
+	return getReturnObj(id, cid);
 };
 
 const ActionsPool = Actions.pool = {};
@@ -20,37 +20,61 @@ Actions.set = function(id, action){
 	};
 };
 
-Actions.getAll = function(id){
-	if( limit.isObjectSuper(id) ){
-		id = id.props.actionId || id.state.actionId;
-	}else{
-		id = limit.toString(id);
+// 获取正确的ID
+function getPropTrueId(obj, key){
+	if( limit.isObjectSuper(obj) ){
+		return obj.props[key] || obj.state[key];
 	};
-	let pool = ActionsPool[id];
-	return pool;
 };
 
-Actions.get = function(id){
-	let pool = Actions.getAll(id);
-	if( pool ){
-		if( limit.isObjectSuper(id) && (id.props.actionUUid || id.state.actionUUid) ){
-			let actionUUid = id.props.actionUUid || id.state.actionUUid;
-			let action = null;
-			pool.some((val) => {
-				if( val.uuid === actionUUid ){
-					action = val;
-					return true;
-				};
+// 通过ID获取
+function getAllPoolById(id){
+	return ActionsPool[getPropTrueId(id, 'actionId') || id] || [];
+};
+
+// 获取目标
+function getTargetPool(id, cid){
+	let pool = getAllPoolById(id);
+	if( cid ){
+		return pool.filter((val) => {
+			return val.actionCid === cid;
+		});
+	}else{
+		let uid = getPropTrueId(id, 'actionUUid');
+		if( uid ){
+			return pool.filter((val) => {
+				return val.actionUUid === uid;
 			});
-			return action;
 		}else{
-			if( pool.length === 1 ){
-				return pool[0];
-			}else{
-				return pool;
-			};
+			return pool;
 		};
 	};
+};
+
+// 获取对应的对象
+function getReturnObj(id, cid){
+	let pool = getTargetPool(id, cid);
+	let obj = {};
+	if( pool.length ){
+		limit.each(pool[0], (val, key) => {
+			if( limit.isFunction(val) ){
+				obj[key] = (...agrs) => {
+					return Promise.all( pool.map((fn) => {
+						return fn[key](...agrs);
+					}) );
+				};
+			}else{
+				obj[key] = pool.map((val) => {
+					return val[key];
+				}).join(',');
+			};
+		});
+	};
+	return obj;
+};
+
+Actions.get = function(id, cid){
+	return getTargetPool(id, cid);
 };
 
 Actions.remove = function(id, action){

@@ -20,8 +20,9 @@ class Controller extends Control {
 		let {state, props} = me;
 		state.left = x;
 		state.top = y;
-		props.onChangePos(x, y);
-		me.updateComponent();
+		me.updateComponent().then(() => {
+			props.onChangePos(x, y);
+		});
 	}
 };
 

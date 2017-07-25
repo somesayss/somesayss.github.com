@@ -1,0 +1,80 @@
+body{
+	background:#FCFCFC;
+	color:#666;
+}
+
+.tally{
+	.tally-filter{
+		padding:10px 0px;
+		margin:0 10px;
+		border-bottom:1px solid #CCC;
+	}
+	.tally-table{
+		.tally-table-much{
+			text-align:right;
+		}
+		.tally-table-deficit{
+			color:#F00;
+		}
+		.tally-table-surplus{
+			color:#4285f4;
+		}
+		.tally-table-edit{
+			padding:0;
+		}
+		.tally-table-shuozhi{
+			position:relative;
+			padding-left:16px;
+			text-align:center;
+			line-height:16px;
+			i{
+				position:absolute;
+				font-style:normal;
+				height:14px;
+				width:14px;
+				line-height:10px;
+				top:1px;
+				color:#4285f4;
+				background:#FFF;
+				border-radius:3px;
+				padding-top:2px;
+				&.active{
+					background:#4285f4;
+					color:#FFF;
+				}
+			}
+			.tally-table-shuozhi-in{
+				left:1px;
+			}
+			.tally-table-shuozhi-out{
+				left:1px;
+				top:16px;
+				color:#F00;
+				&.active{
+					background:#F00;
+					color:#FFF;
+				}
+			}
+		}
+		input{
+			width:100%;
+			border:none;
+			height:32px;
+			font-size:12px;
+			color:#666;
+			padding:0 10px;
+		}
+		padding:10px;
+		td{
+			line-height:22px;
+			padding:5px 10px;
+			border:1px solid #CCC;
+			vertical-align:middle;
+		}
+		tbody{
+			tr:hover, tr:focus{
+				background:#FFF;
+			}	
+		}
+	}
+}

@@ -12,8 +12,8 @@ const webpackConfig = require('./webpack.config');
 // 任务
 // 默认打包，压缩
 gulp.task('default', ['zip', 'webpackOnce']);
-gulp.task('nomin', ['zip', 'webpackOnceNomin']);
-gulp.task('server', ['zip', 'webpack', 'brow', 'watch']);
+gulp.task('nomin',   ['zip', 'webpackOnceNomin']);
+gulp.task('server',  ['zip', 'webpack', 'brow', 'watch']);
 
 // 自定义打包
 gulp.task('zip', () => {

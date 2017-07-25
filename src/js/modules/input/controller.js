@@ -3,7 +3,7 @@
 // 依赖
 const Control = require('common/myReflux/control');
 
-const regNum = /^[\d\.]*$/;
+const regNum = /^[\d\.-]*$/;
 
 class Controller extends Control {
 	state = {

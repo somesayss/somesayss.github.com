@@ -68,9 +68,7 @@ function setConfig(watch, min){
 setConfig.commonJsList = [
     'src/js/libs/jquery.js',
     'src/js/libs/react.js',
-    'src/bower_components/limit/dist/limit.min.js',
-    'src/js/libs/sea.js',
-    'src/js/libs/seaCfg.js'
+    'src/bower_components/limit/dist/limit.min.js'
 ];
 
 // 统一打包的CSS

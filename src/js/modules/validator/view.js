@@ -4,28 +4,22 @@ import './style.less';
 
 const InputWidget = require('modules/input/widget');
 
-let guid = 0;
-
 // 组件类
 class Validator extends React.Component {
-	componentWillMount(){
-		let me = this;
-	}
 	cloneAllChild(child){
 		let me = this;
 		let {props} = me;
 		let childProps = child.props;
 		if( childProps ){
+			if( childProps.actionId === 'limitForm' ){
+				return React.cloneElement(child, {validaor: props.validaor});
+			};
 			if( childProps.children ){
 				return React.cloneElement(child, {}, 
-					React.Children.map(child.props.children, (child) => {
+					React.Children.map(childProps.children, (child) => {
 						return me.cloneAllChild(child);
 					})
 				);
-			}else{
-				if( child.props.actionId === 'limitForm' ){
-					return React.cloneElement(child, {validaor: props.validaor});
-				};
 			};
 		};
 		return child;

@@ -45,19 +45,19 @@
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(90);
+	module.exports = __webpack_require__(97);
 
 
 /***/ },
 
-/***/ 3:
+/***/ 7:
 /***/ function(module, exports) {
 
 	module.exports = jQuery;
 
 /***/ },
 
-/***/ 17:
+/***/ 21:
 /***/ function(module, exports) {
 
 	"use strict";
@@ -113,7 +113,7 @@
 
 /***/ },
 
-/***/ 18:
+/***/ 22:
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -366,25 +366,25 @@
 
 /***/ },
 
-/***/ 90:
+/***/ 97:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	// 依赖
 	
-	var AudioPlayer = __webpack_require__(91);
+	var AudioPlayer = __webpack_require__(98);
 	
-	ReactDOM.render(React.createElement(AudioPlayer, { src: "./music.mp3" }), document.getElementById('container'));
+	ReactDOM.render(React.createElement(AudioPlayer, { src: "http://www.runoob.com/try/demo_source/movie.mp4" }), document.getElementById('container'));
 
 /***/ },
 
-/***/ 91:
+/***/ 98:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	/**
-	 * version:0.1.3
+	 * version:0.1.4
 	 * 参考
 	 * http://www.epooll.com/archives/422/
 	 * 0.1.1
@@ -393,11 +393,14 @@
 	 * 	增加点击定位
 	 * 0.1.3
 	 * 	移动的球定位到中心
+	 * 0.1.4
+	 * 	音量的BUG
+	 * 	可用video和audio
 	 */
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	__webpack_require__(92);
+	__webpack_require__(99);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -405,7 +408,7 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var $ = __webpack_require__(3);
+	var $ = __webpack_require__(7);
 	
 	var AudioPlayer = function (_React$Component) {
 		_inherits(AudioPlayer, _React$Component);
@@ -441,8 +444,8 @@
 	
 				return React.createElement(
 					'div',
-					{ className: 'audio-player' },
-					React.createElement('audio', { src: props.src, ref: 'audio', loop: props.loop, autoPlay: props.autoPlay, muted: props.muted }),
+					{ className: 'audio-player', style: { width: props.width } },
+					props.type === 'audio' ? React.createElement('audio', { src: props.src, width: '100%', ref: 'audio', loop: props.loop, autoPlay: props.autoPlay, muted: props.muted }) : React.createElement('video', { src: props.src, width: '100%', ref: 'audio', loop: props.loop, autoPlay: props.autoPlay, muted: props.muted }),
 					state.error ? React.createElement('div', { className: 'mark' }) : void 0,
 					React.createElement(
 						'table',
@@ -655,6 +658,7 @@
 						audio.pause();
 					};
 				};
+	
 				document.onmousemove = function (e) {
 					e.preventDefault();
 					e.stopPropagation();
@@ -729,6 +733,22 @@
 				var state = me.state;
 	
 				audio.volume = +val.toFixed(2);
+				if (audio.volume) {
+					audio.muted = false;
+				};
+			}
+			// 音量变化
+	
+		}, {
+			key: 'audioVolumechange',
+			value: function audioVolumechange() {
+				var me = this;
+				var state = me.state;
+				var audio = me.audio;
+	
+				state.volume = audio.volume;
+				state.muteStatus = audio.muted ? 'mute' : 'nomute';
+				me.setState(state);
 			}
 			// 禁音
 	
@@ -793,19 +813,6 @@
 				me.changeVolume(state.volume);
 				me.setState(state);
 			}
-			// 音量变化
-	
-		}, {
-			key: 'audioVolumechange',
-			value: function audioVolumechange() {
-				var me = this;
-				var state = me.state;
-				var audio = me.audio;
-	
-				state.volume = audio.volume;
-				state.muteStatus = audio.muted ? 'mute' : 'nomute';
-				me.setState(state);
-			}
 			// 事件转换 把秒格式化为分
 	
 		}, {
@@ -825,11 +832,13 @@
 		loop: true,
 		autoPlay: true,
 		muted: false,
+		width: 400,
 		audioWidth: '100%',
 		audioHeight: '32',
-		volumeWidth: 90,
+		volumeWidth: 50,
 		progressWidth: 90,
-		timeWidth: 90
+		timeWidth: 60,
+		type: 'vido'
 	};
 	
 	
@@ -837,16 +846,16 @@
 
 /***/ },
 
-/***/ 92:
+/***/ 99:
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(93);
+	var content = __webpack_require__(100);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(18)(content, {});
+	var update = __webpack_require__(22)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -864,10 +873,10 @@
 
 /***/ },
 
-/***/ 93:
+/***/ 100:
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(17)();
+	exports = module.exports = __webpack_require__(21)();
 	// imports
 	
 	

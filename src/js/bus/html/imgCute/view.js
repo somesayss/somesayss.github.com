@@ -23,7 +23,7 @@ class Imgcute extends React.Component {
 				<br />
 				<br />
 				<canvas className="fn-hide" ref="theCanvas" width="200" height="200" />
-				<Cropper ref="cropper" src={props.src} top="0" left="0" onChangePos={Actions(me).changePos}/>
+				<Cropper ref="cropper" src={props.src} top={props.y} left={props.x} onChangePos={Actions(me).changePos}/>
 			</div>
 		);
 	}

@@ -45,26 +45,26 @@
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(106);
+	module.exports = __webpack_require__(113);
 
 
 /***/ },
 
-/***/ 3:
+/***/ 7:
 /***/ function(module, exports) {
 
 	module.exports = jQuery;
 
 /***/ },
 
-/***/ 4:
+/***/ 8:
 /***/ function(module, exports) {
 
 	module.exports = limit;
 
 /***/ },
 
-/***/ 17:
+/***/ 21:
 /***/ function(module, exports) {
 
 	"use strict";
@@ -120,7 +120,7 @@
 
 /***/ },
 
-/***/ 18:
+/***/ 22:
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -373,7 +373,7 @@
 
 /***/ },
 
-/***/ 88:
+/***/ 95:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -384,7 +384,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-	var limit = __webpack_require__(4);
+	var limit = __webpack_require__(8);
 	
 	var Rainbow = function () {
 		function Rainbow(config) {
@@ -455,24 +455,24 @@
 
 /***/ },
 
-/***/ 106:
+/***/ 113:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	// 样式
 	
-	__webpack_require__(107);
+	__webpack_require__(114);
 	
 	// 依赖
-	var $ = __webpack_require__(3);
-	var limit = __webpack_require__(4);
+	var $ = __webpack_require__(7);
+	var limit = __webpack_require__(8);
 	
 	// 颜色类
-	var Rainbow = __webpack_require__(88);
+	var Rainbow = __webpack_require__(95);
 	// 画图类
-	var DrawCanvas = __webpack_require__(109);
-	var AudioBuffer = __webpack_require__(110);
+	var DrawCanvas = __webpack_require__(116);
+	var AudioBuffer = __webpack_require__(117);
 	
 	var DC = new DrawCanvas({ rotate: -90 });
 	var RB = new Rainbow({ totle: 360 });
@@ -507,16 +507,16 @@
 
 /***/ },
 
-/***/ 107:
+/***/ 114:
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(108);
+	var content = __webpack_require__(115);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(18)(content, {});
+	var update = __webpack_require__(22)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -534,10 +534,10 @@
 
 /***/ },
 
-/***/ 108:
+/***/ 115:
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(17)();
+	exports = module.exports = __webpack_require__(21)();
 	// imports
 	
 	
@@ -549,7 +549,7 @@
 
 /***/ },
 
-/***/ 109:
+/***/ 116:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -560,7 +560,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-	var limit = __webpack_require__(4);
+	var limit = __webpack_require__(8);
 	
 	var DrawCanvas = function () {
 		function DrawCanvas(config) {
@@ -675,7 +675,7 @@
 
 /***/ },
 
-/***/ 110:
+/***/ 117:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -686,7 +686,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-	var limit = __webpack_require__(4);
+	var limit = __webpack_require__(8);
 	
 	var AudioBuffer = function () {
 		function AudioBuffer(config) {

@@ -2,6 +2,7 @@
 
 import './style.less';
 
+const domUtil = require('common/domUtil');
 const Select = require('modules/select/index');
 const Textarea = require('modules/textarea/index');
 const File = require('./file');
@@ -88,7 +89,11 @@ class Form extends React.Component {
 		let {props} = me;
 		return (
 			<div className={`limit-form-${me.getType()}`}>
-				<a href="javascript:;" tabIndex="-1" className="ch-clear" onClick={!props.disabled ? Actions(me).clear.bind(me) : null}>×</a>
+				{do{
+					if( props.value ){
+						<a href="javascript:;" tabIndex="-1" className="ch-clear" onClick={!props.disabled ? Actions(me).clear.bind(me) : null}>×</a>
+					}
+				}}
 				<input className={props.pswShow?'':'fn-hide'} autoComplete="off" {...me.parseProps()} ref="input" type={me.getType()}   />
 				{do{
 					if( props.type === 'password' ){
@@ -101,7 +106,7 @@ class Form extends React.Component {
 					}
 				}}
 				{do{
-					if( props.type === 'password' ){
+					if( props.value && props.type === 'password' ){
 						<span className="ch-container-eye" onClick={Actions(me).toggleEye}><i className="ch-eye"></i></span>
 					}
 				}}
@@ -126,7 +131,7 @@ class Form extends React.Component {
 		let type = props.type;
 		return (
 			<div className={`limit-form-${me.getType()}`}>
-				<input {...me.parseProps()} />
+				<input {...me.parseProps()} ref="input" />
 			</div>
 		);
 	}
@@ -149,17 +154,20 @@ class Form extends React.Component {
 		let {props} = me;
 		if( limit.contains(['text', 'password', 'number'], props.type) && props.clearSuccess ){
 			if( props.pswShow ){
-				me.refs.input.focus();
+				me.selectInput(me.refs.input);
 			}else{
-				me.refs.inputPwd.focus();
+				me.selectInput(me.refs.inputPwd);
 			};
 		};
 	}
 	componentDidMount(){
 		let me = this;
-		let {refs} = me;
+		let {refs, props} = me;
 		let {eye, input} = refs;
 		Actions(me).comDidMount();
+		if( input && props.focus ){
+			me.selectInput(input);
+		};
 	}
 	componentWillUnmount(){
 		let me = this;
@@ -171,7 +179,15 @@ class Form extends React.Component {
 			validaor.removeAllListeners(`${props.name}Validat`);
 			validaor.removeAllListeners(`${props.name}Reset`);
 		};
-
+	}
+	selectInput(input){
+		if( limit.contains(['text', 'textarea', 'password'], input.type) ){
+			let length = input.value.length;
+			return domUtil.textSelect(input, length, length);
+		}else if( limit.contains(['button', 'reset', 'submit'], input.type) ){
+			input.focus();
+		};
+		
 	}
 };
 

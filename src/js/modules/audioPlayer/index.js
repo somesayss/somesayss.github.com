@@ -1,6 +1,6 @@
 "use strict";
 /**
- * version:0.1.3
+ * version:0.1.4
  * 参考
  * http://www.epooll.com/archives/422/
  * 0.1.1
@@ -9,6 +9,9 @@
  * 	增加点击定位
  * 0.1.3
  * 	移动的球定位到中心
+ * 0.1.4
+ * 	音量的BUG
+ * 	可用video和audio
  */
 
 import './style.less';
@@ -20,11 +23,13 @@ class AudioPlayer extends React.Component {
 		loop: true,
 		autoPlay: true,
 		muted: false,
+		width: 400,
 		audioWidth: '100%',
 		audioHeight: '32',
-		volumeWidth: 90,
+		volumeWidth: 50,
 		progressWidth: 90,
-		timeWidth: 90
+		timeWidth: 60,
+		type: 'vido'
 	}
 	state = {
 		playStatus: 'stop',
@@ -44,8 +49,14 @@ class AudioPlayer extends React.Component {
 		let me = this;
 		let {props, state} = me;
 		return (
-			<div className="audio-player">
-				<audio src={props.src} ref="audio" loop={props.loop} autoPlay={props.autoPlay} muted={props.muted}></audio>
+			<div className="audio-player" style={{width: props.width}}>
+				{do{
+					if( props.type === 'audio' ){
+						<audio src={props.src} width="100%" ref="audio" loop={props.loop} autoPlay={props.autoPlay} muted={props.muted}></audio>
+					}else{
+						<video src={props.src} width="100%" ref="audio" loop={props.loop} autoPlay={props.autoPlay} muted={props.muted}></video>
+					}
+				}}
 				{do{
 					if(state.error){
 						<div className="mark"></div>
@@ -208,6 +219,7 @@ class AudioPlayer extends React.Component {
 				audio.pause();
 			};
 		};
+
 		document.onmousemove = function(e){
 			e.preventDefault();
 			e.stopPropagation();
@@ -268,6 +280,17 @@ class AudioPlayer extends React.Component {
 		let me = this;
 		let {audio, state} = me;
 		audio.volume = +val.toFixed(2);
+		if( audio.volume ){
+			audio.muted = false;
+		};
+	}
+	// 音量变化
+	audioVolumechange(){
+		let me = this;
+		let {state, audio} = me;
+		state.volume = audio.volume;
+		state.muteStatus = audio.muted ? 'mute': 'nomute';
+		me.setState(state);
 	}
 	// 禁音
 	muteAudio(key){
@@ -310,14 +333,6 @@ class AudioPlayer extends React.Component {
 		state.error = false;
 		state.totleTime = audio.duration;
 		me.changeVolume(state.volume);
-		me.setState(state);
-	}
-	// 音量变化
-	audioVolumechange(){
-		let me = this;
-		let {state, audio} = me;
-		state.volume = audio.volume;
-		state.muteStatus = audio.muted ? 'mute': 'nomute';
 		me.setState(state);
 	}
 	// 事件转换 把秒格式化为分
