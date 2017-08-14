@@ -2,9 +2,11 @@
 
 import './style.less';
 
-import Component from 'common/myReflux/component';
+import DomUtil from 'common/domUtil';
 import Input from 'modules/input/index';
 import Dialog from 'modules/dialog/widget';
+import InputSearch from 'modules/inputSearch/index';
+import Component from 'common/myReflux/component';
 
 // 组件类
 class Tally extends Component {
@@ -61,13 +63,15 @@ class Tally extends Component {
 		);
 	}
 	renderName(val){
+		let me = this;
 		return (
 			val.isEdit ? 
 				<td className="tally-table-edit">
-					<input type="text" 
+					<InputSearch contentStyle={{top:34, left:1}}
+						originData={me.props.nameList}
 						ref="input"
 						onChange={Actions(this).change.bind(null, val, 'name')} 
-						value={val.name} />
+						value={val.name}/>
 				</td> :
 				<td>{val.name}</td>
 		);
@@ -147,14 +151,13 @@ class Tally extends Component {
 	}
 	componentDidUpdate(){
 		let me = this;
-		let {refs} = me;
-		let {input} = refs;
-		if( input ){
-			
+		let {refs: {input}, props: {actionStatus}} = me;
+		if( input && limit.contains(['edit', 'add'], actionStatus) ){
+			input = input.refs.com.getInput();
+			let leg = input.value.length;
+			DomUtil.textSelect(input, leg, leg);
 		};
-		console.log(this.refs.input)
 	}
-
 };
 
 module.exports = Tally;

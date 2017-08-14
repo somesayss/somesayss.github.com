@@ -56,6 +56,13 @@ class Scroller extends React.Component {
 		bar.style.top = perCent * ( containerHeight - barHeight ) + 'px';
 		me.scrollShow();
 	}
+	scrollTo(num){
+		let me = this;
+		let {refs} = me;
+		let {container, bar} = refs;
+		container.scrollTop = num;
+		me.scroll();
+	}
 	scrollShow(){
 		let me = this;
 		let {refs} = me;

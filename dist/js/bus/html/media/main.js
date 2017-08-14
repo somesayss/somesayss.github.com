@@ -45,7 +45,7 @@
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(119);
+	module.exports = __webpack_require__(129);
 
 
 /***/ },
@@ -64,7 +64,7 @@
 
 /***/ },
 
-/***/ 119:
+/***/ 129:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -73,13 +73,13 @@
 	
 	var $ = __webpack_require__(7);
 	var limit = __webpack_require__(8);
-	var ViewAudio = __webpack_require__(120);
+	var ViewAudio = __webpack_require__(130);
 	
 	new ViewAudio().viewCanvas();
 
 /***/ },
 
-/***/ 120:
+/***/ 130:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -97,7 +97,7 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var limit = __webpack_require__(8);
-	var Audio = __webpack_require__(121);
+	var Audio = __webpack_require__(131);
 	
 	var viewAudio = function (_Audio) {
 		_inherits(viewAudio, _Audio);
@@ -237,7 +237,7 @@
 
 /***/ },
 
-/***/ 121:
+/***/ 131:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";

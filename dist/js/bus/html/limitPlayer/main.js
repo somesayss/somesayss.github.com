@@ -45,7 +45,7 @@
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(97);
+	module.exports = __webpack_require__(107);
 
 
 /***/ },
@@ -366,20 +366,20 @@
 
 /***/ },
 
-/***/ 97:
+/***/ 107:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	// 依赖
 	
-	var AudioPlayer = __webpack_require__(98);
+	var AudioPlayer = __webpack_require__(108);
 	
 	ReactDOM.render(React.createElement(AudioPlayer, { src: "http://www.runoob.com/try/demo_source/movie.mp4" }), document.getElementById('container'));
 
 /***/ },
 
-/***/ 98:
+/***/ 108:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -400,7 +400,7 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	__webpack_require__(99);
+	__webpack_require__(109);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -846,13 +846,13 @@
 
 /***/ },
 
-/***/ 99:
+/***/ 109:
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(100);
+	var content = __webpack_require__(110);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(22)(content, {});
@@ -873,7 +873,7 @@
 
 /***/ },
 
-/***/ 100:
+/***/ 110:
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(21)();

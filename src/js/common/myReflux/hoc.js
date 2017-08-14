@@ -89,7 +89,7 @@ module.exports = (Wrapper, Class) => {
 	    }
 	    render(){
 	    	let me = this;
-	      	return <Wrapper {...me.state}/>;
+	      	return <Wrapper {...me.state} ref="com"/>;
 	    }
 	    componentWillUnmount(){
 	    	let me = this;

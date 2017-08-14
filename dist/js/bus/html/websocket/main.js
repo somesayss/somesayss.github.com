@@ -45,7 +45,7 @@
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(192);
+	module.exports = __webpack_require__(215);
 
 
 /***/ },
@@ -63,6 +63,8 @@
 	"use strict";
 	
 	// 依赖
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
@@ -184,7 +186,7 @@
 										key: 'render',
 										value: function render() {
 													var me = this;
-													return React.createElement(Wrapper, me.state);
+													return React.createElement(Wrapper, _extends({}, me.state, { ref: 'com' }));
 										}
 							}, {
 										key: 'componentWillUnmount',
@@ -661,12 +663,20 @@
 				var me = this;
 				var Actions = me.Actions = {};
 				// 对第一层的对象的原型属性进行处理
-				limit(me.findAllPro()).filter(function (val) {
-					return REX.test(val);
+				limit(me.findAllPro()).filter(function (val, key) {
+					return REX.test(key);
 				}).each(function (val, key) {
-					Actions[key.replace(REX, function (a, b, c) {
+					var actionName = key.replace(REX, function (a, b, c) {
 						return b.toLowerCase() + c;
-					})] = val.bind(me);
+					});
+					Actions[actionName] = function () {
+						for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+							args[_key] = arguments[_key];
+						}
+	
+						me.state.actionStatus = actionName;
+						return val.apply(me, args);
+					};
 				});
 			}
 		}, {
@@ -730,7 +740,7 @@
 
 /***/ },
 
-/***/ 95:
+/***/ 105:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -812,14 +822,14 @@
 
 /***/ },
 
-/***/ 105:
+/***/ 115:
 /***/ function(module, exports) {
 
 	module.exports = ReactDOM;
 
 /***/ },
 
-/***/ 192:
+/***/ 215:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -827,35 +837,35 @@
 	// 依赖
 	
 	var React = __webpack_require__(16);
-	var ReactDOM = __webpack_require__(105);
+	var ReactDOM = __webpack_require__(115);
 	
 	// 组件类
-	var LimitRate = __webpack_require__(193);
+	var LimitRate = __webpack_require__(216);
 	
 	// 置入文档
 	ReactDOM.render(React.createElement(LimitRate, null), document.getElementById('container'));
 
 /***/ },
 
-/***/ 193:
+/***/ 216:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	// 依赖
 	
-	module.exports = __webpack_require__(15)(__webpack_require__(194), __webpack_require__(197));
+	module.exports = __webpack_require__(15)(__webpack_require__(217), __webpack_require__(220));
 
 /***/ },
 
-/***/ 194:
+/***/ 217:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	__webpack_require__(195);
+	__webpack_require__(218);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -866,7 +876,7 @@
 	// 依赖
 	var React = __webpack_require__(16);
 	var limit = __webpack_require__(8);
-	var Rainbow = __webpack_require__(95);
+	var Rainbow = __webpack_require__(105);
 	
 	var colorList = ['#000', '#060', '#0C0', '#300', '#360', '#3C0', '#600', '#660', '#6C0', '#900'];
 	// 组件类
@@ -956,13 +966,13 @@
 
 /***/ },
 
-/***/ 195:
+/***/ 218:
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(196);
+	var content = __webpack_require__(219);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(22)(content, {});
@@ -983,7 +993,7 @@
 
 /***/ },
 
-/***/ 196:
+/***/ 219:
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(21)();
@@ -998,7 +1008,7 @@
 
 /***/ },
 
-/***/ 197:
+/***/ 220:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1015,7 +1025,7 @@
 	
 	var limit = __webpack_require__(8);
 	var Control = __webpack_require__(38);
-	var Websocket = __webpack_require__(198);
+	var Websocket = __webpack_require__(221);
 	
 	var Controller = function (_Control) {
 		_inherits(Controller, _Control);
@@ -1144,7 +1154,7 @@
 
 /***/ },
 
-/***/ 198:
+/***/ 221:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1160,7 +1170,7 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var limit = __webpack_require__(8);
-	var Events = __webpack_require__(199);
+	var Events = __webpack_require__(222);
 	
 	// 类
 	
@@ -1269,7 +1279,7 @@
 
 /***/ },
 
-/***/ 199:
+/***/ 222:
 /***/ function(module, exports) {
 
 	'use strict';

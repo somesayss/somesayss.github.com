@@ -1,5 +1,6 @@
 module.exports = {
 	label: '应用名称',
+	id: 'a2',
 	children: [{
 		label: '模块名称',
 		children: [{
@@ -17,9 +18,11 @@ module.exports = {
 						info: '百度',
 						link: 'http://www.baidu.com'
 					}, {
-						label: 'lavaBo'
+						label: 'lavaBo',
+						id: 'a1'
 					}, {
-						label: 'lavaBo'
+						label: 'lavaBo',
+
 					}]
 				}, {
 					type: 'info',
@@ -38,7 +41,8 @@ module.exports = {
 					link: 'http://www.baidu.com'
 				}]
 			},{
-				label: '领域'
+				label: '领域',
+				id: 'a3'
 			},{
 				type: 'info',
 				name: 'Function',

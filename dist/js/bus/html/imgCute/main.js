@@ -95,6 +95,8 @@
 	
 	// 依赖
 	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -215,7 +217,7 @@
 										key: 'render',
 										value: function render() {
 													var me = this;
-													return React.createElement(Wrapper, me.state);
+													return React.createElement(Wrapper, _extends({}, me.state, { ref: 'com' }));
 										}
 							}, {
 										key: 'componentWillUnmount',
@@ -1512,6 +1514,17 @@
 				me.scrollShow();
 			}
 		}, {
+			key: 'scrollTo',
+			value: function scrollTo(num) {
+				var me = this;
+				var refs = me.refs;
+				var container = refs.container;
+				var bar = refs.bar;
+	
+				container.scrollTop = num;
+				me.scroll();
+			}
+		}, {
 			key: 'scrollShow',
 			value: function scrollShow() {
 				var me = this;
@@ -1755,12 +1768,20 @@
 				var me = this;
 				var Actions = me.Actions = {};
 				// 对第一层的对象的原型属性进行处理
-				limit(me.findAllPro()).filter(function (val) {
-					return REX.test(val);
+				limit(me.findAllPro()).filter(function (val, key) {
+					return REX.test(key);
 				}).each(function (val, key) {
-					Actions[key.replace(REX, function (a, b, c) {
+					var actionName = key.replace(REX, function (a, b, c) {
 						return b.toLowerCase() + c;
-					})] = val.bind(me);
+					});
+					Actions[actionName] = function () {
+						for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+							args[_key] = arguments[_key];
+						}
+	
+						me.state.actionStatus = actionName;
+						return val.apply(me, args);
+					};
 				});
 			}
 		}, {

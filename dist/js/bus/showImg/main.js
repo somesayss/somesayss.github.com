@@ -45,7 +45,7 @@
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(206);
+	module.exports = __webpack_require__(229);
 
 
 /***/ },
@@ -63,6 +63,8 @@
 	"use strict";
 	
 	// 依赖
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
@@ -184,7 +186,7 @@
 										key: 'render',
 										value: function render() {
 													var me = this;
-													return React.createElement(Wrapper, me.state);
+													return React.createElement(Wrapper, _extends({}, me.state, { ref: 'com' }));
 										}
 							}, {
 										key: 'componentWillUnmount',
@@ -661,12 +663,20 @@
 				var me = this;
 				var Actions = me.Actions = {};
 				// 对第一层的对象的原型属性进行处理
-				limit(me.findAllPro()).filter(function (val) {
-					return REX.test(val);
+				limit(me.findAllPro()).filter(function (val, key) {
+					return REX.test(key);
 				}).each(function (val, key) {
-					Actions[key.replace(REX, function (a, b, c) {
+					var actionName = key.replace(REX, function (a, b, c) {
 						return b.toLowerCase() + c;
-					})] = val.bind(me);
+					});
+					Actions[actionName] = function () {
+						for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+							args[_key] = arguments[_key];
+						}
+	
+						me.state.actionStatus = actionName;
+						return val.apply(me, args);
+					};
 				});
 			}
 		}, {
@@ -730,14 +740,14 @@
 
 /***/ },
 
-/***/ 105:
+/***/ 115:
 /***/ function(module, exports) {
 
 	module.exports = ReactDOM;
 
 /***/ },
 
-/***/ 206:
+/***/ 229:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -745,35 +755,35 @@
 	// 依赖
 	
 	var React = __webpack_require__(16);
-	var ReactDOM = __webpack_require__(105);
+	var ReactDOM = __webpack_require__(115);
 	
 	// 组件类
-	var ShowImg = __webpack_require__(207);
+	var ShowImg = __webpack_require__(230);
 	
 	// 置入文档
 	ReactDOM.render(React.createElement(ShowImg, null), document.getElementById('container'));
 
 /***/ },
 
-/***/ 207:
+/***/ 230:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	// 依赖
 	
-	module.exports = __webpack_require__(15)(__webpack_require__(208), __webpack_require__(212));
+	module.exports = __webpack_require__(15)(__webpack_require__(231), __webpack_require__(235));
 
 /***/ },
 
-/***/ 208:
+/***/ 231:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	__webpack_require__(209);
+	__webpack_require__(232);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -786,7 +796,7 @@
 	var limit = __webpack_require__(8);
 	
 	// 图片
-	var imgShow = __webpack_require__(211);
+	var imgShow = __webpack_require__(234);
 	
 	// 组件类
 	
@@ -821,13 +831,13 @@
 
 /***/ },
 
-/***/ 209:
+/***/ 232:
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(210);
+	var content = __webpack_require__(233);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(22)(content, {});
@@ -848,7 +858,7 @@
 
 /***/ },
 
-/***/ 210:
+/***/ 233:
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(21)();
@@ -856,21 +866,21 @@
 	
 	
 	// module
-	exports.push([module.id, ".imgshow1 {\n  width: 200px;\n  height: 200px;\n  background: url(" + __webpack_require__(211) + ");\n}\n", ""]);
+	exports.push([module.id, ".imgshow1 {\n  width: 200px;\n  height: 200px;\n  background: url(" + __webpack_require__(234) + ");\n}\n", ""]);
 	
 	// exports
 
 
 /***/ },
 
-/***/ 211:
+/***/ 234:
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__.p + "imgs/tutu.jpg";
 
 /***/ },
 
-/***/ 212:
+/***/ 235:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";

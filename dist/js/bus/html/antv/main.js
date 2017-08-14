@@ -80,11 +80,11 @@
 	
 	module.exports = function (data) {
 	
-		var tree = new G6.Tree({
+		var tree = window.tree = new G6.Tree({
 			id: 'c1', // 容器ID
 			animate: false,
 			// layoutFn: G6.Layout.Dendrogram,
-			height: 450, // 画布高
+			height: 600, // 画布高
 			fitView: 'lc', // 自动缩放
 			showButton: true, // 是否显示开关
 			layoutCfg: {
@@ -136,42 +136,86 @@
 				textAlign: 'center'
 			};
 		});
+	
 		// 线
 		tree.edge().shape('HVH').style({
 			stroke: '#666'
 		});
+	
+		// tree.addEdges({
+		// 	"shape": "line",
+		// 	source: 'a1',
+		// 	target: 'a2'
+		// });
+	
 		tree.render();
 	
 		// 事件
-		tree.on('click', function (e) {
+		tree.on('mouseEnter', function (e) {
 			console.log(e);
 		});
 	
 		// 后期追加的节点
 		setTimeout(function () {
-			return;
-			tree.add('a12', {
-				label: 'a121'
-			});
-			var line = tree.get('canvas').addShape('line', {
-				attrs: {
-					x1: 20,
-					y1: 20,
-					x2: 20,
-					y2: 20,
-					lineDash: [2],
-					arrow: true, // 显示箭头
-					stroke: 'red' // 颜色名字
-				}
-			});
-			line.animate({
-				x1: 20,
-				y1: 20,
-				x2: 280,
-				y2: 280,
-				stroke: 'red'
-			}, 1000, 'easeInOutQuart');
-			tree.get('canvas').draw();
+	
+			// tree.addEdges([{
+			// 	id: 'a11',
+			// 	source: 'a2',
+			// 	target: 'a1',
+			// 	shape: 'smoothArrow',
+			// 	style: {
+			// 		stroke:'#F00'
+			// 	}
+			// }, {
+			// 	id: 'a12',
+			// 	source: 'a2',
+			// 	target: 'a3',
+			// 	shape: 'smoothArrow',
+			// 	style: {
+			// 		stroke:'#F00'
+			// 	}
+			// }]);
+			// tree.draw();
+	
+			// setTimeout(() => {
+			// 	tree.removeItem(tree.find('a11'));
+			// 	tree.removeItem(tree.find('a12'));
+			// 	tree.draw();
+			// }, 1000);
+	
+			// tree.add('a1', {
+			// 	label: 'a121'
+			// });
+			// tree.addEdges([{
+			// 			source: 'a2',
+			// 			target: 'a1'
+			// 		}]);
+	
+			// tree.render();
+			// return;
+			// tree.add('a1', {
+			// 	label: 'a121'
+			// });
+			// let line = tree.get('canvas').addShape('line', {
+			//     attrs: {
+			//    		x1: 20,
+			// 				y1: 20,
+			//       	x2: 20,
+			//       	y2: 20,
+			//       	lineDash: [2],
+			//       	arrow: true,                                             // 显示箭头
+			//       	stroke: 'red'                       // 颜色名字
+			//     }
+			//  	});
+			// line.animate({
+			// 	x1: 20,
+			// 	y1: 20,
+			//     x2: 280,
+			//      	y2: 280,
+			//      	stroke: 'red'
+			// }, 1000, 'easeInOutQuart');
+			// tree.get('canvas').draw();
+	
 		}, 1000);
 	
 		console.log(tree);
@@ -306,6 +350,7 @@
 	
 	module.exports = {
 		label: '应用名称',
+		id: 'a2',
 		children: [{
 			label: '模块名称',
 			children: [{
@@ -323,9 +368,11 @@
 							info: '百度',
 							link: 'http://www.baidu.com'
 						}, {
-							label: 'lavaBo'
+							label: 'lavaBo',
+							id: 'a1'
 						}, {
 							label: 'lavaBo'
+	
 						}]
 					}, {
 						type: 'info',
@@ -344,7 +391,8 @@
 						link: 'http://www.baidu.com'
 					}]
 				}, {
-					label: '领域'
+					label: '领域',
+					id: 'a3'
 				}, {
 					type: 'info',
 					name: 'Function',

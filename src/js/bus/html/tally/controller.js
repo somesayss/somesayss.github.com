@@ -18,9 +18,11 @@ class Controller extends Control {
 			name: '晚饭',
 			much: 6,
 			time: '2017-07-17'
-		}]
+		}],
+		nameList: ['早饭', '中饭', '晚饭'],
+		originNameList: ['你好']
 	}
-	onEdit(val){
+	onEdit(val,e){
 		let me = this;
 		let {state} = me;
 		let {list} = state;
@@ -31,19 +33,28 @@ class Controller extends Control {
 	onDele(val){
 		let me = this;
 		let {state} = me;
-		let {list} = state;
 		val.isLoading = true;
 		me.updateComponent().then(() => {
 			return new Ajax();
 		}).then(() => {
-			limit.remove(list, val);
-			return me.updateComponent();
+			limit.remove(me.state.list, val);
+			return me.setNameList();
 		});
 	}
 	onChange(val, key, e){
 		let me = this;
-		val[key] = e.target.value;
+		let value = e.target ? e.target.value : e;
+		val[key] = value;
 		me.updateComponent();
+	}
+	setNameList(){
+		let me = this;
+		let {state} = me;
+		let {list} = state;
+		state.nameList = limit.union( list.map((val) => {
+			return val.name;
+		}).concat(state.originNameList) ).filter(limit.K);
+		return me.updateComponent();
 	}
 	onSave(val){
 		let me = this;
@@ -53,7 +64,7 @@ class Controller extends Control {
 		}).then(() => {
 			val.isLoading = false;
 			val.isEdit = false;
-			return me.updateComponent();
+			return me.setNameList();
 		});
 	}
 	onAdd(){
@@ -61,10 +72,10 @@ class Controller extends Control {
 		let {state} = me;
 		let {list} = state;
 		list.forEach((val) => val.isEdit = false);
-		list.push({
+		list.unshift({
 			name: '',
-			much: null,
-			time: '',
+			much: 0,
+			time: limit.formatDate(undefined, 'yyyy-MM-dd'),
 			isEdit: true
 		});
 		me.updateComponent();

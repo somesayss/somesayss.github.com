@@ -15,9 +15,13 @@ class Control {
 		let	Actions = me.Actions = {};
 		// 对第一层的对象的原型属性进行处理
 		limit( me.findAllPro() )
-			.filter((val) => REX.test(val))
+			.filter( (val, key) => REX.test(key) )
 			.each((val, key) => {
-				Actions[key.replace(REX, (a, b, c) => b.toLowerCase() + c)] = val.bind(me);
+				let actionName = key.replace(REX, (a, b, c) => b.toLowerCase() + c);
+				Actions[actionName] = (...args) => {
+					me.state.actionStatus = actionName;
+					return val.apply(me, args);
+				};
 			});
 	}
 	findAllPro(){

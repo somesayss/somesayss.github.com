@@ -40,39 +40,31 @@
 /******/ 	return __webpack_require__(0);
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */
+/******/ ({
+
+/***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(162);
+	module.exports = __webpack_require__(185);
 
 
 /***/ },
-/* 1 */,
-/* 2 */,
-/* 3 */,
-/* 4 */,
-/* 5 */,
-/* 6 */,
-/* 7 */,
-/* 8 */
+
+/***/ 8:
 /***/ function(module, exports) {
 
 	module.exports = limit;
 
 /***/ },
-/* 9 */,
-/* 10 */,
-/* 11 */,
-/* 12 */,
-/* 13 */,
-/* 14 */,
-/* 15 */
+
+/***/ 15:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	// 依赖
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
@@ -194,7 +186,7 @@
 										key: 'render',
 										value: function render() {
 													var me = this;
-													return React.createElement(Wrapper, me.state);
+													return React.createElement(Wrapper, _extends({}, me.state, { ref: 'com' }));
 										}
 							}, {
 										key: 'componentWillUnmount',
@@ -215,13 +207,15 @@
 	};
 
 /***/ },
-/* 16 */
+
+/***/ 16:
 /***/ function(module, exports) {
 
 	module.exports = React;
 
 /***/ },
-/* 17 */
+
+/***/ 17:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -330,10 +324,8 @@
 	module.exports = Actions;
 
 /***/ },
-/* 18 */,
-/* 19 */,
-/* 20 */,
-/* 21 */
+
+/***/ 21:
 /***/ function(module, exports) {
 
 	"use strict";
@@ -388,7 +380,8 @@
 	};
 
 /***/ },
-/* 22 */
+
+/***/ 22:
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -640,7 +633,8 @@
 
 
 /***/ },
-/* 23 */
+
+/***/ 23:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -650,7 +644,8 @@
 	module.exports = __webpack_require__(15)(__webpack_require__(24), __webpack_require__(53));
 
 /***/ },
-/* 24 */
+
+/***/ 24:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -916,7 +911,8 @@
 	module.exports = Form;
 
 /***/ },
-/* 25 */
+
+/***/ 25:
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
@@ -942,7 +938,8 @@
 	}
 
 /***/ },
-/* 26 */
+
+/***/ 26:
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(21)();
@@ -956,7 +953,8 @@
 
 
 /***/ },
-/* 27 */
+
+/***/ 27:
 /***/ function(module, exports) {
 
 	"use strict";
@@ -982,7 +980,8 @@
 	module.exports = domUtil;
 
 /***/ },
-/* 28 */
+
+/***/ 28:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -992,7 +991,8 @@
 	module.exports = __webpack_require__(15)(__webpack_require__(29), __webpack_require__(46));
 
 /***/ },
-/* 29 */
+
+/***/ 29:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1153,7 +1153,8 @@
 	module.exports = Select;
 
 /***/ },
-/* 30 */
+
+/***/ 30:
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
@@ -1179,7 +1180,8 @@
 	}
 
 /***/ },
-/* 31 */
+
+/***/ 31:
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(21)();
@@ -1193,7 +1195,8 @@
 
 
 /***/ },
-/* 32 */
+
+/***/ 32:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1203,7 +1206,8 @@
 	module.exports = __webpack_require__(15)(__webpack_require__(33), __webpack_require__(37));
 
 /***/ },
-/* 33 */
+
+/***/ 33:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1305,6 +1309,17 @@
 				me.scrollShow();
 			}
 		}, {
+			key: 'scrollTo',
+			value: function scrollTo(num) {
+				var me = this;
+				var refs = me.refs;
+				var container = refs.container;
+				var bar = refs.bar;
+	
+				container.scrollTop = num;
+				me.scroll();
+			}
+		}, {
 			key: 'scrollShow',
 			value: function scrollShow() {
 				var me = this;
@@ -1360,7 +1375,8 @@
 	module.exports = Scroller;
 
 /***/ },
-/* 34 */
+
+/***/ 34:
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
@@ -1386,7 +1402,8 @@
 	}
 
 /***/ },
-/* 35 */
+
+/***/ 35:
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(21)();
@@ -1400,7 +1417,8 @@
 
 
 /***/ },
-/* 36 */
+
+/***/ 36:
 /***/ function(module, exports) {
 
 	"use strict";
@@ -1474,7 +1492,8 @@
 	module.exports = Mousemove;
 
 /***/ },
-/* 37 */
+
+/***/ 37:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1519,7 +1538,8 @@
 	module.exports = Controller;
 
 /***/ },
-/* 38 */
+
+/***/ 38:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1548,12 +1568,20 @@
 				var me = this;
 				var Actions = me.Actions = {};
 				// 对第一层的对象的原型属性进行处理
-				limit(me.findAllPro()).filter(function (val) {
-					return REX.test(val);
+				limit(me.findAllPro()).filter(function (val, key) {
+					return REX.test(key);
 				}).each(function (val, key) {
-					Actions[key.replace(REX, function (a, b, c) {
+					var actionName = key.replace(REX, function (a, b, c) {
 						return b.toLowerCase() + c;
-					})] = val.bind(me);
+					});
+					Actions[actionName] = function () {
+						for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+							args[_key] = arguments[_key];
+						}
+	
+						me.state.actionStatus = actionName;
+						return val.apply(me, args);
+					};
 				});
 			}
 		}, {
@@ -1616,7 +1644,8 @@
 	module.exports = Control;
 
 /***/ },
-/* 39 */
+
+/***/ 39:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1711,7 +1740,8 @@
 	module.exports = originWidget;
 
 /***/ },
-/* 40 */
+
+/***/ 40:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1721,7 +1751,8 @@
 	module.exports = __webpack_require__(15)(__webpack_require__(41), __webpack_require__(44));
 
 /***/ },
-/* 41 */
+
+/***/ 41:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1830,7 +1861,8 @@
 	module.exports = Title;
 
 /***/ },
-/* 42 */
+
+/***/ 42:
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
@@ -1856,7 +1888,8 @@
 	}
 
 /***/ },
-/* 43 */
+
+/***/ 43:
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(21)();
@@ -1870,7 +1903,8 @@
 
 
 /***/ },
-/* 44 */
+
+/***/ 44:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1916,7 +1950,8 @@
 	module.exports = Controller;
 
 /***/ },
-/* 45 */
+
+/***/ 45:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -2013,7 +2048,8 @@
 	module.exports = Widget;
 
 /***/ },
-/* 46 */
+
+/***/ 46:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -2123,7 +2159,8 @@
 	module.exports = Controller;
 
 /***/ },
-/* 47 */
+
+/***/ 47:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -2133,7 +2170,8 @@
 	module.exports = __webpack_require__(15)(__webpack_require__(48), __webpack_require__(51));
 
 /***/ },
-/* 48 */
+
+/***/ 48:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -2198,7 +2236,8 @@
 	module.exports = Scroller;
 
 /***/ },
-/* 49 */
+
+/***/ 49:
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
@@ -2224,7 +2263,8 @@
 	}
 
 /***/ },
-/* 50 */
+
+/***/ 50:
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(21)();
@@ -2238,7 +2278,8 @@
 
 
 /***/ },
-/* 51 */
+
+/***/ 51:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -2303,7 +2344,8 @@
 	module.exports = Controller;
 
 /***/ },
-/* 52 */
+
+/***/ 52:
 /***/ function(module, exports) {
 
 	"use strict";
@@ -2421,7 +2463,8 @@
 	module.exports = File;
 
 /***/ },
-/* 53 */
+
+/***/ 53:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -2607,145 +2650,40 @@
 	module.exports = Controller;
 
 /***/ },
-/* 54 */,
-/* 55 */,
-/* 56 */,
-/* 57 */,
-/* 58 */,
-/* 59 */,
-/* 60 */,
-/* 61 */,
-/* 62 */,
-/* 63 */,
-/* 64 */,
-/* 65 */,
-/* 66 */,
-/* 67 */,
-/* 68 */,
-/* 69 */,
-/* 70 */,
-/* 71 */,
-/* 72 */,
-/* 73 */,
-/* 74 */,
-/* 75 */,
-/* 76 */,
-/* 77 */,
-/* 78 */,
-/* 79 */,
-/* 80 */,
-/* 81 */,
-/* 82 */,
-/* 83 */,
-/* 84 */,
-/* 85 */,
-/* 86 */,
-/* 87 */,
-/* 88 */,
-/* 89 */,
-/* 90 */,
-/* 91 */,
-/* 92 */,
-/* 93 */,
-/* 94 */,
-/* 95 */,
-/* 96 */,
-/* 97 */,
-/* 98 */,
-/* 99 */,
-/* 100 */,
-/* 101 */,
-/* 102 */,
-/* 103 */,
-/* 104 */,
-/* 105 */,
-/* 106 */,
-/* 107 */,
-/* 108 */,
-/* 109 */,
-/* 110 */,
-/* 111 */,
-/* 112 */,
-/* 113 */,
-/* 114 */,
-/* 115 */,
-/* 116 */,
-/* 117 */,
-/* 118 */,
-/* 119 */,
-/* 120 */,
-/* 121 */,
-/* 122 */,
-/* 123 */,
-/* 124 */,
-/* 125 */,
-/* 126 */,
-/* 127 */,
-/* 128 */,
-/* 129 */,
-/* 130 */,
-/* 131 */,
-/* 132 */,
-/* 133 */,
-/* 134 */,
-/* 135 */,
-/* 136 */,
-/* 137 */,
-/* 138 */,
-/* 139 */,
-/* 140 */,
-/* 141 */,
-/* 142 */,
-/* 143 */,
-/* 144 */,
-/* 145 */,
-/* 146 */,
-/* 147 */,
-/* 148 */,
-/* 149 */,
-/* 150 */,
-/* 151 */,
-/* 152 */,
-/* 153 */,
-/* 154 */,
-/* 155 */,
-/* 156 */,
-/* 157 */,
-/* 158 */,
-/* 159 */,
-/* 160 */,
-/* 161 */,
-/* 162 */
+
+/***/ 185:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	// 组件类
 	
-	var Title = __webpack_require__(163);
+	var Title = __webpack_require__(186);
 	
 	// 置入文档
 	ReactDOM.render(React.createElement(Title, null), document.getElementById('container'));
 
 /***/ },
-/* 163 */
+
+/***/ 186:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	// 依赖
 	
-	module.exports = __webpack_require__(15)(__webpack_require__(164), __webpack_require__(167));
+	module.exports = __webpack_require__(15)(__webpack_require__(187), __webpack_require__(190));
 
 /***/ },
-/* 164 */
+
+/***/ 187:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	__webpack_require__(165);
+	__webpack_require__(188);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -2841,13 +2779,14 @@
 	module.exports = Title;
 
 /***/ },
-/* 165 */
+
+/***/ 188:
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(166);
+	var content = __webpack_require__(189);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(22)(content, {});
@@ -2867,7 +2806,8 @@
 	}
 
 /***/ },
-/* 166 */
+
+/***/ 189:
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(21)();
@@ -2881,7 +2821,8 @@
 
 
 /***/ },
-/* 167 */
+
+/***/ 190:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -2936,5 +2877,6 @@
 	module.exports = Controller;
 
 /***/ }
-/******/ ]);
+
+/******/ });
 //# sourceMappingURL=main.js.map
