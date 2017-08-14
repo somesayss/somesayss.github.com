@@ -5,13 +5,13 @@ echo -n "输入你想要的操作:"
 read type
 
 gitDO(){
-
-	echo -n "输入注释:"
+	echo -n "输入注释(默认是add):"
 	read commit
 	[ ! $commit ] && commit="add"
 	echo -n "输入分支(默认是master):"
 	read master
 	[ ! $master ] && master="master"
+	gulp
 	git add -A
 	git commit -m $commit
 	git push origin $master;
