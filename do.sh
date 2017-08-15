@@ -17,4 +17,34 @@ gitDO(){
 	git push origin $master;
 }
 
+pageDO(){
+	echo -n "初始化还是删除[init|remove](默认init):"
+	read init
+	[ ! $init ] && init="init"
+	echo -n "输入名称:"
+	read pagename
+	if [ $init == "init" ]; then
+		echo -n "是否覆盖[true|false]:"
+		read isoverwrite
+		node $init page $pagename $isoverwrite
+	else
+		node $init page $pagename
+	fi
+}
+
+modDO(){
+	echo -n "初始化还是删除[init|remove](默认init):"
+	read init
+	[ ! $init ] && init="init"
+	echo -n "输入名称:"
+	read modame
+	if [ $init == "init" ]; then
+		echo -n "是否覆盖[true|false]:"
+		read isoverwrite
+		node $init mod $modame $isoverwrite
+	else
+		node $init mod $modame
+	fi
+}
+
 ${type}DO
