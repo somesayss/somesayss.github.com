@@ -61,7 +61,7 @@ class Controller extends Control {
 		let me = this;
 		let {state, page} = me;
 		state.page = val;
-		me.updateComponent().then(() => {
+		return me.updateComponent().then(() => {
 			return me.onSearch();
 		});
 	}
@@ -71,28 +71,20 @@ class Controller extends Control {
 		if( props.url ){
 			return new Ajax({
 				url: props.url,
-				dataName: 'data',
 				data: {page: me.getPage()}
 			}).then((res) => {
-				if( res.isSuccess ){
-					me.state.totle = Math.ceil(res.val.count/state.number);
-					return me.updateComponent().then(() => {
-						return props.onSuccess(res.val, res.msg);
-					});
-				}else{
-					return props.onError(res.msg);
-				};
+				let {content, msg} = res;
+				me.state.totle = Math.ceil(content.count/state.number);
+				return me.updateComponent().then(() => {
+					return props.onSuccess(content, msg);
+				});
 			}, props.onError);
 		};
 	}
 	getPage(){
 		let me = this;
-		let {state} = me;
-		let {number} = state;
-		let page = {};
-		page.start = (state.page - 1) * number;
-		page.number = number;
-		return page;
+		let {state: {page, number}} = me;
+		return [(page - 1) * number, number];
 	}
 };
 

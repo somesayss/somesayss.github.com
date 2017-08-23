@@ -23,5 +23,15 @@
 	<input type="file" id="file" />
 	<input type="button" id="clear" value="clear">
 	<div id="contant"></div>
+	<button id="click">
+		click
+	</button>
+	<script>
+	;(function(){
+		$('#click').on('click', (e) => {
+			console.log(e)
+		})
+	})();
+	</script>
 </body>
 </html>

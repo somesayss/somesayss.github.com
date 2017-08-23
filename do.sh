@@ -5,16 +5,15 @@ echo -n "输入你想要的操作:"
 read type
 
 gitDO(){
+	branch=`git symbolic-ref --short -q HEAD`
 	echo -n "输入注释(默认是add):"
 	read commit
 	[ ! $commit ] && commit="add"
-	echo -n "输入分支(默认是master):"
-	read master
-	[ ! $master ] && master="master"
+	echo "当前分支是${branch}开始打包推送"
 	gulp
 	git add -A
 	git commit -m $commit
-	git push origin $master;
+	git push origin $branch
 }
 
 pageDO(){

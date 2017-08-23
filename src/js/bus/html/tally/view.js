@@ -5,8 +5,9 @@ import './style.less';
 import DomUtil from 'common/domUtil';
 import Input from 'modules/input/index';
 import Dialog from 'modules/dialog/widget';
-import InputSearch from 'modules/inputSearch/index';
 import Component from 'common/myReflux/component';
+import SearchList from 'modules/searchList/index';
+import InputSearch from 'modules/inputSearch/index';
 
 // 组件类
 class Tally extends Component {
@@ -14,15 +15,12 @@ class Tally extends Component {
 		let me = this;
 		let {props} = me;
 		return (
-			<div className={me.getClassName('tally')}>
-				<div className="tally-filter">
-					筛选：
-				</div>
+			<div className={me.getClassName('tally', props.initPage ? '' : 'fn-hide')}>
 				<div className="tally-table fn-MT5">
-					<table width="800">
+					<table width="100%">
 						<thead>
 							<tr>
-								<td width="30" className="tally-table-edit fn-TAC">
+								<td width="35" className="tally-table-edit fn-TAC">
 									<button className="limitIcon iconfont icon-add" 
 										onClick={Actions(me).add}></button>
 								</td>
@@ -58,9 +56,18 @@ class Tally extends Component {
 							}}
 						</tbody>
 					</table>
+					<SearchList 
+						className="fn-MT10" 
+						number="10"
+						onSuccess={Actions(me).searchSuccess}
+						url="http://localhost:8080/tally/list.json" />
 				</div>
 			</div>
 		);
+	}
+	componentDidMount(){
+		let me = this;
+		Actions('searchList').search();
 	}
 	renderName(val){
 		let me = this;
@@ -70,10 +77,10 @@ class Tally extends Component {
 					<InputSearch contentStyle={{top:34, left:1}}
 						originData={me.props.nameList}
 						ref="input"
-						onChange={Actions(this).change.bind(null, val, 'name')} 
-						value={val.name}/>
+						onChange={Actions(this).change.bind(null, val, 'type')} 
+						value={val.type}/>
 				</td> :
-				<td>{val.name}</td>
+				<td>{val.type}</td>
 		);
 	}
 	renderMuch(val){
@@ -128,7 +135,7 @@ class Tally extends Component {
 									<button className="limitIcon iconfont icon-refresh loading fn-MR5" disabled="disabled"></button>
 								}else{
 									<button className="limitIcon iconfont icon-save fn-MR5" 
-										onClick={Actions(me).save.bind(null, val)}></button>
+										onClick={Actions(me).save.bind(null, val, null)}></button>
 								}
 							}}
 						</span>

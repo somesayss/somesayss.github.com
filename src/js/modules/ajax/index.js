@@ -8,7 +8,7 @@ class Ajax {
 	props = {
 		url: '',
 		cache: false,
-		dataName: '',
+		dataName: 'param',
 		data: {},
 		dataType: 'json',
 		timeout: 5000,

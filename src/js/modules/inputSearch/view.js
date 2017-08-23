@@ -75,7 +75,9 @@ class InputSearch extends Component {
 			}else if(e.keyCode === 13){
 				e.preventDefault();
 				Actions(me).enterDown().then(() => {
-					input.refs.com.refs.input.blur();
+					let inputNode = input.refs.com.refs.input;
+					inputNode.blur();
+					setTimeout(() => { inputNode.focus(); }, 150)
 				});
 			};
 		};

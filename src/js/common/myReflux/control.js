@@ -63,7 +63,7 @@ class Control {
 		let me = this;
     	let	state = me.getInitialState();
     	return new Promise(resolve => {
-    		me.trigger(state, resolve);
+    		me.trigger(state, resolve.bind(null, 'updateComponentSuccess'));
     	});
 	}
 };

@@ -19,11 +19,8 @@ class Controller extends Control {
 		let me = this;
 		let {props: {originData}, state} = me;
 		state.filterData = originData.filter((val) => {
-			return val.indexOf(value) !== -1;
+			return val !== value && val.indexOf(value) !== -1;
 		});
-		if( state.filterData.length <= 1 ){
-			state.filterData = [];
-		};
 		state.value = value;
 		state.focusNumber = -1;
 		return me.updateComponent();
