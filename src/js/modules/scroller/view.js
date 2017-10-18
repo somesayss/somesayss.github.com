@@ -2,10 +2,11 @@
 
 import './style.less';
 
-const Mousemove = require('modules/mousemove/index');
+import Mousemove from 'modules/mousemove/index';
+import Component from 'common/myReflux/component';
 
 // 组件类
-class Scroller extends React.Component {
+class View extends Component {
 	render(){
 		let me = this;
 		let {props} = me;
@@ -104,5 +105,5 @@ class Scroller extends React.Component {
 	}
 };
 
-module.exports = Scroller;
+export default View;
 

@@ -1,26 +1,77 @@
 "use strict";
 	
 // 依赖
-import Ajax from 'modules/ajax/index';
 import Control from 'common/myReflux/control';
+
+import Ajax from 'modules/ajax/index';
+import CalendarCompute from 'modules/calendarCompute/index';
 
 class Controller extends Control {
 	state = {
 		list:[],
 		nameList: [],
-		initPage: false
+		countTime:[],
+		initPage: false,
+		searchType: {},
+		nameListSelectValue: ''
+	}
+	constructor(){
+		let me = super();
+		me.setCountTime();
+	}
+	onGetCountDataList(){
+		let me = this;
+		return new Ajax({
+			url: 'http://localhost:8080/tally/countDataList.json',
+			data: me.state.countTime
+		}).then((val) => {
+			return val.content.map((val) => {
+				if( val.type !== '大件' ){
+					val.checked = true;
+				}else{
+					val.checked = false;
+				};
+				return val;
+			});			
+		});
 	}
 	onSearchSuccess(response){
 		let me = this;
 		let {state} = me;
-		if( !state.initPage ){
-			state.initPage = true;
-		};
 		state.list = response.list.map((val) => {
 			val.time = limit.formatDate(val.time, 'yyyy-MM-dd');
 			return val;
 		});
-		return me.updateComponent().then(me.getNameList.bind(me));
+		return me.updateComponent().then(me.getNameList.bind(me)).then(() => {
+			if( !state.initPage ){
+				state.initPage = true;
+				return me.updateComponent();
+			};
+		});
+	}
+	onSelectCalendar(val){
+		let me = this;
+		let {state, props} = me;
+		state.countTime = val;
+		return me.updateComponent().then(() => {
+			Actions('searchList').search();
+		});
+	}
+	setCountTime(){
+		let me = this;
+		let {state: {countTime}} = me;
+		let dateExp = new CalendarCompute();
+		let date = dateExp.getDate();
+		if( date < 15 ){
+			// 获取上个月的15号
+			dateExp.setMonth(dateExp.getMonth() - 1);
+		};
+		dateExp.setDate(15);
+		countTime[0] = dateExp.parseTarget();
+		// 下一个月的14号
+		dateExp.setMonth(dateExp.getMonth() + 1);
+		dateExp.setDate(14);
+		countTime[1] = dateExp.parseTarget();
 	}
 	getNameList(){
 		let me = this;
@@ -51,13 +102,14 @@ class Controller extends Control {
 	}
 	onEdit(val,e){
 		let me = this;
+		let isEdit = val.isEdit;
 		return me.toSaveFirst().then((success) => {
 			let {state} = me;
 			if( success ){
 				state.actionStatus = 'edit';
 			};
 			me.getRealOne(val).forEach((v) => {
-				v.isEdit = true;
+				v.isEdit = !isEdit;
 			});
 			return me.updateComponent();
 		});
@@ -92,7 +144,11 @@ class Controller extends Control {
 		switch(type){
 			case 'save':
 				if( flag ){
-					return Actions('searchList').start();
+					state.nameListSelectValue = '';
+					state.searchParam = {};
+					return me.updateComponent().then(() => {
+						Actions('searchList').start();
+					});
 				}else{
 					return Actions('searchList').search();
 				};
@@ -144,10 +200,19 @@ class Controller extends Control {
 			});
 			return me.updateComponent();
 		});
-		
+	}
+	onChangeNameList(val){
+		let me = this;
+		let {state} = me;
+		state.nameListSelectValue = val;
+		state.searchType = {type: val};
+		return me.updateComponent().then(() => {
+			Actions('searchList').start();
+		})
 	}
 };
 
+export default Controller;
 
 
 
@@ -159,19 +224,3 @@ class Controller extends Control {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-module.exports = Controller;

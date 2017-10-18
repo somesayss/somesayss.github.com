@@ -1,2 +1,177 @@
-!function(t){function r(e){if(n[e])return n[e].exports;var o=n[e]={exports:{},id:e,loaded:!1};return t[e].call(o.exports,o,o.exports,r),o.loaded=!0,o.exports}var n={};return r.m=t,r.c=n,r.p="/dist/",r(0)}({0:function(t,r,n){t.exports=n(104)},7:function(t,r){t.exports=jQuery},8:function(t,r){t.exports=limit},104:function(t,r,n){"use strict";var e=n(7),o=n(105),i="",a=new o({totle:10});a.forEach(function(t){i+='<p style="background:rgb('+t.join(",")+');height:10px;"></p>'}),e("body").html(i)},105:function(t,r,n){"use strict";function e(t,r){if(!(t instanceof r))throw new TypeError("Cannot call a class as a function")}var o=function(){function t(t,r){for(var n=0;n<r.length;n++){var e=r[n];e.enumerable=e.enumerable||!1,e.configurable=!0,"value"in e&&(e.writable=!0),Object.defineProperty(t,e.key,e)}}return function(r,n,e){return n&&t(r.prototype,n),e&&t(r,e),r}}(),i=n(8),a=function(){function t(r){e(this,t),this.props={list:[[255,0,0],[255,122,0],[255,255,0],[0,255,0],[0,255,255],[0,0,255],[255,0,255]],totle:50},this.state={};var n=this;return i.assign(n.state,n.props,r),n.parseList()}return o(t,[{key:"parseList",value:function(){var t=this,r=t.state,n=r.list,e=[],o=n.length,i=Math.ceil((r.totle-o)/(o-1)+2);return n.forEach(function(r,o){var a=n[++o];a?(e.push(r),Array.prototype.push.apply(e,t.getColorRange(i,r,a))):e.push(r)}),e}},{key:"getColorRange",value:function(){var t=arguments.length<=0||void 0===arguments[0]?10:arguments[0],r=arguments.length<=1||void 0===arguments[1]?[255,0,0]:arguments[1],n=arguments.length<=2||void 0===arguments[2]?[0,255,0]:arguments[2];t--;var e=r.length,o=i.from(new Array(e),function(e,o){return(r[o]-n[o])/t});return i.from(new Array((--t)),function(t,n){return n++,i.from(new Array(e),function(t,e){return Math.floor(r[e]-o[e]*n)})})}}]),t}();t.exports=a}});
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId])
+/******/ 			return installedModules[moduleId].exports;
+/******/
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			exports: {},
+/******/ 			id: moduleId,
+/******/ 			loaded: false
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.loaded = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "/dist/";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(0);
+/******/ })
+/************************************************************************/
+/******/ ({
+
+/***/ 0:
+/***/ (function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(148);
+
+
+/***/ }),
+
+/***/ 31:
+/***/ (function(module, exports) {
+
+	module.exports = jQuery;
+
+/***/ }),
+
+/***/ 32:
+/***/ (function(module, exports) {
+
+	module.exports = limit;
+
+/***/ }),
+
+/***/ 148:
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	// 依赖
+	
+	var $ = __webpack_require__(31);
+	var Rainbow = __webpack_require__(149);
+	
+	var html = '';
+	var arr = new Rainbow({ totle: 10 });
+	arr.forEach(function (val) {
+		html += '<p style="background:rgb(' + val.join(',') + ');height:10px;"></p>';
+	});
+	// C.getColorRange(10, [255, 122, 0], [255, 255, 0]).forEach((val) => {
+	// 	html += `<p style="background:rgb(${val.join(',')});height:10px;"></p>`;
+	// });
+	
+	$('body').html(html);
+	
+	// window.onfocus = function(){
+	// 	alert(123)
+	// }
+
+/***/ }),
+
+/***/ 149:
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	// 依赖
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var limit = __webpack_require__(32);
+	
+	var Rainbow = function () {
+		function Rainbow(config) {
+			_classCallCheck(this, Rainbow);
+	
+			this.props = {
+				list: [[255, 0, 0] //红
+				, [255, 122, 0] //橙
+				, [255, 255, 0] //黄
+				, [0, 255, 0] //绿
+				, [0, 255, 255] //青
+				, [0, 0, 255] //蓝
+				, [255, 0, 255] //紫
+				],
+				totle: 50
+			};
+			this.state = {};
+	
+			var me = this;
+			limit.assign(me.state, me.props, config);
+			return me.parseList();
+		}
+	
+		_createClass(Rainbow, [{
+			key: "parseList",
+			value: function parseList() {
+				var me = this;
+				var state = me.state;
+				var list = state.list;
+				var rev = [];
+				var leg = list.length;
+				var range = Math.ceil((state.totle - leg) / (leg - 1) + 2);
+				list.forEach(function (val, key) {
+					var next = list[++key];
+					if (next) {
+						rev.push(val);
+						Array.prototype.push.apply(rev, me.getColorRange(range, val, next));
+					} else {
+						rev.push(val);
+					};
+				});return rev;
+			}
+		}, {
+			key: "getColorRange",
+			value: function getColorRange() {
+				var range = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 10;
+				var from = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [255, 0, 0];
+				var to = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [0, 255, 0];
+	
+				range--;
+				var leg = from.length;
+				var dif = limit.from(new Array(leg), function (val, key) {
+					return (from[key] - to[key]) / range;
+				});
+				return limit.from(new Array(--range), function (val, key) {
+					key++;
+					return limit.from(new Array(leg), function (val, k) {
+						return Math.floor(from[k] - dif[k] * key);
+					});
+				});
+			}
+		}]);
+	
+		return Rainbow;
+	}();
+	
+	module.exports = Rainbow;
+
+/***/ })
+
+/******/ });
 //# sourceMappingURL=main.js.map

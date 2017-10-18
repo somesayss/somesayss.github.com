@@ -1,2 +1,1121 @@
-!function(t){function e(r){if(n[r])return n[r].exports;var o=n[r]={exports:{},id:r,loaded:!1};return t[r].call(o.exports,o,o.exports,e),o.loaded=!0,o.exports}var n={};return e.m=t,e.c=n,e.p="/dist/",e(0)}({0:function(t,e,n){t.exports=n(203)},8:function(t,e){t.exports=limit},15:function(t,e,n){"use strict";function r(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}function o(t,e){if(!t)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!e||"object"!=typeof e&&"function"!=typeof e?t:e}function i(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function, not "+typeof e);t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,enumerable:!1,writable:!0,configurable:!0}}),e&&(Object.setPrototypeOf?Object.setPrototypeOf(t,e):t.__proto__=e)}var a=Object.assign||function(t){for(var e=1;e<arguments.length;e++){var n=arguments[e];for(var r in n)Object.prototype.hasOwnProperty.call(n,r)&&(t[r]=n[r])}return t},c=function(){function t(t,e){for(var n=0;n<e.length;n++){var r=e[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(t,r.key,r)}}return function(e,n,r){return n&&t(e.prototype,n),r&&t(e,r),e}}(),u=n(16),s=n(8),f=n(17);t.exports=function(t,e){var n=function(n){function l(t){r(this,l);var n=o(this,(l.__proto__||Object.getPrototypeOf(l)).apply(this,arguments)),i=n,a=void 0,c=i.clearProps(t);return a=i.__controller__=new e(c),a.com=i,i.state=s.assignSuper({},a.getInitialState(),c),a.props=i.getPerProps(c),a.state=i.getPerState(i.state),i.state.actionId=i.state.actionId||"uaid"+s.getUid(),i.state.actionUUid=a.Actions.actionUUid="uuid"+s.getUid(),t.actionCid&&(i.state.actionCid=a.Actions.actionCid=t.actionCid),f.set(i.state.actionId,a.Actions),n}return i(l,n),c(l,[{key:"getPerProps",value:function(t){var n={};return s.each(e.defaultProps,function(e,r){n[r]=t[r]}),n}},{key:"getPerState",value:function(t){var e=this,n={};return s.each(e.__controller__.state,function(e,r){n[r]=t[r]}),n}},{key:"componentWillReceiveProps",value:function(t){var e=this;e.propsFromOther=!0}},{key:"shouldComponentUpdate",value:function(){var t=this,e=!!t.propsFromOther;return!t.state.shouldComponentNotUpdate||(!e||(t.propsFromOther=!1))}},{key:"clearProps",value:function(t){var n=s.assign({},t);return delete n.actionId,delete n.actionUUid,delete n.actionCid,n.actionId=e.defaultProps&&e.defaultProps.actionId,n}},{key:"componentWillUpdate",value:function(t){var e=this,n=e.__controller__;e.propsFromOther&&(s.assignSuper(e.state,e.clearProps(t)),s.cb(n.componentWillUpdate).call(n,e.state),n.state=e.getPerState(e.state),n.props=e.getPerProps(e.state))}},{key:"componentDidUpdate",value:function(){var t=this;t.propsFromOther=!1}},{key:"render",value:function(){var e=this;return u.createElement(t,a({},e.state,{ref:"com"}))}},{key:"componentWillUnmount",value:function(){var t=this;f.remove(t.state.actionId,t.__controller__.Actions),t.__controller__.destroy()}}]),l}(u.Component);return n.defaultProps=e.defaultProps,n.propTypes=e.propTypes,n}},16:function(t,e){t.exports=React},17:function(t,e,n){"use strict";function r(t,e){if(u.isObjectSuper(t))return t.props[e]||t.state[e]}function o(t){return f[r(t,"actionId")||t]||[]}function i(t,e){var n=o(t);if(e)return n.filter(function(t){return t.actionCid===e});var i=function(){var e=r(t,"actionUUid");return e?{v:n.filter(function(t){return t.actionUUid===e})}:{v:n}}();return"object"===("undefined"==typeof i?"undefined":c(i))?i.v:void 0}function a(t,e){var n=i(t,e),r={};return n.length&&u.each(n[0],function(t,e){u.isFunction(t)?r[e]=function(){for(var t=arguments.length,r=Array(t),o=0;o<t;o++)r[o]=arguments[o];return Promise.all(n.map(function(t){return t[e].apply(t,r)}))}:r[e]=n.map(function(t){return t[e]}).join(",")}),r}var c="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol?"symbol":typeof t},u=n(8),s=window.Actions=function(t,e){return a(t,e)},f=s.pool={};s.set=function(t,e){var n=f[t];n?n.push(e):f[t]=[e]},s.get=function(t,e){return i(t,e)},s.remove=function(t,e){var n=f[t];n&&(u.remove(n,e),n.length||delete f[t])},t.exports=s},21:function(t,e){"use strict";t.exports=function(){var t=[];return t.toString=function(){for(var t=[],e=0;e<this.length;e++){var n=this[e];n[2]?t.push("@media "+n[2]+"{"+n[1]+"}"):t.push(n[1])}return t.join("")},t.i=function(e,n){"string"==typeof e&&(e=[[null,e,""]]);for(var r={},o=0;o<this.length;o++){var i=this[o][0];"number"==typeof i&&(r[i]=!0)}for(o=0;o<e.length;o++){var a=e[o];"number"==typeof a[0]&&r[a[0]]||(n&&!a[2]?a[2]=n:n&&(a[2]="("+a[2]+") and ("+n+")"),t.push(a))}},t}},22:function(t,e,n){function r(t,e){for(var n=0;n<t.length;n++){var r=t[n],o=d[r.id];if(o){o.refs++;for(var i=0;i<o.parts.length;i++)o.parts[i](r.parts[i]);for(;i<r.parts.length;i++)o.parts.push(s(r.parts[i],e))}else{for(var a=[],i=0;i<r.parts.length;i++)a.push(s(r.parts[i],e));d[r.id]={id:r.id,refs:1,parts:a}}}}function o(t){for(var e=[],n={},r=0;r<t.length;r++){var o=t[r],i=o[0],a=o[1],c=o[2],u=o[3],s={css:a,media:c,sourceMap:u};n[i]?n[i].parts.push(s):e.push(n[i]={id:i,parts:[s]})}return e}function i(t,e){var n=v(),r=g[g.length-1];if("top"===t.insertAt)r?r.nextSibling?n.insertBefore(e,r.nextSibling):n.appendChild(e):n.insertBefore(e,n.firstChild),g.push(e);else{if("bottom"!==t.insertAt)throw new Error("Invalid value for parameter 'insertAt'. Must be 'top' or 'bottom'.");n.appendChild(e)}}function a(t){t.parentNode.removeChild(t);var e=g.indexOf(t);e>=0&&g.splice(e,1)}function c(t){var e=document.createElement("style");return e.type="text/css",i(t,e),e}function u(t){var e=document.createElement("link");return e.rel="stylesheet",i(t,e),e}function s(t,e){var n,r,o;if(e.singleton){var i=b++;n=m||(m=c(e)),r=f.bind(null,n,i,!1),o=f.bind(null,n,i,!0)}else t.sourceMap&&"function"==typeof URL&&"function"==typeof URL.createObjectURL&&"function"==typeof URL.revokeObjectURL&&"function"==typeof Blob&&"function"==typeof btoa?(n=u(e),r=p.bind(null,n),o=function(){a(n),n.href&&URL.revokeObjectURL(n.href)}):(n=c(e),r=l.bind(null,n),o=function(){a(n)});return r(t),function(e){if(e){if(e.css===t.css&&e.media===t.media&&e.sourceMap===t.sourceMap)return;r(t=e)}else o()}}function f(t,e,n,r){var o=n?"":r.css;if(t.styleSheet)t.styleSheet.cssText=_(e,o);else{var i=document.createTextNode(o),a=t.childNodes;a[e]&&t.removeChild(a[e]),a.length?t.insertBefore(i,a[e]):t.appendChild(i)}}function l(t,e){var n=e.css,r=e.media;if(r&&t.setAttribute("media",r),t.styleSheet)t.styleSheet.cssText=n;else{for(;t.firstChild;)t.removeChild(t.firstChild);t.appendChild(document.createTextNode(n))}}function p(t,e){var n=e.css,r=e.sourceMap;r&&(n+="\n/*# sourceMappingURL=data:application/json;base64,"+btoa(unescape(encodeURIComponent(JSON.stringify(r))))+" */");var o=new Blob([n],{type:"text/css"}),i=t.href;t.href=URL.createObjectURL(o),i&&URL.revokeObjectURL(i)}var d={},h=function(t){var e;return function(){return"undefined"==typeof e&&(e=t.apply(this,arguments)),e}},y=h(function(){return/msie [6-9]\b/.test(window.navigator.userAgent.toLowerCase())}),v=h(function(){return document.head||document.getElementsByTagName("head")[0]}),m=null,b=0,g=[];t.exports=function(t,e){e=e||{},"undefined"==typeof e.singleton&&(e.singleton=y()),"undefined"==typeof e.insertAt&&(e.insertAt="bottom");var n=o(t);return r(n,e),function(t){for(var i=[],a=0;a<n.length;a++){var c=n[a],u=d[c.id];u.refs--,i.push(u)}if(t){var s=o(t);r(s,e)}for(var a=0;a<i.length;a++){var u=i[a];if(0===u.refs){for(var f=0;f<u.parts.length;f++)u.parts[f]();delete d[u.id]}}}};var _=function(){var t=[];return function(e,n){return t[e]=n,t.filter(Boolean).join("\n")}}()},38:function(t,e,n){"use strict";function r(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}var o=function(){function t(t,e){for(var n=0;n<e.length;n++){var r=e[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(t,r.key,r)}}return function(e,n,r){return n&&t(e.prototype,n),r&&t(e,r),e}}(),i=n(8),a=i.promise(),c=/on([A-Z])(\w*)/,u=function(){function t(){r(this,t),this.bindEvent()}return o(t,[{key:"bindEvent",value:function(){var t=this,e=t.Actions={};i(t.findAllPro()).filter(function(t,e){return c.test(e)}).each(function(n,r){var o=r.replace(c,function(t,e,n){return e.toLowerCase()+n});e[o]=function(){for(var e=arguments.length,r=Array(e),i=0;i<e;i++)r[i]=arguments[i];return t.state.actionStatus=o,n.apply(t,r)}})}},{key:"findAllPro",value:function(){for(var t=this,e={},n=t.constructor.prototype;n&&n.constructor!==Object;)i(n).keysSuper().each(function(t){"__proto__"===t||e[t]||(e[t]=n[t])}),n=n.__proto__;return e}},{key:"getInitialState",value:function(){return this.state||(this.state={})}},{key:"destroy",value:function(){var t=this;return i.each(t,function(e,n){delete t[n]}),t}},{key:"trigger",value:function(t,e){var n=this;n.com.setState(t,e)}},{key:"updateComponent",value:function(){var t=this,e=t.getInitialState();return new a(function(n){t.trigger(e,n.bind(null,"updateComponentSuccess"))})}}]),t}();t.exports=u},40:function(t,e,n){"use strict";t.exports=n(15)(n(41),n(44))},41:function(t,e,n){"use strict";function r(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}function o(t,e){if(!t)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!e||"object"!=typeof e&&"function"!=typeof e?t:e}function i(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function, not "+typeof e);t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,enumerable:!1,writable:!0,configurable:!0}}),e&&(Object.setPrototypeOf?Object.setPrototypeOf(t,e):t.__proto__=e)}var a=function(){function t(t,e){for(var n=0;n<e.length;n++){var r=e[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(t,r.key,r)}}return function(e,n,r){return n&&t(e.prototype,n),r&&t(e,r),e}}();n(42);var c=function(t){function e(){return r(this,e),o(this,(e.__proto__||Object.getPrototypeOf(e)).apply(this,arguments))}return i(e,t),a(e,[{key:"shouldComponentUpdate",value:function(){return!1}},{key:"render",value:function(){var t=this,e=t.props;return React.createElement("div",{className:limit.toString(e.className)+" limit_title fn-wrap",ref:"node"},e.children)}},{key:"componentDidMount",value:function(){var t=this,e=t.refs,n=(t.props,e.node);$(document).on("mousemove.limitTitle",function(e){n.style.top=t.getTop(e),n.style.left=t.getLeft(e)})}},{key:"getTop",value:function(t){var e=this,n=e.refs,r=e.props,o=n.node,i=Math.max(document.body.offsetHeight,document.documentElement.offsetHeight,limit.toNumber(window.innerHeight)),a=o.offsetHeight,c=t.clientY+r.diffY,u=t.pageY+r.diffY+a;return u<i?c+"px":t.clientY-a-r.diffY+"px"}},{key:"getLeft",value:function(t){var e=this,n=e.refs,r=e.props,o=n.node,i=document.body.offsetWidth,a=o.offsetWidth,c=t.clientX+r.diffX,u=t.pageX+r.diffX+a;return u<i?c+"px":t.clientX-a-r.diffX+"px"}},{key:"componentWillUnmount",value:function(){$(document).off("mousemove.limitTitle")}}]),e}(React.Component);t.exports=c},42:function(t,e,n){var r=n(43);"string"==typeof r&&(r=[[t.id,r,""]]);n(22)(r,{});r.locals&&(t.exports=r.locals)},43:function(t,e,n){e=t.exports=n(21)(),e.push([t.id,".limit_title{position:fixed;top:-9999px;left:-9999px;z-index:999;background:#f2f2f2;padding:5px;color:#666}",""])},44:function(t,e,n){"use strict";function r(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}function o(t,e){if(!t)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!e||"object"!=typeof e&&"function"!=typeof e?t:e}function i(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function, not "+typeof e);t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,enumerable:!1,writable:!0,configurable:!0}}),e&&(Object.setPrototypeOf?Object.setPrototypeOf(t,e):t.__proto__=e)}var a=n(38),c=function(t){function e(){var t,n,i,a;r(this,e);for(var c=arguments.length,u=Array(c),s=0;s<c;s++)u[s]=arguments[s];return n=i=o(this,(t=e.__proto__||Object.getPrototypeOf(e)).call.apply(t,[this].concat(u))),i.state={},a=n,o(i,a)}return i(e,t),e}(a);c.defaultProps={actionId:"limit_title",shouldComponentNotUpdate:!0,diffX:10,diffY:10},t.exports=c},203:function(t,e,n){"use strict";var r=n(204);ReactDOM.render(React.createElement(r,null),document.getElementById("container"))},204:function(t,e,n){"use strict";t.exports=n(15)(n(205),n(208))},205:function(t,e,n){"use strict";function r(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}function o(t,e){if(!t)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!e||"object"!=typeof e&&"function"!=typeof e?t:e}function i(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function, not "+typeof e);t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,enumerable:!1,writable:!0,configurable:!0}}),e&&(Object.setPrototypeOf?Object.setPrototypeOf(t,e):t.__proto__=e)}var a=function(){function t(t,e){for(var n=0;n<e.length;n++){var r=e[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(t,r.key,r)}}return function(e,n,r){return n&&t(e.prototype,n),r&&t(e,r),e}}();n(206);var c=n(40),u=function(t){function e(){return r(this,e),o(this,(e.__proto__||Object.getPrototypeOf(e)).apply(this,arguments))}return i(e,t),a(e,[{key:"render",value:function(){return React.createElement("div",{className:"title"},React.createElement(c,null,"123123123123123123123123123123123123123123123123123123123123123123123123123123123123"),React.createElement("span",{className:"a1"},"左上"),React.createElement("span",{className:"a2"},"右上"),React.createElement("span",{className:"a3"},"左下"),React.createElement("span",{className:"a4"},"右下"))}}]),e}(React.Component);t.exports=u},206:function(t,e,n){var r=n(207);"string"==typeof r&&(r=[[t.id,r,""]]);n(22)(r,{});r.locals&&(t.exports=r.locals)},207:function(t,e,n){e=t.exports=n(21)(),e.push([t.id,".title span{position:absolute;padding:5px;background:red}.title .a1{top:0;left:0}.title .a2{top:0;right:0}.title .a3{bottom:0;left:0}.title .a4{bottom:0;right:0}",""])},208:function(t,e,n){"use strict";function r(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}function o(t,e){if(!t)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!e||"object"!=typeof e&&"function"!=typeof e?t:e}function i(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function, not "+typeof e);t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,enumerable:!1,writable:!0,configurable:!0}}),e&&(Object.setPrototypeOf?Object.setPrototypeOf(t,e):t.__proto__=e)}var a=n(38),c=function(t){function e(){var t,n,i,a;r(this,e);for(var c=arguments.length,u=Array(c),s=0;s<c;s++)u[s]=arguments[s];return n=i=o(this,(t=e.__proto__||Object.getPrototypeOf(e)).call.apply(t,[this].concat(u))),i.state={},a=n,o(i,a)}return i(e,t),e}(a);t.exports=c}});
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId])
+/******/ 			return installedModules[moduleId].exports;
+/******/
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			exports: {},
+/******/ 			id: moduleId,
+/******/ 			loaded: false
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.loaded = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "/dist/";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(0);
+/******/ })
+/************************************************************************/
+/******/ ({
+
+/***/ 0:
+/***/ (function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(251);
+
+
+/***/ }),
+
+/***/ 11:
+/***/ (function(module, exports) {
+
+	"use strict";
+	
+	/*
+		MIT License http://www.opensource.org/licenses/mit-license.php
+		Author Tobias Koppers @sokra
+	*/
+	// css base code, injected by the css-loader
+	module.exports = function () {
+		var list = [];
+	
+		// return the list of modules as css string
+		list.toString = function toString() {
+			var result = [];
+			for (var i = 0; i < this.length; i++) {
+				var item = this[i];
+				if (item[2]) {
+					result.push("@media " + item[2] + "{" + item[1] + "}");
+				} else {
+					result.push(item[1]);
+				}
+			}
+			return result.join("");
+		};
+	
+		// import a list of modules into the list
+		list.i = function (modules, mediaQuery) {
+			if (typeof modules === "string") modules = [[null, modules, ""]];
+			var alreadyImportedModules = {};
+			for (var i = 0; i < this.length; i++) {
+				var id = this[i][0];
+				if (typeof id === "number") alreadyImportedModules[id] = true;
+			}
+			for (i = 0; i < modules.length; i++) {
+				var item = modules[i];
+				// skip already imported module
+				// this implementation is not 100% perfect for weird media query combinations
+				//  when a module is imported multiple times with different media queries.
+				//  I hope this will never occur (Hey this way we have smaller bundles)
+				if (typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+					if (mediaQuery && !item[2]) {
+						item[2] = mediaQuery;
+					} else if (mediaQuery) {
+						item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+					}
+					list.push(item);
+				}
+			}
+		};
+		return list;
+	};
+
+/***/ }),
+
+/***/ 12:
+/***/ (function(module, exports, __webpack_require__) {
+
+	/*
+		MIT License http://www.opensource.org/licenses/mit-license.php
+		Author Tobias Koppers @sokra
+	*/
+	var stylesInDom = {},
+		memoize = function(fn) {
+			var memo;
+			return function () {
+				if (typeof memo === "undefined") memo = fn.apply(this, arguments);
+				return memo;
+			};
+		},
+		isOldIE = memoize(function() {
+			return /msie [6-9]\b/.test(window.navigator.userAgent.toLowerCase());
+		}),
+		getHeadElement = memoize(function () {
+			return document.head || document.getElementsByTagName("head")[0];
+		}),
+		singletonElement = null,
+		singletonCounter = 0,
+		styleElementsInsertedAtTop = [];
+	
+	module.exports = function(list, options) {
+		if(false) {
+			if(typeof document !== "object") throw new Error("The style-loader cannot be used in a non-browser environment");
+		}
+	
+		options = options || {};
+		// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+		// tags it will allow on a page
+		if (typeof options.singleton === "undefined") options.singleton = isOldIE();
+	
+		// By default, add <style> tags to the bottom of <head>.
+		if (typeof options.insertAt === "undefined") options.insertAt = "bottom";
+	
+		var styles = listToStyles(list);
+		addStylesToDom(styles, options);
+	
+		return function update(newList) {
+			var mayRemove = [];
+			for(var i = 0; i < styles.length; i++) {
+				var item = styles[i];
+				var domStyle = stylesInDom[item.id];
+				domStyle.refs--;
+				mayRemove.push(domStyle);
+			}
+			if(newList) {
+				var newStyles = listToStyles(newList);
+				addStylesToDom(newStyles, options);
+			}
+			for(var i = 0; i < mayRemove.length; i++) {
+				var domStyle = mayRemove[i];
+				if(domStyle.refs === 0) {
+					for(var j = 0; j < domStyle.parts.length; j++)
+						domStyle.parts[j]();
+					delete stylesInDom[domStyle.id];
+				}
+			}
+		};
+	}
+	
+	function addStylesToDom(styles, options) {
+		for(var i = 0; i < styles.length; i++) {
+			var item = styles[i];
+			var domStyle = stylesInDom[item.id];
+			if(domStyle) {
+				domStyle.refs++;
+				for(var j = 0; j < domStyle.parts.length; j++) {
+					domStyle.parts[j](item.parts[j]);
+				}
+				for(; j < item.parts.length; j++) {
+					domStyle.parts.push(addStyle(item.parts[j], options));
+				}
+			} else {
+				var parts = [];
+				for(var j = 0; j < item.parts.length; j++) {
+					parts.push(addStyle(item.parts[j], options));
+				}
+				stylesInDom[item.id] = {id: item.id, refs: 1, parts: parts};
+			}
+		}
+	}
+	
+	function listToStyles(list) {
+		var styles = [];
+		var newStyles = {};
+		for(var i = 0; i < list.length; i++) {
+			var item = list[i];
+			var id = item[0];
+			var css = item[1];
+			var media = item[2];
+			var sourceMap = item[3];
+			var part = {css: css, media: media, sourceMap: sourceMap};
+			if(!newStyles[id])
+				styles.push(newStyles[id] = {id: id, parts: [part]});
+			else
+				newStyles[id].parts.push(part);
+		}
+		return styles;
+	}
+	
+	function insertStyleElement(options, styleElement) {
+		var head = getHeadElement();
+		var lastStyleElementInsertedAtTop = styleElementsInsertedAtTop[styleElementsInsertedAtTop.length - 1];
+		if (options.insertAt === "top") {
+			if(!lastStyleElementInsertedAtTop) {
+				head.insertBefore(styleElement, head.firstChild);
+			} else if(lastStyleElementInsertedAtTop.nextSibling) {
+				head.insertBefore(styleElement, lastStyleElementInsertedAtTop.nextSibling);
+			} else {
+				head.appendChild(styleElement);
+			}
+			styleElementsInsertedAtTop.push(styleElement);
+		} else if (options.insertAt === "bottom") {
+			head.appendChild(styleElement);
+		} else {
+			throw new Error("Invalid value for parameter 'insertAt'. Must be 'top' or 'bottom'.");
+		}
+	}
+	
+	function removeStyleElement(styleElement) {
+		styleElement.parentNode.removeChild(styleElement);
+		var idx = styleElementsInsertedAtTop.indexOf(styleElement);
+		if(idx >= 0) {
+			styleElementsInsertedAtTop.splice(idx, 1);
+		}
+	}
+	
+	function createStyleElement(options) {
+		var styleElement = document.createElement("style");
+		styleElement.type = "text/css";
+		insertStyleElement(options, styleElement);
+		return styleElement;
+	}
+	
+	function createLinkElement(options) {
+		var linkElement = document.createElement("link");
+		linkElement.rel = "stylesheet";
+		insertStyleElement(options, linkElement);
+		return linkElement;
+	}
+	
+	function addStyle(obj, options) {
+		var styleElement, update, remove;
+	
+		if (options.singleton) {
+			var styleIndex = singletonCounter++;
+			styleElement = singletonElement || (singletonElement = createStyleElement(options));
+			update = applyToSingletonTag.bind(null, styleElement, styleIndex, false);
+			remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true);
+		} else if(obj.sourceMap &&
+			typeof URL === "function" &&
+			typeof URL.createObjectURL === "function" &&
+			typeof URL.revokeObjectURL === "function" &&
+			typeof Blob === "function" &&
+			typeof btoa === "function") {
+			styleElement = createLinkElement(options);
+			update = updateLink.bind(null, styleElement);
+			remove = function() {
+				removeStyleElement(styleElement);
+				if(styleElement.href)
+					URL.revokeObjectURL(styleElement.href);
+			};
+		} else {
+			styleElement = createStyleElement(options);
+			update = applyToTag.bind(null, styleElement);
+			remove = function() {
+				removeStyleElement(styleElement);
+			};
+		}
+	
+		update(obj);
+	
+		return function updateStyle(newObj) {
+			if(newObj) {
+				if(newObj.css === obj.css && newObj.media === obj.media && newObj.sourceMap === obj.sourceMap)
+					return;
+				update(obj = newObj);
+			} else {
+				remove();
+			}
+		};
+	}
+	
+	var replaceText = (function () {
+		var textStore = [];
+	
+		return function (index, replacement) {
+			textStore[index] = replacement;
+			return textStore.filter(Boolean).join('\n');
+		};
+	})();
+	
+	function applyToSingletonTag(styleElement, index, remove, obj) {
+		var css = remove ? "" : obj.css;
+	
+		if (styleElement.styleSheet) {
+			styleElement.styleSheet.cssText = replaceText(index, css);
+		} else {
+			var cssNode = document.createTextNode(css);
+			var childNodes = styleElement.childNodes;
+			if (childNodes[index]) styleElement.removeChild(childNodes[index]);
+			if (childNodes.length) {
+				styleElement.insertBefore(cssNode, childNodes[index]);
+			} else {
+				styleElement.appendChild(cssNode);
+			}
+		}
+	}
+	
+	function applyToTag(styleElement, obj) {
+		var css = obj.css;
+		var media = obj.media;
+	
+		if(media) {
+			styleElement.setAttribute("media", media)
+		}
+	
+		if(styleElement.styleSheet) {
+			styleElement.styleSheet.cssText = css;
+		} else {
+			while(styleElement.firstChild) {
+				styleElement.removeChild(styleElement.firstChild);
+			}
+			styleElement.appendChild(document.createTextNode(css));
+		}
+	}
+	
+	function updateLink(linkElement, obj) {
+		var css = obj.css;
+		var sourceMap = obj.sourceMap;
+	
+		if(sourceMap) {
+			// http://stackoverflow.com/a/26603875
+			css += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + " */";
+		}
+	
+		var blob = new Blob([css], { type: "text/css" });
+	
+		var oldSrc = linkElement.href;
+	
+		linkElement.href = URL.createObjectURL(blob);
+	
+		if(oldSrc)
+			URL.revokeObjectURL(oldSrc);
+	}
+
+
+/***/ }),
+
+/***/ 15:
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	// 依赖
+	
+	Object.defineProperty(exports, "__esModule", {
+				value: true
+	});
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _actions = __webpack_require__(16);
+	
+	var _actions2 = _interopRequireDefault(_actions);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var HOC = function HOC(Wrapper, Class) {
+				var WrapperComponent = function (_React$Component) {
+							_inherits(WrapperComponent, _React$Component);
+	
+							function WrapperComponent(props) {
+										_classCallCheck(this, WrapperComponent);
+	
+										var _this = _possibleConstructorReturn(this, (WrapperComponent.__proto__ || Object.getPrototypeOf(WrapperComponent)).apply(this, arguments));
+	
+										var me = _this;
+										var __controller__ = void 0;
+										var clearProps = me.clearProps(props);
+										__controller__ = me.__controller__ = new Class(clearProps);
+										__controller__.com = me;
+										me.state = limit.assignSuper({}, __controller__.getInitialState(), clearProps);
+										__controller__.props = me.getPerProps(clearProps);
+										__controller__.state = me.getPerState(me.state);
+										me.state.actionId = me.state.actionId || "uaid" + limit.getUid();
+										me.state.actionUUid = __controller__.Actions.actionUUid = "uuid" + limit.getUid();
+										if (props.actionCid) {
+													me.state.actionCid = __controller__.Actions.actionCid = props.actionCid;
+										};
+										_actions2.default.set(me.state.actionId, __controller__.Actions);
+										return _this;
+							}
+	
+							_createClass(WrapperComponent, [{
+										key: "getPerProps",
+										value: function getPerProps(props) {
+													var outProps = {};
+													limit.each(Class.defaultProps, function (val, key) {
+																outProps[key] = props[key];
+													});
+													return outProps;
+										}
+							}, {
+										key: "getPerState",
+										value: function getPerState(state) {
+													var me = this;
+													var outState = {};
+													limit.each(me.__controller__.state, function (val, key) {
+																outState[key] = state[key];
+													});
+													return outState;
+										}
+							}, {
+										key: "componentWillReceiveProps",
+										value: function componentWillReceiveProps(props) {
+													var me = this;
+													me.propsFromOther = true;
+										}
+							}, {
+										key: "shouldComponentUpdate",
+										value: function shouldComponentUpdate() {
+													var me = this;
+													var propsFromOther = !!me.propsFromOther;
+													if (me.state.shouldComponentNotUpdate) {
+																if (propsFromOther) {
+																			return me.propsFromOther = false;
+																} else {
+																			return true;
+																};
+													} else {
+																return true;
+													};
+										}
+							}, {
+										key: "clearProps",
+										value: function clearProps(props) {
+													var newProps = limit.assign({}, props);
+													delete newProps.actionId;
+													delete newProps.actionUUid;
+													delete newProps.actionCid;
+													newProps.actionId = Class.defaultProps && Class.defaultProps.actionId;
+													return newProps;
+										}
+							}, {
+										key: "componentWillUpdate",
+										value: function componentWillUpdate(props) {
+													var me = this;
+													var __controller__ = me.__controller__;
+													// 如果是外部传入的属性全量更新
+													// if( me.propsFromOther ){
+													// 	me.nextState = limit.assignSuper({}, me.state, me.clearProps(props));
+													// 	limit.cb(__controller__.componentWillUpdate).call(__controller__, me.nextState);
+													// 	__controller__.state = me.getPerState(me.nextState);
+													// 	__controller__.props = me.getPerProps(me.nextState);
+													// }else{
+													// 	delete me.nextState;
+													// };
+	
+													if (me.propsFromOther) {
+																limit.assignSuper(me.state, me.clearProps(props));
+																__controller__.state = me.getPerState(me.state);
+																__controller__.props = me.getPerProps(me.state);
+																if (limit.isFunction(__controller__.componentWillUpdate)) {
+																			__controller__.componentWillUpdate(me.state);
+																			limit.assignSuper(me.state, __controller__.state);
+																};
+													};
+										}
+							}, {
+										key: "componentDidUpdate",
+										value: function componentDidUpdate() {
+													var me = this;
+													me.propsFromOther = false;
+										}
+							}, {
+										key: "render",
+										value: function render() {
+													var me = this;
+													return React.createElement(Wrapper, _extends({}, me.state, { ref: "com" }));
+										}
+							}, {
+										key: "componentWillUnmount",
+										value: function componentWillUnmount() {
+													var me = this;
+													_actions2.default.remove(me.state.actionId, me.__controller__.Actions);
+													me.__controller__.destroy();
+										}
+							}]);
+	
+							return WrapperComponent;
+				}(React.Component);
+	
+				WrapperComponent.defaultProps = Class.defaultProps;
+				WrapperComponent.propTypes = Class.propTypes;
+				;
+				return WrapperComponent;
+	};
+	
+	exports.default = HOC;
+
+/***/ }),
+
+/***/ 16:
+/***/ (function(module, exports) {
+
+	"use strict";
+	
+	// 变量
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	var Actions = window.Actions = function (id, cid) {
+		return getReturnObj(id, cid);
+	};
+	
+	var ActionsPool = Actions.pool = {};
+	
+	Actions.set = function (id, action) {
+		var pool = ActionsPool[id];
+		if (pool) {
+			pool.push(action);
+		} else {
+			ActionsPool[id] = [action];
+		};
+	};
+	
+	// 获取正确的ID
+	function getPropTrueId(obj, key) {
+		if (limit.isObjectSuper(obj)) {
+			return obj.props[key] || obj.state[key];
+		};
+	};
+	
+	// 通过ID获取
+	function getAllPoolById(id) {
+		return ActionsPool[getPropTrueId(id, 'actionId') || id] || [];
+	};
+	
+	// 获取目标
+	function getTargetPool(id, cid) {
+		var pool = getAllPoolById(id);
+		if (cid) {
+			return pool.filter(function (val) {
+				return val.actionCid === cid;
+			});
+		} else {
+			var uid = getPropTrueId(id, 'actionUUid');
+			if (uid) {
+				return pool.filter(function (val) {
+					return val.actionUUid === uid;
+				});
+			} else {
+				return pool;
+			};
+		};
+	};
+	
+	// 获取对应的对象
+	function getReturnObj(id, cid) {
+		var pool = getTargetPool(id, cid);
+		var obj = {};
+		if (pool.length) {
+			limit.each(pool[0], function (val, key) {
+				if (limit.isFunction(val)) {
+					obj[key] = function () {
+						for (var _len = arguments.length, agrs = Array(_len), _key = 0; _key < _len; _key++) {
+							agrs[_key] = arguments[_key];
+						}
+	
+						return Promise.all(pool.map(function (fn) {
+							return fn[key].apply(fn, agrs);
+						}));
+					};
+				} else {
+					obj[key] = pool.map(function (val) {
+						return val[key];
+					}).join(',');
+				};
+			});
+		};
+		return obj;
+	};
+	
+	Actions.get = function (id, cid) {
+		return getTargetPool(id, cid);
+	};
+	
+	Actions.remove = function (id, action) {
+		var pool = ActionsPool[id];
+		if (pool) {
+			limit.remove(pool, action);
+			if (!pool.length) {
+				delete ActionsPool[id];
+			};
+		};
+	};
+	
+	exports.default = Actions;
+
+/***/ }),
+
+/***/ 26:
+/***/ (function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var Promise = limit.promise();
+	var REX = /on([A-Z])(\w*)/;
+	
+	var Control = function () {
+		function Control() {
+			_classCallCheck(this, Control);
+	
+			this.bindEvent();
+		}
+	
+		_createClass(Control, [{
+			key: 'bindEvent',
+			value: function bindEvent() {
+				var me = this;
+				var Actions = me.Actions = {};
+				// 对第一层的对象的原型属性进行处理
+				limit(me.findAllPro()).filter(function (val, key) {
+					return REX.test(key);
+				}).each(function (val, key) {
+					var actionName = key.replace(REX, function (a, b, c) {
+						return b.toLowerCase() + c;
+					});
+					Actions[actionName] = function () {
+						for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+							args[_key] = arguments[_key];
+						}
+	
+						me.state.actionStatus = actionName;
+						return val.apply(me, args);
+					};
+				});
+			}
+		}, {
+			key: 'findAllPro',
+			value: function findAllPro() {
+				var me = this;
+				var rtv = {};
+				var pro = me.constructor.prototype;
+				while (pro) {
+					// 如果到最底层的Object跳出
+					if (pro.constructor === Object) {
+						break;
+					};
+					limit(pro).keysSuper().each(function (val) {
+						// 隔离__proto__
+						if (val !== '__proto__' && !rtv[val]) {
+							rtv[val] = pro[val];
+						};
+					});
+					pro = pro.__proto__;
+				};
+				return rtv;
+			}
+		}, {
+			key: 'getInitialState',
+			value: function getInitialState() {
+				return this.state || (this.state = {});
+			}
+		}, {
+			key: 'destroy',
+			value: function destroy() {
+				var me = this;
+				limit.each(me, function (val, key) {
+					delete me[key];
+				});
+				return me;
+			}
+		}, {
+			key: 'trigger',
+			value: function trigger(data, callback) {
+				var me = this;
+				me.com.setState(data, callback);
+			}
+		}, {
+			key: 'updateComponent',
+			value: function updateComponent() {
+				var me = this;
+				var state = me.getInitialState();
+				return new Promise(function (resolve) {
+					me.trigger(state, resolve.bind(null, 'updateComponentSuccess'));
+				});
+			}
+		}]);
+	
+		return Control;
+	}();
+	
+	;
+	
+	exports.default = Control;
+
+/***/ }),
+
+/***/ 251:
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	// 组件类
+	
+	var Title = __webpack_require__(252);
+	
+	// 置入文档
+	ReactDOM.render(React.createElement(Title, null), document.getElementById('container'));
+
+/***/ }),
+
+/***/ 252:
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	// 依赖
+	
+	module.exports = __webpack_require__(15)(__webpack_require__(253), __webpack_require__(261));
+
+/***/ }),
+
+/***/ 253:
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	__webpack_require__(254);
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var LimitTitle = __webpack_require__(256);
+	
+	// 组件类
+	
+	var Title = function (_React$Component) {
+		_inherits(Title, _React$Component);
+	
+		function Title() {
+			_classCallCheck(this, Title);
+	
+			return _possibleConstructorReturn(this, (Title.__proto__ || Object.getPrototypeOf(Title)).apply(this, arguments));
+		}
+	
+		_createClass(Title, [{
+			key: 'render',
+			value: function render() {
+				return React.createElement(
+					'div',
+					{ className: 'title' },
+					React.createElement(
+						LimitTitle,
+						null,
+						'123123123123123123123123123123123123123123123123123123123123123123123123123123123123'
+					),
+					React.createElement(
+						'span',
+						{ className: 'a1' },
+						'\u5DE6\u4E0A'
+					),
+					React.createElement(
+						'span',
+						{ className: 'a2' },
+						'\u53F3\u4E0A'
+					),
+					React.createElement(
+						'span',
+						{ className: 'a3' },
+						'\u5DE6\u4E0B'
+					),
+					React.createElement(
+						'span',
+						{ className: 'a4' },
+						'\u53F3\u4E0B'
+					)
+				);
+			}
+		}]);
+	
+		return Title;
+	}(React.Component);
+	
+	;
+	
+	module.exports = Title;
+
+/***/ }),
+
+/***/ 254:
+/***/ (function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(255);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(12)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../../../node_modules/css-loader/index.js!./../../../../../node_modules/less-loader/index.js!./style.less", function() {
+				var newContent = require("!!./../../../../../node_modules/css-loader/index.js!./../../../../../node_modules/less-loader/index.js!./style.less");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ }),
+
+/***/ 255:
+/***/ (function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(11)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, ".title span {\n  position: absolute;\n  padding: 5px;\n  background: #F00;\n}\n.title .a1 {\n  top: 0;\n  left: 0;\n}\n.title .a2 {\n  top: 0;\n  right: 0;\n}\n.title .a3 {\n  bottom: 0;\n  left: 0;\n}\n.title .a4 {\n  bottom: 0;\n  right: 0;\n}\n", ""]);
+	
+	// exports
+
+
+/***/ }),
+
+/***/ 256:
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	// 依赖
+	
+	module.exports = __webpack_require__(15)(__webpack_require__(257), __webpack_require__(260));
+
+/***/ }),
+
+/***/ 257:
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	__webpack_require__(258);
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var guid = 0;
+	
+	// 组件类
+	
+	var Title = function (_React$Component) {
+		_inherits(Title, _React$Component);
+	
+		function Title() {
+			_classCallCheck(this, Title);
+	
+			return _possibleConstructorReturn(this, (Title.__proto__ || Object.getPrototypeOf(Title)).apply(this, arguments));
+		}
+	
+		_createClass(Title, [{
+			key: "shouldComponentUpdate",
+			value: function shouldComponentUpdate() {
+				return false;
+			}
+		}, {
+			key: "render",
+			value: function render() {
+				var me = this;
+				var props = me.props;
+	
+				return React.createElement(
+					"div",
+					{ className: limit.toString(props.className) + " limit_title fn-wrap", ref: "node" },
+					props.children
+				);
+			}
+		}, {
+			key: "componentDidMount",
+			value: function componentDidMount() {
+				var me = this;
+				var refs = me.refs,
+				    props = me.props;
+				var node = refs.node;
+	
+				$(document).on('mousemove.limitTitle', function (e) {
+					node.style.top = me.getTop(e);
+					node.style.left = me.getLeft(e);
+				});
+			}
+		}, {
+			key: "getTop",
+			value: function getTop(e) {
+				var me = this;
+				var refs = me.refs,
+				    props = me.props;
+				var node = refs.node;
+	
+				var bodyHeight = Math.max(document.body.offsetHeight, document.documentElement.offsetHeight, limit.toNumber(window.innerHeight));
+				var nodeHeight = node.offsetHeight;
+				var tempTop = e.clientY + props.diffY;
+				var height = e.pageY + props.diffY + nodeHeight;
+				if (height < bodyHeight) {
+					return tempTop + "px";
+				} else {
+					return e.clientY - nodeHeight - props.diffY + "px";
+				};
+			}
+		}, {
+			key: "getLeft",
+			value: function getLeft(e) {
+				var me = this;
+				var refs = me.refs,
+				    props = me.props;
+				var node = refs.node;
+	
+				var bodyWidth = document.body.offsetWidth;
+				var nodeWidth = node.offsetWidth;
+				var tempLeft = e.clientX + props.diffX;
+				var width = e.pageX + props.diffX + nodeWidth;
+				if (width < bodyWidth) {
+					return tempLeft + "px";
+				} else {
+					return e.clientX - nodeWidth - props.diffX + "px";
+				};
+			}
+		}, {
+			key: "componentWillUnmount",
+			value: function componentWillUnmount() {
+				$(document).off('mousemove.limitTitle');
+			}
+		}]);
+	
+		return Title;
+	}(React.Component);
+	
+	;
+	
+	module.exports = Title;
+
+/***/ }),
+
+/***/ 258:
+/***/ (function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(259);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(12)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/less-loader/index.js!./style.less", function() {
+				var newContent = require("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/less-loader/index.js!./style.less");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ }),
+
+/***/ 259:
+/***/ (function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(11)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, ".limit_title {\n  position: fixed;\n  top: -9999px;\n  left: -9999px;\n  z-index: 999;\n  background: #F2F2F2;\n  padding: 5px;\n  color: #666;\n}\n", ""]);
+	
+	// exports
+
+
+/***/ }),
+
+/***/ 260:
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	// 依赖
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Control = __webpack_require__(26);
+	
+	var Controller = function (_Control) {
+		_inherits(Controller, _Control);
+	
+		function Controller() {
+			var _ref;
+	
+			var _temp, _this, _ret;
+	
+			_classCallCheck(this, Controller);
+	
+			for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+				args[_key] = arguments[_key];
+			}
+	
+			return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Controller.__proto__ || Object.getPrototypeOf(Controller)).call.apply(_ref, [this].concat(args))), _this), _this.state = {}, _temp), _possibleConstructorReturn(_this, _ret);
+		}
+	
+		return Controller;
+	}(Control);
+	
+	Controller.defaultProps = {
+		actionId: 'limit_title',
+		shouldComponentNotUpdate: true,
+		diffX: 10,
+		diffY: 10
+	};
+	;
+	
+	module.exports = Controller;
+
+/***/ }),
+
+/***/ 261:
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	// 依赖
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Control = __webpack_require__(26);
+	
+	var Controller = function (_Control) {
+		_inherits(Controller, _Control);
+	
+		function Controller() {
+			var _ref;
+	
+			var _temp, _this, _ret;
+	
+			_classCallCheck(this, Controller);
+	
+			for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+				args[_key] = arguments[_key];
+			}
+	
+			return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Controller.__proto__ || Object.getPrototypeOf(Controller)).call.apply(_ref, [this].concat(args))), _this), _this.state = {}, _temp), _possibleConstructorReturn(_this, _ret);
+		}
+	
+		return Controller;
+	}(Control);
+	
+	;
+	
+	module.exports = Controller;
+
+/***/ })
+
+/******/ });
 //# sourceMappingURL=main.js.map

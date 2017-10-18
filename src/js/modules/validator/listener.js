@@ -1,12 +1,12 @@
 "use strict";
 
-const ValidatorMap = require('./map')
+import Map from './map';
 
 const returnTrue = () => true;
 
 const REGRULE = /(\w+)(?:\((.*)?\))?/;
 
-class Validator extends limit.Events {
+class Listener extends limit.Events {
 	props = {
 		// 原始数据
 		originData: {},
@@ -64,7 +64,7 @@ class Validator extends limit.Events {
 	}
 	// 通过rule获取函数
 	getRuleFunByRule(rule){
-		let fun = ValidatorMap[rule];
+		let fun = Map[rule];
 		if( fun ){
 			return fun;
 		}else{
@@ -129,7 +129,7 @@ class Validator extends limit.Events {
 	}
 }
 
-module.exports = Validator;
+export default Listener;
 
 
 

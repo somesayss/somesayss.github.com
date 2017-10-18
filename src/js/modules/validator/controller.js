@@ -1,8 +1,8 @@
 "use strict";
 	
 // 依赖
-const Listener = require('./listener');
-const Control = require('common/myReflux/control');
+import Listener from './listener';
+import Control from 'common/myReflux/control';
 
 class Controller extends Control {
 	state = {
@@ -31,7 +31,8 @@ class Controller extends Control {
 	}
 };
 
-module.exports = Controller;
+export default Controller;
+
 
 
 

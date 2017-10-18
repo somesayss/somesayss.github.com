@@ -1,6 +1,5 @@
-"use strict";
 
-// const FilesDrop = require('modules/filesdrop/index');
+"use strict";
 
 // 组件类
 class File extends React.Component {
@@ -9,9 +8,13 @@ class File extends React.Component {
 		return (
 			<input 
 				ref="file"
-				onMouseEnter={me.mouseEnter.bind(me)}
+				onClick={me.click.bind(me)}
 				{...me.props} type="button" />
 		);
+	}
+	click(){
+		let me = this;
+		me.file.click();
 	}
 	mouseEnter(){
 		let me = this;
@@ -38,7 +41,7 @@ class File extends React.Component {
 		let me = this;
 		return (
 			<form onMouseLeave={me.mouseLeave.bind(me)}>
-				<input type="file" onChange={me.change.bind(me)}  />
+				<input type="file" name="file" onChange={me.change.bind(me)}  />
 			</form>
 		);
 	}
@@ -50,10 +53,11 @@ class File extends React.Component {
 		let node = me.tempNode = document.createElement('div');
 		node.className = 'limit-file';
 		document.body.appendChild(node);
-		ReactDOM.render(
+		let a = ReactDOM.render(
 			me.createForm(),
 			node
 		);
+		me.file = a.file;
 		// 创建拖拽文件上传
 		// let nodeDrop = me.tempNodeDrop = document.createElement('div');
 		// document.body.appendChild(nodeDrop);
@@ -76,5 +80,10 @@ class File extends React.Component {
 	}
 };
 
-module.exports = File;
+export default File;
+
+
+
+
+
 

@@ -2,10 +2,16 @@
 
 import './style.less';
 
-const domUtil = require('common/domUtil');
-const Select = require('modules/select/index');
-const Textarea = require('modules/textarea/index');
-const File = require('./file');
+import File from './file';
+import Checkbox from './checkbox';
+import domUtil from 'common/domUtil';
+import Component from 'common/myReflux/component';
+
+import Select from 'modules/select/index';
+import Textarea from 'modules/textarea/index';
+import Multiple from 'modules/multiple/index';
+import CalendarInput from 'modules/calendarInput/index';
+import CalendarRange from 'modules/calendarRange/index';
 
 const formMap = {
 	number: 'text',
@@ -14,7 +20,7 @@ const formMap = {
 };
 
 // 组件类
-class Form extends React.Component {
+class View extends Component {
 	render(){
 		let me = this;
 		let {props} = me;
@@ -56,6 +62,14 @@ class Form extends React.Component {
 		};
 		return props[`${me.getType()}Width`]
 	}
+	doOriginFun(val, e, args){
+		let me = this;
+		let {props} = me;
+		let originFun = props[val];
+		if( originFun ){
+			undefined::originFun(e.target ? e.target.value: e, e, ...args);
+		};
+	}
 	parseProps(){
 		let me = this;
 		let {props} = me;
@@ -63,13 +77,12 @@ class Form extends React.Component {
 			return !limit.contains(['actionId', 'actionUUid', 'className', 'placeholder'], key);
 		});
 		['onFocus', 'onBlur', 'onChange'].forEach((val) => {
-			newProps[val] = function(...args){
-				props[val] && undefined::props[val](...args);
+			newProps[val] = function(e, ...args){
 				let fun = Actions(me)[`${props.type}${val.slice(2)}`];
 				if( fun ){
-					fun(...args);
+					fun(e, ...args).then(me.doOriginFun.bind(me, val, e, args));
 				}else{
-					Actions(me)[`${val.slice(2).toLowerCase()}`](...args);
+					Actions(me)[`${val.slice(2).toLowerCase()}`](e, ...args).then(me.doOriginFun.bind(me, val, e, args));
 				};
 			};
 		});
@@ -88,9 +101,9 @@ class Form extends React.Component {
 		let me = this;
 		let {props} = me;
 		return (
-			<div className={`limit-form-${me.getType()}`}>
+			<div className={`limit-form-${me.getType()}`} style={{paddingRight: props.readOnly ? '6' : null}}>
 				{do{
-					if( props.value ){
+					if( props.value && !props.readOnly ){
 						<a href="javascript:;" tabIndex="-1" className="ch-clear" onClick={!props.disabled ? Actions(me).clear.bind(me) : null}>×</a>
 					}
 				}}
@@ -149,6 +162,68 @@ class Form extends React.Component {
 			</div>
 		) 
 	}
+	multipleRender(){
+		let me = this;
+		let {props} = me;
+		return (
+			<div className={`limit-form-${props.type}`}>
+				{do{
+					if( !(''+props.value) ){
+						<span className="ch-placeholder">{props.placeholder}</span>
+					}
+				}}
+				<Multiple {...me.parseProps()} width="100%" className={`limit-form-${props.type}`}>
+					{props.children}
+				</Multiple>
+			</div>
+		);
+	}
+	checkboxRender(){
+		let me = this;
+		return <Checkbox {...me.parseProps()} />
+	}
+	calendarRender(){
+		let me = this;
+		let {props} = me;
+		return (
+			<div className={`limit-form-calendar`}>
+				{do{
+					if( !props.value ){
+						<span className="ch-placeholder">{props.placeholder}</span>
+					}
+				}}
+				{do{
+					if( props.value ){
+						<a href="javascript:;" tabIndex="-1" className="ch-clear" onClick={!props.disabled ? Actions(me).clear.bind(me) : null}>×</a>
+					}
+				}}
+				<CalendarInput {...me.parseProps()} />
+			</div>
+		)
+	}
+	calendarRangeRender(){
+		let me = this;
+		let {props} = me;
+		let parseProps = me.parseProps();
+		if( !limit.isArray(parseProps.value) ){
+			parseProps.value = [null, null];
+		};
+		return (
+			<div className={`limit-form-calendar`}>
+				{do{
+					if( !props.value ){
+						<span className="ch-placeholder">{props.placeholder}</span>
+					}
+				}}
+				{do{
+					if( props.value ){
+						<a href="javascript:;" tabIndex="-1" className="ch-clear" onClick={!props.disabled ? Actions(me).clear.bind(me) : null}>×</a>
+					}
+				}}
+				<CalendarRange {...parseProps} />
+			</div>
+		)
+	}
 	componentDidUpdate(){
 		let me = this;
 		let {props} = me;
@@ -191,5 +266,5 @@ class Form extends React.Component {
 	}
 };
 
-module.exports = Form;
+export default View;
 

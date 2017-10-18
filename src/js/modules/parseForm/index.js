@@ -1,8 +1,6 @@
 "use strict";
 
 // 依赖
-const limit = require('limit');
-
 class ParseForm {
 	props = {
 		element: null	// 主要表单
@@ -32,4 +30,4 @@ class ParseForm {
 	}
 }
 
-module.exports = ParseForm;
+export default ParseForm;

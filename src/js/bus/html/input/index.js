@@ -1,6 +1,8 @@
 
-import view from './view';
+import View from './view';
 import HOC from 'common/myReflux/hoc';
-import controller from './controller';
+import Controller from './controller';
 
-module.exports = HOC( view, controller );
+const Index = HOC( View, Controller );
+
+export default Index;

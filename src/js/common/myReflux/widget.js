@@ -1,8 +1,5 @@
 "use strict";
 
-// 依赖
-const limit = require('limit');
-
 class Widget {
 	props = {}
 	state = {}
@@ -63,7 +60,7 @@ class Widget {
 	}
 };
 
-module.exports = Widget;
+export default Widget;
 
 
 

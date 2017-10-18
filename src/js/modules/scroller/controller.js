@@ -1,7 +1,7 @@
 "use strict";
 	
 // 依赖
-const Control = require('common/myReflux/control');
+import Control from 'common/myReflux/control';
 
 class Controller extends Control {
 	state = {
@@ -14,7 +14,7 @@ class Controller extends Control {
 	}
 };
 
-module.exports = Controller;
+export default Controller;
 
 
 

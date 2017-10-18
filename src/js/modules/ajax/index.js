@@ -1,10 +1,9 @@
 "use strict";
 
 // 依赖
-const limit = require('limit');
-const DialogWidget = require('modules/dialog/widget');
+import DialogWidget from 'modules/dialog/widget';
 
-class Ajax {
+class Index {
 	props = {
 		url: '',
 		cache: false,
@@ -78,7 +77,7 @@ class Ajax {
 	}
 }
 
-module.exports = Ajax;
+export default Index;
 
 
 

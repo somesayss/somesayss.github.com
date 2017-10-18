@@ -13,6 +13,7 @@ class Controller extends Control {
 	static defaultProps = {
 		actionId: 'searchList',
 		url: '',
+		searchParam: [],
 		onSuccess: limit.K,
 		onError: limit.K
 	}
@@ -71,7 +72,7 @@ class Controller extends Control {
 		if( props.url ){
 			return new Ajax({
 				url: props.url,
-				data: {page: me.getPage()}
+				data: {page: me.getPage(), searchParam: limit.assign.apply(null, [].concat(props.searchParam))}
 			}).then((res) => {
 				let {content, msg} = res;
 				me.state.totle = Math.ceil(content.count/state.number);
@@ -88,7 +89,7 @@ class Controller extends Control {
 	}
 };
 
-module.exports = Controller;
+export default Controller;
 
 
 

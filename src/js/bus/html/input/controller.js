@@ -18,4 +18,5 @@ class Controller extends Control {
 	}
 };
 
-module.exports = Controller;
+export default Controller;
+

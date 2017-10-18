@@ -9,7 +9,7 @@ import InputText from 'modules/inputText/index';
 class InputSearch extends Component {
 	render(){
 		let me = this;
-		let {props: {filterData, value, focusNumber, isFocus, contentStyle}} = me;
+		let {props: {filterData, value, focusNumber, isFocus, contentStyle, scrollSize}} = me;
 		let data = filterData ;
 		let leg = data.length;
 		if( leg >= 3 ){
@@ -27,7 +27,7 @@ class InputSearch extends Component {
 					if( isFocus && data.length ){
 						<div className="limit-input-search-content" style={{...contentStyle, width:`${leg * 100 + 4}px`}}>
 							{do{
-								if( data.length <= 9 ){
+								if( data.length <= scrollSize ){
 									<ul className="fn-clear">
 										{data.map((val, key) => {
 											return <li key={key} style={{width: 100}}
@@ -36,7 +36,7 @@ class InputSearch extends Component {
 										})}
 									</ul>
 								}else{
-									<Scroller height="75" ref="scroller" barHeight="50">
+									<Scroller height={Math.ceil(scrollSize/3)*25} ref="scroller" barHeight="50">
 										<ul className="fn-clear">
 											{data.map((val, key) => {
 												return <li key={key} 
@@ -68,7 +68,7 @@ class InputSearch extends Component {
 				e.preventDefault();
 				Actions(me).keyDown(keyMap[e.keyCode]).then(() => {
 					if( scroller ){
-						let num = Math.floor( me.props.focusNumber / 3 ) - 2;
+						let num = Math.floor(me.props.focusNumber/3) - Math.ceil(me.props.scrollSize/3) + 1;
 						scroller.refs.com.scrollTo(num*25)
 					};
 				});
@@ -88,5 +88,6 @@ class InputSearch extends Component {
 	}
 };
 
-module.exports = InputSearch;
+export default InputSearch;
+
 

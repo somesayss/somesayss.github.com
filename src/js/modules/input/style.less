@@ -1,6 +1,7 @@
 .limit-form{
 	display:inline-block;
 	position:relative;
+	background:#FFF;
 }
 .less-placeholder{
 	position:absolute;
@@ -11,6 +12,21 @@
 	line-height:16px;
 	padding:7px;
 	padding-right:16px;
+}
+.less-clear{
+	position:absolute;
+	z-index:1;
+	width:15px;
+	height:16px;
+	line-height:14px;
+	text-align:center;
+	right:1px;
+	top:50%;
+	margin-top:-8px;
+	color:#CCC;
+	&:hover{
+		color:#666;
+	}
 }
 .limit-form-text{
 	border:1px solid #CCC;
@@ -29,19 +45,7 @@
 		background:none;
 	}
 	.ch-clear{
-		position:absolute;
-		z-index:2;
-		width:15px;
-		height:16px;
-		line-height:14px;
-		text-align:center;
-		right:1px;
-		top:50%;
-		margin-top:-8px;
-		color:#CCC;
-		&:hover{
-			color:#666;
-		}
+		.less-clear;
 	}
 	.ch-placeholder{
 		.less-placeholder;
@@ -109,20 +113,20 @@
 .limit-form-file{
 	.limit-form-button;
 }
-.limit-file{
-	position:absolute;
-	width:100px;
-	height:100px;
-	overflow:hidden;
-	background:#F00;
-	opacity:0;
-	top:-999px;
-	left:-999px;
-	z-index:99;
-	input{
-		font-size:100px;
-		opacity:0;
-		cursor:pointer;
+.limit-form-calendar{
+	.ch-placeholder{
+		.less-placeholder;
+	}
+	.ch-clear{
+		.less-clear;
+	}
+}
+.limit-form{
+	.ch-placeholder{
+		.less-placeholder;
+	}
+	input[type="text"]{
+		background:transparent;
 	}
 }
 /*禁止*/
@@ -150,7 +154,7 @@
 	&.limit-form{
 		z-index:2;
 	}
-	.limit-form-text,.limit-form-password,.limit-form-textarea{
+	.limit-form-text,.limit-form-password,.limit-form-textarea,.mod-calendar-input,.mod-calendar-range{
 		border-color:#4285f4;
 		box-shadow:0 0 3px rgba(66, 133, 244, .5);
 		.ch-clear{
@@ -173,7 +177,7 @@
 			background:#4285f4;
 		}
 	}
-	.limit-form-button{
+	.limit-form-button,.limit-form-file{
 		input{
 			box-shadow:0 0 1px rgba(0, 0, 0, .5);
 		}	
@@ -181,7 +185,7 @@
 }
 /*错误*/
 .limit-form-error{
-	.limit-form-text,.limit-form-password,.limit-form-textarea{
+	.limit-form-text,.limit-form-password,.limit-form-textarea,.mod-calendar-input,.mod-calendar-range{
 		border-color:#F00;
 		box-shadow:0 0 3px rgba(255, 0, 0, .5);
 		.ch-clear{
@@ -189,6 +193,35 @@
 		}
 		.ch-placeholder{
 			color:#F00;
+		}
+	}
+	.limit-form-calendar{
+		.ch-placeholder{
+			color:#F00;
+		}
+		.mod-calendar{
+			border-color:#F00;
+			.limitIcon{
+				color:#F00;
+				&:focus,&:hover{
+					text-shadow:0 0 3px rgba(255, 0, 0, .5);
+				}
+			}
+			.calendar-main{
+				li{
+					&:hover,&.active{
+						border-color:#F00;
+						color:#F00 !important;
+					}
+					&.today{
+						color:#F00 !important;
+					}
+					&.active{
+						background:#F00;
+						color:#FFF !important;
+					}
+				}
+			} 
 		}
 	}
 	.limit-form-password{
@@ -204,8 +237,8 @@
 			background:#F00;
 		}
 	}
-	.limit-form-select.limit-select{
-		.ch-show,.ch-list{
+	.limit-form-select.mod-select{
+		.select-trigger,.select-container{
 			border-color:#F00;
 			box-shadow:0 0 3px rgba(255, 0, 0, .5);
 		}
@@ -213,13 +246,48 @@
 			border-color:#F00;
 		}
 		li{
-			&:hover{
+			&.active{
 				background:#F00;
+				border-color:#F00;
+			}
+			&:hover{
+				border-color:#F00;
 			}
 		}
-		.ch-san{
-			border-top-color:#F00;
+		.select-trigger{
+			.select-trigger-san{
+				border-top-color:#F00;
+			}
 		}
+	}
+	.limit-form-multiple{
+		.ch-placeholder{
+			color:#F00;
+		}
+		.mod-multiple{
+			.multiple-trigger,.multiple-content{
+				border-color:#F00;
+				box-shadow:0 0 3px rgba(255, 0, 0, .5);
+			}
+			.multiple-trigger{
+				.multiple-trigger-san{
+					border-top-color:#F00;
+				}
+			}
+			&:before{
+				border-color:#F00;
+			}
+			li{
+				&.active{
+					background:#F00;
+					border-color:#F00;
+				}
+				&.focus{
+					border-color:#F00;
+				}
+			}
+		}
+
 	}
 	.ch-error-info{
 		position:absolute;

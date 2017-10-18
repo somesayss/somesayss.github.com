@@ -3,7 +3,7 @@ import './style.less';
 
 import Component from 'common/myReflux/component';
 
-class InputText extends Component {
+class View extends Component {
 	render(){
 		let me = this;
 		let {props} = me;
@@ -32,4 +32,4 @@ class InputText extends Component {
 	}
 };
 
-module.exports = InputText;
+export default View;

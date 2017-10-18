@@ -2,11 +2,11 @@
 
 import './style.less';
 
-const Mousemove = require('modules/mousemove/index');
-const ScrollerView = require('modules/scroller/view');
+import Mousemove from 'modules/mousemove/index';
+import ScrollerView from 'modules/scroller/view';
 
 // 组件类
-class Scroller extends ScrollerView {
+class View extends ScrollerView {
 	render(){
 		let me = this;
 		let {props} = me;
@@ -29,5 +29,5 @@ class Scroller extends ScrollerView {
 	}
 };
 
-module.exports = Scroller;
+export default View;
 

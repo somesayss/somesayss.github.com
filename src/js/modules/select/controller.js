@@ -1,25 +1,36 @@
-"use strict";
-	
-// 依赖
-const Control = require('common/myReflux/control');
+
+import Control from 'common/myReflux/control';
 
 class Controller extends Control {
 	state = {
-		showList: false
+		focus: false,
+		focusNumber: 0
 	}
 	static defaultProps = {
-		actionId: 'limitSelect',
+		actionId: 'Select',
 		width: 300,
-		barHeight: 50,
-		titleSize: 23,
-		size: 4,
+		height: 30,
+		scrollSize: 4,
 		onChange: limit.K,
 		onFocus: limit.K,
 		onBlur: limit.K
 	}
 	constructor(props){
 		let me = super();
-		me.state.list = me.parseListByChildren(props);
+		let {state} = me;
+		state.list = me.parseListByChildren(props);
+		me.setInitFocusNmuber();
+	}
+	setInitFocusNmuber(){
+		let me = this;
+		let {state} = me;
+		state.focusNumber = 0;
+		state.list.some((val, key) => {
+			if( val.selected ){
+				state.focusNumber = key;
+				return true;
+			};
+		});
 	}
 	parseListByChildren(props){
 		return React.Children.map(props.children, (child) => {
@@ -37,44 +48,83 @@ class Controller extends Control {
 	}
 	componentWillUpdate(nextState){
 		let me = this;
-		nextState.list = me.parseListByChildren(nextState);
+		let {state} = me;
+		state.list = me.parseListByChildren(nextState);
+		me.setInitFocusNmuber();
 	}
-	onShowList(e){
+	onFocus(flag){
+		let me = this;
+		let {state} = me;
+		state.focus = flag;
+		return me.updateComponent().then(() => {
+			if( flag ){
+				me.props.onFocus();
+			}else{
+				me.props.onBlur();
+			};
+		});
+	}
+	onKeyDown(key){
+		let me = this;
+		let {state} = me;
+		let {list} = state;
+		let max = list.length - 1;
+		switch(key){
+			case 'up':
+				if( state.focusNumber > max || state.focusNumber <= 0 ){
+					state.focusNumber = max; 
+				}else{
+					state.focusNumber--; 
+				};
+				break;
+			case 'down':
+				if( state.focusNumber < 0 || state.focusNumber >= max ){
+					state.focusNumber = 0;
+				}else{
+					state.focusNumber++; 
+				};
+				break;
+		};
+		if( state.focusNumber <= 0 ){
+			state.focusNumber = 0;
+		}else if( state.focusNumber >= max){
+			state.focusNumber = max;
+		};
+		return me.updateComponent();
+	}
+	doSelect(val, key){
 		let me = this;
 		let {state, props} = me;
-		state.showList = !state.showList;
-		me.updateComponent().then(() => {
-			if( state.showList ){
-				props.onFocus();
-			}else{
-				props.onBlur();
+		let {focusNumber, list} = state;
+		let targetKey = 0;
+		list.forEach((v, k) => {
+			if( v.selected ){
+				targetKey = k; 
+			};
+			v.selected = false;
+		});
+		val.selected = true;
+		if( limit.isDefined(key) ){
+			targetKey = state.focusNumber = key;
+		};
+		return me.updateComponent().then(() => {
+			if( targetKey !== focusNumber ){
+				props.onChange(val.value, val.key, focusNumber);
 			};
 		});
 	}
 	onSelect(val, key){
 		let me = this;
-		let {props, state} = me;
-		let targetKey = null;
-		state.list.forEach((val, key) => {
-			if( targetKey == null && val.selected ){
-				targetKey = key;
-			};
-			val.selected = false;
-		});
-		val.selected = true;
-		if( targetKey !== null && targetKey !== key ){
-			props.onChange(val.value, val.key, key);
+		return me.doSelect(val, key);
+	}
+	onEnterDown(){
+		let me = this;
+		let {state: {list, focusNumber}, props} = me;
+		let val = list[focusNumber];
+		if( val ){
+			return me.doSelect(val);
 		};
-		me.updateComponent();
 	}
 };
 
 module.exports = Controller;
-
-
-
-
-
-
-
-

@@ -45,6 +45,7 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
 // 入口
 $(function(){
 	var DOC = document;
+	var HEAD = document.head || document.getElementsByTagName('head')[0];
 	var scripts = DOC.getElementsByTagName('script');
     var lastScript = scripts[scripts.length - 1];
     var src = lastScript.src;
@@ -57,7 +58,7 @@ $(function(){
     var url = base + 'bus'+location.href.match(REX)[2]+'/main.js';
     var loadScript = DOC.createElement('script');
     loadScript.src = url;
-    DOC.head.appendChild(loadScript);
+    HEAD.appendChild(loadScript);
     loadScript.onload = function(){
     	loadScript.onload = null
     	$(loadScript).remove();

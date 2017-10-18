@@ -1,28 +1,13 @@
-"use strict";
 
 import './style.less';
 
-const Scroller = require('modules/scroller/index');
-const Title = require('modules/title/widget');
+import Scroller from 'modules/scroller/index';
+import Component from 'common/myReflux/component';
 
-// 组件类
-class Select extends React.Component {
-	getClassName(){
-		let me = this;
-		let {props} = me;
-		let arr = ['limit-select'];
-		if( props.className ){
-			arr.push(props.className);
-		};
-		if( props.showList ){
-			arr.push('limit-select-focus');
-		};
-		return arr.join(' ')
-	}
+class Select extends Component {
 	getFirstSelect(){
 		let me = this;
-		let {props} = me;
-		let {list} = props;
+		let {props: {list}} = me;
 		let key = null;
 		list.some((val) => {
 			if( val.selected ){
@@ -35,67 +20,94 @@ class Select extends React.Component {
 		};
 		return key;
 	}
-	getRightHeight(){
-		let me = this;
-		let {props} = me;
-		let leg = props.list.length;
-		if( leg < props.size ){
-			return 28 * leg;
-		}else{
-			return props.size * 28;
-		};
-	}
 	render(){
 		let me = this;
-		let {props} = me;
+		let {props: {width, height, focus, scrollSize, list, focusNumber}} = me;
+		let lineHeight = (height-18)/2;
 		return (
-			<div ref="selectMock" className={me.getClassName()}
-				style={ {width:props.width} }>
-				<div ref="selectTrigger" className="ch-show fn-ellipsis"><i className="ch-san"></i>{me.getFirstSelect()}</div>
-				<div className="ch-list" ref="selectList">
-					<Scroller ref="scroller" height={me.getRightHeight()} barHeight={props.barHeight} >
-						<ul>
-							{props.list.map((val, key) => {
-								return (
-									<li title={val.key} className="fn-ellipsis" key={key} 
-										data-value={val.value}  onClick={Actions(me).select.bind(null, val, key)}>{val.key}</li>
-								)
-							})}
-						</ul>
-					</Scroller>
+			<div className={me.getClassName('mod-select', focus ? 'mod-select-focus' : '')} style={{width:width, height:height}}>
+				<div className="select-trigger">
+					<input type="text" 
+						style={{paddingTop:lineHeight, paddingBottom: lineHeight}}
+						ref="input"
+						value={me.getFirstSelect()} 
+						readOnly="readOnly" 
+						onKeyDown={me.keyDown.bind(me)} 
+						onFocus={me.focus.bind(me)}
+						onBlur={() => { setTimeout(() => {Actions(me).focus(null, false)}, 100) }} />
+					<i className="select-trigger-san"></i>
 				</div>
+				{do{
+					if( focus ){
+						<div className="select-container" style={{top:height-1}}>
+						{do{
+							if( list.length <= scrollSize ){
+								<ul className="fn-clear">
+									{list.map((val, key) => {
+										return <li key={key}
+											onClick={Actions(me).select.bind(null, val, key)}
+											className={`${key === focusNumber ? 'active': ''}`}>{val.key}</li>;
+									})}
+								</ul>
+							}else{
+								<Scroller height={scrollSize * 28} ref="scroller" barHeight="50">
+									<ul className="fn-clear">
+										{list.map((val, key) => {
+											return <li key={key} 
+												onClick={Actions(me).select.bind(null, val, key)}
+												className={`${key === focusNumber ? 'active': ''}`}>{val.key}</li>;
+										})}
+									</ul>
+								</Scroller>
+							}
+						}}
+						</div>
+					}
+				}}
 			</div>
 		);
 	}
-	componentDidMount(){
+	focus(){
 		let me = this;
-		let {refs, props} = me;
-		let {selectTrigger, selectList, scroller} = refs;
-		$(selectTrigger).on('click.select', (e) => {
-			e.stopPropagation();
-			if( props.disabled ){
-				return;
+		Actions(me).focus(true).then(me.scrollTo.bind(me));
+	}
+	scrollTo(){
+		let me = this;
+		let {refs: {scroller}} = me;
+		if( scroller ){
+			let num = me.props.focusNumber - me.props.scrollSize + 1;
+			scroller.refs.com.scrollTo(num*28)
+		};
+	}
+	keyDown(e){
+		let me = this;
+		let {refs: {input, scroller}, props: {focusNumber, list}} = me;
+		if( !e.shiftKey && !e.altKey && list.length ){
+			// 
+			let keyMap = {
+				38: 'up',
+				40: 'down'
 			};
-			if( !me.props.showList ){
-				$(document).on('click.select', () => {
-					$(document).off('click.select');
-					Actions(me).showList();
+			if( keyMap[e.keyCode] ){
+				e.preventDefault();
+				Actions(me).keyDown(keyMap[e.keyCode]).then(me.scrollTo.bind(me));
+			}else if(e.keyCode === 13){
+				e.preventDefault();
+				Actions(me).enterDown().then(() => {
+					input.blur();
 				});
-			}else{
-				$(document).off('click.select');
 			};
-			Actions(me).showList();
-		});
-		me.TitleWidget = Title.use(selectList, {className: 'limit-select-title', diffX:15, diffY:15}, props.titleSize);
+		};
+	}
+	componentDidUpdate(){
+
+	}
+	componentDidMount(){
+
 	}
 	componentWillUnmount(){
-		let me = this;
-		let {refs} = me;
-		let {selectTrigger} = refs;
-		$(selectTrigger).off('click.select');
-		me.TitleWidget.destroy();
+		
 	}
 };
 
 module.exports = Select;
-

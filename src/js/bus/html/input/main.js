@@ -1,4 +1,4 @@
 
-import Component from './index';
+import Index from './index';
 
-ReactDOM.render( <Component />, document.getElementById('container') );
+ReactDOM.render( <Index />, document.getElementById('container') );

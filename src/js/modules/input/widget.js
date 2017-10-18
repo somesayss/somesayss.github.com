@@ -1,12 +1,9 @@
-"use strict";
 
-// 依赖
-const limit = require('limit');
-const originClass = require('./index');
-const Widget = require('common/myReflux/widget');
+import Index from './index';
+import Widget from 'common/myReflux/widget';
 
-class originWidget extends Widget {
+class OriginWidget extends Widget {
 	static originClass = originClass
 };
 
-module.exports = originWidget;
+export default OriginWidget;

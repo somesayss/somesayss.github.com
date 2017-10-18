@@ -1,13 +1,12 @@
 "use strict";
 
 // 依赖
-const limit = require('limit');
-const ParseForm = require('modules/parseForm/index');
+import DomUtil from 'common/domUtil';
+import ParseForm from 'modules/parseForm/index';
 
 class Upload extends ParseForm {
 	props = {
-		a: 'a1'
-		,url: '/common/upload.json'
+		url: '/common/upload.json'
 		,onprogress: limit.K
 		,errParseEle: '上传失败，未解析到element。'
 		,errSys: '上传失败，系统错误。'
@@ -36,9 +35,10 @@ class Upload extends ParseForm {
 			AJAX.open('POST', state.url);
 			// 上传进度
 			AJAX.upload.onprogress = function(e){
-				let loaded = e.loaded;
-				let total = e.total;
-				state.onprogress( limit(loaded/total).toFixed(2).toNumber().val(), loaded, total );
+				let {loaded, total} = e;
+				if( total ){
+					state.onprogress( limit(loaded/total).toFixed(2).toNumber().val(), loaded, total );
+				};
 			};
 			// 结束
 			AJAX.onload = function(e){
@@ -52,22 +52,24 @@ class Upload extends ParseForm {
 	iframeSubmit(){
 		let me = this;
 		return new Promise((resolve, reject) => {
+			let {state} = me;
 			let element = me.element;
 			if( !element ){
 				return reject(me.state.errParseEle);
 			};
 			let iframe = document.createElement('iframe');
 			element.target = iframe.name = `upload${limit.getUid()}`;
+			element.action = state.url;
 			iframe.style.display = 'none';
 			document.body.appendChild(iframe);
-			iframe.onload = function(){
-				iframe.onload = null;
+			$(iframe).on('load', () => {
+				$(iframe).off('load');
 				let iframeBody = iframe.contentWindow.document.body;
 				let responseText = iframeBody.innerHTML.replace(/<.*?>/g, '');
 				me.parseRespone(responseText, resolve, reject);
 				me.removeHideArea(iframe);
 				element.target = '';
-			};
+			});
 			element.submit();
 		});
 	}
@@ -94,12 +96,15 @@ class Upload extends ParseForm {
 		};
 	}
 	removeHideArea(element){
-		let me = this;
-		let div = document.createElement('div');
-		div.appendChild(element);
-		div.innerHTML = '';
-		div = null;
+		DomUtil.clearDom(element);
 	}
 }
 
 module.exports = Upload;
+
+
+
+
+
+
+

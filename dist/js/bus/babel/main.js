@@ -1,2 +1,284 @@
-!function(e){function t(n){if(o[n])return o[n].exports;var r=o[n]={exports:{},id:n,loaded:!1};return e[n].call(r.exports,r,r.exports,t),r.loaded=!0,r.exports}var o={};return t.m=e,t.c=o,t.p="/dist/",t(0)}([function(e,t,o){e.exports=o(1)},function(e,t,o){function n(e,t){if(!e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!t||"object"!==("undefined"==typeof t?"undefined":u(t))&&"function"!=typeof t?e:t}function r(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+("undefined"==typeof t?"undefined":u(t)));e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(Object.setPrototypeOf?Object.setPrototypeOf(e,t):e.__proto__=t)}function i(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function a(e,t,o){return t in e?Object.defineProperty(e,t,{value:o,enumerable:!0,configurable:!0,writable:!0}):e[t]=o,e}var c,u="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol?"symbol":typeof e},l=Object.assign||function(e){for(var t=1;t<arguments.length;t++){var o=arguments[t];for(var n in o)Object.prototype.hasOwnProperty.call(o,n)&&(e[n]=o[n])}return e},f=function s(e,t,o){null===e&&(e=Function.prototype);var n=Object.getOwnPropertyDescriptor(e,t);if(void 0===n){var r=Object.getPrototypeOf(e);return null===r?void 0:s(r,t,o)}if("value"in n)return n.value;var i=n.get;if(void 0!==i)return i.call(o)},p=function(){function e(e,t){for(var o=0;o<t.length;o++){var n=t[o];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}return function(t,o,n){return o&&e(t.prototype,o),n&&e(t,n),t}}();c=function(e,t,o){function c(e){for(var t=arguments.length,o=Array(t>1?t-1:0),n=1;n<t;n++)o[n-1]=arguments[n];console.log(this,"x",o)}var u,s,y,b="a1",v="b1",h=(u={},a(u,"a1","a1"),a(u,"b",v),a(u,"aaa",function(){}),a(u,"bbb",function(){}),a(u,"ccc","ccc3"),u,{e1:"e11",e2:"e22",e3:"e33"}),d=(h.e1,h.e2,h.e3,function(){function e(t){i(this,e),this.store={a:"a1"},this.name=t}return p(e,[{key:"show",value:function(){console.log(this.name)}}],[{key:"xixi",value:function(){return"xixi"}}]),e}());d.a="a1";var g=function(e){function t(e,o){i(this,t);var r=n(this,(t.__proto__||Object.getPrototypeOf(t)).apply(this,arguments));return r.store={b:"b2"},r.age=o,r}return r(t,e),p(t,[{key:"show",value:function(){f(t.prototype.__proto__||Object.getPrototypeOf(t.prototype),"show",this).call(this),console.log(this.age)}}],[{key:"xixi",value:function(){return"xi1xi1"}}]),t}(d),O=new g("shao2",28);console.log(g.a,"i want"),O.show();var w=["i1","i2","i3"];[].concat(w);c.apply(void 0,w),(s="111",y=c).call.apply(y,[s].concat(w)),console.log(!0);var x=["a1","a2","a3"],m=Array.prototype,j=m.map,_=m.forEach;j.call(x,function(e,t){});var P=_.bind(x);P(function(e){console.log(e)});l({},b,v)}.call(t,o,t,e),!(void 0!==c&&(e.exports=c))}]);
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId])
+/******/ 			return installedModules[moduleId].exports;
+/******/
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			exports: {},
+/******/ 			id: moduleId,
+/******/ 			loaded: false
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.loaded = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "/dist/";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(0);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(1);
+
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_RESULT__;"use strict";
+	/**
+	 * 业务
+	 */
+	
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+	
+	var _extends = Object.assign || function (target) {
+		for (var i = 1; i < arguments.length; i++) {
+			var source = arguments[i];for (var key in source) {
+				if (Object.prototype.hasOwnProperty.call(source, key)) {
+					target[key] = source[key];
+				}
+			}
+		}return target;
+	};
+	
+	var _get = function get(object, property, receiver) {
+		if (object === null) object = Function.prototype;var desc = Object.getOwnPropertyDescriptor(object, property);if (desc === undefined) {
+			var parent = Object.getPrototypeOf(object);if (parent === null) {
+				return undefined;
+			} else {
+				return get(parent, property, receiver);
+			}
+		} else if ("value" in desc) {
+			return desc.value;
+		} else {
+			var getter = desc.get;if (getter === undefined) {
+				return undefined;
+			}return getter.call(receiver);
+		}
+	};
+	
+	var _createClass = function () {
+		function defineProperties(target, props) {
+			for (var i = 0; i < props.length; i++) {
+				var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+			}
+		}return function (Constructor, protoProps, staticProps) {
+			if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+		};
+	}();
+	
+	function _possibleConstructorReturn(self, call) {
+		if (!self) {
+			throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+		}return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+	}
+	
+	function _inherits(subClass, superClass) {
+		if (typeof superClass !== "function" && superClass !== null) {
+			throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
+		}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+	}
+	
+	function _classCallCheck(instance, Constructor) {
+		if (!(instance instanceof Constructor)) {
+			throw new TypeError("Cannot call a class as a function");
+		}
+	}
+	
+	function _defineProperty(obj, key, value) {
+		if (key in obj) {
+			Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
+		} else {
+			obj[key] = value;
+		}return obj;
+	}
+	
+	!(__WEBPACK_AMD_DEFINE_RESULT__ = function (require, exports, module) {
+		var _obj, _context, _ref;
+	
+		// 定义局部变量
+		var a = 'a1';
+	
+		// 定义全局变量
+		var b = 'b1';
+	
+		// 箭头操作符号
+		var fn1 = function fn1(a, b) {
+			return a + b;
+		};
+		var fn2 = function fn2(a, b) {
+			return a + b;
+		};
+		var fn3 = function fn3(a) {
+			return a;
+		};
+	
+		// 对象的定义
+		var obj = (_obj = {}, _defineProperty(_obj, 'a1', 'a1'), _defineProperty(_obj, 'b', b), _defineProperty(_obj, 'aaa', function aaa() {}), _defineProperty(_obj, 'bbb', function bbb() {}), _defineProperty(_obj, 'ccc', 'ccc3'), _obj);
+	
+		// 字符串模板
+		var c = 'c1';
+	
+		var d = '\n\t\tmy name is ' + c + ' haha\n\t\t<div> ' + c + ' </div>\n\t';
+	
+		// 解构
+		var e = 'e1';
+		var f = 'f1';
+		var g = 'g1';
+		var _e1$e2$e = { e1: 'e11', e2: 'e22', e3: 'e33' };
+		var e1 = _e1$e2$e.e1;
+		var e2 = _e1$e2$e.e2;
+		var e3 = _e1$e2$e.e3;
+	
+		// 类
+	
+		var A = function () {
+			function A(name) {
+				_classCallCheck(this, A);
+	
+				this.store = {
+					a: 'a1'
+				};
+	
+				this.name = name;
+			}
+	
+			_createClass(A, [{
+				key: 'show',
+				value: function show() {
+					console.log(this.name);
+				}
+			}], [{
+				key: 'xixi',
+				value: function xixi() {
+					return 'xixi';
+				}
+			}]);
+	
+			return A;
+		}();
+	
+		A.a = 'a1';
+		;
+	
+		// 继承
+	
+		var B = function (_A) {
+			_inherits(B, _A);
+	
+			function B(name, age) {
+				_classCallCheck(this, B);
+	
+				var _this = _possibleConstructorReturn(this, (B.__proto__ || Object.getPrototypeOf(B)).apply(this, arguments));
+	
+				_this.store = {
+					b: 'b2'
+				};
+	
+				_this.age = age;
+				return _this;
+			}
+	
+			_createClass(B, [{
+				key: 'show',
+				value: function show() {
+					_get(B.prototype.__proto__ || Object.getPrototypeOf(B.prototype), 'show', this).call(this);
+					console.log(this.age);
+				}
+			}], [{
+				key: 'xixi',
+				value: function xixi() {
+					return 'xi1xi1';
+				}
+				// static a = 'a2'
+	
+			}]);
+	
+			return B;
+		}(A);
+	
+		;
+	
+		var bbb = new B('shao2', 28);
+		console.log(B.a, 'i want');
+		bbb.show();
+	
+		// console.log( A.xixi(), 'aaaaaaa' );
+		// console.log(bb, bb instanceof B, bb instanceof A); // true true
+		// console.log(bb.constructor, bb.constructor === B, bb.constructor === A); // true false
+	
+		// 默认参数
+		function h() {
+			var name = arguments.length <= 0 || arguments[0] === undefined ? 'kiss' : arguments[0];
+			var age = arguments.length <= 1 || arguments[1] === undefined ? 19 : arguments[1];
+	
+			console.log(name, age);
+		};
+	
+		// 
+		var i = ['i1', 'i2', 'i3'];
+	
+		var j = [].concat(i);
+	
+		function per2(y) {
+			for (var _len = arguments.length, x = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+				x[_key - 1] = arguments[_key];
+			}
+	
+			console.log(this, 'x', x);
+		};
+	
+		per2.apply(undefined, i);
+		(_ref = (_context = '111', per2)).call.apply(_ref, [_context].concat(i));
+	
+		// 8进制
+		console.log(503 === 503);
+	
+		// 绑定上下文
+		var content = ['a1', 'a2', 'a3'];
+		var _Array$prototype = Array.prototype;
+		var map = _Array$prototype.map;
+		var forEach = _Array$prototype.forEach;
+	
+		map.call(content, function (val, key) {});
+	
+		var conEachFn = forEach.bind(content);
+		conEachFn(function (val) {
+			console.log(val);
+		});
+	
+		var o1 = { a: 'a1' };
+		var o2 = { b: 'b1' };
+		var o3 = _extends({}, a, b);
+	}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+
+/***/ })
+/******/ ]);
 //# sourceMappingURL=main.js.map

@@ -22,5 +22,6 @@ class SearchList extends Component {
 	}
 };
 
-module.exports = SearchList;
+export default SearchList;
+
 

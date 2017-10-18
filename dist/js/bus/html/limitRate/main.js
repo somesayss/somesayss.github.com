@@ -1,2 +1,1055 @@
-!function(e){function t(r){if(n[r])return n[r].exports;var o=n[r]={exports:{},id:r,loaded:!1};return e[r].call(o.exports,o,o.exports,t),o.loaded=!0,o.exports}var n={};return t.m=e,t.c=n,t.p="/dist/",t(0)}({0:function(e,t,n){e.exports=n(114)},8:function(e,t){e.exports=limit},15:function(e,t,n){"use strict";function r(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function o(e,t){if(!e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!t||"object"!=typeof t&&"function"!=typeof t?e:t}function a(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(Object.setPrototypeOf?Object.setPrototypeOf(e,t):e.__proto__=t)}var i=Object.assign||function(e){for(var t=1;t<arguments.length;t++){var n=arguments[t];for(var r in n)Object.prototype.hasOwnProperty.call(n,r)&&(e[r]=n[r])}return e},u=function(){function e(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}}(),c=n(16),s=n(8),l=n(17);e.exports=function(e,t){var n=function(n){function p(e){r(this,p);var n=o(this,(p.__proto__||Object.getPrototypeOf(p)).apply(this,arguments)),a=n,i=void 0,u=a.clearProps(e);return i=a.__controller__=new t(u),i.com=a,a.state=s.assignSuper({},i.getInitialState(),u),i.props=a.getPerProps(u),i.state=a.getPerState(a.state),a.state.actionId=a.state.actionId||"uaid"+s.getUid(),a.state.actionUUid=i.Actions.actionUUid="uuid"+s.getUid(),e.actionCid&&(a.state.actionCid=i.Actions.actionCid=e.actionCid),l.set(a.state.actionId,i.Actions),n}return a(p,n),u(p,[{key:"getPerProps",value:function(e){var n={};return s.each(t.defaultProps,function(t,r){n[r]=e[r]}),n}},{key:"getPerState",value:function(e){var t=this,n={};return s.each(t.__controller__.state,function(t,r){n[r]=e[r]}),n}},{key:"componentWillReceiveProps",value:function(e){var t=this;t.propsFromOther=!0}},{key:"shouldComponentUpdate",value:function(){var e=this,t=!!e.propsFromOther;return!e.state.shouldComponentNotUpdate||(!t||(e.propsFromOther=!1))}},{key:"clearProps",value:function(e){var n=s.assign({},e);return delete n.actionId,delete n.actionUUid,delete n.actionCid,n.actionId=t.defaultProps&&t.defaultProps.actionId,n}},{key:"componentWillUpdate",value:function(e){var t=this,n=t.__controller__;t.propsFromOther&&(s.assignSuper(t.state,t.clearProps(e)),s.cb(n.componentWillUpdate).call(n,t.state),n.state=t.getPerState(t.state),n.props=t.getPerProps(t.state))}},{key:"componentDidUpdate",value:function(){var e=this;e.propsFromOther=!1}},{key:"render",value:function(){var t=this;return c.createElement(e,i({},t.state,{ref:"com"}))}},{key:"componentWillUnmount",value:function(){var e=this;l.remove(e.state.actionId,e.__controller__.Actions),e.__controller__.destroy()}}]),p}(c.Component);return n.defaultProps=t.defaultProps,n.propTypes=t.propTypes,n}},16:function(e,t){e.exports=React},17:function(e,t,n){"use strict";function r(e,t){if(c.isObjectSuper(e))return e.props[t]||e.state[t]}function o(e){return l[r(e,"actionId")||e]||[]}function a(e,t){var n=o(e);if(t)return n.filter(function(e){return e.actionCid===t});var a=function(){var t=r(e,"actionUUid");return t?{v:n.filter(function(e){return e.actionUUid===t})}:{v:n}}();return"object"===("undefined"==typeof a?"undefined":u(a))?a.v:void 0}function i(e,t){var n=a(e,t),r={};return n.length&&c.each(n[0],function(e,t){c.isFunction(e)?r[t]=function(){for(var e=arguments.length,r=Array(e),o=0;o<e;o++)r[o]=arguments[o];return Promise.all(n.map(function(e){return e[t].apply(e,r)}))}:r[t]=n.map(function(e){return e[t]}).join(",")}),r}var u="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol?"symbol":typeof e},c=n(8),s=window.Actions=function(e,t){return i(e,t)},l=s.pool={};s.set=function(e,t){var n=l[e];n?n.push(t):l[e]=[t]},s.get=function(e,t){return a(e,t)},s.remove=function(e,t){var n=l[e];n&&(c.remove(n,t),n.length||delete l[e])},e.exports=s},21:function(e,t){"use strict";e.exports=function(){var e=[];return e.toString=function(){for(var e=[],t=0;t<this.length;t++){var n=this[t];n[2]?e.push("@media "+n[2]+"{"+n[1]+"}"):e.push(n[1])}return e.join("")},e.i=function(t,n){"string"==typeof t&&(t=[[null,t,""]]);for(var r={},o=0;o<this.length;o++){var a=this[o][0];"number"==typeof a&&(r[a]=!0)}for(o=0;o<t.length;o++){var i=t[o];"number"==typeof i[0]&&r[i[0]]||(n&&!i[2]?i[2]=n:n&&(i[2]="("+i[2]+") and ("+n+")"),e.push(i))}},e}},22:function(e,t,n){function r(e,t){for(var n=0;n<e.length;n++){var r=e[n],o=d[r.id];if(o){o.refs++;for(var a=0;a<o.parts.length;a++)o.parts[a](r.parts[a]);for(;a<r.parts.length;a++)o.parts.push(s(r.parts[a],t))}else{for(var i=[],a=0;a<r.parts.length;a++)i.push(s(r.parts[a],t));d[r.id]={id:r.id,refs:1,parts:i}}}}function o(e){for(var t=[],n={},r=0;r<e.length;r++){var o=e[r],a=o[0],i=o[1],u=o[2],c=o[3],s={css:i,media:u,sourceMap:c};n[a]?n[a].parts.push(s):t.push(n[a]={id:a,parts:[s]})}return t}function a(e,t){var n=y(),r=g[g.length-1];if("top"===e.insertAt)r?r.nextSibling?n.insertBefore(t,r.nextSibling):n.appendChild(t):n.insertBefore(t,n.firstChild),g.push(t);else{if("bottom"!==e.insertAt)throw new Error("Invalid value for parameter 'insertAt'. Must be 'top' or 'bottom'.");n.appendChild(t)}}function i(e){e.parentNode.removeChild(e);var t=g.indexOf(e);t>=0&&g.splice(t,1)}function u(e){var t=document.createElement("style");return t.type="text/css",a(e,t),t}function c(e){var t=document.createElement("link");return t.rel="stylesheet",a(e,t),t}function s(e,t){var n,r,o;if(t.singleton){var a=b++;n=m||(m=u(t)),r=l.bind(null,n,a,!1),o=l.bind(null,n,a,!0)}else e.sourceMap&&"function"==typeof URL&&"function"==typeof URL.createObjectURL&&"function"==typeof URL.revokeObjectURL&&"function"==typeof Blob&&"function"==typeof btoa?(n=c(t),r=f.bind(null,n),o=function(){i(n),n.href&&URL.revokeObjectURL(n.href)}):(n=u(t),r=p.bind(null,n),o=function(){i(n)});return r(e),function(t){if(t){if(t.css===e.css&&t.media===e.media&&t.sourceMap===e.sourceMap)return;r(e=t)}else o()}}function l(e,t,n,r){var o=n?"":r.css;if(e.styleSheet)e.styleSheet.cssText=x(t,o);else{var a=document.createTextNode(o),i=e.childNodes;i[t]&&e.removeChild(i[t]),i.length?e.insertBefore(a,i[t]):e.appendChild(a)}}function p(e,t){var n=t.css,r=t.media;if(r&&e.setAttribute("media",r),e.styleSheet)e.styleSheet.cssText=n;else{for(;e.firstChild;)e.removeChild(e.firstChild);e.appendChild(document.createTextNode(n))}}function f(e,t){var n=t.css,r=t.sourceMap;r&&(n+="\n/*# sourceMappingURL=data:application/json;base64,"+btoa(unescape(encodeURIComponent(JSON.stringify(r))))+" */");var o=new Blob([n],{type:"text/css"}),a=e.href;e.href=URL.createObjectURL(o),a&&URL.revokeObjectURL(a)}var d={},h=function(e){var t;return function(){return"undefined"==typeof t&&(t=e.apply(this,arguments)),t}},v=h(function(){return/msie [6-9]\b/.test(window.navigator.userAgent.toLowerCase())}),y=h(function(){return document.head||document.getElementsByTagName("head")[0]}),m=null,b=0,g=[];e.exports=function(e,t){t=t||{},"undefined"==typeof t.singleton&&(t.singleton=v()),"undefined"==typeof t.insertAt&&(t.insertAt="bottom");var n=o(e);return r(n,t),function(e){for(var a=[],i=0;i<n.length;i++){var u=n[i],c=d[u.id];c.refs--,a.push(c)}if(e){var s=o(e);r(s,t)}for(var i=0;i<a.length;i++){var c=a[i];if(0===c.refs){for(var l=0;l<c.parts.length;l++)c.parts[l]();delete d[c.id]}}}};var x=function(){var e=[];return function(t,n){return e[t]=n,e.filter(Boolean).join("\n")}}()},38:function(e,t,n){"use strict";function r(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}var o=function(){function e(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}}(),a=n(8),i=a.promise(),u=/on([A-Z])(\w*)/,c=function(){function e(){r(this,e),this.bindEvent()}return o(e,[{key:"bindEvent",value:function(){var e=this,t=e.Actions={};a(e.findAllPro()).filter(function(e,t){return u.test(t)}).each(function(n,r){var o=r.replace(u,function(e,t,n){return t.toLowerCase()+n});t[o]=function(){for(var t=arguments.length,r=Array(t),a=0;a<t;a++)r[a]=arguments[a];return e.state.actionStatus=o,n.apply(e,r)}})}},{key:"findAllPro",value:function(){for(var e=this,t={},n=e.constructor.prototype;n&&n.constructor!==Object;)a(n).keysSuper().each(function(e){"__proto__"===e||t[e]||(t[e]=n[e])}),n=n.__proto__;return t}},{key:"getInitialState",value:function(){return this.state||(this.state={})}},{key:"destroy",value:function(){var e=this;return a.each(e,function(t,n){delete e[n]}),e}},{key:"trigger",value:function(e,t){var n=this;n.com.setState(e,t)}},{key:"updateComponent",value:function(){var e=this,t=e.getInitialState();return new i(function(n){e.trigger(t,n.bind(null,"updateComponentSuccess"))})}}]),e}();e.exports=c},114:function(e,t,n){"use strict";var r=n(16),o=n(115),a=n(116);o.render(r.createElement(a,null),document.getElementById("container"))},115:function(e,t){e.exports=ReactDOM},116:function(e,t,n){"use strict";e.exports=n(15)(n(117),n(120))},117:function(e,t,n){"use strict";function r(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function o(e,t){if(!e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!t||"object"!=typeof t&&"function"!=typeof t?e:t}function a(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(Object.setPrototypeOf?Object.setPrototypeOf(e,t):e.__proto__=t)}var i=function(){function e(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}}();n(118);var u=n(16),c=n(8),s=function(e){function t(){return r(this,t),o(this,(t.__proto__||Object.getPrototypeOf(t)).apply(this,arguments))}return a(t,e),i(t,[{key:"render",value:function(){var e=this,t=e.props;return u.createElement("div",{className:"rate"},u.createElement("span",{className:"ch-txt"},"总金额："),u.createElement("input",{ref:"inputText1",className:"rate-input",title:"总金额",placeholder:"总金额",value:c.toFixed(t.amount),onChange:Actions(e).changeAmount}),u.createElement("br",null),u.createElement("br",null),u.createElement("span",{className:"ch-txt"},"年利率："),u.createElement("input",{ref:"inputText2",className:"rate-input",title:"年利率",placeholder:"年利率",value:t.rate,onChange:Actions(e).changeRate}),u.createElement("br",null),u.createElement("br",null),u.createElement("span",{className:"ch-txt"},"日收入："),u.createElement("input",{ref:"inputText3",className:"rate-input",title:"日收入",placeholder:"日收入",value:c.toFixed(e.getMountByDay(),2),onChange:c.K,readOnly:"readOnly"}),u.createElement("br",null),u.createElement("br",null),u.createElement("span",{className:"ch-txt"},"月收入："),u.createElement("input",{ref:"inputText4",className:"rate-input",title:"月收入",placeholder:"月收入",value:c.toFixed(e.getMountByMouth(30),2),onChange:c.K,readOnly:"readOnly"}),u.createElement("br",null),u.createElement("br",null),u.createElement("span",{className:"ch-txt"},"(35日)收入："),u.createElement("input",{ref:"inputText5",className:"rate-input",title:"季收入",placeholder:"35收入",value:c.toFixed(e.getMountByMouth(35),2),onChange:c.K,readOnly:"readOnly"}),u.createElement("br",null),u.createElement("br",null),u.createElement("span",{className:"ch-txt"},"年收入："),u.createElement("input",{ref:"inputText6",className:"rate-input",title:"年收入",placeholder:"年收入",value:c.toFixed(e.getMountByYear()),onChange:Actions(e).changeAmountYear}),u.createElement("br",null),u.createElement("br",null))}},{key:"setInputWidth",value:function(){var e=this,t=e.refs;c.each(t,function(e){e.style.width="1px",e.style.width=e.scrollWidth+3+"px"})}},{key:"componentDidMount",value:function(){return this.setInputWidth()}},{key:"componentDidUpdate",value:function(){return this.setInputWidth()}},{key:"getMountByDay",value:function(){var e=this,t=e.props;return c["?"](t.amount+" * "+t.rate+" / 365")}},{key:"getMountByMouth",value:function(e){var t=this,n=t.props;return c["?"](n.amount+" * "+n.rate+" / 365 * "+e)}},{key:"getMountByYear",value:function(){var e=this,t=e.props;return c["?"](t.amount+" * "+t.rate)}}]),t}(u.Component);e.exports=s},118:function(e,t,n){var r=n(119);"string"==typeof r&&(r=[[e.id,r,""]]);n(22)(r,{});r.locals&&(e.exports=r.locals)},119:function(e,t,n){t=e.exports=n(21)(),t.push([e.id,".rate{color:#666}.rate .ch-txt{line-height:26px;margin-right:5px}.rate-input{width:200px;border:1px solid #fff;border-radius:5px;padding:5px;font-size:12px;color:#666;vertical-align:middle}.rate-input:focus,.rate-input:hover{border:1px solid #fff;background:#f7f7f7}.rate-input[readonly]{cursor:not-allowed}",""])},120:function(e,t,n){"use strict";function r(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function o(e,t){if(!e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!t||"object"!=typeof t&&"function"!=typeof t?e:t}function a(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(Object.setPrototypeOf?Object.setPrototypeOf(e,t):e.__proto__=t)}var i=function(){function e(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}}(),u=n(38),c=n(8),s=function(e){function t(){var e,n,a,i;r(this,t);for(var u=arguments.length,c=Array(u),s=0;s<u;s++)c[s]=arguments[s];return n=a=o(this,(e=t.__proto__||Object.getPrototypeOf(t)).call.apply(e,[this].concat(c))),a.state={amount:2e5,rate:.042},i=n,o(a,i)}return a(t,e),i(t,[{key:"onChangeAmount",value:function(e){var t=this,n=t.state,r=(t.props,c.toNumber(e.target.value));if(!c.isNaN(r))return n.amount=r,t.updateComponent()}},{key:"onChangeRate",value:function(e){var t=this,n=t.state,r=(t.props,e.target.value);return n.rate=r,t.updateComponent()}},{key:"onChangeAmountYear",value:function(e){var t=this,n=t.state,r=(t.props,c.toNumber(e.target.value));if(!c.isNaN(r))return n.amount=r/n.rate,t.updateComponent()}}]),t}(u);e.exports=s}});
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId])
+/******/ 			return installedModules[moduleId].exports;
+/******/
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			exports: {},
+/******/ 			id: moduleId,
+/******/ 			loaded: false
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.loaded = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "/dist/";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(0);
+/******/ })
+/************************************************************************/
+/******/ ({
+
+/***/ 0:
+/***/ (function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(158);
+
+
+/***/ }),
+
+/***/ 11:
+/***/ (function(module, exports) {
+
+	"use strict";
+	
+	/*
+		MIT License http://www.opensource.org/licenses/mit-license.php
+		Author Tobias Koppers @sokra
+	*/
+	// css base code, injected by the css-loader
+	module.exports = function () {
+		var list = [];
+	
+		// return the list of modules as css string
+		list.toString = function toString() {
+			var result = [];
+			for (var i = 0; i < this.length; i++) {
+				var item = this[i];
+				if (item[2]) {
+					result.push("@media " + item[2] + "{" + item[1] + "}");
+				} else {
+					result.push(item[1]);
+				}
+			}
+			return result.join("");
+		};
+	
+		// import a list of modules into the list
+		list.i = function (modules, mediaQuery) {
+			if (typeof modules === "string") modules = [[null, modules, ""]];
+			var alreadyImportedModules = {};
+			for (var i = 0; i < this.length; i++) {
+				var id = this[i][0];
+				if (typeof id === "number") alreadyImportedModules[id] = true;
+			}
+			for (i = 0; i < modules.length; i++) {
+				var item = modules[i];
+				// skip already imported module
+				// this implementation is not 100% perfect for weird media query combinations
+				//  when a module is imported multiple times with different media queries.
+				//  I hope this will never occur (Hey this way we have smaller bundles)
+				if (typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+					if (mediaQuery && !item[2]) {
+						item[2] = mediaQuery;
+					} else if (mediaQuery) {
+						item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+					}
+					list.push(item);
+				}
+			}
+		};
+		return list;
+	};
+
+/***/ }),
+
+/***/ 12:
+/***/ (function(module, exports, __webpack_require__) {
+
+	/*
+		MIT License http://www.opensource.org/licenses/mit-license.php
+		Author Tobias Koppers @sokra
+	*/
+	var stylesInDom = {},
+		memoize = function(fn) {
+			var memo;
+			return function () {
+				if (typeof memo === "undefined") memo = fn.apply(this, arguments);
+				return memo;
+			};
+		},
+		isOldIE = memoize(function() {
+			return /msie [6-9]\b/.test(window.navigator.userAgent.toLowerCase());
+		}),
+		getHeadElement = memoize(function () {
+			return document.head || document.getElementsByTagName("head")[0];
+		}),
+		singletonElement = null,
+		singletonCounter = 0,
+		styleElementsInsertedAtTop = [];
+	
+	module.exports = function(list, options) {
+		if(false) {
+			if(typeof document !== "object") throw new Error("The style-loader cannot be used in a non-browser environment");
+		}
+	
+		options = options || {};
+		// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+		// tags it will allow on a page
+		if (typeof options.singleton === "undefined") options.singleton = isOldIE();
+	
+		// By default, add <style> tags to the bottom of <head>.
+		if (typeof options.insertAt === "undefined") options.insertAt = "bottom";
+	
+		var styles = listToStyles(list);
+		addStylesToDom(styles, options);
+	
+		return function update(newList) {
+			var mayRemove = [];
+			for(var i = 0; i < styles.length; i++) {
+				var item = styles[i];
+				var domStyle = stylesInDom[item.id];
+				domStyle.refs--;
+				mayRemove.push(domStyle);
+			}
+			if(newList) {
+				var newStyles = listToStyles(newList);
+				addStylesToDom(newStyles, options);
+			}
+			for(var i = 0; i < mayRemove.length; i++) {
+				var domStyle = mayRemove[i];
+				if(domStyle.refs === 0) {
+					for(var j = 0; j < domStyle.parts.length; j++)
+						domStyle.parts[j]();
+					delete stylesInDom[domStyle.id];
+				}
+			}
+		};
+	}
+	
+	function addStylesToDom(styles, options) {
+		for(var i = 0; i < styles.length; i++) {
+			var item = styles[i];
+			var domStyle = stylesInDom[item.id];
+			if(domStyle) {
+				domStyle.refs++;
+				for(var j = 0; j < domStyle.parts.length; j++) {
+					domStyle.parts[j](item.parts[j]);
+				}
+				for(; j < item.parts.length; j++) {
+					domStyle.parts.push(addStyle(item.parts[j], options));
+				}
+			} else {
+				var parts = [];
+				for(var j = 0; j < item.parts.length; j++) {
+					parts.push(addStyle(item.parts[j], options));
+				}
+				stylesInDom[item.id] = {id: item.id, refs: 1, parts: parts};
+			}
+		}
+	}
+	
+	function listToStyles(list) {
+		var styles = [];
+		var newStyles = {};
+		for(var i = 0; i < list.length; i++) {
+			var item = list[i];
+			var id = item[0];
+			var css = item[1];
+			var media = item[2];
+			var sourceMap = item[3];
+			var part = {css: css, media: media, sourceMap: sourceMap};
+			if(!newStyles[id])
+				styles.push(newStyles[id] = {id: id, parts: [part]});
+			else
+				newStyles[id].parts.push(part);
+		}
+		return styles;
+	}
+	
+	function insertStyleElement(options, styleElement) {
+		var head = getHeadElement();
+		var lastStyleElementInsertedAtTop = styleElementsInsertedAtTop[styleElementsInsertedAtTop.length - 1];
+		if (options.insertAt === "top") {
+			if(!lastStyleElementInsertedAtTop) {
+				head.insertBefore(styleElement, head.firstChild);
+			} else if(lastStyleElementInsertedAtTop.nextSibling) {
+				head.insertBefore(styleElement, lastStyleElementInsertedAtTop.nextSibling);
+			} else {
+				head.appendChild(styleElement);
+			}
+			styleElementsInsertedAtTop.push(styleElement);
+		} else if (options.insertAt === "bottom") {
+			head.appendChild(styleElement);
+		} else {
+			throw new Error("Invalid value for parameter 'insertAt'. Must be 'top' or 'bottom'.");
+		}
+	}
+	
+	function removeStyleElement(styleElement) {
+		styleElement.parentNode.removeChild(styleElement);
+		var idx = styleElementsInsertedAtTop.indexOf(styleElement);
+		if(idx >= 0) {
+			styleElementsInsertedAtTop.splice(idx, 1);
+		}
+	}
+	
+	function createStyleElement(options) {
+		var styleElement = document.createElement("style");
+		styleElement.type = "text/css";
+		insertStyleElement(options, styleElement);
+		return styleElement;
+	}
+	
+	function createLinkElement(options) {
+		var linkElement = document.createElement("link");
+		linkElement.rel = "stylesheet";
+		insertStyleElement(options, linkElement);
+		return linkElement;
+	}
+	
+	function addStyle(obj, options) {
+		var styleElement, update, remove;
+	
+		if (options.singleton) {
+			var styleIndex = singletonCounter++;
+			styleElement = singletonElement || (singletonElement = createStyleElement(options));
+			update = applyToSingletonTag.bind(null, styleElement, styleIndex, false);
+			remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true);
+		} else if(obj.sourceMap &&
+			typeof URL === "function" &&
+			typeof URL.createObjectURL === "function" &&
+			typeof URL.revokeObjectURL === "function" &&
+			typeof Blob === "function" &&
+			typeof btoa === "function") {
+			styleElement = createLinkElement(options);
+			update = updateLink.bind(null, styleElement);
+			remove = function() {
+				removeStyleElement(styleElement);
+				if(styleElement.href)
+					URL.revokeObjectURL(styleElement.href);
+			};
+		} else {
+			styleElement = createStyleElement(options);
+			update = applyToTag.bind(null, styleElement);
+			remove = function() {
+				removeStyleElement(styleElement);
+			};
+		}
+	
+		update(obj);
+	
+		return function updateStyle(newObj) {
+			if(newObj) {
+				if(newObj.css === obj.css && newObj.media === obj.media && newObj.sourceMap === obj.sourceMap)
+					return;
+				update(obj = newObj);
+			} else {
+				remove();
+			}
+		};
+	}
+	
+	var replaceText = (function () {
+		var textStore = [];
+	
+		return function (index, replacement) {
+			textStore[index] = replacement;
+			return textStore.filter(Boolean).join('\n');
+		};
+	})();
+	
+	function applyToSingletonTag(styleElement, index, remove, obj) {
+		var css = remove ? "" : obj.css;
+	
+		if (styleElement.styleSheet) {
+			styleElement.styleSheet.cssText = replaceText(index, css);
+		} else {
+			var cssNode = document.createTextNode(css);
+			var childNodes = styleElement.childNodes;
+			if (childNodes[index]) styleElement.removeChild(childNodes[index]);
+			if (childNodes.length) {
+				styleElement.insertBefore(cssNode, childNodes[index]);
+			} else {
+				styleElement.appendChild(cssNode);
+			}
+		}
+	}
+	
+	function applyToTag(styleElement, obj) {
+		var css = obj.css;
+		var media = obj.media;
+	
+		if(media) {
+			styleElement.setAttribute("media", media)
+		}
+	
+		if(styleElement.styleSheet) {
+			styleElement.styleSheet.cssText = css;
+		} else {
+			while(styleElement.firstChild) {
+				styleElement.removeChild(styleElement.firstChild);
+			}
+			styleElement.appendChild(document.createTextNode(css));
+		}
+	}
+	
+	function updateLink(linkElement, obj) {
+		var css = obj.css;
+		var sourceMap = obj.sourceMap;
+	
+		if(sourceMap) {
+			// http://stackoverflow.com/a/26603875
+			css += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + " */";
+		}
+	
+		var blob = new Blob([css], { type: "text/css" });
+	
+		var oldSrc = linkElement.href;
+	
+		linkElement.href = URL.createObjectURL(blob);
+	
+		if(oldSrc)
+			URL.revokeObjectURL(oldSrc);
+	}
+
+
+/***/ }),
+
+/***/ 15:
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	// 依赖
+	
+	Object.defineProperty(exports, "__esModule", {
+				value: true
+	});
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _actions = __webpack_require__(16);
+	
+	var _actions2 = _interopRequireDefault(_actions);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var HOC = function HOC(Wrapper, Class) {
+				var WrapperComponent = function (_React$Component) {
+							_inherits(WrapperComponent, _React$Component);
+	
+							function WrapperComponent(props) {
+										_classCallCheck(this, WrapperComponent);
+	
+										var _this = _possibleConstructorReturn(this, (WrapperComponent.__proto__ || Object.getPrototypeOf(WrapperComponent)).apply(this, arguments));
+	
+										var me = _this;
+										var __controller__ = void 0;
+										var clearProps = me.clearProps(props);
+										__controller__ = me.__controller__ = new Class(clearProps);
+										__controller__.com = me;
+										me.state = limit.assignSuper({}, __controller__.getInitialState(), clearProps);
+										__controller__.props = me.getPerProps(clearProps);
+										__controller__.state = me.getPerState(me.state);
+										me.state.actionId = me.state.actionId || "uaid" + limit.getUid();
+										me.state.actionUUid = __controller__.Actions.actionUUid = "uuid" + limit.getUid();
+										if (props.actionCid) {
+													me.state.actionCid = __controller__.Actions.actionCid = props.actionCid;
+										};
+										_actions2.default.set(me.state.actionId, __controller__.Actions);
+										return _this;
+							}
+	
+							_createClass(WrapperComponent, [{
+										key: "getPerProps",
+										value: function getPerProps(props) {
+													var outProps = {};
+													limit.each(Class.defaultProps, function (val, key) {
+																outProps[key] = props[key];
+													});
+													return outProps;
+										}
+							}, {
+										key: "getPerState",
+										value: function getPerState(state) {
+													var me = this;
+													var outState = {};
+													limit.each(me.__controller__.state, function (val, key) {
+																outState[key] = state[key];
+													});
+													return outState;
+										}
+							}, {
+										key: "componentWillReceiveProps",
+										value: function componentWillReceiveProps(props) {
+													var me = this;
+													me.propsFromOther = true;
+										}
+							}, {
+										key: "shouldComponentUpdate",
+										value: function shouldComponentUpdate() {
+													var me = this;
+													var propsFromOther = !!me.propsFromOther;
+													if (me.state.shouldComponentNotUpdate) {
+																if (propsFromOther) {
+																			return me.propsFromOther = false;
+																} else {
+																			return true;
+																};
+													} else {
+																return true;
+													};
+										}
+							}, {
+										key: "clearProps",
+										value: function clearProps(props) {
+													var newProps = limit.assign({}, props);
+													delete newProps.actionId;
+													delete newProps.actionUUid;
+													delete newProps.actionCid;
+													newProps.actionId = Class.defaultProps && Class.defaultProps.actionId;
+													return newProps;
+										}
+							}, {
+										key: "componentWillUpdate",
+										value: function componentWillUpdate(props) {
+													var me = this;
+													var __controller__ = me.__controller__;
+													// 如果是外部传入的属性全量更新
+													// if( me.propsFromOther ){
+													// 	me.nextState = limit.assignSuper({}, me.state, me.clearProps(props));
+													// 	limit.cb(__controller__.componentWillUpdate).call(__controller__, me.nextState);
+													// 	__controller__.state = me.getPerState(me.nextState);
+													// 	__controller__.props = me.getPerProps(me.nextState);
+													// }else{
+													// 	delete me.nextState;
+													// };
+	
+													if (me.propsFromOther) {
+																limit.assignSuper(me.state, me.clearProps(props));
+																__controller__.state = me.getPerState(me.state);
+																__controller__.props = me.getPerProps(me.state);
+																if (limit.isFunction(__controller__.componentWillUpdate)) {
+																			__controller__.componentWillUpdate(me.state);
+																			limit.assignSuper(me.state, __controller__.state);
+																};
+													};
+										}
+							}, {
+										key: "componentDidUpdate",
+										value: function componentDidUpdate() {
+													var me = this;
+													me.propsFromOther = false;
+										}
+							}, {
+										key: "render",
+										value: function render() {
+													var me = this;
+													return React.createElement(Wrapper, _extends({}, me.state, { ref: "com" }));
+										}
+							}, {
+										key: "componentWillUnmount",
+										value: function componentWillUnmount() {
+													var me = this;
+													_actions2.default.remove(me.state.actionId, me.__controller__.Actions);
+													me.__controller__.destroy();
+										}
+							}]);
+	
+							return WrapperComponent;
+				}(React.Component);
+	
+				WrapperComponent.defaultProps = Class.defaultProps;
+				WrapperComponent.propTypes = Class.propTypes;
+				;
+				return WrapperComponent;
+	};
+	
+	exports.default = HOC;
+
+/***/ }),
+
+/***/ 16:
+/***/ (function(module, exports) {
+
+	"use strict";
+	
+	// 变量
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	var Actions = window.Actions = function (id, cid) {
+		return getReturnObj(id, cid);
+	};
+	
+	var ActionsPool = Actions.pool = {};
+	
+	Actions.set = function (id, action) {
+		var pool = ActionsPool[id];
+		if (pool) {
+			pool.push(action);
+		} else {
+			ActionsPool[id] = [action];
+		};
+	};
+	
+	// 获取正确的ID
+	function getPropTrueId(obj, key) {
+		if (limit.isObjectSuper(obj)) {
+			return obj.props[key] || obj.state[key];
+		};
+	};
+	
+	// 通过ID获取
+	function getAllPoolById(id) {
+		return ActionsPool[getPropTrueId(id, 'actionId') || id] || [];
+	};
+	
+	// 获取目标
+	function getTargetPool(id, cid) {
+		var pool = getAllPoolById(id);
+		if (cid) {
+			return pool.filter(function (val) {
+				return val.actionCid === cid;
+			});
+		} else {
+			var uid = getPropTrueId(id, 'actionUUid');
+			if (uid) {
+				return pool.filter(function (val) {
+					return val.actionUUid === uid;
+				});
+			} else {
+				return pool;
+			};
+		};
+	};
+	
+	// 获取对应的对象
+	function getReturnObj(id, cid) {
+		var pool = getTargetPool(id, cid);
+		var obj = {};
+		if (pool.length) {
+			limit.each(pool[0], function (val, key) {
+				if (limit.isFunction(val)) {
+					obj[key] = function () {
+						for (var _len = arguments.length, agrs = Array(_len), _key = 0; _key < _len; _key++) {
+							agrs[_key] = arguments[_key];
+						}
+	
+						return Promise.all(pool.map(function (fn) {
+							return fn[key].apply(fn, agrs);
+						}));
+					};
+				} else {
+					obj[key] = pool.map(function (val) {
+						return val[key];
+					}).join(',');
+				};
+			});
+		};
+		return obj;
+	};
+	
+	Actions.get = function (id, cid) {
+		return getTargetPool(id, cid);
+	};
+	
+	Actions.remove = function (id, action) {
+		var pool = ActionsPool[id];
+		if (pool) {
+			limit.remove(pool, action);
+			if (!pool.length) {
+				delete ActionsPool[id];
+			};
+		};
+	};
+	
+	exports.default = Actions;
+
+/***/ }),
+
+/***/ 26:
+/***/ (function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var Promise = limit.promise();
+	var REX = /on([A-Z])(\w*)/;
+	
+	var Control = function () {
+		function Control() {
+			_classCallCheck(this, Control);
+	
+			this.bindEvent();
+		}
+	
+		_createClass(Control, [{
+			key: 'bindEvent',
+			value: function bindEvent() {
+				var me = this;
+				var Actions = me.Actions = {};
+				// 对第一层的对象的原型属性进行处理
+				limit(me.findAllPro()).filter(function (val, key) {
+					return REX.test(key);
+				}).each(function (val, key) {
+					var actionName = key.replace(REX, function (a, b, c) {
+						return b.toLowerCase() + c;
+					});
+					Actions[actionName] = function () {
+						for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+							args[_key] = arguments[_key];
+						}
+	
+						me.state.actionStatus = actionName;
+						return val.apply(me, args);
+					};
+				});
+			}
+		}, {
+			key: 'findAllPro',
+			value: function findAllPro() {
+				var me = this;
+				var rtv = {};
+				var pro = me.constructor.prototype;
+				while (pro) {
+					// 如果到最底层的Object跳出
+					if (pro.constructor === Object) {
+						break;
+					};
+					limit(pro).keysSuper().each(function (val) {
+						// 隔离__proto__
+						if (val !== '__proto__' && !rtv[val]) {
+							rtv[val] = pro[val];
+						};
+					});
+					pro = pro.__proto__;
+				};
+				return rtv;
+			}
+		}, {
+			key: 'getInitialState',
+			value: function getInitialState() {
+				return this.state || (this.state = {});
+			}
+		}, {
+			key: 'destroy',
+			value: function destroy() {
+				var me = this;
+				limit.each(me, function (val, key) {
+					delete me[key];
+				});
+				return me;
+			}
+		}, {
+			key: 'trigger',
+			value: function trigger(data, callback) {
+				var me = this;
+				me.com.setState(data, callback);
+			}
+		}, {
+			key: 'updateComponent',
+			value: function updateComponent() {
+				var me = this;
+				var state = me.getInitialState();
+				return new Promise(function (resolve) {
+					me.trigger(state, resolve.bind(null, 'updateComponentSuccess'));
+				});
+			}
+		}]);
+	
+		return Control;
+	}();
+	
+	;
+	
+	exports.default = Control;
+
+/***/ }),
+
+/***/ 32:
+/***/ (function(module, exports) {
+
+	module.exports = limit;
+
+/***/ }),
+
+/***/ 104:
+/***/ (function(module, exports) {
+
+	module.exports = React;
+
+/***/ }),
+
+/***/ 158:
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	// 依赖
+	
+	var React = __webpack_require__(104);
+	var ReactDOM = __webpack_require__(159);
+	
+	// 组件类
+	var LimitRate = __webpack_require__(160);
+	
+	// 置入文档
+	ReactDOM.render(React.createElement(LimitRate, null), document.getElementById('container'));
+
+/***/ }),
+
+/***/ 159:
+/***/ (function(module, exports) {
+
+	module.exports = ReactDOM;
+
+/***/ }),
+
+/***/ 160:
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	// 依赖
+	
+	module.exports = __webpack_require__(15)(__webpack_require__(161), __webpack_require__(164));
+
+/***/ }),
+
+/***/ 161:
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	__webpack_require__(162);
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	// 依赖
+	var React = __webpack_require__(104);
+	var limit = __webpack_require__(32);
+	
+	// 组件类
+	
+	var Rate = function (_React$Component) {
+		_inherits(Rate, _React$Component);
+	
+		function Rate() {
+			_classCallCheck(this, Rate);
+	
+			return _possibleConstructorReturn(this, (Rate.__proto__ || Object.getPrototypeOf(Rate)).apply(this, arguments));
+		}
+	
+		_createClass(Rate, [{
+			key: 'render',
+			value: function render() {
+				var me = this;
+				var props = me.props;
+				return React.createElement(
+					'div',
+					{ className: 'rate' },
+					React.createElement(
+						'span',
+						{ className: 'ch-txt' },
+						'\u603B\u91D1\u989D\uFF1A'
+					),
+					React.createElement('input', { ref: 'inputText1', className: 'rate-input', title: '\u603B\u91D1\u989D', placeholder: '\u603B\u91D1\u989D',
+						value: limit.toFixed(props.amount), onChange: Actions(me).changeAmount }),
+					React.createElement('br', null),
+					React.createElement('br', null),
+					React.createElement(
+						'span',
+						{ className: 'ch-txt' },
+						'\u5E74\u5229\u7387\uFF1A'
+					),
+					React.createElement('input', { ref: 'inputText2', className: 'rate-input', title: '\u5E74\u5229\u7387', placeholder: '\u5E74\u5229\u7387',
+						value: props.rate, onChange: Actions(me).changeRate }),
+					React.createElement('br', null),
+					React.createElement('br', null),
+					React.createElement(
+						'span',
+						{ className: 'ch-txt' },
+						'\u65E5\u6536\u5165\uFF1A'
+					),
+					React.createElement('input', { ref: 'inputText3', className: 'rate-input', title: '\u65E5\u6536\u5165', placeholder: '\u65E5\u6536\u5165',
+						value: limit.toFixed(me.getMountByDay(), 2), onChange: limit.K, readOnly: 'readOnly' }),
+					React.createElement('br', null),
+					React.createElement('br', null),
+					React.createElement(
+						'span',
+						{ className: 'ch-txt' },
+						'\u6708\u6536\u5165\uFF1A'
+					),
+					React.createElement('input', { ref: 'inputText4', className: 'rate-input', title: '\u6708\u6536\u5165', placeholder: '\u6708\u6536\u5165',
+						value: limit.toFixed(me.getMountByMouth(30), 2), onChange: limit.K, readOnly: 'readOnly' }),
+					React.createElement('br', null),
+					React.createElement('br', null),
+					React.createElement(
+						'span',
+						{ className: 'ch-txt' },
+						'(35\u65E5)\u6536\u5165\uFF1A'
+					),
+					React.createElement('input', { ref: 'inputText5', className: 'rate-input', title: '\u5B63\u6536\u5165', placeholder: '35\u6536\u5165',
+						value: limit.toFixed(me.getMountByMouth(35), 2), onChange: limit.K, readOnly: 'readOnly' }),
+					React.createElement('br', null),
+					React.createElement('br', null),
+					React.createElement(
+						'span',
+						{ className: 'ch-txt' },
+						'\u5E74\u6536\u5165\uFF1A'
+					),
+					React.createElement('input', { ref: 'inputText6', className: 'rate-input', title: '\u5E74\u6536\u5165', placeholder: '\u5E74\u6536\u5165',
+						value: limit.toFixed(me.getMountByYear()), onChange: Actions(me).changeAmountYear }),
+					React.createElement('br', null),
+					React.createElement('br', null)
+				);
+			}
+		}, {
+			key: 'setInputWidth',
+			value: function setInputWidth() {
+				var me = this;
+				var refs = me.refs;
+				limit.each(refs, function (node) {
+					node.style.width = '1px';
+					node.style.width = node.scrollWidth + 3 + 'px';
+				});
+			}
+		}, {
+			key: 'componentDidMount',
+			value: function componentDidMount() {
+				return this.setInputWidth();
+			}
+		}, {
+			key: 'componentDidUpdate',
+			value: function componentDidUpdate() {
+				return this.setInputWidth();
+			}
+		}, {
+			key: 'getMountByDay',
+			value: function getMountByDay() {
+				var me = this;
+				var props = me.props;
+				return limit['?'](props.amount + ' * ' + props.rate + ' / 365');
+			}
+		}, {
+			key: 'getMountByMouth',
+			value: function getMountByMouth(num) {
+				var me = this;
+				var props = me.props;
+				return limit['?'](props.amount + ' * ' + props.rate + ' / 365 * ' + num);
+			}
+		}, {
+			key: 'getMountByYear',
+			value: function getMountByYear() {
+				var me = this;
+				var props = me.props;
+				return limit['?'](props.amount + ' * ' + props.rate);
+			}
+		}]);
+	
+		return Rate;
+	}(React.Component);
+	
+	;
+	
+	module.exports = Rate;
+
+/***/ }),
+
+/***/ 162:
+/***/ (function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(163);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(12)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../../../node_modules/css-loader/index.js!./../../../../../node_modules/less-loader/index.js!./style.less", function() {
+				var newContent = require("!!./../../../../../node_modules/css-loader/index.js!./../../../../../node_modules/less-loader/index.js!./style.less");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ }),
+
+/***/ 163:
+/***/ (function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(11)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, ".rate {\n  color: #666;\n}\n.rate .ch-txt {\n  line-height: 26px;\n  margin-right: 5px;\n}\n.rate-input {\n  width: 200px;\n  border: 1px solid #FFF;\n  border-radius: 5px;\n  padding: 5px;\n  font-size: 12px;\n  color: #666;\n  vertical-align: middle;\n}\n.rate-input:focus,\n.rate-input:hover {\n  border: 1px solid #FFF;\n  background: #F7F7F7;\n}\n.rate-input[readonly] {\n  cursor: not-allowed;\n}\n", ""]);
+	
+	// exports
+
+
+/***/ }),
+
+/***/ 164:
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	// 依赖
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Control = __webpack_require__(26);
+	var limit = __webpack_require__(32);
+	
+	var Controller = function (_Control) {
+		_inherits(Controller, _Control);
+	
+		function Controller() {
+			var _ref;
+	
+			var _temp, _this, _ret;
+	
+			_classCallCheck(this, Controller);
+	
+			for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+				args[_key] = arguments[_key];
+			}
+	
+			return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Controller.__proto__ || Object.getPrototypeOf(Controller)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
+				amount: 200000,
+				rate: 0.042
+			}, _temp), _possibleConstructorReturn(_this, _ret);
+		}
+	
+		_createClass(Controller, [{
+			key: 'onChangeAmount',
+			value: function onChangeAmount(e) {
+				var me = this;
+				var state = me.state,
+				    props = me.props;
+	
+				var value = limit.toNumber(e.target.value);
+				if (!limit.isNaN(value)) {
+					state.amount = value;
+					return me.updateComponent();
+				};
+			}
+		}, {
+			key: 'onChangeRate',
+			value: function onChangeRate(e) {
+				var me = this;
+				var state = me.state,
+				    props = me.props;
+	
+				var value = e.target.value;
+				state.rate = value;
+				return me.updateComponent();
+			}
+		}, {
+			key: 'onChangeAmountYear',
+			value: function onChangeAmountYear(e) {
+				var me = this;
+				var state = me.state,
+				    props = me.props;
+	
+				var value = limit.toNumber(e.target.value);
+				if (!limit.isNaN(value)) {
+					state.amount = value / state.rate;
+					return me.updateComponent();
+				};
+			}
+		}]);
+	
+		return Controller;
+	}(Control);
+	
+	;
+	
+	module.exports = Controller;
+
+/***/ })
+
+/******/ });
 //# sourceMappingURL=main.js.map

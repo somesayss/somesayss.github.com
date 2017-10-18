@@ -3,14 +3,19 @@
 import './style.less';
 
 import DomUtil from 'common/domUtil';
-import Input from 'modules/input/index';
-import Dialog from 'modules/dialog/widget';
 import Component from 'common/myReflux/component';
+
+import Input from 'modules/input/index';
+import Select from'modules/select/index';
+import Dialog from 'modules/dialog/widget';
 import SearchList from 'modules/searchList/index';
 import InputSearch from 'modules/inputSearch/index';
+import BusTallyCount from 'modules/busTallyCount/index';
+
+const dayCN = ['日', '一', '二', '三', '四', '五', '六'];
 
 // 组件类
-class Tally extends Component {
+class View extends Component {
 	render(){
 		let me = this;
 		let {props} = me;
@@ -24,9 +29,24 @@ class Tally extends Component {
 									<button className="limitIcon iconfont icon-add" 
 										onClick={Actions(me).add}></button>
 								</td>
-								<td width="100">类别</td>
+								<td width="104" className="tally-table-select">
+									<Select width="100%"
+										value={props.nameListSelectValue}
+										onChange={Actions(me).changeNameList}>
+										<option value=''>全部</option>
+										{props.nameList.map((val, key) => {
+											return <option key={key} value={val}>{val}</option>
+										})}
+									</Select>
+								</td>
+								<td width="153" className="tally-table-calendar">
+									<Input type="calendarRange" 
+										calendarRangeWidth="150"
+										value={props.countTime} 
+										placeholder="请选择日期区间"
+										onChange={Actions(me).selectCalendar}/>
+								</td>
 								<td width="100">金额</td>
-								<td width="100">日期</td>
 								<td>说明</td>
 								<td width="70">操作</td>
 							</tr>
@@ -34,11 +54,13 @@ class Tally extends Component {
 						<tbody>
 							{props.list.map((val, key) => {
 								return (
-									<tr key={key} onDoubleClick={Actions(me).edit.bind(null, val)}>
+									<tr className={new Date(val.time).getDay()%2 === 0 ? '' : 'tally-table-single'} 
+										key={key} 
+										onDoubleClick={Actions(me).edit.bind(null, val)}>
 										<td className="fn-TAC">{key+1}</td>
 										{me.renderName(val)}
-										{me.renderMuch(val)}
 										{me.renderTime(val)}
+										{me.renderMuch(val)}
 										{me.renderInfo(val)}
 										{me.renderEdit(val)}
 									</tr>
@@ -56,10 +78,15 @@ class Tally extends Component {
 							}}
 						</tbody>
 					</table>
+					<Input type="button" 
+						onClick={me.countData.bind(me)}
+						value="统 计" 
+						className="fn-left fn-MT10"/>
 					<SearchList 
 						className="fn-MT10" 
 						number="10"
 						onSuccess={Actions(me).searchSuccess}
+						searchParam={[props.searchType, {countTime: props.countTime}]}
 						url="http://localhost:8080/tally/list.json" />
 				</div>
 			</div>
@@ -104,12 +131,13 @@ class Tally extends Component {
 	renderTime(val){
 		return (
 			val.isEdit ? 
-				<td className="tally-table-edit">
-					<input type="text" 
-						onChange={Actions(this).change.bind(null, val, 'time')} 
-						value={val.time} />
+				<td className="tally-table-edit tally-table-calendar">
+					<Input type="calendar" 
+						calendarWidth="150"
+						value={val.time} 
+						onChange={Actions(this).change.bind(null, val, 'time')}/>
 				</td> :
-				<td>{val.time}</td>
+				<td>{val.time} [周{dayCN[new Date(val.time).getDay()]}]</td>
 		);
 	}
 	renderInfo(val){
@@ -165,9 +193,18 @@ class Tally extends Component {
 			DomUtil.textSelect(input, leg, leg);
 		};
 	}
+	countData(){
+		let me = this;
+		return Actions(me).getCountDataList().then((val) => {
+			new Dialog({
+				useEsc: true,
+				height: 'auto'
+			}, null, <BusTallyCount countDataList={val[0]} />);
+		});
+	}
 };
 
-module.exports = Tally;
+export default View;
 
 
 

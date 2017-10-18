@@ -1,10 +1,7 @@
 "use strict";
 
 // 组件类
-const Title = require('./index');
+import Index from './index';
 
 // 置入文档
-ReactDOM.render(
-	<Title />, 
-	document.getElementById('container')
-);
+ReactDOM.render( <Index />, document.getElementById('container') );

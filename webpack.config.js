@@ -2,6 +2,7 @@
 // 依赖 
 const path = require('path');
 const webpack = require('webpack');
+const ES5to3OutputPlugin = require("es5to3-webpack-plugin");
 
 function setConfig(watch, min){
     var config = {
@@ -29,7 +30,7 @@ function setConfig(watch, min){
         module: {
             loaders:[{
                 test: /\.js$/,
-                loader: 'babel',
+                loader: 'babel-loader',
                 query: {
                     presets: ['es2015', 'react', 'stage-0']
                 }
@@ -41,7 +42,9 @@ function setConfig(watch, min){
                 loader: 'url-loader?limit=8192&name=imgs/[name].[ext]'
             }]
         },
-        plugins: [],
+        plugins: [
+            // new ES5to3OutputPlugin()
+        ],
     };
 
     if(watch){
@@ -57,7 +60,8 @@ function setConfig(watch, min){
                 compress: {
                     warnings: false
                 }
-            })
+            }),
+            new ES5to3OutputPlugin()
         ]
     };
 

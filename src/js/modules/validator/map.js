@@ -1,21 +1,21 @@
 "use strict";
 
-const ValidatorMap = {};
+const Map = {};
 
 // 必填
-ValidatorMap.required = (val) => {
+Map.required = (val) => {
 	return val !== '';
 }
 // 数字
-ValidatorMap.number = (val) => {
+Map.number = (val) => {
 	return /^\d*$/.test(val);
 }
 // 最小几个数字
-ValidatorMap.min = (val, num) => {
+Map.min = (val, num) => {
 	return val === '' || replaceEnter(val).length >= num;
 }
 // 最多几个数字
-ValidatorMap.max = (val, num) => {
+Map.max = (val, num) => {
 	return val === '' || replaceEnter(val).length <= num;
 }
 
@@ -25,9 +25,7 @@ function replaceEnter(val){
 	return val.replace(REX_ENTER, '');
 };
 
-
-
-module.exports = ValidatorMap;
+export default Map;
 
 
 

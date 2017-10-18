@@ -1,4 +1,8 @@
-"use strict";
 
-// 依赖
-module.exports = require('common/myReflux/hoc')( require('./view'), require('./controller') );
+import View from './view';
+import HOC from 'common/myReflux/hoc';
+import Controller from './controller';
+
+const Index = HOC( View, Controller );
+
+export default Index;

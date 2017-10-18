@@ -1,8 +1,5 @@
 "use strict";
 
-// 依赖
-const limit = require('limit');
-
 // 变量
 const Actions = window.Actions = function(id, cid){
 	return getReturnObj(id, cid);
@@ -88,4 +85,8 @@ Actions.remove = function(id, action){
 };
 
 
-module.exports = Actions;
+export default Actions;
+
+
+
+

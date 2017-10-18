@@ -1,7 +1,7 @@
 "use strict";
 	
 // 依赖
-const Control = require('common/myReflux/control');
+import Control from 'common/myReflux/control';
 
 class Controller extends Control {
 	state = {
@@ -13,6 +13,7 @@ class Controller extends Control {
 	static defaultProps = {
 		actionId: 'inputSelect',
 		originData: ['a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a41', 'a5', 'a6', 'a42', 'a5', 'a6', 'a43', 'a5', 'a6'],
+		scrollSize: 12,
 		onChange: limit.K
 	}
 	doFilter(value){
@@ -99,7 +100,8 @@ class Controller extends Control {
 	}
 };
 
-module.exports = Controller;
+export default Controller;
+
 
 
 

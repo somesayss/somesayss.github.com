@@ -1,11 +1,9 @@
 "use strict";
 
 // 依赖
-const React = require('react');
-const limit = require('limit');
-const Actions = require('./actions');
+import Actions from './actions';
 
-module.exports = (Wrapper, Class) => {
+const HOC = (Wrapper, Class) => {
 	class WrapperComponent extends React.Component {
 	    constructor(props){
 	    	super(...arguments);
@@ -78,9 +76,12 @@ module.exports = (Wrapper, Class) => {
 	    	// };
 	    	if( me.propsFromOther ){
 	    		limit.assignSuper(me.state, me.clearProps(props));
-	    		limit.cb(__controller__.componentWillUpdate).call(__controller__, me.state);
 	    		__controller__.state = me.getPerState(me.state);
 	    		__controller__.props = me.getPerProps(me.state);
+	    		if( limit.isFunction(__controller__.componentWillUpdate) ){
+	    			__controller__.componentWillUpdate(me.state);
+	    			limit.assignSuper(me.state, __controller__.state);
+	    		};
 	    	};
 	    }
 	    componentDidUpdate(){
@@ -101,3 +102,7 @@ module.exports = (Wrapper, Class) => {
 	};
 	return WrapperComponent;
 };
+
+export default HOC;
+
+

@@ -1,8 +1,5 @@
 "use strict";
 
-// 依赖
-const limit = require('limit');
-
 const Promise = limit.promise();
 const REX = /on([A-Z])(\w*)/;
 
@@ -68,8 +65,8 @@ class Control {
 	}
 };
 
-module.exports = Control;
 
+export default Control;
 
 
 

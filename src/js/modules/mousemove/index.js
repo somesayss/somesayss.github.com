@@ -1,6 +1,6 @@
 "use strict";
 
-class Mousemove extends limit.Events{
+class Index extends limit.Events{
 	props = {
 		keyWord: 'move',
 		clientX: null,
@@ -42,7 +42,7 @@ class Mousemove extends limit.Events{
 	}
 }
 
-module.exports = Mousemove;
+export {Index};
 
 
 

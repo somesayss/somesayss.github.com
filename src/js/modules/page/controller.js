@@ -1,10 +1,7 @@
 "use strict";
 	
 // 依赖
-const $ = require('$');
-const React = require('react');
-const Control = require('common/myReflux/control');
-const limit = require('limit');
+import Control from 'common/myReflux/control';
 
 class Controller extends Control {
 	state = {
@@ -31,4 +28,4 @@ class Controller extends Control {
 	}
 };
 
-module.exports = Controller;
+export default Controller;

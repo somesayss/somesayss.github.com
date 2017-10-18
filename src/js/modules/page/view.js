@@ -2,10 +2,6 @@
 
 import './style.less';
 
-// 依赖
-const React = require('react');
-const limit = require('limit');
-
 // 组件类
 class Page extends React.Component {
 	constructor(){
@@ -98,5 +94,6 @@ class Page extends React.Component {
 	
 };
 
-module.exports = Page;
+export default Page;
+
 

@@ -1,7 +1,7 @@
 "use strict";
 	
 // 依赖
-const Control = require('common/myReflux/control');
+import Control from 'common/myReflux/control';
 
 class Controller extends Control {
 	state = {
@@ -10,7 +10,10 @@ class Controller extends Control {
 			age: '',
 			pwd: '',
 			content: '',
-			number: ''
+			number: '',
+			time: '',
+			timeRange: '',
+			duoxuan: ''
 		},
 		isHideAge: false
 	}
@@ -22,15 +25,17 @@ class Controller extends Control {
 	onSuccess(){
 		let me = this;
 	}
-	onChange(name, val){
+	onChange(name, val, e){
 		let me = this;
 		let originData = me.state.originData;
-		if( val.target ){
-			originData[name] = val.target.value;
-		}else{
+		// if( val.target ){
+			// originData[name] = val.target.value;
+		// }else{
 			originData[name] = val;
-		};
+		// };
+		return me.updateComponent();
 	}
 };
 
-module.exports = Controller;
+export default Controller;
+

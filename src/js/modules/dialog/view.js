@@ -3,9 +3,7 @@
 import './style.less';
 
 // 依赖
-const React = require('react');
-const limit = require('limit');
-const Cover = require('modules/cover/index');
+import Cover from 'modules/cover/index';
 
 // 组件类
 class Dialog extends React.Component {
@@ -107,5 +105,6 @@ class Dialog extends React.Component {
 	}
 };
 
-module.exports = Dialog;
+export default Dialog;
+
 

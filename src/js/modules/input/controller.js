@@ -1,7 +1,7 @@
 "use strict";
 	
 // 依赖
-const Control = require('common/myReflux/control');
+import Control from 'common/myReflux/control';
 
 const regNum = /^[\d\.-]*$/;
 
@@ -10,7 +10,10 @@ class Controller extends Control {
 		textWidth: 300,
 		passwordWidth: 300,
 		selectWidth: 300,
+		multipleWidth: 300,
 		textareaWidth: 300,
+		calendarWidth: 200,
+		calendarRangeWidth: 200,
 		value: '',
 		focus: false,
 		clearSuccess: false,
@@ -40,26 +43,22 @@ class Controller extends Control {
 			return;
 		};
 		state.value = value;
-		if( value ){
-			me.updateOriginData(value);
-			me.updateComponent().then(() => {
-				props.validaor && props.validaor.emit(`${props.name}Validat`);
-			});
-		}else{
-			me.onClear();
-		};
+		me.updateOriginData(value);
+		return me.updateComponent().then(() => {
+			return value && props.validaor && props.validaor.emit(`${props.name}Validat`);
+		});
 	}
 	onFocus(){
 		let me = this;
 		let {state} = me;
 		state.focus = true;
-		me.updateComponent();
+		return me.updateComponent();
 	}
 	onBlur(){
 		let me = this;
 		let {state} = me;
 		state.focus = false;
-		me.updateComponent();
+		return me.updateComponent();
 	}
 	onToggleEye(){
 		let me = this;
@@ -80,6 +79,7 @@ class Controller extends Control {
 		me.updateOriginData('');
 		me.updateComponent().then(() => {
 			state.clearSuccess = false;
+			props.onChange('');
 		});
 	}
 	updateOriginData(val){
@@ -123,7 +123,7 @@ class Controller extends Control {
 	}
 };
 
-module.exports = Controller;
+export default Controller;
 
 
 

@@ -1,11 +1,10 @@
 "use strict";
 
 import './style.less';
-
-const InputWidget = require('modules/input/widget');
+import Component from 'common/myReflux/component';
 
 // 组件类
-class Validator extends React.Component {
+class View extends Component {
 	cloneAllChild(child){
 		let me = this;
 		let {props} = me;
@@ -42,5 +41,5 @@ class Validator extends React.Component {
 	}
 };
 
-module.exports = Validator;
+export default View;
 
