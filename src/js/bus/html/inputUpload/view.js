@@ -10,7 +10,7 @@ class InputUpload extends Component {
 		let {props} = me;
 		return (
 			<div className={me.getClassName('page-input-upload')}>
-				<Upload />
+				<Upload/>
 			</div>
 		);
 	}

@@ -10,7 +10,7 @@ class Controller extends Control {
 		value: '上 传',
 		width: 300,
 		param: {},
-		action: '/common/upload.json',
+		action: '',
 		multiple: false,	// IE8不支持
 		accept: '',			// IE8不支持
 		onChange: limit.K,
@@ -22,7 +22,6 @@ class Controller extends Control {
 		let me = this;
 		let {state, props} = me;
 		state.isUpload = true;
-		console.log(nameList);
 		return me.updateComponent().then(() => {
 			return props.onChange(nameList);
 		});
@@ -33,7 +32,6 @@ class Controller extends Control {
 		return props.onProgress(scale);
 	}
 	onUploadSuccess(...args){
-		console.log('onUploadSuccess');
 		let me = this;
 		let {state, props} = me;
 		state.isUpload = false;
@@ -42,7 +40,6 @@ class Controller extends Control {
 		});
 	}
 	onUploadError(e){
-		console.log('onUploadError', e);
 		let me = this;
 		let {state, props} = me;
 		state.isUpload = false;

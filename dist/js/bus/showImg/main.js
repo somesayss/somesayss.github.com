@@ -45,7 +45,7 @@
 /***/ 0:
 /***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(282);
+	module.exports = __webpack_require__(275);
 
 
 /***/ }),
@@ -734,57 +734,57 @@
 
 /***/ }),
 
-/***/ 104:
+/***/ 97:
 /***/ (function(module, exports) {
 
 	module.exports = React;
 
 /***/ }),
 
-/***/ 159:
+/***/ 147:
 /***/ (function(module, exports) {
 
 	module.exports = ReactDOM;
 
 /***/ }),
 
-/***/ 282:
+/***/ 275:
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	// 依赖
 	
-	var React = __webpack_require__(104);
-	var ReactDOM = __webpack_require__(159);
+	var React = __webpack_require__(97);
+	var ReactDOM = __webpack_require__(147);
 	
 	// 组件类
-	var ShowImg = __webpack_require__(283);
+	var ShowImg = __webpack_require__(276);
 	
 	// 置入文档
 	ReactDOM.render(React.createElement(ShowImg, null), document.getElementById('container'));
 
 /***/ }),
 
-/***/ 283:
+/***/ 276:
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	// 依赖
 	
-	module.exports = __webpack_require__(15)(__webpack_require__(284), __webpack_require__(288));
+	module.exports = __webpack_require__(15)(__webpack_require__(277), __webpack_require__(281));
 
 /***/ }),
 
-/***/ 284:
+/***/ 277:
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	__webpack_require__(285);
+	__webpack_require__(278);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -793,11 +793,11 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	// 依赖
-	var React = __webpack_require__(104);
+	var React = __webpack_require__(97);
 	var limit = __webpack_require__(32);
 	
 	// 图片
-	var imgShow = __webpack_require__(287);
+	var imgShow = __webpack_require__(280);
 	
 	// 组件类
 	
@@ -832,13 +832,13 @@
 
 /***/ }),
 
-/***/ 285:
+/***/ 278:
 /***/ (function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(286);
+	var content = __webpack_require__(279);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(12)(content, {});
@@ -859,7 +859,7 @@
 
 /***/ }),
 
-/***/ 286:
+/***/ 279:
 /***/ (function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(11)();
@@ -867,21 +867,21 @@
 	
 	
 	// module
-	exports.push([module.id, ".imgshow1 {\n  width: 200px;\n  height: 200px;\n  background: url(" + __webpack_require__(287) + ");\n}\n", ""]);
+	exports.push([module.id, ".imgshow1 {\n  width: 200px;\n  height: 200px;\n  background: url(" + __webpack_require__(280) + ");\n}\n", ""]);
 	
 	// exports
 
 
 /***/ }),
 
-/***/ 287:
+/***/ 280:
 /***/ (function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__.p + "imgs/tutu.jpg";
 
 /***/ }),
 
-/***/ 288:
+/***/ 281:
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";

@@ -45,7 +45,7 @@
 /***/ 0:
 /***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(176);
+	module.exports = __webpack_require__(164);
 
 
 /***/ }),
@@ -778,12 +778,12 @@
 
 /***/ }),
 
-/***/ 176:
+/***/ 164:
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var _index = __webpack_require__(177);
+	var _index = __webpack_require__(165);
 	
 	var _index2 = _interopRequireDefault(_index);
 	
@@ -793,12 +793,12 @@
 
 /***/ }),
 
-/***/ 177:
+/***/ 165:
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var _view = __webpack_require__(178);
+	var _view = __webpack_require__(166);
 	
 	var _view2 = _interopRequireDefault(_view);
 	
@@ -806,7 +806,7 @@
 	
 	var _hoc2 = _interopRequireDefault(_hoc);
 	
-	var _controller = __webpack_require__(181);
+	var _controller = __webpack_require__(169);
 	
 	var _controller2 = _interopRequireDefault(_controller);
 	
@@ -816,14 +816,14 @@
 
 /***/ }),
 
-/***/ 178:
+/***/ 166:
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	__webpack_require__(179);
+	__webpack_require__(167);
 	
 	var _component = __webpack_require__(13);
 	
@@ -900,13 +900,13 @@
 
 /***/ }),
 
-/***/ 179:
+/***/ 167:
 /***/ (function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(180);
+	var content = __webpack_require__(168);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(12)(content, {});
@@ -927,7 +927,7 @@
 
 /***/ }),
 
-/***/ 180:
+/***/ 168:
 /***/ (function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(11)();
@@ -942,7 +942,7 @@
 
 /***/ }),
 
-/***/ 181:
+/***/ 169:
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';

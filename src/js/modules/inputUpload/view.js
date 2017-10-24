@@ -1,6 +1,7 @@
 
 import './style.less';
 
+import Button from 'modules/button/index';
 import DomUtil from 'common/domUtil';
 import Upload from 'modules/upload/index';
 import Component from 'common/myReflux/component';
@@ -10,10 +11,12 @@ class InputUpload extends Component {
 		let me = this;
 		let {props} = me;
 		return (
-			<input type="button" 
+			<Button type="button" 
 				className="mod-input-upload"
 				ref="file" 
 				onMouseEnter={me.isUseUploadHack() ? me.mouseEnter.bind(me) : null}
+				onFocus={props.onFocus}
+				onBlur={props.onBlur}
 				disabled={props.isUpload ? true : false}
 				value={props.value} 
 				onClick={me.isUseUploadHack() ? null : me.click.bind(me)} />
@@ -29,6 +32,7 @@ class InputUpload extends Component {
 		if( props.isUpload ){
 			return;
 		};
+		file = file.refs.com.getButton();
 		let offset = $(file).offset();
 		let node = me.tempNode;
 		node.style.top = `${offset.top}px`;
@@ -47,9 +51,14 @@ class InputUpload extends Component {
 	}
 	change(e){
 		let me = this;
+		let {props} = me;
 		Actions(me).change( me.getFileName(e) ).then(() => {
 			me.mouseLeave();
-			return me.upload();
+			if( props.action ){
+				return me.upload();
+			}else{
+				throw 'action is empty';
+			};
 		}).then(Actions(me).uploadSuccess, Actions(me).uploadError).then(() => {
 			me.removeForm();
 			me.createForm();
@@ -78,9 +87,9 @@ class InputUpload extends Component {
 			value = me.form.file.value;
 		};
 		if( files ){
-			return limit.from(e.target.files, (val) => {
-				let {name, size} = val;
-				return {name, size};
+			return limit.from(e.target.files, (file) => {
+				let {name, size} = file;
+				return {name, size, file};
 			});
 		}else{
 			return [{name: value.split('\\').pop(), size: 0}];

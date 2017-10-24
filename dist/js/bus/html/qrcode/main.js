@@ -44,7 +44,7 @@
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(183);
+	module.exports = __webpack_require__(171);
 
 
 /***/ }),
@@ -1754,25 +1754,218 @@
 /***/ }),
 /* 33 */,
 /* 34 */,
-/* 35 */,
-/* 36 */,
+/* 35 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	// 依赖
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _domUtil = __webpack_require__(20);
+	
+	var _domUtil2 = _interopRequireDefault(_domUtil);
+	
+	var _index = __webpack_require__(36);
+	
+	var _index2 = _interopRequireDefault(_index);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Upload = function (_ParseForm) {
+		_inherits(Upload, _ParseForm);
+	
+		function Upload(config) {
+			_classCallCheck(this, Upload);
+	
+			var _this = _possibleConstructorReturn(this, (Upload.__proto__ || Object.getPrototypeOf(Upload)).apply(this, arguments));
+	
+			_this.props = {
+				url: '/common/upload.json',
+				onprogress: limit.K,
+				errParseEle: '上传失败，未解析到element。',
+				errSys: '上传失败，系统错误。'
+			};
+	
+			var me = _this;
+			limit.assign(me.state, me.props, config);
+			return _this;
+		}
+	
+		_createClass(Upload, [{
+			key: 'submit',
+			value: function submit() {
+				var me = this;
+				if (window.FormData && window.XMLHttpRequest) {
+					return me.ajaxSubmit();
+				} else {
+					return me.iframeSubmit();
+				};
+			}
+		}, {
+			key: 'ajaxSubmit',
+			value: function ajaxSubmit() {
+				var me = this;
+				return new Promise(function (resolve, reject) {
+					if (!me.element) {
+						return reject(me.state.errParseEle);
+					};
+					var state = me.state;
+					var AJAX = new XMLHttpRequest();
+					AJAX.open('POST', state.url);
+					// 上传进度
+					AJAX.upload.onprogress = function (e) {
+						var loaded = e.loaded,
+						    total = e.total;
+	
+						if (total) {
+							state.onprogress(limit(loaded / total).toFixed(2).toNumber().val(), loaded, total);
+						};
+					};
+					// 结束
+					AJAX.onload = function (e) {
+						me.parseRespone(e.target.responseText, resolve, reject);
+					};
+					// 错误
+					AJAX.onerror = reject;
+					AJAX.send(me.useFormData());
+				});
+			}
+		}, {
+			key: 'iframeSubmit',
+			value: function iframeSubmit() {
+				var me = this;
+				return new Promise(function (resolve, reject) {
+					var state = me.state;
+	
+					var element = me.element;
+					if (!element) {
+						return reject(me.state.errParseEle);
+					};
+					var iframe = document.createElement('iframe');
+					element.target = iframe.name = 'upload' + limit.getUid();
+					element.action = state.url;
+					iframe.style.display = 'none';
+					document.body.appendChild(iframe);
+					$(iframe).on('load', function () {
+						$(iframe).off('load');
+						var iframeBody = iframe.contentWindow.document.body;
+						var responseText = iframeBody.innerHTML.replace(/<.*?>/g, '');
+						me.parseRespone(responseText, resolve, reject);
+						me.removeHideArea(iframe);
+						element.target = '';
+					});
+					element.submit();
+				});
+			}
+		}, {
+			key: 'parseRespone',
+			value: function parseRespone(responseText, resolve, reject) {
+				var me = this;
+				var errMeg = me.state.errSys;
+				if (responseText) {
+					try {
+						var response = JSON.parse(responseText);
+						if (limit.getValueInObject(response, 'hasError') === false) {
+							if (limit.getValueInObject(response, 'content', 'isSuccess')) {
+								resolve(response.content);
+							} else {
+								reject(limit.getValueInObject(response, 'content', 'msg') || errMeg);
+							};
+						} else {
+							reject(limit.getValueInObject(response, 'msg') || errMeg);
+						};
+					} catch (e) {
+						reject(e);
+					};
+				} else {
+					reject(errMeg);
+				};
+			}
+		}, {
+			key: 'removeHideArea',
+			value: function removeHideArea(element) {
+				_domUtil2.default.clearDom(element);
+			}
+		}]);
+	
+		return Upload;
+	}(_index2.default);
+	
+	module.exports = Upload;
+
+/***/ }),
+/* 36 */
+/***/ (function(module, exports) {
+
+	"use strict";
+	
+	// 依赖
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var ParseForm = function () {
+		function ParseForm(config) {
+			_classCallCheck(this, ParseForm);
+	
+			this.props = {
+				element: null // 主要表单
+			};
+			this.state = {};
+			this.element = null;
+	
+			var me = this;
+			var state = me.state;
+			limit.assign(state, me.props, config);
+			if (me.isFormElement()) {
+				me.element = state.element;
+			};
+		}
+	
+		_createClass(ParseForm, [{
+			key: "isFormElement",
+			value: function isFormElement() {
+				var me = this;
+				var state = me.state;
+				var element = state.element;
+				return element && element.nodeName === 'FORM';
+			}
+		}, {
+			key: "useFormData",
+			value: function useFormData() {
+				var me = this;
+				var element = me.element;
+				if (element && window.FormData) {
+					return new FormData(element);
+				};
+			}
+		}]);
+	
+		return ParseForm;
+	}();
+	
+	exports.default = ParseForm;
+
+/***/ }),
 /* 37 */,
 /* 38 */,
 /* 39 */,
 /* 40 */,
 /* 41 */,
-/* 42 */,
-/* 43 */,
-/* 44 */,
-/* 45 */,
-/* 46 */,
-/* 47 */,
-/* 48 */,
-/* 49 */,
-/* 50 */,
-/* 51 */,
-/* 52 */,
-/* 53 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1781,7 +1974,7 @@
 	  value: true
 	});
 	
-	var _view = __webpack_require__(54);
+	var _view = __webpack_require__(43);
 	
 	var _view2 = _interopRequireDefault(_view);
 	
@@ -1789,7 +1982,7 @@
 	
 	var _hoc2 = _interopRequireDefault(_hoc);
 	
-	var _controller = __webpack_require__(90);
+	var _controller = __webpack_require__(83);
 	
 	var _controller2 = _interopRequireDefault(_controller);
 	
@@ -1800,7 +1993,7 @@
 	exports.default = Index;
 
 /***/ }),
-/* 54 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1813,13 +2006,9 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	__webpack_require__(55);
+	__webpack_require__(44);
 	
-	var _file = __webpack_require__(57);
-	
-	var _file2 = _interopRequireDefault(_file);
-	
-	var _checkbox = __webpack_require__(58);
+	var _checkbox = __webpack_require__(46);
 	
 	var _checkbox2 = _interopRequireDefault(_checkbox);
 	
@@ -1831,25 +2020,33 @@
 	
 	var _component2 = _interopRequireDefault(_component);
 	
-	var _index = __webpack_require__(59);
+	var _index = __webpack_require__(255);
 	
 	var _index2 = _interopRequireDefault(_index);
 	
-	var _index3 = __webpack_require__(70);
+	var _index3 = __webpack_require__(47);
 	
 	var _index4 = _interopRequireDefault(_index3);
 	
-	var _index5 = __webpack_require__(75);
+	var _index5 = __webpack_require__(58);
 	
 	var _index6 = _interopRequireDefault(_index5);
 	
-	var _index7 = __webpack_require__(85);
+	var _index7 = __webpack_require__(63);
 	
 	var _index8 = _interopRequireDefault(_index7);
 	
-	var _index9 = __webpack_require__(14);
+	var _index9 = __webpack_require__(73);
 	
 	var _index10 = _interopRequireDefault(_index9);
+	
+	var _index11 = __webpack_require__(78);
+	
+	var _index12 = _interopRequireDefault(_index11);
+	
+	var _index13 = __webpack_require__(14);
+	
+	var _index14 = _interopRequireDefault(_index13);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -1976,7 +2173,7 @@
 				var props = me.props;
 	
 				return React.createElement(
-					_index2.default,
+					_index4.default,
 					_extends({}, me.parseProps(), { width: '100%', className: 'limit-form-' + props.type }),
 					props.children
 				);
@@ -2022,7 +2219,7 @@
 				return React.createElement(
 					'div',
 					{ className: 'limit-form-' + me.getType() },
-					React.createElement(_file2.default, me.parseProps())
+					React.createElement(_index10.default, me.parseProps())
 				);
 			}
 		}, {
@@ -2035,7 +2232,7 @@
 				return React.createElement(
 					'div',
 					{ className: 'limit-form-' + me.getType() },
-					React.createElement('input', _extends({}, me.parseProps(), { ref: 'input' }))
+					React.createElement(_index2.default, _extends({}, me.parseProps(), { ref: 'input' }))
 				);
 			}
 		}, {
@@ -2052,7 +2249,7 @@
 						{ className: 'ch-placeholder' },
 						props.placeholder
 					) : void 0,
-					React.createElement(_index4.default, me.parseProps())
+					React.createElement(_index6.default, me.parseProps())
 				);
 			}
 		}, {
@@ -2070,7 +2267,7 @@
 						props.placeholder
 					) : void 0,
 					React.createElement(
-						_index6.default,
+						_index8.default,
 						_extends({}, me.parseProps(), { width: '100%', className: 'limit-form-' + props.type }),
 						props.children
 					)
@@ -2101,7 +2298,7 @@
 						{ href: 'javascript:;', tabIndex: '-1', className: 'ch-clear', onClick: !props.disabled ? Actions(me).clear.bind(me) : null },
 						'\xD7'
 					) : void 0,
-					React.createElement(_index8.default, me.parseProps())
+					React.createElement(_index12.default, me.parseProps())
 				);
 			}
 		}, {
@@ -2127,7 +2324,7 @@
 						{ href: 'javascript:;', tabIndex: '-1', className: 'ch-clear', onClick: !props.disabled ? Actions(me).clear.bind(me) : null },
 						'\xD7'
 					) : void 0,
-					React.createElement(_index10.default, parseProps)
+					React.createElement(_index14.default, parseProps)
 				);
 			}
 		}, {
@@ -2176,11 +2373,14 @@
 		}, {
 			key: 'selectInput',
 			value: function selectInput(input) {
-				if (limit.contains(['text', 'textarea', 'password'], input.type)) {
+				var me = this;
+				var props = me.props;
+	
+				if (limit.contains(['text', 'textarea', 'password'], props.type)) {
 					var length = input.value.length;
 					return _domUtil2.default.textSelect(input, length, length);
-				} else if (limit.contains(['button', 'reset', 'submit'], input.type)) {
-					input.focus();
+				} else if (limit.contains(['button', 'reset', 'submit'], props.type)) {
+					input.refs.com.focus();
 				};
 			}
 		}]);
@@ -2193,13 +2393,13 @@
 	exports.default = View;
 
 /***/ }),
-/* 55 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(56);
+	var content = __webpack_require__(45);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(12)(content, {});
@@ -2219,7 +2419,7 @@
 	}
 
 /***/ }),
-/* 56 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(11)();
@@ -2227,141 +2427,13 @@
 	
 	
 	// module
-	exports.push([module.id, ".limit-form {\n  display: inline-block;\n  position: relative;\n  background: #FFF;\n}\n.less-placeholder {\n  position: absolute;\n  width: 100%;\n  top: 0;\n  left: 0;\n  color: #999;\n  line-height: 16px;\n  padding: 7px;\n  padding-right: 16px;\n}\n.less-clear {\n  position: absolute;\n  z-index: 1;\n  width: 15px;\n  height: 16px;\n  line-height: 14px;\n  text-align: center;\n  right: 1px;\n  top: 50%;\n  margin-top: -8px;\n  color: #CCC;\n}\n.less-clear:hover {\n  color: #666;\n}\n.limit-form-text {\n  border: 1px solid #CCC;\n  padding: 6px;\n  padding-right: 15px;\n  background: #FFF;\n}\n.limit-form-text input {\n  border: 0;\n  height: 16px;\n  line-height: 16px;\n  color: #666;\n  font-size: 1em;\n  width: 100%;\n  position: relative;\n  z-index: 2;\n  background: none;\n}\n.limit-form-text .ch-clear {\n  position: absolute;\n  z-index: 1;\n  width: 15px;\n  height: 16px;\n  line-height: 14px;\n  text-align: center;\n  right: 1px;\n  top: 50%;\n  margin-top: -8px;\n  color: #CCC;\n}\n.limit-form-text .ch-clear:hover {\n  color: #666;\n}\n.limit-form-text .ch-placeholder {\n  position: absolute;\n  width: 100%;\n  top: 0;\n  left: 0;\n  color: #999;\n  line-height: 16px;\n  padding: 7px;\n  padding-right: 16px;\n}\n.limit-form-password {\n  border: 1px solid #CCC;\n  padding: 6px;\n  padding-right: 15px;\n  background: #FFF;\n  padding-right: 28px;\n}\n.limit-form-password input {\n  border: 0;\n  height: 16px;\n  line-height: 16px;\n  color: #666;\n  font-size: 1em;\n  width: 100%;\n  position: relative;\n  z-index: 2;\n  background: none;\n}\n.limit-form-password .ch-clear {\n  position: absolute;\n  z-index: 1;\n  width: 15px;\n  height: 16px;\n  line-height: 14px;\n  text-align: center;\n  right: 1px;\n  top: 50%;\n  margin-top: -8px;\n  color: #CCC;\n}\n.limit-form-password .ch-clear:hover {\n  color: #666;\n}\n.limit-form-password .ch-placeholder {\n  position: absolute;\n  width: 100%;\n  top: 0;\n  left: 0;\n  color: #999;\n  line-height: 16px;\n  padding: 7px;\n  padding-right: 16px;\n}\n.limit-form-password .ch-container-eye {\n  position: absolute;\n  z-index: 2;\n  width: 10px;\n  height: 10px;\n  top: 50%;\n  margin-top: -5px;\n  right: 15px;\n  background: #FFF;\n  text-align: center;\n  border: 1px solid #CCC;\n  border-radius: 100px;\n  cursor: pointer;\n}\n.limit-form-password .ch-container-eye:hover .ch-eye {\n  background: #666;\n}\n.limit-form-password .ch-eye {\n  display: inline-block;\n  width: 6px;\n  height: 6px;\n  border-radius: 6px;\n  background: #CCC;\n  margin-top: 1px;\n}\n.limit-form-textarea {\n  border: 1px solid #CCC;\n  padding: 6px;\n  background: #FFF;\n}\n.limit-form-textarea .ch-placeholder {\n  position: absolute;\n  width: 100%;\n  top: 0;\n  left: 0;\n  color: #999;\n  line-height: 16px;\n  padding: 7px;\n  padding-right: 16px;\n}\n.limit-form-textarea textarea {\n  background: transparent;\n}\n.limit-form-button input {\n  border: 1px solid #CCC;\n  background: #F2F2F2;\n  font-size: 12px;\n  padding: 0 10px;\n  height: 30px;\n  line-height: 28px;\n  width: 100%;\n  color: #666;\n}\n.limit-form-button input:active {\n  background: #DDD;\n  border-color: #BBB;\n}\n.limit-form-file input {\n  border: 1px solid #CCC;\n  background: #F2F2F2;\n  font-size: 12px;\n  padding: 0 10px;\n  height: 30px;\n  line-height: 28px;\n  width: 100%;\n  color: #666;\n}\n.limit-form-file input:active {\n  background: #DDD;\n  border-color: #BBB;\n}\n.limit-form-calendar .ch-placeholder {\n  position: absolute;\n  width: 100%;\n  top: 0;\n  left: 0;\n  color: #999;\n  line-height: 16px;\n  padding: 7px;\n  padding-right: 16px;\n}\n.limit-form-calendar .ch-clear {\n  position: absolute;\n  z-index: 1;\n  width: 15px;\n  height: 16px;\n  line-height: 14px;\n  text-align: center;\n  right: 1px;\n  top: 50%;\n  margin-top: -8px;\n  color: #CCC;\n}\n.limit-form-calendar .ch-clear:hover {\n  color: #666;\n}\n.limit-form .ch-placeholder {\n  position: absolute;\n  width: 100%;\n  top: 0;\n  left: 0;\n  color: #999;\n  line-height: 16px;\n  padding: 7px;\n  padding-right: 16px;\n}\n.limit-form input[type=\"text\"] {\n  background: transparent;\n}\n/*禁止*/\n.limit-form-disabled .limit-form-text,\n.limit-form-disabled .limit-form-password,\n.limit-form-disabled .limit-form-textarea {\n  background: #F2F2F2;\n}\n.limit-form-disabled .limit-form-text *,\n.limit-form-disabled .limit-form-password *,\n.limit-form-disabled .limit-form-textarea * {\n  cursor: not-allowed;\n}\n.limit-form-disabled .limit-form-submit input,\n.limit-form-disabled .limit-form-reset input,\n.limit-form-disabled .limit-form-button input {\n  color: #999;\n  cursor: not-allowed;\n}\n.limit-form-disabled .limit-form-select {\n  background: #F2F2F2;\n  color: #999;\n  cursor: not-allowed;\n}\n/*焦点*/\n.limit-form-focus.limit-form {\n  z-index: 2;\n}\n.limit-form-focus .limit-form-text,\n.limit-form-focus .limit-form-password,\n.limit-form-focus .limit-form-textarea,\n.limit-form-focus .mod-calendar-input,\n.limit-form-focus .mod-calendar-range {\n  border-color: #4285f4;\n  box-shadow: 0 0 3px rgba(66, 133, 244, 0.5);\n}\n.limit-form-focus .limit-form-text .ch-clear,\n.limit-form-focus .limit-form-password .ch-clear,\n.limit-form-focus .limit-form-textarea .ch-clear,\n.limit-form-focus .mod-calendar-input .ch-clear,\n.limit-form-focus .mod-calendar-range .ch-clear {\n  color: #4285f4;\n}\n.limit-form-focus .limit-form-text .ch-placeholder,\n.limit-form-focus .limit-form-password .ch-placeholder,\n.limit-form-focus .limit-form-textarea .ch-placeholder,\n.limit-form-focus .mod-calendar-input .ch-placeholder,\n.limit-form-focus .mod-calendar-range .ch-placeholder {\n  display: none;\n}\n.limit-form-focus .limit-form-password .ch-container-eye {\n  border-color: #4285f4;\n}\n.limit-form-focus .limit-form-password .ch-container-eye:hover .ch-eye {\n  background: #4285f4;\n}\n.limit-form-focus .limit-form-password .ch-eye {\n  background: #4285f4;\n}\n.limit-form-focus .limit-form-button input,\n.limit-form-focus .limit-form-file input {\n  box-shadow: 0 0 1px rgba(0, 0, 0, 0.5);\n}\n/*错误*/\n.limit-form-error .limit-form-text,\n.limit-form-error .limit-form-password,\n.limit-form-error .limit-form-textarea,\n.limit-form-error .mod-calendar-input,\n.limit-form-error .mod-calendar-range {\n  border-color: #F00;\n  box-shadow: 0 0 3px rgba(255, 0, 0, 0.5);\n}\n.limit-form-error .limit-form-text .ch-clear,\n.limit-form-error .limit-form-password .ch-clear,\n.limit-form-error .limit-form-textarea .ch-clear,\n.limit-form-error .mod-calendar-input .ch-clear,\n.limit-form-error .mod-calendar-range .ch-clear {\n  color: #F00;\n}\n.limit-form-error .limit-form-text .ch-placeholder,\n.limit-form-error .limit-form-password .ch-placeholder,\n.limit-form-error .limit-form-textarea .ch-placeholder,\n.limit-form-error .mod-calendar-input .ch-placeholder,\n.limit-form-error .mod-calendar-range .ch-placeholder {\n  color: #F00;\n}\n.limit-form-error .limit-form-calendar .ch-placeholder {\n  color: #F00;\n}\n.limit-form-error .limit-form-calendar .mod-calendar {\n  border-color: #F00;\n}\n.limit-form-error .limit-form-calendar .mod-calendar .limitIcon {\n  color: #F00;\n}\n.limit-form-error .limit-form-calendar .mod-calendar .limitIcon:focus,\n.limit-form-error .limit-form-calendar .mod-calendar .limitIcon:hover {\n  text-shadow: 0 0 3px rgba(255, 0, 0, 0.5);\n}\n.limit-form-error .limit-form-calendar .mod-calendar .calendar-main li:hover,\n.limit-form-error .limit-form-calendar .mod-calendar .calendar-main li.active {\n  border-color: #F00;\n  color: #F00 !important;\n}\n.limit-form-error .limit-form-calendar .mod-calendar .calendar-main li.today {\n  color: #F00 !important;\n}\n.limit-form-error .limit-form-calendar .mod-calendar .calendar-main li.active {\n  background: #F00;\n  color: #FFF !important;\n}\n.limit-form-error .limit-form-password .ch-container-eye {\n  border-color: #F00;\n}\n.limit-form-error .limit-form-password .ch-container-eye:hover .ch-eye {\n  background: #F00;\n}\n.limit-form-error .limit-form-password .ch-eye {\n  background: #F00;\n}\n.limit-form-error .limit-form-select.mod-select .select-trigger,\n.limit-form-error .limit-form-select.mod-select .select-container {\n  border-color: #F00;\n  box-shadow: 0 0 3px rgba(255, 0, 0, 0.5);\n}\n.limit-form-error .limit-form-select.mod-select:before {\n  border-color: #F00;\n}\n.limit-form-error .limit-form-select.mod-select li.active {\n  background: #F00;\n  border-color: #F00;\n}\n.limit-form-error .limit-form-select.mod-select li:hover {\n  border-color: #F00;\n}\n.limit-form-error .limit-form-select.mod-select .select-trigger .select-trigger-san {\n  border-top-color: #F00;\n}\n.limit-form-error .limit-form-multiple .ch-placeholder {\n  color: #F00;\n}\n.limit-form-error .limit-form-multiple .mod-multiple .multiple-trigger,\n.limit-form-error .limit-form-multiple .mod-multiple .multiple-content {\n  border-color: #F00;\n  box-shadow: 0 0 3px rgba(255, 0, 0, 0.5);\n}\n.limit-form-error .limit-form-multiple .mod-multiple .multiple-trigger .multiple-trigger-san {\n  border-top-color: #F00;\n}\n.limit-form-error .limit-form-multiple .mod-multiple:before {\n  border-color: #F00;\n}\n.limit-form-error .limit-form-multiple .mod-multiple li.active {\n  background: #F00;\n  border-color: #F00;\n}\n.limit-form-error .limit-form-multiple .mod-multiple li.focus {\n  border-color: #F00;\n}\n.limit-form-error .ch-error-info {\n  position: absolute;\n  height: 20px;\n  line-height: 18px;\n  border: 1px solid #F00;\n  box-shadow: 0 0 3px rgba(255, 0, 0, 0.5);\n  top: -10px;\n  right: 3px;\n  color: #F00;\n  background: #FFF;\n  padding: 0 5px;\n  z-index: 1;\n}\n", ""]);
+	exports.push([module.id, ".limit-form {\n  display: inline-block;\n  position: relative;\n  background: #FFF;\n}\n.less-placeholder {\n  position: absolute;\n  width: 100%;\n  top: 0;\n  left: 0;\n  color: #999;\n  line-height: 16px;\n  padding: 7px;\n  padding-right: 16px;\n}\n.less-clear {\n  position: absolute;\n  z-index: 1;\n  width: 15px;\n  height: 16px;\n  line-height: 14px;\n  text-align: center;\n  right: 1px;\n  top: 50%;\n  margin-top: -8px;\n  color: #CCC;\n}\n.less-clear:hover {\n  color: #666;\n}\n.limit-form-text {\n  border: 1px solid #CCC;\n  padding: 6px;\n  padding-right: 15px;\n  background: #FFF;\n}\n.limit-form-text input {\n  border: 0;\n  height: 16px;\n  line-height: 16px;\n  color: #666;\n  font-size: 1em;\n  width: 100%;\n  position: relative;\n  z-index: 2;\n  background: none;\n}\n.limit-form-text .ch-clear {\n  position: absolute;\n  z-index: 1;\n  width: 15px;\n  height: 16px;\n  line-height: 14px;\n  text-align: center;\n  right: 1px;\n  top: 50%;\n  margin-top: -8px;\n  color: #CCC;\n}\n.limit-form-text .ch-clear:hover {\n  color: #666;\n}\n.limit-form-text .ch-placeholder {\n  position: absolute;\n  width: 100%;\n  top: 0;\n  left: 0;\n  color: #999;\n  line-height: 16px;\n  padding: 7px;\n  padding-right: 16px;\n}\n.limit-form-password {\n  border: 1px solid #CCC;\n  padding: 6px;\n  padding-right: 15px;\n  background: #FFF;\n  padding-right: 28px;\n}\n.limit-form-password input {\n  border: 0;\n  height: 16px;\n  line-height: 16px;\n  color: #666;\n  font-size: 1em;\n  width: 100%;\n  position: relative;\n  z-index: 2;\n  background: none;\n}\n.limit-form-password .ch-clear {\n  position: absolute;\n  z-index: 1;\n  width: 15px;\n  height: 16px;\n  line-height: 14px;\n  text-align: center;\n  right: 1px;\n  top: 50%;\n  margin-top: -8px;\n  color: #CCC;\n}\n.limit-form-password .ch-clear:hover {\n  color: #666;\n}\n.limit-form-password .ch-placeholder {\n  position: absolute;\n  width: 100%;\n  top: 0;\n  left: 0;\n  color: #999;\n  line-height: 16px;\n  padding: 7px;\n  padding-right: 16px;\n}\n.limit-form-password .ch-container-eye {\n  position: absolute;\n  z-index: 2;\n  width: 10px;\n  height: 10px;\n  top: 50%;\n  margin-top: -5px;\n  right: 15px;\n  background: #FFF;\n  text-align: center;\n  border: 1px solid #CCC;\n  border-radius: 100px;\n  cursor: pointer;\n}\n.limit-form-password .ch-container-eye:hover .ch-eye {\n  background: #666;\n}\n.limit-form-password .ch-eye {\n  display: inline-block;\n  width: 6px;\n  height: 6px;\n  border-radius: 6px;\n  background: #CCC;\n  margin-top: 1px;\n}\n.limit-form-textarea {\n  border: 1px solid #CCC;\n  padding: 6px;\n  background: #FFF;\n}\n.limit-form-textarea .ch-placeholder {\n  position: absolute;\n  width: 100%;\n  top: 0;\n  left: 0;\n  color: #999;\n  line-height: 16px;\n  padding: 7px;\n  padding-right: 16px;\n}\n.limit-form-textarea textarea {\n  background: transparent;\n}\n.limit-form-button input {\n  border: 1px solid #CCC;\n  background: #F2F2F2;\n  font-size: 12px;\n  padding: 0 10px;\n  height: 30px;\n  line-height: 28px;\n  width: 100%;\n  color: #666;\n}\n.limit-form-button input:active {\n  background: #DDD;\n  border-color: #BBB;\n}\n.limit-form-file input {\n  border: 1px solid #CCC;\n  background: #F2F2F2;\n  font-size: 12px;\n  padding: 0 10px;\n  height: 30px;\n  line-height: 28px;\n  width: 100%;\n  color: #666;\n}\n.limit-form-file input:active {\n  background: #DDD;\n  border-color: #BBB;\n}\n.limit-form-calendar .ch-placeholder {\n  position: absolute;\n  width: 100%;\n  top: 0;\n  left: 0;\n  color: #999;\n  line-height: 16px;\n  padding: 7px;\n  padding-right: 16px;\n}\n.limit-form-calendar .ch-clear {\n  position: absolute;\n  z-index: 1;\n  width: 15px;\n  height: 16px;\n  line-height: 14px;\n  text-align: center;\n  right: 1px;\n  top: 50%;\n  margin-top: -8px;\n  color: #CCC;\n}\n.limit-form-calendar .ch-clear:hover {\n  color: #666;\n}\n.limit-form .ch-placeholder {\n  position: absolute;\n  width: 100%;\n  top: 0;\n  left: 0;\n  color: #999;\n  line-height: 16px;\n  padding: 7px;\n  padding-right: 16px;\n}\n.limit-form input[type=\"text\"] {\n  background: transparent;\n}\n/*禁止*/\n.limit-form-disabled .limit-form-text,\n.limit-form-disabled .limit-form-password,\n.limit-form-disabled .limit-form-textarea {\n  background: #F2F2F2;\n}\n.limit-form-disabled .limit-form-text *,\n.limit-form-disabled .limit-form-password *,\n.limit-form-disabled .limit-form-textarea * {\n  cursor: not-allowed;\n}\n.limit-form-disabled .limit-form-submit input,\n.limit-form-disabled .limit-form-reset input,\n.limit-form-disabled .limit-form-button input {\n  color: #999;\n  cursor: not-allowed;\n}\n.limit-form-disabled .limit-form-select {\n  background: #F2F2F2;\n  color: #999;\n  cursor: not-allowed;\n}\n/*焦点*/\n.limit-form-focus.limit-form {\n  z-index: 2;\n}\n.limit-form-focus .limit-form-text,\n.limit-form-focus .limit-form-password,\n.limit-form-focus .limit-form-textarea,\n.limit-form-focus .mod-calendar-input,\n.limit-form-focus .mod-calendar-range {\n  border-color: #4285f4;\n  box-shadow: 0 0 3px rgba(66, 133, 244, 0.5);\n}\n.limit-form-focus .limit-form-text .ch-clear,\n.limit-form-focus .limit-form-password .ch-clear,\n.limit-form-focus .limit-form-textarea .ch-clear,\n.limit-form-focus .mod-calendar-input .ch-clear,\n.limit-form-focus .mod-calendar-range .ch-clear {\n  color: #4285f4;\n}\n.limit-form-focus .limit-form-text .ch-placeholder,\n.limit-form-focus .limit-form-password .ch-placeholder,\n.limit-form-focus .limit-form-textarea .ch-placeholder,\n.limit-form-focus .mod-calendar-input .ch-placeholder,\n.limit-form-focus .mod-calendar-range .ch-placeholder {\n  display: none;\n}\n.limit-form-focus .limit-form-password .ch-container-eye {\n  border-color: #4285f4;\n}\n.limit-form-focus .limit-form-password .ch-container-eye:hover .ch-eye {\n  background: #4285f4;\n}\n.limit-form-focus .limit-form-password .ch-eye {\n  background: #4285f4;\n}\n.limit-form-focus .limit-form-button button:after,\n.limit-form-focus .limit-form-file button:after {\n  position: absolute;\n  content: '';\n  width: 100%;\n  height: 100%;\n  top: 0;\n  left: 0;\n  border-radius: 2px;\n  border: 1px solid #FFF;\n}\n/*错误*/\n.limit-form-error .limit-form-text,\n.limit-form-error .limit-form-password,\n.limit-form-error .limit-form-textarea,\n.limit-form-error .mod-calendar-input,\n.limit-form-error .mod-calendar-range {\n  border-color: #F00;\n  box-shadow: 0 0 3px rgba(255, 0, 0, 0.5);\n}\n.limit-form-error .limit-form-text .ch-clear,\n.limit-form-error .limit-form-password .ch-clear,\n.limit-form-error .limit-form-textarea .ch-clear,\n.limit-form-error .mod-calendar-input .ch-clear,\n.limit-form-error .mod-calendar-range .ch-clear {\n  color: #F00;\n}\n.limit-form-error .limit-form-text .ch-placeholder,\n.limit-form-error .limit-form-password .ch-placeholder,\n.limit-form-error .limit-form-textarea .ch-placeholder,\n.limit-form-error .mod-calendar-input .ch-placeholder,\n.limit-form-error .mod-calendar-range .ch-placeholder {\n  color: #F00;\n}\n.limit-form-error .limit-form-calendar .ch-placeholder {\n  color: #F00;\n}\n.limit-form-error .limit-form-calendar .mod-calendar {\n  border-color: #F00;\n}\n.limit-form-error .limit-form-calendar .mod-calendar .limitIcon {\n  color: #F00;\n}\n.limit-form-error .limit-form-calendar .mod-calendar .limitIcon:focus,\n.limit-form-error .limit-form-calendar .mod-calendar .limitIcon:hover {\n  text-shadow: 0 0 3px rgba(255, 0, 0, 0.5);\n}\n.limit-form-error .limit-form-calendar .mod-calendar .calendar-main li:hover,\n.limit-form-error .limit-form-calendar .mod-calendar .calendar-main li.active {\n  border-color: #F00;\n  color: #F00 !important;\n}\n.limit-form-error .limit-form-calendar .mod-calendar .calendar-main li.today {\n  color: #F00 !important;\n}\n.limit-form-error .limit-form-calendar .mod-calendar .calendar-main li.active {\n  background: #F00;\n  color: #FFF !important;\n}\n.limit-form-error .limit-form-password .ch-container-eye {\n  border-color: #F00;\n}\n.limit-form-error .limit-form-password .ch-container-eye:hover .ch-eye {\n  background: #F00;\n}\n.limit-form-error .limit-form-password .ch-eye {\n  background: #F00;\n}\n.limit-form-error .limit-form-select.mod-select .select-trigger,\n.limit-form-error .limit-form-select.mod-select .select-container {\n  border-color: #F00;\n  box-shadow: 0 0 3px rgba(255, 0, 0, 0.5);\n}\n.limit-form-error .limit-form-select.mod-select:before {\n  border-color: #F00;\n}\n.limit-form-error .limit-form-select.mod-select li.active {\n  background: #F00;\n  border-color: #F00;\n}\n.limit-form-error .limit-form-select.mod-select li:hover {\n  border-color: #F00;\n}\n.limit-form-error .limit-form-select.mod-select .select-trigger .select-trigger-san {\n  border-top-color: #F00;\n}\n.limit-form-error .limit-form-multiple .ch-placeholder {\n  color: #F00;\n}\n.limit-form-error .limit-form-multiple .mod-multiple .multiple-trigger,\n.limit-form-error .limit-form-multiple .mod-multiple .multiple-content {\n  border-color: #F00;\n  box-shadow: 0 0 3px rgba(255, 0, 0, 0.5);\n}\n.limit-form-error .limit-form-multiple .mod-multiple .multiple-trigger .multiple-trigger-san {\n  border-top-color: #F00;\n}\n.limit-form-error .limit-form-multiple .mod-multiple:before {\n  border-color: #F00;\n}\n.limit-form-error .limit-form-multiple .mod-multiple li.active {\n  background: #F00;\n  border-color: #F00;\n}\n.limit-form-error .limit-form-multiple .mod-multiple li.focus {\n  border-color: #F00;\n}\n.limit-form-error .ch-error-info {\n  position: absolute;\n  height: 20px;\n  line-height: 18px;\n  border: 1px solid #F00;\n  box-shadow: 0 0 3px rgba(255, 0, 0, 0.5);\n  top: -10px;\n  right: 3px;\n  color: #F00;\n  background: #FFF;\n  padding: 0 5px;\n  z-index: 1;\n}\n", ""]);
 	
 	// exports
 
 
 /***/ }),
-/* 57 */
-/***/ (function(module, exports) {
-
-	
-	"use strict";
-	
-	// 组件类
-	
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var File = function (_React$Component) {
-		_inherits(File, _React$Component);
-	
-		function File() {
-			_classCallCheck(this, File);
-	
-			return _possibleConstructorReturn(this, (File.__proto__ || Object.getPrototypeOf(File)).apply(this, arguments));
-		}
-	
-		_createClass(File, [{
-			key: "render",
-			value: function render() {
-				var me = this;
-				return React.createElement("input", _extends({
-					ref: "file",
-					onClick: me.click.bind(me)
-				}, me.props, { type: "button" }));
-			}
-		}, {
-			key: "click",
-			value: function click() {
-				var me = this;
-				me.file.click();
-			}
-		}, {
-			key: "mouseEnter",
-			value: function mouseEnter() {
-				var me = this;
-				var refs = me.refs;
-				var file = refs.file;
-	
-				var offset = $(file).offset();
-				var node = me.tempNode;
-				node.style.top = offset.top + "px";
-				node.style.left = offset.left + "px";
-				node.style.width = file.offsetWidth + "px";
-				node.style.height = file.offsetHeight + "px";
-			}
-		}, {
-			key: "mouseLeave",
-			value: function mouseLeave() {
-				var me = this;
-				me.tempNode.style.top = '-999px';
-				me.tempNode.style.left = '-999px';
-			}
-		}, {
-			key: "change",
-			value: function change(e) {
-				var me = this;
-				limit.cb(me.props.onChange)(e);
-			}
-		}, {
-			key: "createForm",
-			value: function createForm() {
-				var me = this;
-				return React.createElement(
-					"form",
-					{ onMouseLeave: me.mouseLeave.bind(me) },
-					React.createElement("input", { type: "file", name: "file", onChange: me.change.bind(me) })
-				);
-			}
-		}, {
-			key: "componentDidMount",
-			value: function componentDidMount() {
-				var me = this;
-				var refs = me.refs,
-				    props = me.props;
-				var file = refs.file;
-				// 创建点击文件上传
-	
-				var node = me.tempNode = document.createElement('div');
-				node.className = 'limit-file';
-				document.body.appendChild(node);
-				var a = ReactDOM.render(me.createForm(), node);
-				me.file = a.file;
-				// 创建拖拽文件上传
-				// let nodeDrop = me.tempNodeDrop = document.createElement('div');
-				// document.body.appendChild(nodeDrop);
-				// nodeDrop.className = 'limit-file-drop';
-				// ReactDOM.render(
-				// 	<FilesDrop onDrop={props.onDrop} />,
-				// 	nodeDrop
-				// );
-			}
-		}, {
-			key: "componentWillUnmount",
-			value: function componentWillUnmount() {
-				var me = this;
-				ReactDOM.unmountComponentAtNode(me.tempNode);
-				// ReactDOM.unmountComponentAtNode(me.tempNodeDrop);
-				var clearDiv = document.createElement('div');
-				clearDiv.appendChild(me.tempNode);
-				// clearDiv.appendChild(me.tempNodeDrop);
-				clearDiv.innerHTML = '';
-				clearDiv = null;
-			}
-		}]);
-	
-		return File;
-	}(React.Component);
-	
-	;
-	
-	exports.default = File;
-
-/***/ }),
-/* 58 */
+/* 46 */
 /***/ (function(module, exports) {
 
 	"use strict";
@@ -2421,7 +2493,7 @@
 	exports.default = Checkbox;
 
 /***/ }),
-/* 59 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2430,11 +2502,11 @@
 	
 	var _hoc2 = _interopRequireDefault(_hoc);
 	
-	var _view = __webpack_require__(60);
+	var _view = __webpack_require__(48);
 	
 	var _view2 = _interopRequireDefault(_view);
 	
-	var _controller = __webpack_require__(69);
+	var _controller = __webpack_require__(57);
 	
 	var _controller2 = _interopRequireDefault(_controller);
 	
@@ -2443,16 +2515,16 @@
 	module.exports = (0, _hoc2.default)(_view2.default, _controller2.default);
 
 /***/ }),
-/* 60 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	__webpack_require__(61);
+	__webpack_require__(49);
 	
-	var _index = __webpack_require__(63);
+	var _index = __webpack_require__(51);
 	
 	var _index2 = _interopRequireDefault(_index);
 	
@@ -2627,13 +2699,13 @@
 	module.exports = Select;
 
 /***/ }),
-/* 61 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(62);
+	var content = __webpack_require__(50);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(12)(content, {});
@@ -2653,7 +2725,7 @@
 	}
 
 /***/ }),
-/* 62 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(11)();
@@ -2667,7 +2739,7 @@
 
 
 /***/ }),
-/* 63 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2676,7 +2748,7 @@
 	  value: true
 	});
 	
-	var _view = __webpack_require__(64);
+	var _view = __webpack_require__(52);
 	
 	var _view2 = _interopRequireDefault(_view);
 	
@@ -2684,7 +2756,7 @@
 	
 	var _hoc2 = _interopRequireDefault(_hoc);
 	
-	var _controller = __webpack_require__(68);
+	var _controller = __webpack_require__(56);
 	
 	var _controller2 = _interopRequireDefault(_controller);
 	
@@ -2695,7 +2767,7 @@
 	exports.default = Index;
 
 /***/ }),
-/* 64 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -2706,9 +2778,9 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	__webpack_require__(65);
+	__webpack_require__(53);
 	
-	var _index = __webpack_require__(67);
+	var _index = __webpack_require__(55);
 	
 	var _index2 = _interopRequireDefault(_index);
 	
@@ -2874,13 +2946,13 @@
 	exports.default = View;
 
 /***/ }),
-/* 65 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(66);
+	var content = __webpack_require__(54);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(12)(content, {});
@@ -2900,7 +2972,7 @@
 	}
 
 /***/ }),
-/* 66 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(11)();
@@ -2914,7 +2986,7 @@
 
 
 /***/ }),
-/* 67 */
+/* 55 */
 /***/ (function(module, exports) {
 
 	"use strict";
@@ -2992,7 +3064,7 @@
 	exports.Index = Index;
 
 /***/ }),
-/* 68 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -3045,7 +3117,7 @@
 	exports.default = Controller;
 
 /***/ }),
-/* 69 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3233,7 +3305,7 @@
 	module.exports = Controller;
 
 /***/ }),
-/* 70 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3242,7 +3314,7 @@
 	  value: true
 	});
 	
-	var _view = __webpack_require__(71);
+	var _view = __webpack_require__(59);
 	
 	var _view2 = _interopRequireDefault(_view);
 	
@@ -3250,7 +3322,7 @@
 	
 	var _hoc2 = _interopRequireDefault(_hoc);
 	
-	var _controller = __webpack_require__(74);
+	var _controller = __webpack_require__(62);
 	
 	var _controller2 = _interopRequireDefault(_controller);
 	
@@ -3261,7 +3333,7 @@
 	exports.default = Index;
 
 /***/ }),
-/* 71 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -3272,13 +3344,13 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	__webpack_require__(72);
+	__webpack_require__(60);
 	
-	var _index = __webpack_require__(67);
+	var _index = __webpack_require__(55);
 	
 	var _index2 = _interopRequireDefault(_index);
 	
-	var _view = __webpack_require__(64);
+	var _view = __webpack_require__(52);
 	
 	var _view2 = _interopRequireDefault(_view);
 	
@@ -3336,13 +3408,13 @@
 	exports.default = View;
 
 /***/ }),
-/* 72 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(73);
+	var content = __webpack_require__(61);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(12)(content, {});
@@ -3362,7 +3434,7 @@
 	}
 
 /***/ }),
-/* 73 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(11)();
@@ -3376,7 +3448,7 @@
 
 
 /***/ }),
-/* 74 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -3449,7 +3521,7 @@
 	exports.default = Controller;
 
 /***/ }),
-/* 75 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3458,11 +3530,11 @@
 	
 	var _hoc2 = _interopRequireDefault(_hoc);
 	
-	var _view = __webpack_require__(76);
+	var _view = __webpack_require__(64);
 	
 	var _view2 = _interopRequireDefault(_view);
 	
-	var _controller = __webpack_require__(84);
+	var _controller = __webpack_require__(72);
 	
 	var _controller2 = _interopRequireDefault(_controller);
 	
@@ -3471,20 +3543,20 @@
 	module.exports = (0, _hoc2.default)(_view2.default, _controller2.default);
 
 /***/ }),
-/* 76 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	__webpack_require__(77);
+	__webpack_require__(65);
 	
-	var _index = __webpack_require__(79);
+	var _index = __webpack_require__(67);
 	
 	var _index2 = _interopRequireDefault(_index);
 	
-	var _index3 = __webpack_require__(63);
+	var _index3 = __webpack_require__(51);
 	
 	var _index4 = _interopRequireDefault(_index3);
 	
@@ -3669,13 +3741,13 @@
 	module.exports = Multiple;
 
 /***/ }),
-/* 77 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(78);
+	var content = __webpack_require__(66);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(12)(content, {});
@@ -3695,7 +3767,7 @@
 	}
 
 /***/ }),
-/* 78 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(11)();
@@ -3709,7 +3781,7 @@
 
 
 /***/ }),
-/* 79 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3718,7 +3790,7 @@
 	  value: true
 	});
 	
-	var _view = __webpack_require__(80);
+	var _view = __webpack_require__(68);
 	
 	var _view2 = _interopRequireDefault(_view);
 	
@@ -3726,7 +3798,7 @@
 	
 	var _hoc2 = _interopRequireDefault(_hoc);
 	
-	var _controller = __webpack_require__(83);
+	var _controller = __webpack_require__(71);
 	
 	var _controller2 = _interopRequireDefault(_controller);
 	
@@ -3737,7 +3809,7 @@
 	exports.default = Index;
 
 /***/ }),
-/* 80 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3750,7 +3822,7 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	__webpack_require__(81);
+	__webpack_require__(69);
 	
 	var _component = __webpack_require__(13);
 	
@@ -3815,13 +3887,13 @@
 	exports.default = View;
 
 /***/ }),
-/* 81 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(82);
+	var content = __webpack_require__(70);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(12)(content, {});
@@ -3841,7 +3913,7 @@
 	}
 
 /***/ }),
-/* 82 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(11)();
@@ -3855,7 +3927,7 @@
 
 
 /***/ }),
-/* 83 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3922,7 +3994,7 @@
 	exports.default = Controller;
 
 /***/ }),
-/* 84 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4132,7 +4204,402 @@
 	module.exports = Controller;
 
 /***/ }),
-/* 85 */
+/* 73 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _view = __webpack_require__(74);
+	
+	var _view2 = _interopRequireDefault(_view);
+	
+	var _hoc = __webpack_require__(15);
+	
+	var _hoc2 = _interopRequireDefault(_hoc);
+	
+	var _controller = __webpack_require__(77);
+	
+	var _controller2 = _interopRequireDefault(_controller);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var Index = (0, _hoc2.default)(_view2.default, _controller2.default);
+	
+	exports.default = Index;
+
+/***/ }),
+/* 74 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	__webpack_require__(75);
+	
+	var _index = __webpack_require__(255);
+	
+	var _index2 = _interopRequireDefault(_index);
+	
+	var _domUtil = __webpack_require__(20);
+	
+	var _domUtil2 = _interopRequireDefault(_domUtil);
+	
+	var _index3 = __webpack_require__(35);
+	
+	var _index4 = _interopRequireDefault(_index3);
+	
+	var _component = __webpack_require__(13);
+	
+	var _component2 = _interopRequireDefault(_component);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var InputUpload = function (_Component) {
+		_inherits(InputUpload, _Component);
+	
+		function InputUpload() {
+			_classCallCheck(this, InputUpload);
+	
+			return _possibleConstructorReturn(this, (InputUpload.__proto__ || Object.getPrototypeOf(InputUpload)).apply(this, arguments));
+		}
+	
+		_createClass(InputUpload, [{
+			key: 'render',
+			value: function render() {
+				var me = this;
+				var props = me.props;
+	
+				return React.createElement(_index2.default, { type: 'button',
+					className: 'mod-input-upload',
+					ref: 'file',
+					onMouseEnter: me.isUseUploadHack() ? me.mouseEnter.bind(me) : null,
+					onFocus: props.onFocus,
+					onBlur: props.onBlur,
+					disabled: props.isUpload ? true : false,
+					value: props.value,
+					onClick: me.isUseUploadHack() ? null : me.click.bind(me) });
+			}
+		}, {
+			key: 'isUseUploadHack',
+			value: function isUseUploadHack() {
+				return _domUtil2.default.isIE8();
+			}
+		}, {
+			key: 'mouseEnter',
+			value: function mouseEnter() {
+				var me = this;
+				var refs = me.refs,
+				    props = me.props;
+				var file = refs.file;
+	
+				if (props.isUpload) {
+					return;
+				};
+				file = file.refs.com.getButton();
+				var offset = $(file).offset();
+				var node = me.tempNode;
+				node.style.top = offset.top + 'px';
+				node.style.left = offset.left + 'px';
+				node.style.width = file.offsetWidth + 'px';
+				node.style.height = file.offsetHeight + 'px';
+			}
+		}, {
+			key: 'mouseLeave',
+			value: function mouseLeave() {
+				var me = this;
+				me.tempNode.style.top = '-999px';
+				me.tempNode.style.left = '-999px';
+			}
+		}, {
+			key: 'click',
+			value: function click() {
+				var me = this;
+				me.form.file.click();
+			}
+		}, {
+			key: 'change',
+			value: function change(e) {
+				var me = this;
+				var props = me.props;
+	
+				Actions(me).change(me.getFileName(e)).then(function () {
+					me.mouseLeave();
+					if (props.action) {
+						return me.upload();
+					} else {
+						throw 'action is empty';
+					};
+				}).then(Actions(me).uploadSuccess, Actions(me).uploadError).then(function () {
+					me.removeForm();
+					me.createForm();
+				});
+			}
+		}, {
+			key: 'upload',
+			value: function upload() {
+				var me = this;
+				var props = me.props;
+	
+				return new _index4.default({
+					element: me.form,
+					url: props.action,
+					onprogress: function onprogress(scale) {
+						Actions(me).progress(scale * 100);
+					}
+				}).submit();
+			}
+		}, {
+			key: 'getFileName',
+			value: function getFileName(e) {
+				var me = this;
+				var files = void 0;
+				var value = void 0;
+				if (e) {
+					var target = e.target;
+					files = target.files;
+					value = target.value;
+				} else {
+					value = me.form.file.value;
+				};
+				if (files) {
+					return limit.from(e.target.files, function (file) {
+						var name = file.name,
+						    size = file.size;
+	
+						return { name: name, size: size, file: file };
+					});
+				} else {
+					return [{ name: value.split('\\').pop(), size: 0 }];
+				};
+			}
+		}, {
+			key: 'formatFileName',
+			value: function formatFileName(name) {
+				var arr = name.split('.');
+				return limit.wordWrap(arr[0], 10, '···') + '.' + arr[1];
+			}
+		}, {
+			key: 'createForm',
+			value: function createForm() {
+				var me = this;
+				var props = me.props;
+	
+				var node = me.tempNode = document.createElement('div');
+				var arr = [];
+				limit.each(props.param, function (val, key) {
+					arr.push('<input type="hidden" name="' + key + '" value="' + val + '" />');
+				});
+				node.className = 'mod-input-file';
+				node.innerHTML = '<form method="POST" encType="multipart/form-data">\n\t\t\t\t<input name="file" ' + (props.multiple ? 'multiple="multiple"' : '') + ' accept="' + props.accept + '" type="file" style="filter:alpha(opacity=0);" />\n\t\t\t\t' + arr.join('') + '\n\t\t\t</form>';
+				var form = me.form = node.firstChild;
+				var file = form.file;
+				file.onchange = me.change.bind(me);
+				$(node).on('mouseleave', me.mouseLeave.bind(me));
+				document.body.appendChild(node);
+			}
+		}, {
+			key: 'removeForm',
+			value: function removeForm() {
+				var me = this;
+				me.form.file.onchange = null;
+				$(me.tempNode).off('mouseleave');
+				_domUtil2.default.clearDom(me.tempNode);
+			}
+		}, {
+			key: 'componentDidMount',
+			value: function componentDidMount() {
+				var me = this;
+				// 创建点击文件上传
+				me.createForm();
+			}
+		}, {
+			key: 'componentWillUnmount',
+			value: function componentWillUnmount() {
+				var me = this;
+				me.removeForm();
+			}
+		}, {
+			key: 'componentDidUpdate',
+			value: function componentDidUpdate() {}
+		}]);
+	
+		return InputUpload;
+	}(_component2.default);
+	
+	;
+	
+	exports.default = InputUpload;
+
+/***/ }),
+/* 75 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(76);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(12)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/less-loader/index.js!./style.less", function() {
+				var newContent = require("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/less-loader/index.js!./style.less");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ }),
+/* 76 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(11)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, ".mod-input-upload {\n  border: 1px solid #CCC;\n  background: #F2F2F2;\n  font-size: 12px;\n  padding: 0 10px;\n  height: 30px;\n  line-height: 28px;\n  color: #666;\n  cursor: pointer;\n}\n.mod-input-upload:active {\n  background: #DDD;\n  border-color: #BBB;\n}\n.mod-input-upload[disabled] {\n  cursor: not-allowed;\n  color: #CCC;\n}\n.mod-input-file {\n  position: absolute;\n  width: 100px;\n  height: 100px;\n  overflow: hidden;\n  background: #F00;\n  opacity: 0;\n  filter: alpha(opacity=0);\n  top: -999px;\n  left: -999px;\n  font-size: 200px;\n}\n.mod-input-file input {\n  position: absolute;\n  right: 0px;\n  top: 0px;\n  cursor: pointer;\n}\n", ""]);
+	
+	// exports
+
+
+/***/ }),
+/* 77 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _control = __webpack_require__(26);
+	
+	var _control2 = _interopRequireDefault(_control);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Controller = function (_Control) {
+		_inherits(Controller, _Control);
+	
+		function Controller() {
+			var _ref;
+	
+			var _temp, _this, _ret;
+	
+			_classCallCheck(this, Controller);
+	
+			for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+				args[_key] = arguments[_key];
+			}
+	
+			return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Controller.__proto__ || Object.getPrototypeOf(Controller)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
+				isUpload: false
+			}, _temp), _possibleConstructorReturn(_this, _ret);
+		}
+	
+		_createClass(Controller, [{
+			key: 'onChange',
+			value: function onChange(nameList) {
+				var me = this;
+				var state = me.state,
+				    props = me.props;
+	
+				state.isUpload = true;
+				return me.updateComponent().then(function () {
+					return props.onChange(nameList);
+				});
+			}
+		}, {
+			key: 'onProgress',
+			value: function onProgress(scale) {
+				var me = this;
+				var props = me.props;
+	
+				return props.onProgress(scale);
+			}
+		}, {
+			key: 'onUploadSuccess',
+			value: function onUploadSuccess() {
+				for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+					args[_key2] = arguments[_key2];
+				}
+	
+				var me = this;
+				var state = me.state,
+				    props = me.props;
+	
+				state.isUpload = false;
+				return me.updateComponent().then(function () {
+					return props.onUploadSuccess.apply(props, args);
+				});
+			}
+		}, {
+			key: 'onUploadError',
+			value: function onUploadError(e) {
+				var me = this;
+				var state = me.state,
+				    props = me.props;
+	
+				state.isUpload = false;
+				return me.updateComponent().then(function () {
+					return props.onUploadError(e);
+				});
+			}
+		}]);
+	
+		return Controller;
+	}(_control2.default);
+	
+	Controller.defaultProps = {
+		actionId: 'InputUpload',
+		value: '上 传',
+		width: 300,
+		param: {},
+		action: '',
+		multiple: false, // IE8不支持
+		accept: '', // IE8不支持
+		onChange: limit.K,
+		onProgress: limit.K, // IE8不支持
+		onUploadSuccess: limit.K,
+		onUploadError: limit.K
+	};
+	;
+	
+	exports.default = Controller;
+
+/***/ }),
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4141,11 +4608,11 @@
 	
 	var _hoc2 = _interopRequireDefault(_hoc);
 	
-	var _view = __webpack_require__(86);
+	var _view = __webpack_require__(79);
 	
 	var _view2 = _interopRequireDefault(_view);
 	
-	var _controller = __webpack_require__(89);
+	var _controller = __webpack_require__(82);
 	
 	var _controller2 = _interopRequireDefault(_controller);
 	
@@ -4154,14 +4621,14 @@
 	module.exports = (0, _hoc2.default)(_view2.default, _controller2.default);
 
 /***/ }),
-/* 86 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	__webpack_require__(87);
+	__webpack_require__(80);
 	
 	var _index = __webpack_require__(21);
 	
@@ -4266,13 +4733,13 @@
 	module.exports = CalendarInput;
 
 /***/ }),
-/* 87 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(88);
+	var content = __webpack_require__(81);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(12)(content, {});
@@ -4292,7 +4759,7 @@
 	}
 
 /***/ }),
-/* 88 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(11)();
@@ -4306,7 +4773,7 @@
 
 
 /***/ }),
-/* 89 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4389,7 +4856,7 @@
 	module.exports = Controller;
 
 /***/ }),
-/* 90 */
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -4463,6 +4930,10 @@
 				if (props.type === 'number' && !regNum.test(value)) {
 					return;
 				};
+				// 对类型是文件的拦截
+				if (props.type === 'file') {
+					return;
+				};
 				state.value = value;
 				me.updateOriginData(value);
 				return me.updateComponent().then(function () {
@@ -4513,7 +4984,9 @@
 				me.updateOriginData('');
 				me.updateComponent().then(function () {
 					state.clearSuccess = false;
-					props.onChange('');
+					return me.updateComponent().then(function () {
+						return props.onChange('');
+					});
 				});
 			}
 		}, {
@@ -4581,8 +5054,8 @@
 	exports.default = Controller;
 
 /***/ }),
-/* 91 */,
-/* 92 */
+/* 84 */,
+/* 85 */
 /***/ (function(module, exports) {
 
 	"use strict";
@@ -4679,10 +5152,10 @@
 	exports.default = Widget;
 
 /***/ }),
-/* 93 */,
-/* 94 */,
-/* 95 */,
-/* 96 */
+/* 86 */,
+/* 87 */,
+/* 88 */,
+/* 89 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4691,7 +5164,7 @@
 	  value: true
 	});
 	
-	var _view = __webpack_require__(97);
+	var _view = __webpack_require__(90);
 	
 	var _view2 = _interopRequireDefault(_view);
 	
@@ -4699,7 +5172,7 @@
 	
 	var _hoc2 = _interopRequireDefault(_hoc);
 	
-	var _controller = __webpack_require__(106);
+	var _controller = __webpack_require__(99);
 	
 	var _controller2 = _interopRequireDefault(_controller);
 	
@@ -4710,7 +5183,7 @@
 	exports.default = Index;
 
 /***/ }),
-/* 97 */
+/* 90 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -4721,9 +5194,9 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	__webpack_require__(98);
+	__webpack_require__(91);
 	
-	var _index = __webpack_require__(100);
+	var _index = __webpack_require__(93);
 	
 	var _index2 = _interopRequireDefault(_index);
 	
@@ -4880,13 +5353,13 @@
 	exports.default = Dialog;
 
 /***/ }),
-/* 98 */
+/* 91 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(99);
+	var content = __webpack_require__(92);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(12)(content, {});
@@ -4906,7 +5379,7 @@
 	}
 
 /***/ }),
-/* 99 */
+/* 92 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(11)();
@@ -4920,7 +5393,7 @@
 
 
 /***/ }),
-/* 100 */
+/* 93 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4929,7 +5402,7 @@
 	  value: true
 	});
 	
-	var _view = __webpack_require__(101);
+	var _view = __webpack_require__(94);
 	
 	var _view2 = _interopRequireDefault(_view);
 	
@@ -4937,7 +5410,7 @@
 	
 	var _hoc2 = _interopRequireDefault(_hoc);
 	
-	var _controller = __webpack_require__(105);
+	var _controller = __webpack_require__(98);
 	
 	var _controller2 = _interopRequireDefault(_controller);
 	
@@ -4948,14 +5421,14 @@
 	exports.default = Index;
 
 /***/ }),
-/* 101 */
+/* 94 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	__webpack_require__(102);
+	__webpack_require__(95);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -4964,7 +5437,7 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	// 依赖
-	var React = __webpack_require__(104);
+	var React = __webpack_require__(97);
 	var limit = __webpack_require__(32);
 	
 	// 组件类
@@ -5002,13 +5475,13 @@
 	module.exports = Cover;
 
 /***/ }),
-/* 102 */
+/* 95 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(103);
+	var content = __webpack_require__(96);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(12)(content, {});
@@ -5028,7 +5501,7 @@
 	}
 
 /***/ }),
-/* 103 */
+/* 96 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(11)();
@@ -5042,13 +5515,13 @@
 
 
 /***/ }),
-/* 104 */
+/* 97 */
 /***/ (function(module, exports) {
 
 	module.exports = React;
 
 /***/ }),
-/* 105 */
+/* 98 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5101,7 +5574,7 @@
 	exports.default = Controller;
 
 /***/ }),
-/* 106 */
+/* 99 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5159,8 +5632,8 @@
 	exports.default = Controller;
 
 /***/ }),
-/* 107 */,
-/* 108 */
+/* 100 */,
+/* 101 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5173,7 +5646,7 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _widget = __webpack_require__(109);
+	var _widget = __webpack_require__(102);
 	
 	var _widget2 = _interopRequireDefault(_widget);
 	
@@ -5276,7 +5749,7 @@
 	exports.default = Index;
 
 /***/ }),
-/* 109 */
+/* 102 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5289,15 +5762,15 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _index = __webpack_require__(96);
+	var _index = __webpack_require__(89);
 	
 	var _index2 = _interopRequireDefault(_index);
 	
-	var _index3 = __webpack_require__(53);
+	var _index3 = __webpack_require__(42);
 	
 	var _index4 = _interopRequireDefault(_index3);
 	
-	var _widget = __webpack_require__(92);
+	var _widget = __webpack_require__(85);
 	
 	var _widget2 = _interopRequireDefault(_widget);
 	
@@ -5464,6 +5937,13 @@
 	exports.default = originWidget;
 
 /***/ }),
+/* 103 */,
+/* 104 */,
+/* 105 */,
+/* 106 */,
+/* 107 */,
+/* 108 */,
+/* 109 */,
 /* 110 */,
 /* 111 */,
 /* 112 */,
@@ -5525,51 +6005,39 @@
 /* 168 */,
 /* 169 */,
 /* 170 */,
-/* 171 */,
-/* 172 */,
-/* 173 */,
-/* 174 */,
-/* 175 */,
-/* 176 */,
-/* 177 */,
-/* 178 */,
-/* 179 */,
-/* 180 */,
-/* 181 */,
-/* 182 */,
-/* 183 */
+/* 171 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	// 组件类
 	
-	var Title = __webpack_require__(184);
+	var Title = __webpack_require__(172);
 	
 	// 置入文档
 	ReactDOM.render(React.createElement(Title, null), document.getElementById('container'));
 
 /***/ }),
-/* 184 */
+/* 172 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	// 依赖
 	
-	module.exports = __webpack_require__(15)(__webpack_require__(185), __webpack_require__(206));
+	module.exports = __webpack_require__(15)(__webpack_require__(173), __webpack_require__(194));
 
 /***/ }),
-/* 185 */
+/* 173 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	__webpack_require__(186);
+	__webpack_require__(174);
 	
-	var _index = __webpack_require__(188);
+	var _index = __webpack_require__(176);
 	
 	var _index2 = _interopRequireDefault(_index);
 	
@@ -5581,11 +6049,11 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var QrcodeImg = __webpack_require__(198);
-	var Page = __webpack_require__(192);
-	var Input = __webpack_require__(53);
-	var Validator = __webpack_require__(199);
-	var DialogWidget = __webpack_require__(109);
+	var QrcodeImg = __webpack_require__(186);
+	var Page = __webpack_require__(180);
+	var Input = __webpack_require__(42);
+	var Validator = __webpack_require__(187);
+	var DialogWidget = __webpack_require__(102);
 	
 	// 组件类
 	var Qrcode = function (_React$Component) {
@@ -5881,13 +6349,13 @@
 	module.exports = Qrcode;
 
 /***/ }),
-/* 186 */
+/* 174 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(187);
+	var content = __webpack_require__(175);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(12)(content, {});
@@ -5907,7 +6375,7 @@
 	}
 
 /***/ }),
-/* 187 */
+/* 175 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(11)();
@@ -5921,7 +6389,7 @@
 
 
 /***/ }),
-/* 188 */
+/* 176 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5930,7 +6398,7 @@
 	  value: true
 	});
 	
-	var _view = __webpack_require__(189);
+	var _view = __webpack_require__(177);
 	
 	var _view2 = _interopRequireDefault(_view);
 	
@@ -5938,7 +6406,7 @@
 	
 	var _hoc2 = _interopRequireDefault(_hoc);
 	
-	var _controller = __webpack_require__(197);
+	var _controller = __webpack_require__(185);
 	
 	var _controller2 = _interopRequireDefault(_controller);
 	
@@ -5949,7 +6417,7 @@
 	exports.default = Index;
 
 /***/ }),
-/* 189 */
+/* 177 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5960,13 +6428,13 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	__webpack_require__(190);
+	__webpack_require__(178);
 	
 	var _component = __webpack_require__(13);
 	
 	var _component2 = _interopRequireDefault(_component);
 	
-	var _index = __webpack_require__(192);
+	var _index = __webpack_require__(180);
 	
 	var _index2 = _interopRequireDefault(_index);
 	
@@ -6014,13 +6482,13 @@
 	exports.default = SearchList;
 
 /***/ }),
-/* 190 */
+/* 178 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(191);
+	var content = __webpack_require__(179);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(12)(content, {});
@@ -6040,7 +6508,7 @@
 	}
 
 /***/ }),
-/* 191 */
+/* 179 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(11)();
@@ -6054,7 +6522,7 @@
 
 
 /***/ }),
-/* 192 */
+/* 180 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6063,7 +6531,7 @@
 	  value: true
 	});
 	
-	var _view = __webpack_require__(193);
+	var _view = __webpack_require__(181);
 	
 	var _view2 = _interopRequireDefault(_view);
 	
@@ -6071,7 +6539,7 @@
 	
 	var _hoc2 = _interopRequireDefault(_hoc);
 	
-	var _controller = __webpack_require__(196);
+	var _controller = __webpack_require__(184);
 	
 	var _controller2 = _interopRequireDefault(_controller);
 	
@@ -6082,7 +6550,7 @@
 	exports.default = Index;
 
 /***/ }),
-/* 193 */
+/* 181 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -6093,7 +6561,7 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	__webpack_require__(194);
+	__webpack_require__(182);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -6221,13 +6689,13 @@
 	exports.default = Page;
 
 /***/ }),
-/* 194 */
+/* 182 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(195);
+	var content = __webpack_require__(183);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(12)(content, {});
@@ -6247,7 +6715,7 @@
 	}
 
 /***/ }),
-/* 195 */
+/* 183 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(11)();
@@ -6261,7 +6729,7 @@
 
 
 /***/ }),
-/* 196 */
+/* 184 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -6338,7 +6806,7 @@
 	exports.default = Controller;
 
 /***/ }),
-/* 197 */
+/* 185 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -6355,7 +6823,7 @@
 	
 	var _control2 = _interopRequireDefault(_control);
 	
-	var _index = __webpack_require__(108);
+	var _index = __webpack_require__(101);
 	
 	var _index2 = _interopRequireDefault(_index);
 	
@@ -6508,7 +6976,7 @@
 	exports.default = Controller;
 
 /***/ }),
-/* 198 */
+/* 186 */
 /***/ (function(module, exports) {
 
 	"use strict";
@@ -6568,7 +7036,7 @@
 	module.exports = QrcodeImg;
 
 /***/ }),
-/* 199 */
+/* 187 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6577,7 +7045,7 @@
 	  value: true
 	});
 	
-	var _view = __webpack_require__(200);
+	var _view = __webpack_require__(188);
 	
 	var _view2 = _interopRequireDefault(_view);
 	
@@ -6585,7 +7053,7 @@
 	
 	var _hoc2 = _interopRequireDefault(_hoc);
 	
-	var _controller = __webpack_require__(203);
+	var _controller = __webpack_require__(191);
 	
 	var _controller2 = _interopRequireDefault(_controller);
 	
@@ -6596,7 +7064,7 @@
 	exports.default = Index;
 
 /***/ }),
-/* 200 */
+/* 188 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -6607,7 +7075,7 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	__webpack_require__(201);
+	__webpack_require__(189);
 	
 	var _component = __webpack_require__(13);
 	
@@ -6682,13 +7150,13 @@
 	exports.default = View;
 
 /***/ }),
-/* 201 */
+/* 189 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(202);
+	var content = __webpack_require__(190);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(12)(content, {});
@@ -6708,7 +7176,7 @@
 	}
 
 /***/ }),
-/* 202 */
+/* 190 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(11)();
@@ -6722,7 +7190,7 @@
 
 
 /***/ }),
-/* 203 */
+/* 191 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -6735,7 +7203,7 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _listener = __webpack_require__(204);
+	var _listener = __webpack_require__(192);
 	
 	var _listener2 = _interopRequireDefault(_listener);
 	
@@ -6809,7 +7277,7 @@
 	exports.default = Controller;
 
 /***/ }),
-/* 204 */
+/* 192 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -6820,7 +7288,7 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _map = __webpack_require__(205);
+	var _map = __webpack_require__(193);
 	
 	var _map2 = _interopRequireDefault(_map);
 	
@@ -7014,7 +7482,7 @@
 	exports.default = Listener;
 
 /***/ }),
-/* 205 */
+/* 193 */
 /***/ (function(module, exports) {
 
 	"use strict";
@@ -7051,7 +7519,7 @@
 	exports.default = Map;
 
 /***/ }),
-/* 206 */
+/* 194 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -7066,9 +7534,9 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var Ajax = __webpack_require__(108);
+	var Ajax = __webpack_require__(101);
 	var Control = __webpack_require__(26);
-	var DialogWidget = __webpack_require__(109);
+	var DialogWidget = __webpack_require__(102);
 	
 	var Controller = function (_Control) {
 		_inherits(Controller, _Control);
@@ -7248,6 +7716,318 @@
 	;
 	
 	module.exports = Controller;
+
+/***/ }),
+/* 195 */,
+/* 196 */,
+/* 197 */,
+/* 198 */,
+/* 199 */,
+/* 200 */,
+/* 201 */,
+/* 202 */,
+/* 203 */,
+/* 204 */,
+/* 205 */,
+/* 206 */,
+/* 207 */,
+/* 208 */,
+/* 209 */,
+/* 210 */,
+/* 211 */,
+/* 212 */,
+/* 213 */,
+/* 214 */,
+/* 215 */,
+/* 216 */,
+/* 217 */,
+/* 218 */,
+/* 219 */,
+/* 220 */,
+/* 221 */,
+/* 222 */,
+/* 223 */,
+/* 224 */,
+/* 225 */,
+/* 226 */,
+/* 227 */,
+/* 228 */,
+/* 229 */,
+/* 230 */,
+/* 231 */,
+/* 232 */,
+/* 233 */,
+/* 234 */,
+/* 235 */,
+/* 236 */,
+/* 237 */,
+/* 238 */,
+/* 239 */,
+/* 240 */,
+/* 241 */,
+/* 242 */,
+/* 243 */,
+/* 244 */,
+/* 245 */,
+/* 246 */,
+/* 247 */,
+/* 248 */,
+/* 249 */,
+/* 250 */,
+/* 251 */,
+/* 252 */,
+/* 253 */,
+/* 254 */,
+/* 255 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _view = __webpack_require__(256);
+	
+	var _view2 = _interopRequireDefault(_view);
+	
+	var _hoc = __webpack_require__(15);
+	
+	var _hoc2 = _interopRequireDefault(_hoc);
+	
+	var _controller = __webpack_require__(259);
+	
+	var _controller2 = _interopRequireDefault(_controller);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var Index = (0, _hoc2.default)(_view2.default, _controller2.default);
+	
+	exports.default = Index;
+
+/***/ }),
+/* 256 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	__webpack_require__(257);
+	
+	var _component = __webpack_require__(13);
+	
+	var _component2 = _interopRequireDefault(_component);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Button = function (_Component) {
+		_inherits(Button, _Component);
+	
+		function Button() {
+			_classCallCheck(this, Button);
+	
+			return _possibleConstructorReturn(this, (Button.__proto__ || Object.getPrototypeOf(Button)).apply(this, arguments));
+		}
+	
+		_createClass(Button, [{
+			key: 'render',
+			value: function render() {
+				var me = this;
+				var props = me.props;
+	
+				return React.createElement(
+					'button',
+					{
+						ref: 'button',
+						disabled: props.disabled,
+						onClick: Actions(me).click,
+						onFocus: props.onFocus,
+						onBlur: props.onBlur,
+						onMouseEnter: props.onMouseEnter,
+						className: me.getClassName('mod-button', props.isClick ? 'button-clicked' : null, me.getButtonColor()),
+						type: props.type },
+					React.createElement(
+						'span',
+						null,
+						props.value
+					)
+				);
+			}
+		}, {
+			key: 'getButtonColor',
+			value: function getButtonColor() {
+				var me = this;
+				var props = me.props;
+	
+				if (props.disabled) {
+					return 'button-color-disabled';
+				} else {
+					return 'button-color-' + props.colorType;
+				};
+			}
+		}, {
+			key: 'focus',
+			value: function focus() {
+				var me = this;
+				var button = me.refs.button;
+	
+				button.focus();
+			}
+		}, {
+			key: 'getButton',
+			value: function getButton() {
+				var me = this;
+				var button = me.refs.button;
+	
+				return button;
+			}
+		}, {
+			key: 'componentDidMount',
+			value: function componentDidMount() {}
+		}, {
+			key: 'componentDidUpdate',
+			value: function componentDidUpdate() {}
+		}, {
+			key: 'componentWillUnmount',
+			value: function componentWillUnmount() {}
+		}]);
+	
+		return Button;
+	}(_component2.default);
+	
+	;
+	
+	exports.default = Button;
+
+/***/ }),
+/* 257 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(258);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(12)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/less-loader/index.js!./style.less", function() {
+				var newContent = require("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/less-loader/index.js!./style.less");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ }),
+/* 258 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(11)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, "/*默认*/\n.mod-button {\n  border: 1px solid #bfbfbf;\n  background: #F2F2F2;\n  height: 30px;\n  line-height: 30px;\n  font-size: 12px;\n  color: #666;\n  padding: 0 10px;\n  position: relative;\n  border-radius: 3px;\n}\n.mod-button:focus {\n  outline: none;\n}\n.mod-button:active,\n.mod-button:active:before {\n  background: #d9d9d9;\n}\n.mod-button:before {\n  position: absolute;\n  content: '';\n  width: 100%;\n  height: 100%;\n  top: 0;\n  left: 0;\n  opacity: 1;\n  background: #F2F2F2;\n  border-radius: 5px;\n}\n.mod-button.button-clicked:before {\n  transition: all 0.3s ease-out 0s;\n  width: 130%;\n  height: 130%;\n  top: -15%;\n  left: -15%;\n  opacity: 0;\n}\n.mod-button span {\n  position: relative;\n}\n.mod-button.button-color-primary {\n  border: 1px solid #1266f1;\n  background: #4285f4;\n  color: #FFF;\n}\n.mod-button.button-color-primary:active,\n.mod-button.button-color-primary:active:before {\n  background: #2a75f3;\n}\n.mod-button.button-color-primary:before {\n  background: #4285f4;\n}\n.mod-button.button-color-warning {\n  border: 1px solid #cc7a00;\n  background: #F90;\n  color: #FFF;\n}\n.mod-button.button-color-warning:active,\n.mod-button.button-color-warning:active:before {\n  background: #e68a00;\n}\n.mod-button.button-color-warning:before {\n  background: #F90;\n}\n.mod-button.button-color-error {\n  border: 1px solid #cc0000;\n  background: #F00;\n  color: #FFF;\n}\n.mod-button.button-color-error:active,\n.mod-button.button-color-error:active:before {\n  background: #e60000;\n}\n.mod-button.button-color-error:before {\n  background: #F00;\n}\n.mod-button.button-color-disabled {\n  cursor: not-allowed;\n  color: #999;\n}\n.mod-button.button-color-disabled:active,\n.mod-button.button-color-disabled:active:before {\n  background: #F2F2F2;\n}\n", ""]);
+	
+	// exports
+
+
+/***/ }),
+/* 259 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _control = __webpack_require__(26);
+	
+	var _control2 = _interopRequireDefault(_control);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Controller = function (_Control) {
+		_inherits(Controller, _Control);
+	
+		function Controller() {
+			var _ref;
+	
+			var _temp, _this, _ret;
+	
+			_classCallCheck(this, Controller);
+	
+			for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+				args[_key] = arguments[_key];
+			}
+	
+			return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Controller.__proto__ || Object.getPrototypeOf(Controller)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
+				isClick: false
+			}, _temp), _possibleConstructorReturn(_this, _ret);
+		}
+	
+		_createClass(Controller, [{
+			key: 'onClick',
+			value: function onClick() {
+				var me = this;
+				var state = me.state,
+				    props = me.props;
+	
+				if (!state.isClick) {
+					state.isClick = true;
+				};
+				return me.updateComponent().then(function () {
+					setTimeout(function () {
+						me.state.isClick = false;
+						me.updateComponent();
+					}, 300);
+				}).then(function () {
+					return props.onClick();
+				});
+			}
+		}]);
+	
+		return Controller;
+	}(_control2.default);
+	
+	Controller.defaultProps = {
+		actionId: 'Button',
+		type: 'button',
+		disabled: false,
+		colorType: 'default', // 颜色类型 default[灰色#F2F2F2] primary[蓝色#4285f4] warning[橘黄#F90] error[红色#F00]
+		value: '按 钮',
+		onClick: limit.K
+	};
+	;
+	
+	exports.default = Controller;
 
 /***/ })
 /******/ ]);

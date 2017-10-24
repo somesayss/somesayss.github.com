@@ -45,7 +45,7 @@
 /***/ 0:
 /***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(207);
+	module.exports = __webpack_require__(195);
 
 
 /***/ }),
@@ -727,7 +727,7 @@
 
 /***/ }),
 
-/***/ 166:
+/***/ 154:
 /***/ (function(module, exports) {
 
 	"use strict";
@@ -849,39 +849,39 @@
 
 /***/ }),
 
-/***/ 207:
+/***/ 195:
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	// 组件类
 	
-	var Title = __webpack_require__(208);
+	var Title = __webpack_require__(196);
 	
 	// 置入文档
 	ReactDOM.render(React.createElement(Title, null), document.getElementById('container'));
 
 /***/ }),
 
-/***/ 208:
+/***/ 196:
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	// 依赖
 	
-	module.exports = __webpack_require__(15)(__webpack_require__(209), __webpack_require__(212));
+	module.exports = __webpack_require__(15)(__webpack_require__(197), __webpack_require__(200));
 
 /***/ }),
 
-/***/ 209:
+/***/ 197:
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	__webpack_require__(210);
+	__webpack_require__(198);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -889,7 +889,7 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var Router = __webpack_require__(166);
+	var Router = __webpack_require__(154);
 	
 	// 组件类
 	
@@ -954,13 +954,13 @@
 
 /***/ }),
 
-/***/ 210:
+/***/ 198:
 /***/ (function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(211);
+	var content = __webpack_require__(199);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(12)(content, {});
@@ -981,7 +981,7 @@
 
 /***/ }),
 
-/***/ 211:
+/***/ 199:
 /***/ (function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(11)();
@@ -996,7 +996,7 @@
 
 /***/ }),
 
-/***/ 212:
+/***/ 200:
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";

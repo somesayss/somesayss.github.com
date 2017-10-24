@@ -45,7 +45,7 @@
 /***/ 0:
 /***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(133);
+	module.exports = __webpack_require__(126);
 
 
 /***/ }),
@@ -1038,22 +1038,7 @@
 
 /***/ }),
 
-/***/ 133:
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var _index = __webpack_require__(134);
-	
-	var _index2 = _interopRequireDefault(_index);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	ReactDOM.render(React.createElement(_index2.default, null), document.getElementById('container'));
-
-/***/ }),
-
-/***/ 134:
+/***/ 73:
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1062,7 +1047,7 @@
 	  value: true
 	});
 	
-	var _view = __webpack_require__(135);
+	var _view = __webpack_require__(74);
 	
 	var _view2 = _interopRequireDefault(_view);
 	
@@ -1070,7 +1055,7 @@
 	
 	var _hoc2 = _interopRequireDefault(_hoc);
 	
-	var _controller = __webpack_require__(143);
+	var _controller = __webpack_require__(77);
 	
 	var _controller2 = _interopRequireDefault(_controller);
 	
@@ -1082,7 +1067,7 @@
 
 /***/ }),
 
-/***/ 135:
+/***/ 74:
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1093,156 +1078,19 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	__webpack_require__(136);
+	__webpack_require__(75);
 	
-	var _index = __webpack_require__(138);
+	var _index = __webpack_require__(255);
 	
 	var _index2 = _interopRequireDefault(_index);
-	
-	var _component = __webpack_require__(13);
-	
-	var _component2 = _interopRequireDefault(_component);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var InputUpload = function (_Component) {
-		_inherits(InputUpload, _Component);
-	
-		function InputUpload() {
-			_classCallCheck(this, InputUpload);
-	
-			return _possibleConstructorReturn(this, (InputUpload.__proto__ || Object.getPrototypeOf(InputUpload)).apply(this, arguments));
-		}
-	
-		_createClass(InputUpload, [{
-			key: 'render',
-			value: function render() {
-				var me = this;
-				var props = me.props;
-	
-				return React.createElement(
-					'div',
-					{ className: me.getClassName('page-input-upload') },
-					React.createElement(_index2.default, null)
-				);
-			}
-		}, {
-			key: 'componentDidMount',
-			value: function componentDidMount() {}
-		}, {
-			key: 'componentDidUpdate',
-			value: function componentDidUpdate() {}
-		}, {
-			key: 'componentWillUnmount',
-			value: function componentWillUnmount() {}
-		}]);
-	
-		return InputUpload;
-	}(_component2.default);
-	
-	;
-	
-	exports.default = InputUpload;
-
-/***/ }),
-
-/***/ 136:
-/***/ (function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-	
-	// load the styles
-	var content = __webpack_require__(137);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(12)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../../../../node_modules/css-loader/index.js!./../../../../../node_modules/less-loader/index.js!./style.less", function() {
-				var newContent = require("!!./../../../../../node_modules/css-loader/index.js!./../../../../../node_modules/less-loader/index.js!./style.less");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ }),
-
-/***/ 137:
-/***/ (function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(11)();
-	// imports
-	
-	
-	// module
-	exports.push([module.id, ".page-input-upload {\n  padding: 10px;\n}\n", ""]);
-	
-	// exports
-
-
-/***/ }),
-
-/***/ 138:
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _view = __webpack_require__(139);
-	
-	var _view2 = _interopRequireDefault(_view);
-	
-	var _hoc = __webpack_require__(15);
-	
-	var _hoc2 = _interopRequireDefault(_hoc);
-	
-	var _controller = __webpack_require__(142);
-	
-	var _controller2 = _interopRequireDefault(_controller);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var Index = (0, _hoc2.default)(_view2.default, _controller2.default);
-	
-	exports.default = Index;
-
-/***/ }),
-
-/***/ 139:
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	__webpack_require__(140);
 	
 	var _domUtil = __webpack_require__(20);
 	
 	var _domUtil2 = _interopRequireDefault(_domUtil);
 	
-	var _index = __webpack_require__(35);
+	var _index3 = __webpack_require__(35);
 	
-	var _index2 = _interopRequireDefault(_index);
+	var _index4 = _interopRequireDefault(_index3);
 	
 	var _component = __webpack_require__(13);
 	
@@ -1271,10 +1119,12 @@
 				var me = this;
 				var props = me.props;
 	
-				return React.createElement('input', { type: 'button',
+				return React.createElement(_index2.default, { type: 'button',
 					className: 'mod-input-upload',
 					ref: 'file',
 					onMouseEnter: me.isUseUploadHack() ? me.mouseEnter.bind(me) : null,
+					onFocus: props.onFocus,
+					onBlur: props.onBlur,
 					disabled: props.isUpload ? true : false,
 					value: props.value,
 					onClick: me.isUseUploadHack() ? null : me.click.bind(me) });
@@ -1295,6 +1145,7 @@
 				if (props.isUpload) {
 					return;
 				};
+				file = file.refs.com.getButton();
 				var offset = $(file).offset();
 				var node = me.tempNode;
 				node.style.top = offset.top + 'px';
@@ -1319,9 +1170,15 @@
 			key: 'change',
 			value: function change(e) {
 				var me = this;
+				var props = me.props;
+	
 				Actions(me).change(me.getFileName(e)).then(function () {
 					me.mouseLeave();
-					return me.upload();
+					if (props.action) {
+						return me.upload();
+					} else {
+						throw 'action is empty';
+					};
 				}).then(Actions(me).uploadSuccess, Actions(me).uploadError).then(function () {
 					me.removeForm();
 					me.createForm();
@@ -1333,7 +1190,7 @@
 				var me = this;
 				var props = me.props;
 	
-				return new _index2.default({
+				return new _index4.default({
 					element: me.form,
 					url: props.action,
 					onprogress: function onprogress(scale) {
@@ -1355,11 +1212,11 @@
 					value = me.form.file.value;
 				};
 				if (files) {
-					return limit.from(e.target.files, function (val) {
-						var name = val.name,
-						    size = val.size;
+					return limit.from(e.target.files, function (file) {
+						var name = file.name,
+						    size = file.size;
 	
-						return { name: name, size: size };
+						return { name: name, size: size, file: file };
 					});
 				} else {
 					return [{ name: value.split('\\').pop(), size: 0 }];
@@ -1425,13 +1282,13 @@
 
 /***/ }),
 
-/***/ 140:
+/***/ 75:
 /***/ (function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(141);
+	var content = __webpack_require__(76);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(12)(content, {});
@@ -1452,7 +1309,7 @@
 
 /***/ }),
 
-/***/ 141:
+/***/ 76:
 /***/ (function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(11)();
@@ -1467,7 +1324,7 @@
 
 /***/ }),
 
-/***/ 142:
+/***/ 77:
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1517,7 +1374,6 @@
 				    props = me.props;
 	
 				state.isUpload = true;
-				console.log(nameList);
 				return me.updateComponent().then(function () {
 					return props.onChange(nameList);
 				});
@@ -1537,7 +1393,6 @@
 					args[_key2] = arguments[_key2];
 				}
 	
-				console.log('onUploadSuccess');
 				var me = this;
 				var state = me.state,
 				    props = me.props;
@@ -1550,7 +1405,6 @@
 		}, {
 			key: 'onUploadError',
 			value: function onUploadError(e) {
-				console.log('onUploadError', e);
 				var me = this;
 				var state = me.state,
 				    props = me.props;
@@ -1570,7 +1424,7 @@
 		value: '上 传',
 		width: 300,
 		param: {},
-		action: '/common/upload.json',
+		action: '',
 		multiple: false, // IE8不支持
 		accept: '', // IE8不支持
 		onChange: limit.K,
@@ -1584,7 +1438,163 @@
 
 /***/ }),
 
-/***/ 143:
+/***/ 126:
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _index = __webpack_require__(127);
+	
+	var _index2 = _interopRequireDefault(_index);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	ReactDOM.render(React.createElement(_index2.default, null), document.getElementById('container'));
+
+/***/ }),
+
+/***/ 127:
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _view = __webpack_require__(128);
+	
+	var _view2 = _interopRequireDefault(_view);
+	
+	var _hoc = __webpack_require__(15);
+	
+	var _hoc2 = _interopRequireDefault(_hoc);
+	
+	var _controller = __webpack_require__(131);
+	
+	var _controller2 = _interopRequireDefault(_controller);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var Index = (0, _hoc2.default)(_view2.default, _controller2.default);
+	
+	exports.default = Index;
+
+/***/ }),
+
+/***/ 128:
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	__webpack_require__(129);
+	
+	var _index = __webpack_require__(73);
+	
+	var _index2 = _interopRequireDefault(_index);
+	
+	var _component = __webpack_require__(13);
+	
+	var _component2 = _interopRequireDefault(_component);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var InputUpload = function (_Component) {
+		_inherits(InputUpload, _Component);
+	
+		function InputUpload() {
+			_classCallCheck(this, InputUpload);
+	
+			return _possibleConstructorReturn(this, (InputUpload.__proto__ || Object.getPrototypeOf(InputUpload)).apply(this, arguments));
+		}
+	
+		_createClass(InputUpload, [{
+			key: 'render',
+			value: function render() {
+				var me = this;
+				var props = me.props;
+	
+				return React.createElement(
+					'div',
+					{ className: me.getClassName('page-input-upload') },
+					React.createElement(_index2.default, null)
+				);
+			}
+		}, {
+			key: 'componentDidMount',
+			value: function componentDidMount() {}
+		}, {
+			key: 'componentDidUpdate',
+			value: function componentDidUpdate() {}
+		}, {
+			key: 'componentWillUnmount',
+			value: function componentWillUnmount() {}
+		}]);
+	
+		return InputUpload;
+	}(_component2.default);
+	
+	;
+	
+	exports.default = InputUpload;
+
+/***/ }),
+
+/***/ 129:
+/***/ (function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(130);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(12)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../../../node_modules/css-loader/index.js!./../../../../../node_modules/less-loader/index.js!./style.less", function() {
+				var newContent = require("!!./../../../../../node_modules/css-loader/index.js!./../../../../../node_modules/less-loader/index.js!./style.less");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ }),
+
+/***/ 130:
+/***/ (function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(11)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, ".page-input-upload {\n  padding: 10px;\n}\n", ""]);
+	
+	// exports
+
+
+/***/ }),
+
+/***/ 131:
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1625,6 +1635,263 @@
 		return Controller;
 	}(_control2.default);
 	
+	;
+	
+	exports.default = Controller;
+
+/***/ }),
+
+/***/ 255:
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _view = __webpack_require__(256);
+	
+	var _view2 = _interopRequireDefault(_view);
+	
+	var _hoc = __webpack_require__(15);
+	
+	var _hoc2 = _interopRequireDefault(_hoc);
+	
+	var _controller = __webpack_require__(259);
+	
+	var _controller2 = _interopRequireDefault(_controller);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var Index = (0, _hoc2.default)(_view2.default, _controller2.default);
+	
+	exports.default = Index;
+
+/***/ }),
+
+/***/ 256:
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	__webpack_require__(257);
+	
+	var _component = __webpack_require__(13);
+	
+	var _component2 = _interopRequireDefault(_component);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Button = function (_Component) {
+		_inherits(Button, _Component);
+	
+		function Button() {
+			_classCallCheck(this, Button);
+	
+			return _possibleConstructorReturn(this, (Button.__proto__ || Object.getPrototypeOf(Button)).apply(this, arguments));
+		}
+	
+		_createClass(Button, [{
+			key: 'render',
+			value: function render() {
+				var me = this;
+				var props = me.props;
+	
+				return React.createElement(
+					'button',
+					{
+						ref: 'button',
+						disabled: props.disabled,
+						onClick: Actions(me).click,
+						onFocus: props.onFocus,
+						onBlur: props.onBlur,
+						onMouseEnter: props.onMouseEnter,
+						className: me.getClassName('mod-button', props.isClick ? 'button-clicked' : null, me.getButtonColor()),
+						type: props.type },
+					React.createElement(
+						'span',
+						null,
+						props.value
+					)
+				);
+			}
+		}, {
+			key: 'getButtonColor',
+			value: function getButtonColor() {
+				var me = this;
+				var props = me.props;
+	
+				if (props.disabled) {
+					return 'button-color-disabled';
+				} else {
+					return 'button-color-' + props.colorType;
+				};
+			}
+		}, {
+			key: 'focus',
+			value: function focus() {
+				var me = this;
+				var button = me.refs.button;
+	
+				button.focus();
+			}
+		}, {
+			key: 'getButton',
+			value: function getButton() {
+				var me = this;
+				var button = me.refs.button;
+	
+				return button;
+			}
+		}, {
+			key: 'componentDidMount',
+			value: function componentDidMount() {}
+		}, {
+			key: 'componentDidUpdate',
+			value: function componentDidUpdate() {}
+		}, {
+			key: 'componentWillUnmount',
+			value: function componentWillUnmount() {}
+		}]);
+	
+		return Button;
+	}(_component2.default);
+	
+	;
+	
+	exports.default = Button;
+
+/***/ }),
+
+/***/ 257:
+/***/ (function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(258);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(12)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/less-loader/index.js!./style.less", function() {
+				var newContent = require("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/less-loader/index.js!./style.less");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ }),
+
+/***/ 258:
+/***/ (function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(11)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, "/*默认*/\n.mod-button {\n  border: 1px solid #bfbfbf;\n  background: #F2F2F2;\n  height: 30px;\n  line-height: 30px;\n  font-size: 12px;\n  color: #666;\n  padding: 0 10px;\n  position: relative;\n  border-radius: 3px;\n}\n.mod-button:focus {\n  outline: none;\n}\n.mod-button:active,\n.mod-button:active:before {\n  background: #d9d9d9;\n}\n.mod-button:before {\n  position: absolute;\n  content: '';\n  width: 100%;\n  height: 100%;\n  top: 0;\n  left: 0;\n  opacity: 1;\n  background: #F2F2F2;\n  border-radius: 5px;\n}\n.mod-button.button-clicked:before {\n  transition: all 0.3s ease-out 0s;\n  width: 130%;\n  height: 130%;\n  top: -15%;\n  left: -15%;\n  opacity: 0;\n}\n.mod-button span {\n  position: relative;\n}\n.mod-button.button-color-primary {\n  border: 1px solid #1266f1;\n  background: #4285f4;\n  color: #FFF;\n}\n.mod-button.button-color-primary:active,\n.mod-button.button-color-primary:active:before {\n  background: #2a75f3;\n}\n.mod-button.button-color-primary:before {\n  background: #4285f4;\n}\n.mod-button.button-color-warning {\n  border: 1px solid #cc7a00;\n  background: #F90;\n  color: #FFF;\n}\n.mod-button.button-color-warning:active,\n.mod-button.button-color-warning:active:before {\n  background: #e68a00;\n}\n.mod-button.button-color-warning:before {\n  background: #F90;\n}\n.mod-button.button-color-error {\n  border: 1px solid #cc0000;\n  background: #F00;\n  color: #FFF;\n}\n.mod-button.button-color-error:active,\n.mod-button.button-color-error:active:before {\n  background: #e60000;\n}\n.mod-button.button-color-error:before {\n  background: #F00;\n}\n.mod-button.button-color-disabled {\n  cursor: not-allowed;\n  color: #999;\n}\n.mod-button.button-color-disabled:active,\n.mod-button.button-color-disabled:active:before {\n  background: #F2F2F2;\n}\n", ""]);
+	
+	// exports
+
+
+/***/ }),
+
+/***/ 259:
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _control = __webpack_require__(26);
+	
+	var _control2 = _interopRequireDefault(_control);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Controller = function (_Control) {
+		_inherits(Controller, _Control);
+	
+		function Controller() {
+			var _ref;
+	
+			var _temp, _this, _ret;
+	
+			_classCallCheck(this, Controller);
+	
+			for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+				args[_key] = arguments[_key];
+			}
+	
+			return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Controller.__proto__ || Object.getPrototypeOf(Controller)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
+				isClick: false
+			}, _temp), _possibleConstructorReturn(_this, _ret);
+		}
+	
+		_createClass(Controller, [{
+			key: 'onClick',
+			value: function onClick() {
+				var me = this;
+				var state = me.state,
+				    props = me.props;
+	
+				if (!state.isClick) {
+					state.isClick = true;
+				};
+				return me.updateComponent().then(function () {
+					setTimeout(function () {
+						me.state.isClick = false;
+						me.updateComponent();
+					}, 300);
+				}).then(function () {
+					return props.onClick();
+				});
+			}
+		}]);
+	
+		return Controller;
+	}(_control2.default);
+	
+	Controller.defaultProps = {
+		actionId: 'Button',
+		type: 'button',
+		disabled: false,
+		colorType: 'default', // 颜色类型 default[灰色#F2F2F2] primary[蓝色#4285f4] warning[橘黄#F90] error[红色#F00]
+		value: '按 钮',
+		onClick: limit.K
+	};
 	;
 	
 	exports.default = Controller;

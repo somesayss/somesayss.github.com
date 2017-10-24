@@ -45,7 +45,7 @@
 /***/ 0:
 /***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(268);
+	module.exports = __webpack_require__(261);
 
 
 /***/ }),
@@ -734,14 +734,14 @@
 
 /***/ }),
 
-/***/ 104:
+/***/ 97:
 /***/ (function(module, exports) {
 
 	module.exports = React;
 
 /***/ }),
 
-/***/ 149:
+/***/ 137:
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -823,50 +823,50 @@
 
 /***/ }),
 
-/***/ 159:
+/***/ 147:
 /***/ (function(module, exports) {
 
 	module.exports = ReactDOM;
 
 /***/ }),
 
-/***/ 268:
+/***/ 261:
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	// 依赖
 	
-	var React = __webpack_require__(104);
-	var ReactDOM = __webpack_require__(159);
+	var React = __webpack_require__(97);
+	var ReactDOM = __webpack_require__(147);
 	
 	// 组件类
-	var LimitRate = __webpack_require__(269);
+	var LimitRate = __webpack_require__(262);
 	
 	// 置入文档
 	ReactDOM.render(React.createElement(LimitRate, null), document.getElementById('container'));
 
 /***/ }),
 
-/***/ 269:
+/***/ 262:
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	// 依赖
 	
-	module.exports = __webpack_require__(15)(__webpack_require__(270), __webpack_require__(273));
+	module.exports = __webpack_require__(15)(__webpack_require__(263), __webpack_require__(266));
 
 /***/ }),
 
-/***/ 270:
+/***/ 263:
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	__webpack_require__(271);
+	__webpack_require__(264);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -875,9 +875,9 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	// 依赖
-	var React = __webpack_require__(104);
+	var React = __webpack_require__(97);
 	var limit = __webpack_require__(32);
-	var Rainbow = __webpack_require__(149);
+	var Rainbow = __webpack_require__(137);
 	
 	var colorList = ['#000', '#060', '#0C0', '#300', '#360', '#3C0', '#600', '#660', '#6C0', '#900'];
 	// 组件类
@@ -967,13 +967,13 @@
 
 /***/ }),
 
-/***/ 271:
+/***/ 264:
 /***/ (function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(272);
+	var content = __webpack_require__(265);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(12)(content, {});
@@ -994,7 +994,7 @@
 
 /***/ }),
 
-/***/ 272:
+/***/ 265:
 /***/ (function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(11)();
@@ -1009,7 +1009,7 @@
 
 /***/ }),
 
-/***/ 273:
+/***/ 266:
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1026,7 +1026,7 @@
 	
 	var limit = __webpack_require__(32);
 	var Control = __webpack_require__(26);
-	var Websocket = __webpack_require__(274);
+	var Websocket = __webpack_require__(267);
 	
 	var Controller = function (_Control) {
 		_inherits(Controller, _Control);
@@ -1154,7 +1154,7 @@
 
 /***/ }),
 
-/***/ 274:
+/***/ 267:
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1170,7 +1170,7 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var limit = __webpack_require__(32);
-	var Events = __webpack_require__(275);
+	var Events = __webpack_require__(268);
 	
 	// 类
 	
@@ -1279,7 +1279,7 @@
 
 /***/ }),
 
-/***/ 275:
+/***/ 268:
 /***/ (function(module, exports) {
 
 	'use strict';

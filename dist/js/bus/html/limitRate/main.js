@@ -45,7 +45,7 @@
 /***/ 0:
 /***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(158);
+	module.exports = __webpack_require__(146);
 
 
 /***/ }),
@@ -734,57 +734,57 @@
 
 /***/ }),
 
-/***/ 104:
+/***/ 97:
 /***/ (function(module, exports) {
 
 	module.exports = React;
 
 /***/ }),
 
-/***/ 158:
+/***/ 146:
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	// 依赖
 	
-	var React = __webpack_require__(104);
-	var ReactDOM = __webpack_require__(159);
+	var React = __webpack_require__(97);
+	var ReactDOM = __webpack_require__(147);
 	
 	// 组件类
-	var LimitRate = __webpack_require__(160);
+	var LimitRate = __webpack_require__(148);
 	
 	// 置入文档
 	ReactDOM.render(React.createElement(LimitRate, null), document.getElementById('container'));
 
 /***/ }),
 
-/***/ 159:
+/***/ 147:
 /***/ (function(module, exports) {
 
 	module.exports = ReactDOM;
 
 /***/ }),
 
-/***/ 160:
+/***/ 148:
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	// 依赖
 	
-	module.exports = __webpack_require__(15)(__webpack_require__(161), __webpack_require__(164));
+	module.exports = __webpack_require__(15)(__webpack_require__(149), __webpack_require__(152));
 
 /***/ }),
 
-/***/ 161:
+/***/ 149:
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	__webpack_require__(162);
+	__webpack_require__(150);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -793,7 +793,7 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	// 依赖
-	var React = __webpack_require__(104);
+	var React = __webpack_require__(97);
 	var limit = __webpack_require__(32);
 	
 	// 组件类
@@ -923,13 +923,13 @@
 
 /***/ }),
 
-/***/ 162:
+/***/ 150:
 /***/ (function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(163);
+	var content = __webpack_require__(151);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(12)(content, {});
@@ -950,7 +950,7 @@
 
 /***/ }),
 
-/***/ 163:
+/***/ 151:
 /***/ (function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(11)();
@@ -965,7 +965,7 @@
 
 /***/ }),
 
-/***/ 164:
+/***/ 152:
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";

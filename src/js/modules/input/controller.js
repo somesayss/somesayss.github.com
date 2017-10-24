@@ -42,6 +42,10 @@ class Controller extends Control {
 		if( props.type === 'number' && !regNum.test(value) ){
 			return;
 		};
+		// 对类型是文件的拦截
+		if( props.type === 'file' ){
+			return;
+		};
 		state.value = value;
 		me.updateOriginData(value);
 		return me.updateComponent().then(() => {
@@ -79,7 +83,9 @@ class Controller extends Control {
 		me.updateOriginData('');
 		me.updateComponent().then(() => {
 			state.clearSuccess = false;
-			props.onChange('');
+			return me.updateComponent().then(() => {
+				return props.onChange('');
+			});
 		});
 	}
 	updateOriginData(val){

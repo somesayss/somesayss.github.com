@@ -45,17 +45,17 @@
 /***/ 0:
 /***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(165);
+	module.exports = __webpack_require__(153);
 
 
 /***/ }),
 
-/***/ 165:
+/***/ 153:
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var Router = __webpack_require__(166);
+	var Router = __webpack_require__(154);
 	
 	var router = new Router({
 		a: function a(param) {
@@ -67,7 +67,7 @@
 
 /***/ }),
 
-/***/ 166:
+/***/ 154:
 /***/ (function(module, exports) {
 
 	"use strict";

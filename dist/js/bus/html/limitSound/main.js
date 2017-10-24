@@ -45,7 +45,7 @@
 /***/ 0:
 /***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(167);
+	module.exports = __webpack_require__(155);
 
 
 /***/ }),
@@ -373,7 +373,7 @@
 
 /***/ }),
 
-/***/ 149:
+/***/ 137:
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -455,24 +455,24 @@
 
 /***/ }),
 
-/***/ 167:
+/***/ 155:
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	// 样式
 	
-	__webpack_require__(168);
+	__webpack_require__(156);
 	
 	// 依赖
 	var $ = __webpack_require__(31);
 	var limit = __webpack_require__(32);
 	
 	// 颜色类
-	var Rainbow = __webpack_require__(149);
+	var Rainbow = __webpack_require__(137);
 	// 画图类
-	var DrawCanvas = __webpack_require__(170);
-	var AudioBuffer = __webpack_require__(171);
+	var DrawCanvas = __webpack_require__(158);
+	var AudioBuffer = __webpack_require__(159);
 	
 	var DC = new DrawCanvas({ rotate: -90 });
 	var RB = new Rainbow({ totle: 360 });
@@ -507,13 +507,13 @@
 
 /***/ }),
 
-/***/ 168:
+/***/ 156:
 /***/ (function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(169);
+	var content = __webpack_require__(157);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(12)(content, {});
@@ -534,7 +534,7 @@
 
 /***/ }),
 
-/***/ 169:
+/***/ 157:
 /***/ (function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(11)();
@@ -549,7 +549,7 @@
 
 /***/ }),
 
-/***/ 170:
+/***/ 158:
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -675,7 +675,7 @@
 
 /***/ }),
 
-/***/ 171:
+/***/ 159:
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";

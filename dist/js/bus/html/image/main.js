@@ -889,7 +889,7 @@
 				return React.createElement(
 					'div',
 					{ className: me.getClassName('page-image') },
-					React.createElement(_index2.default, null)
+					React.createElement(_index2.default, { url: 'http://t1.niutuku.com/960/10/10-135293.jpg' })
 				);
 			}
 		}, {
@@ -1022,12 +1022,20 @@
 				return React.createElement(
 					'div',
 					{ className: me.getClassName('mod-image') },
-					'modImage'
+					'123'
 				);
 			}
 		}, {
 			key: 'componentDidMount',
-			value: function componentDidMount() {}
+			value: function componentDidMount() {
+				var me = this;
+				var props = me.props;
+	
+				var AJAX = new XMLHttpRequest();
+				AJAX.open('GET', props.url);
+				console.log(AJAX);
+				AJAX.send();
+			}
 		}, {
 			key: 'componentDidUpdate',
 			value: function componentDidUpdate() {}

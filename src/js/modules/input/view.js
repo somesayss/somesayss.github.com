@@ -2,14 +2,16 @@
 
 import './style.less';
 
-import File from './file';
 import Checkbox from './checkbox';
+
 import domUtil from 'common/domUtil';
 import Component from 'common/myReflux/component';
 
+import Button from 'modules/button/index';
 import Select from 'modules/select/index';
 import Textarea from 'modules/textarea/index';
 import Multiple from 'modules/multiple/index';
+import Upload from 'modules/inputUpload/index';
 import CalendarInput from 'modules/calendarInput/index';
 import CalendarRange from 'modules/calendarRange/index';
 
@@ -134,7 +136,7 @@ class View extends Component {
 		let me = this;
 		return (
 			<div className={`limit-form-${me.getType()}`}>
-				<File {...me.parseProps()} />
+				<Upload {...me.parseProps()} />
 			</div>
 		);
 	}
@@ -144,7 +146,7 @@ class View extends Component {
 		let type = props.type;
 		return (
 			<div className={`limit-form-${me.getType()}`}>
-				<input {...me.parseProps()} ref="input" />
+				<Button {...me.parseProps()} ref="input" />
 			</div>
 		);
 	}
@@ -256,11 +258,13 @@ class View extends Component {
 		};
 	}
 	selectInput(input){
-		if( limit.contains(['text', 'textarea', 'password'], input.type) ){
+		let me = this;
+		let {props} = me;
+		if( limit.contains(['text', 'textarea', 'password'], props.type) ){
 			let length = input.value.length;
 			return domUtil.textSelect(input, length, length);
-		}else if( limit.contains(['button', 'reset', 'submit'], input.type) ){
-			input.focus();
+		}else if( limit.contains(['button', 'reset', 'submit'], props.type) ){
+			input.refs.com.focus();
 		};
 		
 	}

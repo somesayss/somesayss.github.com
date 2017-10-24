@@ -45,7 +45,7 @@
 /***/ 0:
 /***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(155);
+	module.exports = __webpack_require__(143);
 
 
 /***/ }),
@@ -64,7 +64,7 @@
 
 /***/ }),
 
-/***/ 155:
+/***/ 143:
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -81,8 +81,8 @@
 	
 	var $ = __webpack_require__(31);
 	var limit = __webpack_require__(32);
-	var Router = __webpack_require__(156);
-	var Class = __webpack_require__(157);
+	var Router = __webpack_require__(144);
+	var Class = __webpack_require__(145);
 	
 	var A = function () {
 		function A() {
@@ -183,7 +183,7 @@
 
 /***/ }),
 
-/***/ 156:
+/***/ 144:
 /***/ (function(module, exports) {
 
 	"use strict";
@@ -321,7 +321,7 @@
 
 /***/ }),
 
-/***/ 157:
+/***/ 145:
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;"use strict";

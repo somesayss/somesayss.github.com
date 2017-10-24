@@ -45,7 +45,7 @@
 /***/ 0:
 /***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(251);
+	module.exports = __webpack_require__(239);
 
 
 /***/ }),
@@ -727,39 +727,39 @@
 
 /***/ }),
 
-/***/ 251:
+/***/ 239:
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	// 组件类
 	
-	var Title = __webpack_require__(252);
+	var Title = __webpack_require__(240);
 	
 	// 置入文档
 	ReactDOM.render(React.createElement(Title, null), document.getElementById('container'));
 
 /***/ }),
 
-/***/ 252:
+/***/ 240:
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	// 依赖
 	
-	module.exports = __webpack_require__(15)(__webpack_require__(253), __webpack_require__(261));
+	module.exports = __webpack_require__(15)(__webpack_require__(241), __webpack_require__(249));
 
 /***/ }),
 
-/***/ 253:
+/***/ 241:
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	__webpack_require__(254);
+	__webpack_require__(242);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -767,7 +767,7 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var LimitTitle = __webpack_require__(256);
+	var LimitTitle = __webpack_require__(244);
 	
 	// 组件类
 	
@@ -824,13 +824,13 @@
 
 /***/ }),
 
-/***/ 254:
+/***/ 242:
 /***/ (function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(255);
+	var content = __webpack_require__(243);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(12)(content, {});
@@ -851,7 +851,7 @@
 
 /***/ }),
 
-/***/ 255:
+/***/ 243:
 /***/ (function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(11)();
@@ -866,25 +866,25 @@
 
 /***/ }),
 
-/***/ 256:
+/***/ 244:
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	// 依赖
 	
-	module.exports = __webpack_require__(15)(__webpack_require__(257), __webpack_require__(260));
+	module.exports = __webpack_require__(15)(__webpack_require__(245), __webpack_require__(248));
 
 /***/ }),
 
-/***/ 257:
+/***/ 245:
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	__webpack_require__(258);
+	__webpack_require__(246);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -987,13 +987,13 @@
 
 /***/ }),
 
-/***/ 258:
+/***/ 246:
 /***/ (function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(259);
+	var content = __webpack_require__(247);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(12)(content, {});
@@ -1014,7 +1014,7 @@
 
 /***/ }),
 
-/***/ 259:
+/***/ 247:
 /***/ (function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(11)();
@@ -1029,7 +1029,7 @@
 
 /***/ }),
 
-/***/ 260:
+/***/ 248:
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1076,7 +1076,7 @@
 
 /***/ }),
 
-/***/ 261:
+/***/ 249:
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
