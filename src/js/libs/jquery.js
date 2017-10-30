@@ -55,7 +55,7 @@ $(function(){
         base = RegExp.$1;
     };
     base += '/dist/js/';
-    var url = base + 'bus'+location.href.match(REX)[2]+'/main.js';
+    var url = base + 'entry/'+location.href.match(/((?:http|https):\/\/[^\/]*)(.+?)\./)[2].split('/')[2]+'/main.js';
     var loadScript = DOC.createElement('script');
     loadScript.src = url;
     HEAD.appendChild(loadScript);
