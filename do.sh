@@ -15,7 +15,8 @@ gitDO(){
 	read commit
 	[ ! $commit ] && commit="add"
 	echo "当前分支是${branch}开始打包推送"
-	gulp
+	gulp --build
+	node_modules/.bin/webpack --config ./config/buildConfig.js
 	git add -A
 	git commit -m $commit
 	git push origin $branch
