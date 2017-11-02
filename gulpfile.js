@@ -1,7 +1,6 @@
 // 定义
 const gulp = require('gulp');
 const less = require('gulp-less');
-const named = require('vinyl-named');
 const uglify= require('gulp-uglify');
 const cssmin = require('gulp-cssmin');
 const concat = require('gulp-concat');
@@ -37,18 +36,4 @@ gulp.task('zip', () => {
         gulp.src([`src/${val}/**/*`])
             .pipe( gulp.dest(`dist/${val}`) )
     });
-});
-
-// less自动编译
-gulp.task('watch', () => {
-    const matchRex = /src((?:\/.*\/)?).*\..*/;
-    gulp.watch(['src/css/**/*.less'])
-        .on('change', (e) => {
-            var match = e.path.replace(/\\/g, '/').match( matchRex ),
-                file = match[0];
-            gulp.src( file )
-                .pipe( less() )
-                .pipe( cssmin() )
-                .pipe( gulp.dest('dist' + match[1]) );
-        });
 });
