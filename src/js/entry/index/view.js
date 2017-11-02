@@ -1,7 +1,7 @@
 
 import './style.less';
 
-import Router from 'modules/router/router';
+import Router from 'modules/router/index';
 import Component from 'common/myReflux/component';
 
 class Index extends Component {
@@ -39,9 +39,28 @@ class Index extends Component {
 						let reactCom = require('bus/test3/index')['default'];
 						Actions(me).changeCom(reactCom);
 					}, 'bus/test3/main');
+				},
+				tally(){
+					require.ensure([], (a) => {
+						let reactCom = require('bus/tally/index')['default'];
+						Actions(me).changeCom(reactCom);
+					}, 'bus/tally/main');
+				},
+				validator(){
+					require.ensure([], (a) => {
+						let reactCom = require('bus/validator/index')['default'];
+						Actions(me).changeCom(reactCom);
+					}, 'bus/validator/main');
+				},
+				calendar(){
+					require.ensure([], (a) => {
+						let reactCom = require('bus/calendar/index')['default'];
+						Actions(me).changeCom(reactCom);
+					}, 'bus/calendar/main');
 				}
 			}
 		});
+		
 	}
 	componentDidUpdate(){
 

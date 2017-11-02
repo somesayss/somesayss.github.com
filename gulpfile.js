@@ -8,6 +8,9 @@ const concat = require('gulp-concat');
 const staticConfig = require('./config/staticConfig')
  
 // 任务
+const env = gulp.env;
+const isBuild = env.build;
+
 // 默认打包，压缩
 gulp.task('default', ['zip']);
 
@@ -21,9 +24,11 @@ gulp.task('zip', () => {
     // common.css
     gulp.src(staticConfig.commonCssList)
         .pipe( concat('common.css') )
-        .pipe(gulp.dest('dist/css') );
+        .pipe( gulp.dest('dist/css') );
     // 编译less
-    gulp.src(['src/css/**/*.less'])
+    let lessList = isBuild ? ['src/css/**/*.less', 'src/js/**/style.less'] : ['src/css/**/*.less'];
+    gulp.src(lessList)
+        .pipe( concat('app.css') )
         .pipe( less() )
         .pipe( cssmin() )
         .pipe( gulp.dest('dist/css') );

@@ -3,7 +3,6 @@
 const path = require('path');
 const glob = require('glob');
 const webpack = require('webpack');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const rootPath = __dirname.match(/(.*?)config/)[1];
 const entry = {};
@@ -46,22 +45,22 @@ module.exports = {
             }
         }, {
             test: /\.less$/,
-            use: ExtractTextPlugin.extract([{
+            use: [{
+                loader: 'style-loader'
+            }, {
                 loader: 'css-loader',
                 options: {
                     minimize: true
                 }
             }, {
                 loader: 'less-loader'
-            }])
+            }]
         }, {
             test: /\.(png|jpg)$/,
             loader: 'url-loader?limit=8192&name=imgs/[name].[ext]'
         }]
     },
-    plugins: [
-        new ExtractTextPlugin('css/styles.css')
-    ],
+    plugins: [],
     devServer: {
         host: 'localhost',
         port: '3000',

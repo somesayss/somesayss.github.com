@@ -1,0 +1,36 @@
+.mod-input-upload{
+	border:1px solid #CCC;
+	background:#F2F2F2;
+	font-size:12px;
+	padding:0 10px;
+	height:30px;
+	line-height:28px;
+	color:#666;
+	cursor:pointer;
+	&:active{
+		background:#DDD;
+		border-color:#BBB;
+	}
+	&[disabled]{
+		cursor:not-allowed;
+		color:#CCC;
+	}
+}
+.mod-input-file{
+	position:absolute;
+	width:100px;
+	height:100px;
+	overflow:hidden;
+	background:#F00;
+	opacity:0;
+	filter:alpha(opacity=0);
+	top:-999px;
+	left:-999px;
+	font-size:200px;
+	input{
+		position:absolute;
+		right:0px;
+		top:0px;
+		cursor:pointer;
+	}
+}

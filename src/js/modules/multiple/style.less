@@ -1,0 +1,104 @@
+.mod-multiple{
+	display:inline-block;
+	position:relative;
+	.multiple-trigger{
+		border:1px solid #CCC;
+		height:100%;
+		input{
+			border:none;
+			line-height:16px;
+			padding:6px 15px 6px 6px;
+			font-size:12px;
+			color:#666;
+			width:100%;
+			height:100%;
+		}
+		input[readOnly]{
+			cursor:pointer;
+		}
+		.multiple-trigger-san{
+			transition:all .3s ease-in-out 0s;
+			position:absolute;
+			width:0;
+			height:0;
+			border-top:6px solid #999;
+			border-bottom:0;
+			border-left:4px solid transparent;
+			border-right:4px solid transparent;
+			right:5px;
+			top:50%;
+			margin-top:-3px;
+		}
+	}
+	.multiple-content{
+		color:#666;
+		position:absolute;
+		width:100%;
+		border:1px solid #CCC;
+		padding:1px;
+		border-top:none;
+		background:#FFF;
+		li{
+			padding:0 4px;
+			line-height:28px;
+			height:28px;
+			cursor:pointer;
+			border:1px solid #FFF;
+			position:relative;
+			&.focus{
+				border:1px dashed #4285f4;
+			}
+			&.active{
+				padding:0 20px 0 4px;
+				background:#4285f4;
+				border-color:#4285f4;
+				color:#FFF;
+				&:before{
+					font-family:"iconfont" !important;
+					content:"\e6ad";
+					position:absolute;
+					width:16px;
+					height:16px;
+					right:2px;
+					top:6px;
+					border-radius:16px;
+					line-height:18px;
+					text-align:center;
+					background:#FFF;
+					color:#4285f4;
+					overflow:hidden;
+				}
+				&.focus{
+					background:#1f5dc3;
+					border-color:#1f5dc3;
+				}
+			}
+		}
+	}
+	&.multiple-focus{
+		.multiple-trigger{
+			border-color:#4285f4;
+			box-shadow:0 1px 3px rgba(66, 133, 244, .5);
+			&:before{
+				content:'';
+				position:absolute;
+				width:100%;
+				height:4px;
+				bottom:0;
+				left:0;
+				background:#FFF;
+				border-left:1px solid #4285f4;
+				border-right:1px solid #4285f4;
+				z-index:1;
+			}
+			.multiple-trigger-san{
+				transform:rotate(180deg);
+				border-top-color:#4285f4;
+			}
+		}
+		.multiple-content{
+			border-color:#4285f4;
+			box-shadow:0 1px 3px rgba(66, 133, 244, .5);
+		}
+	}
+}
