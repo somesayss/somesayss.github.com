@@ -1,7 +1,9 @@
 
 import './style.less';
 
+
 import Router from 'modules/router/index';
+import Ajax from 'modules/ajax/index';
 import Component from 'common/myReflux/component';
 
 class Index extends Component {
@@ -15,30 +17,40 @@ class Index extends Component {
 			</div>
 		);
 	}
-	componentDidMount(){
+	createRouter(defaultWhiteList){
 		let me = this;
-		new Router({
-			defaultHash: 'test3',
+		return new Router({
+			defaultHash: 'test1',
+			defaultWhiteList: defaultWhiteList,
+			linksList: [
+				'test1',
+				'test2/index',
+				'test3',
+				'tally',
+				'validator',
+				'calendar',
+				'notFound',
+				'noPermission',
+				'login'
+			],
 			rule: {
-				test1(){
+				'test1': function(){
 					require.ensure([], (a) => {
-						let test1 = require('bus/test1/main')['default'];
-						console.log('abc', test1);
-						Actions(me).changeCom(null);
-					}, 'bus/test1/main');
+						let reactCom = require('bus/test1/index')['default'];
+						Actions(me).changeCom(reactCom);
+					}, 'bus/test1/index');
 				},
-				test2(){
+				'test2/index': function(){
 					require.ensure([], (a) => {
-						let test2 = require('bus/test2/main')['default'];
-						console.log('def', test2);
-						Actions(me).changeCom(null);
-					}, 'bus/test2/main');
+						let reactCom = require('bus/test2/index/index')['default'];
+						Actions(me).changeCom(reactCom);
+					}, 'bus/test2/index/index');
 				},
-				test3(){
+				'test3': function(){
 					require.ensure([], (a) => {
 						let reactCom = require('bus/test3/index')['default'];
 						Actions(me).changeCom(reactCom);
-					}, 'bus/test3/main');
+					}, 'bus/test3/index');
 				},
 				tally(){
 					require.ensure([], (a) => {
@@ -47,6 +59,7 @@ class Index extends Component {
 					}, 'bus/tally/main');
 				},
 				validator(){
+					console.log('in validator')
 					require.ensure([], (a) => {
 						let reactCom = require('bus/validator/index')['default'];
 						Actions(me).changeCom(reactCom);
@@ -57,9 +70,38 @@ class Index extends Component {
 						let reactCom = require('bus/calendar/index')['default'];
 						Actions(me).changeCom(reactCom);
 					}, 'bus/calendar/main');
+				},
+				notFound(){
+					require.ensure([], (a) => {
+						let reactCom = require('bus/notFound/index')['default'];
+						Actions(me).changeCom(reactCom);
+					}, 'bus/notFound/main');
+				},
+				noPermission(){
+					require.ensure([], (a) => {
+						let reactCom = require('bus/noPermission/index')['default'];
+						Actions(me).changeCom(reactCom);
+					}, 'bus/noPermission/main');
+				},
+				login(){
+					require.ensure([], (a) => {
+						let reactCom = require('bus/login/index')['default'];
+						Actions(me).changeCom(reactCom);
+					}, 'bus/login/main');
 				}
 			}
 		});
+	}
+	componentDidMount(){
+		let me = this;
+		new Ajax({
+			url: '/mock/readLinks.json',
+			type: 'get'
+		}).then((val) => {
+			return me.createRouter(val.defaultWhiteList);
+		});
+
+		
 		
 	}
 	componentDidUpdate(){

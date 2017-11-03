@@ -40,5 +40,16 @@ domUtil.clearDom = (node) => {
 	clearDiv = null;
 };
 
+const getStaticFun = domUtil.getStaticFun = (className, method) => {
+	if( className ){
+		let fn = className[method];
+		if( fn ){
+			return fn;
+		}else{
+			return getStaticFun(className.__proto__, method);
+		};
+	};
+};
+
 export default domUtil;
 

@@ -5,21 +5,36 @@ const Events = limit.Events;
 const REX_HASH = /^#([^?]*)(?:\?(.*))?/;
 
 class Router extends Events {
-	props = {}
+	props = {
+		// 默认跳转的地址
+		defaultHash: ''
+	}
+	setDefaultHash(){
+		let me = this;
+		let {state} = me;
+		let parseHash = Router.parseHash();
+		if( !parseHash && state.defaultHash ){
+			Router.setHash(state.defaultHash);
+		};
+	}
 	constructor(config){
 		let me = super();
 		limit.assignSuper(me.state, me.props, config);
 		limit.each( me.state.rule, (val, key) => me.on(key, val) );
 		me.state.eventUid = `hashchange.router${limit.getUid()}`;
-		me.bindHashChange();
+	}
+	checkHash(hash){
+		return hash;
 	}
 	bindHashChange(){
 		let me = this;
 		let {state} = me;
 		WIN.on(state.eventUid, (e) => {
 			let hashParse = Router.parseHash();
-			if( hashParse){
-				me.emit( hashParse.hash, hashParse.search );
+			if( hashParse ){
+				me.checkHash(hashParse.hash) && me.emit( hashParse.hash, hashParse.search );
+			}else{
+				me.setDefaultHash();	
 			};
 		});
 		WIN.trigger(state.eventUid);
@@ -60,7 +75,6 @@ class Router extends Events {
 			needHash = `${hash}`;
 		};
 		location.hash = encodeURIComponent(needHash);
-		return me;
 	}
 	// function str
 	static setHash(arg){
@@ -73,7 +87,6 @@ class Router extends Events {
 			needHash = limit.toString( arg );
 		};
 		location.hash = encodeURIComponent(needHash);
-		return me;
 	}
 };
 

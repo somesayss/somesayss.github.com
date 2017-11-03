@@ -33,13 +33,17 @@ class Index {
 		let dialogExp = DialogWidget.loading();
 		return me.jQuertAjax().then((val) => {
 			if(val.hasError){
-				throw val.message;
+				throw val.errorMsg;
 			}else{
 				let content = val.content;
 				if( content.isSuccess ){
-					return content;
+					let {retValue, message} = content;
+					if( message ){
+						retValue.successMsg = message;
+					};
+					return retValue;
 				}else{
-					throw content.msg;
+					throw content.message;
 				};
 			};
 		}).then((val) => {
