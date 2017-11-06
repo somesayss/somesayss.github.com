@@ -41,7 +41,7 @@ class Router extends RouterBase {
 				};
 			}else{
 				 // 如果在权限表里 
-				 if( limit(defaultWhiteList).concat(whiteList).contains(hash).val() ){
+				 if( limit(defaultWhiteList).concat(whiteList, [notFound, noPermission, login]).contains(hash).val() ){
 				 	return true;
 				 }else{
 				 	return setHash(noPermission);
