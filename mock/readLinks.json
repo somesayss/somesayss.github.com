@@ -1,0 +1,10 @@
+{
+    "hasError": false,
+    "content": {
+        "isSuccess": true,
+        "retValue": {
+            "defaultWhiteList": ["test1", "test2/index"],
+            "whiteList": ["tally"]
+        }
+    }
+}

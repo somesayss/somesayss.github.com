@@ -25,7 +25,7 @@ class Controller extends Control {
 			url: 'http://localhost:8080/tally/countDataList.json',
 			data: me.state.countTime
 		}).then((val) => {
-			return val.content.map((val) => {
+			return val.map((val) => {
 				if( val.type !== '大件' ){
 					val.checked = true;
 				}else{
@@ -78,7 +78,7 @@ class Controller extends Control {
 		return new Ajax({
 			url: 'http://localhost:8080/tally/nameList.json'
 		}).then((val) => {
-			me.state.nameList = val.content;
+			me.state.nameList = val;
 			return me.updateComponent()
 		});
 	}

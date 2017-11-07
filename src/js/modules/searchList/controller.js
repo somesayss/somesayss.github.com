@@ -74,10 +74,10 @@ class Controller extends Control {
 				url: props.url,
 				data: {page: me.getPage(), searchParam: limit.assign.apply(null, [].concat(props.searchParam))}
 			}).then((res) => {
-				let {content, msg} = res;
-				me.state.totle = Math.ceil(content.count/state.number);
+				let {count, list, successMsg} = res;
+				me.state.totle = Math.ceil(count/state.number);
 				return me.updateComponent().then(() => {
-					return props.onSuccess(content, msg);
+					return props.onSuccess({list, successMsg});
 				});
 			}, props.onError);
 		};

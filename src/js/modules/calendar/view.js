@@ -61,7 +61,6 @@ class Calendar extends Component {
 	renderContentMain(){
 		let me = this;
 		let {props: {calendarData, year, month, yearMonthStr, target, today}} = me;
-		console.log(yearMonthStr);
 		return (
 			<div className="calendar-content calendar-main">
 				<ul>
