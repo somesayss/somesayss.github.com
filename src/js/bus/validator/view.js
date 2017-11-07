@@ -94,11 +94,11 @@ class View extends React.Component {
 						value={originData.content}
 						name="content" /><br /><br />
 					{/* 提交按钮 */}
-					<Input type="submit" value="确 定" />
+					<Input type="submit"  value="确 定" />
 					{/* 重置按钮 */}
 					<Input type="reset" className="fn-ML5" value="重 置" />
 					{/* 普通按钮 */}
-					<Input type="button" className="fn-ML5" value="点 击" />
+					<Input type="button" colorType="primary" className="fn-ML5" value="点 击" />
 				</Validator>
 			</div>
 		);

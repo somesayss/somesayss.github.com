@@ -14,7 +14,7 @@ class CalendarRange extends Component {
 				<input type="text"
 					ref="input"
 					onFocus={me.focus.bind(me)}
-					onBlur={function(){ me.timeoutId = setTimeout(() => { Actions(me).focus(false) }, domUtil.isIEOld(100, 200) ) }}
+					onBlur={function(){ me.timeoutId = setTimeout(() => { Actions(me).focus(false) }, 200 ) }}
 					readOnly="readOnly" 
 					value={me.getValue()} />
 				{do{

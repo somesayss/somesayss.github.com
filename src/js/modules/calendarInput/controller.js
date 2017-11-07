@@ -25,6 +25,7 @@ class Controller extends Control {
 		});
 	}
 	onSelect(val){
+		console.log('select')
 		let me = this;
 		let {state, props} = me;
 		state.value = val;

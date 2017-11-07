@@ -34,7 +34,7 @@ class Select extends Component {
 						readOnly="readOnly" 
 						onKeyDown={me.keyDown.bind(me)} 
 						onFocus={me.focus.bind(me)}
-						onBlur={() => { setTimeout(() => {Actions(me).focus(null, false)}, 100) }} />
+						onBlur={() => { setTimeout(() => {Actions(me).focus(null, false)}, 200) }} />
 					<i className="select-trigger-san"></i>
 				</div>
 				{do{

@@ -13,7 +13,7 @@ class CalendarInput extends Component {
 				<input type="text"
 					ref="input"
 					onFocus={me.focus.bind(me)}
-					onBlur={function(){ me.timeoutId = setTimeout(() => { Actions(me).focus(false) }, 100) }}
+					onBlur={function(){ me.timeoutId = setTimeout(() => { Actions(me).focus(false) }, 200) }}
 					readOnly="readOnly" 
 					value={props.value} />
 				{do{

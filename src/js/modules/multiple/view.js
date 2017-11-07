@@ -18,7 +18,7 @@ class Multiple extends Component {
 						onFocus={me.focus.bind(me)}
 						onChange={Actions(me).change}
 						onKeyDown={me.keyDown.bind(me)} 
-						onBlur={function(){ me.timeoutId = setTimeout(() => { Actions(me).focus(false) }, 100) }}
+						onBlur={function(){ me.timeoutId = setTimeout(() => { Actions(me).focus(false) }, 200) }}
 						readOnly={readOnly} 
 						value={me.getValue()} />
 					<i className="multiple-trigger-san"></i>
