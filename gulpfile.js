@@ -25,7 +25,7 @@ gulp.task('zip', () => {
         .pipe( concat('common.css') )
         .pipe( gulp.dest('dist/css') );
     // 编译less
-    let lessList = isBuild ? ['src/css/**/*.less', 'src/js/**/style.less'] : ['src/css/**/*.less'];
+    var lessList = isBuild ? ['src/css/**/*.less', 'src/js/**/style.less'] : ['src/css/**/*.less'];
     gulp.src(lessList)
         .pipe( concat('app.css') )
         .pipe( less() )
