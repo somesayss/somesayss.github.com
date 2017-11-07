@@ -3,9 +3,6 @@
 import RouterBase from './routerBase';
 import domUtil from 'common/domUtil';
 
-const setHash = RouterBase.setHash;
-
-
 class Router extends RouterBase {
 	props = {
 		// 全部地址
@@ -37,20 +34,22 @@ class Router extends RouterBase {
 				if( limit(defaultWhiteList).concat([notFound, noPermission, login]).contains(hash).val() ){
 					return true;
 				}else{
-				 	return setHash(login);
+				 	return Router.setHash(login);
 				};
 			}else{
 				 // 如果在权限表里 
 				 if( limit(defaultWhiteList).concat(whiteList, [notFound, noPermission, login]).contains(hash).val() ){
 				 	return true;
 				 }else{
-				 	return setHash(noPermission);
+				 	return Router.setHash(noPermission);
 				 };
 			};
 		}else{
-			return setHash(notFound);
+			return Router.setHash(notFound);
 		};
 	}
 };
+
+domUtil.setStaticProps(Router, RouterBase);
 
 export default Router;

@@ -51,5 +51,14 @@ const getStaticFun = domUtil.getStaticFun = (className, method) => {
 	};
 };
 
+domUtil.setStaticProps = (sub, par) => {
+	let obj = limit.assign({}, par);
+	// 删除不应该在的
+	['name', 'length', '__proto__', 'prototype'].forEach((val) => {
+		delete obj[val];
+	});
+	limit.assign(sub, obj);
+};
+
 export default domUtil;
 
