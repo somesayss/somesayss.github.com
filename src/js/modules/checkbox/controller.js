@@ -3,16 +3,23 @@ import Control from 'common/myReflux/control';
 
 class Controller extends Control {
 	state = {
-		isClick: false
+		checked: false,
+		indeterminate: false,
+		disabled: false
 	}
 	static defaultProps = {
-		actionId: 'Button',
-		type: 'button',
-		disabled: false,
-		colorType: 'default',	// 颜色类型 default[灰色#F2F2F2] primary[蓝色#4285f4] warning[橘黄#F90] error[红色#F00]
-		size: 'default', // default[30] big[40] small[25]
-		value: '按 钮',
-		onClick: limit.K
+		actionId: 'Checkbox',
+		onClick: limit.K,
+		onChange: limit.K
+	}
+	onChange(e){
+		let me = this;
+		let {state, props} = me;
+		state.checked = !state.checked;
+		state.indeterminate = false;
+		return me.updateComponent().then(() => {
+			return props.onChange(e);
+		});
 	}
 	onClick(){
 		let me = this;

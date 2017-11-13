@@ -25,6 +25,7 @@ class Index extends Component {
 			whiteList,
 			linksList: [
 'calendar',
+'checkbox',
 'login',
 'noPermission',
 'notFound',
@@ -41,6 +42,12 @@ class Index extends Component {
                             var reactCom = require('bus/calendar/index')['default'];
                             Actions(me).changeCom(reactCom);
                         }, 'bus/calendar/index');
+                    },
+'checkbox': function(){
+                        require.ensure([], (a) => {
+                            var reactCom = require('bus/checkbox/index')['default'];
+                            Actions(me).changeCom(reactCom);
+                        }, 'bus/checkbox/index');
                     },
 'login': function(){
                         require.ensure([], (a) => {

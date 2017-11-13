@@ -15,7 +15,7 @@ class Button extends Component {
 				onFocus={props.onFocus}
 				onBlur={props.onBlur}
 				onMouseEnter={props.onMouseEnter}
-				className={me.getClassName('mod-button', props.isClick ? 'button-clicked': null, me.getButtonColor())} 
+				className={me.getClassName('mod-button', props.isClick ? 'button-clicked': null, me.getButtonColor(), me.getButtonSize())} 
 				type={props.type}><span>{props.value}</span></button>
 		);
 	}
@@ -27,6 +27,11 @@ class Button extends Component {
 		}else{
 			return `button-color-${props.colorType}`;
 		};	
+	}
+	getButtonSize(){
+		let me = this;
+		let {props} = me;
+		return `button-size-${props.size}`;
 	}
 	focus(){
 		let me = this;

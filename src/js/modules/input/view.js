@@ -2,13 +2,12 @@
 
 import './style.less';
 
-import Checkbox from './checkbox';
-
 import domUtil from 'common/domUtil';
 import Component from 'common/myReflux/component';
 
 import Button from 'modules/button/index';
 import Select from 'modules/select/index';
+import Checkbox from 'modules/checkbox/index';
 import Textarea from 'modules/textarea/index';
 import Multiple from 'modules/multiple/index';
 import Upload from 'modules/inputUpload/index';

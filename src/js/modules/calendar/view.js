@@ -24,19 +24,19 @@ class Calendar extends Component {
 		return (
 			<div className="calendar-title-table">
 				<div className="calendar-title-cell calendar-title-click">
-					<a href="javascript:;" tabIndex="-1" className="limitIcon iconfont icon-back" onClick={Actions(me).changeYear.bind(null, 'prev')}></a>
+					<a href="javascript:;" tabIndex="-1" onClick={Actions(me).changeYear.bind(null, 'prev')}>&#171;</a>
 				</div>
 				<div className="calendar-title-cell calendar-title-click">
-					<a href="javascript:;" tabIndex="-1" className="limitIcon iconfont icon-back" onClick={Actions(me).changeMonth.bind(null, 'prev')}></a>
+					<a href="javascript:;" tabIndex="-1" onClick={Actions(me).changeMonth.bind(null, 'prev')}>&#8249;</a>
 				</div>
 				<div className="calendar-title-cell calendar-title-text">
 					{props.yearMonthStr}
 				</div>
 				<div className="calendar-title-cell calendar-title-click">
-					<a href="javascript:;" tabIndex="-1" className="limitIcon iconfont icon-more" onClick={Actions(me).changeMonth.bind(null, 'next')}></a>
+					<a href="javascript:;" tabIndex="-1" onClick={Actions(me).changeMonth.bind(null, 'next')}>&#8250;</a>
 				</div>
 				<div className="calendar-title-cell calendar-title-click">
-					<a href="javascript:;" tabIndex="-1" className="limitIcon iconfont icon-more" onClick={Actions(me).changeYear.bind(null, 'next')}></a>
+					<a href="javascript:;" tabIndex="-1" onClick={Actions(me).changeYear.bind(null, 'next')}>&#187;</a>
 				</div>
 			</div>
 		);
