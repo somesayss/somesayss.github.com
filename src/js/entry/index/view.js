@@ -29,6 +29,7 @@ class Index extends Component {
 'login',
 'noPermission',
 'notFound',
+'showImg',
 'tally',
 'test1',
 'test2/index',
@@ -66,6 +67,12 @@ class Index extends Component {
                             var reactCom = require('bus/notFound/index')['default'];
                             Actions(me).changeCom(reactCom);
                         }, 'bus/notFound/index');
+                    },
+'showImg': function(){
+                        require.ensure([], (a) => {
+                            var reactCom = require('bus/showImg/index')['default'];
+                            Actions(me).changeCom(reactCom);
+                        }, 'bus/showImg/index');
                     },
 'tally': function(){
                         require.ensure([], (a) => {

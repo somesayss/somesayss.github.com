@@ -1,3 +1,74 @@
+
 .mod-radio{
-	background:#F00;
+	position:relative;
+	display:inline-block;
+	width:14px;
+	height:14px;
+	background:#FFF;
+	border:1px solid #CCC;
+	border-radius:7px;
+	cursor:pointer;
+	input{
+		opacity:0;
+		/*margin-left:100px;*/
+	}
+	&:before{
+		position:absolute;
+		content:'';
+		width:100%;
+		height:100%;
+		top:0;
+		left:0;
+		transform:scale(1);
+		opacity:1;
+		background:#4285f4;
+		border-radius:7px;
+	}
+	&.radio-clicked:before{
+		transition:all .3s ease-out 0s;
+		transform:scale(1.7);
+		opacity:0;
+	}
+	.radio-right{
+		transition:all .1s ease-out 0s;
+		position:absolute;
+		top:50%;
+		left:50%;
+		width:6px;
+		height:6px;
+		border-radius:3px;
+		background:#4285f4;
+		transform:scale(0) translate(-50%, -50%);
+		transform-origin:0 0;
+	}
+	.radio-mock{
+		transition:all .3s ease-out 0s;
+		position:absolute;
+		height:100%;
+		width:100%;
+		background:#FFF;
+		border-radius:7px;
+		top:0;
+		left:0;
+	}
+	&.radio-checked{
+		border:1px solid #4285f4;
+		background:#FFF;
+		.radio-mock{
+			background:#FFF;
+		}
+		.radio-right{
+			transform:scale(1) translate(-50%, -50%);
+		}
+	}
+	&.radio-disabled{
+		border-color:#CCC;
+		cursor:not-allowed;
+		.radio-mock{
+			background:#f2f2f2;
+		}
+		.radio-right{
+			background:#CCC;
+		}
+	}
 }

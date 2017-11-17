@@ -75,7 +75,7 @@ class BusTallyCount extends Component {
 							{countDataListSurplus.map((val, key) => {
 								return (
 									<tr key={key}>
-										<td width="60" className="count-data-type">
+										<td  width="80" className="count-data-type">
 											<label><Input type="checkbox" checked={val.checked} onChange={Actions(me).selectType.bind(null, val)} /> {val.type}</label>
 										</td>
 										<td>

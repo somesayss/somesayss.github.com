@@ -16,6 +16,8 @@ class Checkbox extends Component {
 					onBlur={props.onBlur}
 					checked={props.checked}
 					disabled={props.disabled}
+					name={props.name}
+					value={props.value}
 					type="checkbox" 
 					ref="input" />
 				<span className="checkbox-mock"></span>

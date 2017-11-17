@@ -9,21 +9,23 @@ class Controller extends Control {
 	}
 	static defaultProps = {
 		actionId: 'Checkbox',
-		onClick: limit.K,
-		onChange: limit.K
+		onChange: limit.K,
+		defaultChecked: false,
+		value: '',
+		name: ''
+	}
+	constructor(props){
+		let me = super();
+		if( props.defaultChecked ){
+			me.state.checked = true;
+		};
 	}
 	onChange(e){
 		let me = this;
 		let {state, props} = me;
-		state.checked = !state.checked;
+		let {checked} = state;
+		state.checked = !checked;
 		state.indeterminate = false;
-		return me.updateComponent().then(() => {
-			return props.onChange(e);
-		});
-	}
-	onClick(){
-		let me = this;
-		let {state, props} = me;
 		if( !state.isClick ){
 			state.isClick = true;
 		};
@@ -32,9 +34,17 @@ class Controller extends Control {
 				me.state.isClick = false;
 				me.updateComponent();
 			}, 300);
-		}).then(() => {
-			return props.onClick();
+			return props.onChange(e, props.value, checked);
 		});
+	}
+	onResetChecked(){
+		let me = this;
+		let {state, props} = me;
+		state.checked = false;
+		if( props.defaultChecked ){
+			me.state.checked = true;
+		};
+		return me.updateComponent();
 	}
 };
 

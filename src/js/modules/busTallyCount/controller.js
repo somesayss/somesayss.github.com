@@ -8,9 +8,9 @@ class Controller extends Control {
 	static defaultProps = {
 		actionId: 'BusTallyCount'
 	}
-	onSelectType(data, val, e){
+	onSelectType(data, nodeVal, e, val, checked){
 		let me = this;
-		data.checked = !e.target.checked;
+		data.checked = !checked;
 		return me.updateComponent();
 	}
 	onSelectAllType(key, val, e){

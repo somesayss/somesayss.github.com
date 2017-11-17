@@ -5,6 +5,7 @@ import './style.less';
 import domUtil from 'common/domUtil';
 import Component from 'common/myReflux/component';
 
+import Radio from 'modules/radio/index';
 import Button from 'modules/button/index';
 import Select from 'modules/select/index';
 import Checkbox from 'modules/checkbox/index';
@@ -108,7 +109,7 @@ class View extends Component {
 						<a href="javascript:;" tabIndex="-1" className="ch-clear" onClick={!props.disabled ? Actions(me).clear.bind(me) : null}>×</a>
 					}
 				}}
-				<input className={props.pswShow?'':'fn-hide'} autoComplete="off" {...me.parseProps()} ref="input" type={me.getType()}   />
+				<input className={props.pswShow?'':'fn-hide'} autoComplete="off" {...me.parseProps()} ref="input" type={me.getType()} />
 				{do{
 					if( props.type === 'password' ){
 						<input className={props.pswShow?'fn-hide':''} autoComplete="off" {...me.parseProps()} ref="inputPwd" type="text" name=""/>
@@ -181,7 +182,11 @@ class View extends Component {
 	}
 	checkboxRender(){
 		let me = this;
-		return <Checkbox {...me.parseProps()} />
+		return <Checkbox {...me.parseProps()} ref="input" />
+	}
+	radioRender(){
+		let me = this;
+		return <Radio {...me.parseProps()} ref="input" />
 	}
 	calendarRender(){
 		let me = this;

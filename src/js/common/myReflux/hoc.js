@@ -12,15 +12,19 @@ const HOC = (Wrapper, Class) => {
 	    	let clearProps = me.clearProps(props);
 	    	__controller__ = me.__controller__ = new Class(clearProps);
 	    	__controller__.com = me;
-	    	me.state = limit.assignSuper({}, __controller__.getInitialState(), clearProps);
+	    	me.state = limit.assign({}, __controller__.getInitialState(), clearProps);
 	    	__controller__.props = me.getPerProps(clearProps);
 	    	__controller__.state = me.getPerState(me.state);
-	    	me.state.actionId = me.state.actionId || `uaid${limit.getUid()}`;
+	    	me.state.actionId = me.getActionId(Class);
 	    	me.state.actionUUid = __controller__.Actions.actionUUid = `uuid${limit.getUid()}`;
 	    	if( props.actionCid ){
 	    		me.state.actionCid = __controller__.Actions.actionCid = props.actionCid;
 	    	};
 	    	Actions.set(me.state.actionId, __controller__.Actions);
+	    }
+	    getActionId(Class){
+	    	let me = this;
+	    	return Class.defaultProps && Class.defaultProps.actionId || `uaid${limit.getUid()}`;
 	    }
 	    getPerProps(props){
 	    	let outProps = {};
@@ -59,7 +63,6 @@ const HOC = (Wrapper, Class) => {
 	    	delete newProps.actionId;
     		delete newProps.actionUUid;
     		delete newProps.actionCid;
-    		newProps.actionId = Class.defaultProps && Class.defaultProps.actionId;
     		return newProps;
 	    }
 	    componentWillUpdate(props){
@@ -67,7 +70,7 @@ const HOC = (Wrapper, Class) => {
 	    	let {__controller__} = me;
 	    	// 如果是外部传入的属性全量更新
 	    	// if( me.propsFromOther ){
-	    	// 	me.nextState = limit.assignSuper({}, me.state, me.clearProps(props));
+	    	// 	me.nextState = limit.assign({}, me.state, me.clearProps(props));
 	    	// 	limit.cb(__controller__.componentWillUpdate).call(__controller__, me.nextState);
 	    	// 	__controller__.state = me.getPerState(me.nextState);
 	    	// 	__controller__.props = me.getPerProps(me.nextState);
@@ -75,12 +78,12 @@ const HOC = (Wrapper, Class) => {
 	    	// 	delete me.nextState;
 	    	// };
 	    	if( me.propsFromOther ){
-	    		limit.assignSuper(me.state, me.clearProps(props));
+	    		limit.assign(me.state, me.clearProps(props));
 	    		__controller__.state = me.getPerState(me.state);
 	    		__controller__.props = me.getPerProps(me.state);
 	    		if( limit.isFunction(__controller__.componentWillUpdate) ){
 	    			__controller__.componentWillUpdate(me.state);
-	    			limit.assignSuper(me.state, __controller__.state);
+	    			limit.assign(me.state, __controller__.state);
 	    		};
 	    	};
 	    }

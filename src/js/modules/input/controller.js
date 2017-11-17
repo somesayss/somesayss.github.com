@@ -26,6 +26,7 @@ class Controller extends Control {
 		type: 'text',
 		rule: '',
 		errMessage:'',
+		defaultChecked: false,
 		actionId: 'limitForm',
 		onChange: limit.K
 	}
@@ -43,7 +44,7 @@ class Controller extends Control {
 			return;
 		};
 		// 对类型是文件的拦截
-		if( props.type === 'file' ){
+		if( limit.contains(['file', 'radio', 'checkbox'], props.type) ){
 			return;
 		};
 		state.value = value;
@@ -115,10 +116,14 @@ class Controller extends Control {
 				me.updateComponent();
 			});
 			let originVal = state.value;
+			let originChecked = props.defaultChecked;
 			validaor.on(`${props.name}Reset`, () => {
 				let validaorState = validaor.state;
 				let originData = validaorState.originData;
 				originData[props.name] = me.state.value = originVal;
+				if( limit.contains(['radio', 'checkbox'], props.type) ){
+					me.resetChecked();
+				};
 				me.state.validaorError = null;
 				me.updateComponent().then(() => {
 					me.props.onChange(originVal);
@@ -126,6 +131,11 @@ class Controller extends Control {
 			});
 
 		};
+	}
+	resetChecked(){
+		let me = this;
+		let theCheckControl = me.com.refs.com.refs.input.__controller__;
+		theCheckControl.onResetChecked();
 	}
 };
 

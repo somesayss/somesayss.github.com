@@ -78,16 +78,17 @@ class View extends Component {
 							}}
 						</tbody>
 					</table>
-					<Input type="button" 
-						onClick={me.countData.bind(me)}
-						value="统 计" 
-						className="fn-left fn-MT10"/>
 					<SearchList 
-						className="fn-MT10" 
+						className="fn-right fn-MT10"
 						number="10"
 						onSuccess={Actions(me).searchSuccess}
 						searchParam={[props.searchType, {countTime: props.countTime}]}
 						url="http://localhost:8080/tally/list.json" />
+					<Input type="button" 
+						onClick={me.countData.bind(me)}
+						value="统 计" 
+						className="fn-MT10"/>
+					
 				</div>
 			</div>
 		);
@@ -124,7 +125,7 @@ class View extends Component {
 					</div>
 				</td> :
 				<td className={`tally-table-much ${val.much < 0 ? 'tally-table-deficit' : 'tally-table-surplus'}`}>
-					{val.much > 0 ? '+': null}{limit.thousandSeparator(val.much)}
+					{val.much > 0 ? '+': null}{val.type === '工资' ? '100.00' : limit.thousandSeparator(val.much)}
 				</td>
 		);
 	}

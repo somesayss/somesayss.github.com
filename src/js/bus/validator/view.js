@@ -93,12 +93,38 @@ class View extends React.Component {
 						placeholder="请填写文本"
 						value={originData.content}
 						name="content" /><br /><br />
+					<label className="fn-MR5">
+						<Input type="checkbox" name="a1" defaultChecked="true" className="fn-MR5" />
+						天猫
+					</label>
+					<label className="fn-MR5">
+						<Input type="checkbox" name="a2"  className="fn-MR5" />
+						天猫
+					</label>
+					<label className="fn-MR5">
+						<Input type="checkbox" name="a3"  className="fn-MR5" />
+						天猫
+					</label>
+					<br /><br />
+					<label className="fn-MR5">
+						<Input type="radio" name="a2" defaultChecked="true" className="fn-MR5" />
+						天猫
+					</label>
+					<label className="fn-MR5">
+						<Input type="radio" name="a2"  className="fn-MR5" />
+						天猫
+					</label>
+					<label className="fn-MR5">
+						<Input type="radio" name="a2"  className="fn-MR5" />
+						天猫
+					</label>
+					<br /><br />
 					{/* 提交按钮 */}
-					<Input type="submit"  value="确 定" />
+					<Input type="submit" value="确 定" />
 					{/* 重置按钮 */}
 					<Input type="reset" className="fn-ML5" value="重 置" />
 					{/* 普通按钮 */}
-					<Input type="button" colorType="primary" className="fn-ML5" value="点 击" />
+					<Input type="button" className="fn-ML5" value="点 击" />
 				</Validator>
 			</div>
 		);
