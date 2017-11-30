@@ -59,7 +59,7 @@ gulp.task('buildEntry', () => {
                 });
                 str = str.replace(/rule[\s\S]*buildRuleEnd/, `rule: {\n${buildPool.join(',\n')}\n}\n//buildRuleEnd`);
                 fs.writeFile(path, str);
-                 console.log('buildEntry success');
+                console.log('buildEntry success');
             }else{
                 throw err;
             };

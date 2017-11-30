@@ -3,78 +3,54 @@ import Control from 'common/myReflux/control';
 
 class Controller extends Control {
 	state = {
-		multipleFocus: false,
+		selectSearchFocus: false,
+		focusNumber: -1,
 		value: '',
 		list: [],
-		originList: [],
-		focusNumber: -1
+		originList: []
 	}
 	static defaultProps = {
-		actionId: 'Multiple',
+		actionId: 'SelectSearch',
 		scrollSize: 4,
 		onChange: limit.K,
 		onFocus: limit.K,
 		onBlur: limit.K,
-		defaultValue: '',
 		width: 300,
-		height: 30,
-		readOnly: true
+		notFound: '未找到匹配项'
 	}
 	constructor(props){
 		let me = super();
 		let {state} = me;
-		state.list = state.originList = me.parseListByChildren(props);
-		me.setInitFocusNmuber();
+		state.list = state.originList = props.list;
 	}
-	setInitFocusNmuber(){
-		let me = this;
-		let {state} = me;
-		state.focusNumber = 0;
-		state.originList.some((val, key) => {
-			if( val.selected ){
-				state.focusNumber = key;
-				return true;
-			};
-		});
-	}
-	parseListByChildren(props){
-		let me = this;
-		let {state} = me;
-		let propsValue = limit.isArray(props.defaultValue) ? props.defaultValue : props.defaultValue.split(',');
-		return React.Children.map(props.children, (child, key) => {
-			let val = child.props;
-			let valValue = val.value;
-			let selected = valValue && limit.contains(propsValue, valValue);
-			return {key: val.children, value: valValue, selected: selected};
-		});
-	}
-	componentWillUpdate(nextState){
-		let me = this;
-		let {state} = me;
-		state.list = state.originList = me.parseListByChildren(nextState);
-	}
-	onFocus(key){
+	onFocus(flag){
 		let me = this;
 		let {state, props} = me;
-		if( key ){
+		state.selectSearchFocus = flag;
+		// 失去焦点后重置focus
+		if( !flag ){
+			state.focusNumber = -1;
 			state.value = '';
 			state.list = state.originList;
-		}else{
-			state.focusNumber = -1;
 		};
-		state.multipleFocus = key;
 		return me.updateComponent().then(() => {
-			if( key ){
+			if( flag ){
 				return props.onFocus();
 			}else{
 				return props.onBlur();
 			};
 		});
 	}
-	onSelect(val){
+	onDeleteItem(){
 		let me = this;
-		val.selected = !val.selected;
-		return me.updateComponent().then(me.doSelect.bind(me));
+		let {state: {originList}} = me;
+		limit.reverse(originList).some((val) => {
+			if( val.selected ){
+				val.selected = false;
+				return true;
+			};
+		});
+		return me.updateComponent();
 	}
 	onChange(val){
 		let me = this;
@@ -85,12 +61,6 @@ class Controller extends Control {
 		state.value = val;
 		state.focusNumber = -1;
 		return me.updateComponent();
-	}
-	doSelect(){
-		let me = this;
-		let {state, props} = me;
-		let list = state.originList.filter((val) => val.selected).map((val) => {return {key: val.key, value: val.value}});
-		return props.onChange(list.map(val => val.value).join(','), list);
 	}
 	onKeyDown(key){
 		let me = this;
@@ -126,6 +96,16 @@ class Controller extends Control {
 		state.focusNumber = key;
 		return me.updateComponent();
 	}
+	doSelect(){
+		let me = this;
+		let {state, props} = me;
+		state.value = '';
+		state.list = state.originList;
+		let list = state.originList.filter((val) => val.selected).map((val) => {return {key: val.key, value: val.value}});
+		return me.updateComponent().then(() => {
+			return props.onChange(list);
+		});
+	}
 	onEnterDown(){
 		let me = this;
 		let {state: {list, focusNumber}, props} = me;
@@ -135,29 +115,13 @@ class Controller extends Control {
 			return me.updateComponent().then(me.doSelect.bind(me));
 		};
 	}
+	onSelect(val){
+		let me = this;
+		let {state} = me;
+		val.selected = !val.selected;
+		return me.updateComponent().then(me.doSelect.bind(me));
+	}
+
 };
 
-module.exports = Controller;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+export default Controller;

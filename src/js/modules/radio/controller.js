@@ -8,7 +8,6 @@ class Controller extends Control {
 	}
 	static defaultProps = {
 		actionId: 'Radio',
-		onClick: limit.K,
 		onChange: limit.K,
 		defaultChecked: false,
 		value: '',
@@ -29,9 +28,11 @@ class Controller extends Control {
 		};
 		return me.updateComponent();
 	}
-	onClick(){
+	onChange(e){
 		let me = this;
 		let {state, props} = me;
+		let isTriggerChange = !state.checked;
+		state.checked = true;
 		if( !state.isClick ){
 			state.isClick = true;
 		};
@@ -40,16 +41,6 @@ class Controller extends Control {
 				me.state.isClick = false;
 				me.updateComponent();
 			}, 300);
-		}).then(() => {
-			return props.onClick();
-		});
-	}
-	onChange(e){
-		let me = this;
-		let {state, props} = me;
-		let isTriggerChange = !state.checked;
-		state.checked = true;
-		return me.updateComponent().then(() => {
 			if( isTriggerChange ){
 				let {props: {name}} = me;
 				let {target} = e;

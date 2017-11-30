@@ -1,13 +1,12 @@
 
 import './style.less';
 
-import Button from 'modules/button/index';
 import Radio from 'modules/radio/index';
+import Button from 'modules/button/index';
 import Chcekbox from 'modules/checkbox/index';
 import Component from 'common/myReflux/component';
-
-// 图片
-const imgShow = require('../../../imgs/tutu.jpg');
+import Multiple from 'modules/multiple/index';
+import SelectSearch from 'modules/selectSearch/index';
 
 class Checkbox extends Component {
 	render(){
@@ -49,6 +48,16 @@ class Checkbox extends Component {
 				</label>
 				<br />
 				<br />
+				<SelectSearch 
+					list={[{key: 'a1'}, {key: 'a2'}, {key: 'a3'}, {key: 'a4'}, {key: 'a5'}]} />
+				<Multiple>
+					<option value="v1">a1</option>
+					<option value="v2">a2</option>
+					<option value="v3">a3</option>
+					<option value="v4">a4</option>
+					<option value="v5">a5</option>
+				</Multiple>
+
 			</div>
 		);
 	}

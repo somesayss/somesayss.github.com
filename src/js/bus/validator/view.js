@@ -94,29 +94,29 @@ class View extends React.Component {
 						value={originData.content}
 						name="content" /><br /><br />
 					<label className="fn-MR5">
-						<Input type="checkbox" name="a1" defaultChecked="true" className="fn-MR5" />
-						天猫
+						<Input type="checkbox" name="a1" onChange={Actions(me).changeChecked} value="a1" defaultChecked="true" className="fn-MR5" />
+						天猫1
 					</label>
 					<label className="fn-MR5">
-						<Input type="checkbox" name="a2"  className="fn-MR5" />
-						天猫
+						<Input type="checkbox" name="a2" onChange={Actions(me).changeChecked} value="a2"  className="fn-MR5" />
+						天猫2
 					</label>
 					<label className="fn-MR5">
-						<Input type="checkbox" name="a3"  className="fn-MR5" />
-						天猫
+						<Input type="checkbox" name="a3" onChange={Actions(me).changeChecked} value="a3"  className="fn-MR5" />
+						天猫3
 					</label>
 					<br /><br />
 					<label className="fn-MR5">
-						<Input type="radio" name="a2" defaultChecked="true" className="fn-MR5" />
-						天猫
+						<Input type="radio" name="a2" onChange={Actions(me).changeChecked} value="a4" defaultChecked="true" className="fn-MR5" />
+						天猫4
 					</label>
 					<label className="fn-MR5">
-						<Input type="radio" name="a2"  className="fn-MR5" />
-						天猫
+						<Input type="radio" name="a2" onChange={Actions(me).changeChecked} value="a5" className="fn-MR5" />
+						天猫5
 					</label>
 					<label className="fn-MR5">
-						<Input type="radio" name="a2"  className="fn-MR5" />
-						天猫
+						<Input type="radio" name="a2" onChange={Actions(me).changeChecked} value="a6" className="fn-MR5" />
+						天猫6
 					</label>
 					<br /><br />
 					{/* 提交按钮 */}

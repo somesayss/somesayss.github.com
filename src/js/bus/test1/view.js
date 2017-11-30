@@ -13,14 +13,7 @@ class Test1 extends Component {
 		return (
 			<div className={me.getClassName('page-test1')}>
 				pageTest1
-				<Validator>
-					{/* 文本框 */}
-					<Input type="text" 
-						placeholder="请填写姓名"
-						rule="required"
-						errMessage="姓名必填"
-						name="name" /><br /><br />
-				</Validator>
+				<a href="#test2/index">点击进入test2</a>
 			</div>
 		);
 	}

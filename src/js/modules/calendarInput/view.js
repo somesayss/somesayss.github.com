@@ -58,7 +58,8 @@ class CalendarInput extends Component {
 
 	}
 	componentWillUnmount(){
-		
+		let me = this;
+		clearTimeout(me.timeoutId);
 	}
 };
 
