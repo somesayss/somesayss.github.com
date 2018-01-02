@@ -64,10 +64,10 @@ class View extends Component {
 		};
 		return props[`${me.getType()}Width`]
 	}
-	doOriginFun(val, e, args){
+	doOriginFun(method, e, args){
 		let me = this;
 		let {props} = me;
-		let originFun = props[val];
+		let originFun = props[method];
 		if( originFun ){
 			undefined::originFun(e.target ? e.target.value: e, e, ...args);
 		};
@@ -78,13 +78,15 @@ class View extends Component {
 		let newProps = limit.filter(props, (val, key) => {
 			return !limit.contains(['actionId', 'actionUUid', 'className', 'placeholder'], key);
 		});
-		['onFocus', 'onBlur', 'onChange'].forEach((val) => {
-			newProps[val] = function(e, ...args){
-				let fun = Actions(me)[`${props.type}${val.slice(2)}`];
+		['onFocus', 'onBlur', 'onChange'].forEach((method) => {
+			newProps[method] = function(e, ...args){
+				let fun = Actions(me)[`${props.type}${method.slice(2)}`];
+				// 如果是事件对象，进入异步操作会被销毁，我们要保存一个下来
+ 				let copyEvent = (e && e.target && e.target.nodeType) ? limit.assign({}, e) : e;
 				if( fun ){
-					fun(e, ...args).then(me.doOriginFun.bind(me, val, e, args));
+					fun(e, ...args).then(me.doOriginFun.bind(me, method, copyEvent, args));
 				}else{
-					Actions(me)[`${val.slice(2).toLowerCase()}`](e, ...args).then(me.doOriginFun.bind(me, val, e, args));
+					Actions(me)[`${method.slice(2).toLowerCase()}`](e, ...args).then(me.doOriginFun.bind(me, method, copyEvent, args));
 				};
 			};
 		});

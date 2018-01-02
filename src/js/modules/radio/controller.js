@@ -31,6 +31,7 @@ class Controller extends Control {
 	onChange(e){
 		let me = this;
 		let {state, props} = me;
+		let {target} = e;
 		let isTriggerChange = !state.checked;
 		state.checked = true;
 		if( !state.isClick ){
@@ -43,7 +44,6 @@ class Controller extends Control {
 			}, 300);
 			if( isTriggerChange ){
 				let {props: {name}} = me;
-				let {target} = e;
 				return Actions('Radio').clearChecked(name, target);
 			};
 		}).then(() => {

@@ -9,7 +9,8 @@ class NotFound extends Component {
 		let {props} = me;
 		return (
 			<div className={me.getClassName('page-not-found')}>
-				pageNotFound
+				<span className="fn-FS30">404页面不存在</span>
+				<a href="javascript:history.go(-2);" className="fn-ML10 not-found-back">点击我返回</a>
 			</div>
 		);
 	}

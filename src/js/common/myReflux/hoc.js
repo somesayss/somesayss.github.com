@@ -27,8 +27,9 @@ const HOC = (Wrapper, Class) => {
 	    	return Class.defaultProps && Class.defaultProps.actionId || `uaid${limit.getUid()}`;
 	    }
 	    getPerProps(props){
+	    	let me = this;
 	    	let outProps = {};
-	    	limit.each(Class.defaultProps, (val, key) => {
+	    	limit.each(me.clearProps(Class.defaultProps), (val, key) => {
 	    		outProps[key] = props[key];
 	    	});
 	    	return outProps;

@@ -48,16 +48,16 @@ gulp.task('buildEntry', () => {
     glob.sync('src/js/entry/**/view.js').forEach((path) => {
         fs.readFile(path, (err, file) => {
             if( !err ){
-                var str = file.toString().replace(/linksList[\s\S]*buildLinksListEnd/, `linksList: [\n${buildPool.map((val) => `'${val}'`).join(',\n')}\n],\n//buildLinksListEnd`);
-                buildPool = buildPool.map((val) => {
-                    return `'${val}': function(){
-                        require.ensure([], (a) => {
-                            var reactCom = require('bus/${val}/index')['default'];
-                            Actions(me).changeCom(reactCom);
-                        }, 'bus/${val}/index');
-                    }`;
+                var str = file.toString().replace(/linksList[\s\S]*buildLinksListEnd/, `linksList: [\n${buildPool.map((val) => `\t\t\t\t'${val}'`).join(',\n')}\n\t\t\t],\n\t\t\t//buildLinksListEnd`);
+                var buildPoolTmp = buildPool.map((val) => {
+                    return `\t\t\t\t'${val}': function(){
+                    require.ensure([], (a) => {
+                        var reactCom = require('bus/${val}/index')['default'];
+                        Actions(me).changeCom(reactCom);
+                    }, 'bus/${val}/index');
+                }`;
                 });
-                str = str.replace(/rule[\s\S]*buildRuleEnd/, `rule: {\n${buildPool.join(',\n')}\n}\n//buildRuleEnd`);
+                str = str.replace(/rule[\s\S]*buildRuleEnd/, `rule: {\n${buildPoolTmp.join(',\n')}\n\t\t\t}\n\t\t\t//buildRuleEnd`);
                 fs.writeFile(path, str);
                 console.log('buildEntry success');
             }else{

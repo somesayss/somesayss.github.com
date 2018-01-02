@@ -6,6 +6,7 @@ import Button from 'modules/button/index';
 import Chcekbox from 'modules/checkbox/index';
 import Component from 'common/myReflux/component';
 import Multiple from 'modules/multiple/index';
+import Input from 'modules/input/index';
 import SelectSearch from 'modules/selectSearch/index';
 
 class Checkbox extends Component {
@@ -22,7 +23,7 @@ class Checkbox extends Component {
 				<br />
 				<label>
 					<Chcekbox indeterminate={props.indeterminate} checked={props.checked} className="fn-MR5" />
-					嘻嘻哈哈1
+					嘻嘻哈哈
 				</label>
 				<br />
 				<br />
@@ -57,6 +58,13 @@ class Checkbox extends Component {
 					<option value="v4">a4</option>
 					<option value="v5">a5</option>
 				</Multiple>
+				<Input type="multiple">
+					<option value="17">a17</option>
+					<option value="18">a18</option>
+					<option value="19">a19</option>
+					<option value="20">a20</option>
+					<option value="21">a21</option>
+				</Input>
 
 			</div>
 		);

@@ -1,7 +1,5 @@
 @charset "UTF-8";
-*,
-*:after,
-*:before {
+* {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   vertical-align: top;
   box-sizing: border-box;
@@ -17,6 +15,7 @@ body {
   -webkit-text-size-adjust: none;
   background: #FFF;
   font-size: 1.2em;
+  line-height: inherit;
 }
 body,
 div,

@@ -39,6 +39,7 @@ class Index {
 				if( content.isSuccess ){
 					let {retValue, message} = content;
 					if( message ){
+						retValue = retValue || {};
 						retValue.successMsg = message;
 					};
 					return retValue;
@@ -50,11 +51,12 @@ class Index {
 			dialogExp.destroy();
 			return val;
 		}, (e) => {
+			let eMsg;
 			if( !limit.isString(e) ){
-				e = '请求数据错误，请稍后再试';
+				eMsg = '请求数据错误，请稍后再试';
 			};
 			dialogExp.destroy();
-			DialogWidget.error(e);
+			DialogWidget.error(eMsg);
 			throw e;
 		});
 	}

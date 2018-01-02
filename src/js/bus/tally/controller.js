@@ -144,8 +144,6 @@ class Controller extends Control {
 		switch(type){
 			case 'save':
 				if( flag ){
-					state.nameListSelectValue = '';
-					state.searchParam = {};
 					return me.updateComponent().then(() => {
 						Actions('searchList').start();
 					});

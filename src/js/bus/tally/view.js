@@ -194,6 +194,9 @@ class View extends Component {
 			DomUtil.textSelect(input, leg, leg);
 		};
 	}
+	componentWillUnmount(){
+		Dialog.clearLoop();
+	}
 	countData(){
 		let me = this;
 		return Actions(me).getCountDataList().then((val) => {

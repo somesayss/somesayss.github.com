@@ -30,7 +30,7 @@ class Controller extends Control {
 		actionId: 'limitForm',
 		onChange: limit.K
 	}
-	onChange(e){
+	onChange(e, ...args){
 		let me = this;
 		let {state, props} = me;
 		let value;

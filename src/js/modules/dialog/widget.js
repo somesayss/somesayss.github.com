@@ -5,12 +5,27 @@ import originClass from './index';
 import Input from 'modules/input/index';
 import Widget from 'common/myReflux/widget';
 
+const dialogLoop = window.dialogLoop = [];
 
 class originWidget extends Widget {
 	static originClass = originClass
+	constructor(...args){
+		let me = super(...args);
+		dialogLoop.push(me);
+	}
 	setCenter(){
 		let me = this;
 		Actions(me.componentExp).setCenter();
+	}
+	destroy(){
+		let me = this;
+		super.destroy();
+		limit.remove(dialogLoop, me);
+	}
+	static clearLoop(){
+		dialogLoop.forEach((exp) => {
+			exp.destroy();
+		});
 	}
 	static loading(){
 		return new originWidget({
