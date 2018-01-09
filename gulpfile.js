@@ -45,26 +45,36 @@ gulp.task('buildEntry', () => {
     glob.sync('src/js/bus/**/index.js').forEach((files) => {
         buildPool.push(`${files.match(/bus\/(.*)\/index/)[1]}`);
     });
-    glob.sync('src/js/entry/**/view.js').forEach((path) => {
-        fs.readFile(path, (err, file) => {
-            if( !err ){
-                var str = file.toString().replace(/linksList[\s\S]*buildLinksListEnd/, `linksList: [\n${buildPool.map((val) => `\t\t\t\t'${val}'`).join(',\n')}\n\t\t\t],\n\t\t\t//buildLinksListEnd`);
-                var buildPoolTmp = buildPool.map((val) => {
-                    return `\t\t\t\t'${val}': function(){
-                    require.ensure([], (a) => {
-                        var reactCom = require('bus/${val}/index')['default'];
-                        Actions(me).changeCom(reactCom);
-                    }, 'bus/${val}/index');
-                }`;
-                });
-                str = str.replace(/rule[\s\S]*buildRuleEnd/, `rule: {\n${buildPoolTmp.join(',\n')}\n\t\t\t}\n\t\t\t//buildRuleEnd`);
-                fs.writeFile(path, str);
-                console.log('buildEntry success');
-            }else{
-                throw err;
-            };
-        });
-    });
+
+    var linksListStr = buildPool.map((val) => `\t\t'${val}'`).join(',\n');
+
+    var ruleStr = buildPool.map((val) => {
+        return `\t\t'${val}': function(){
+            require.ensure([], (a) => {
+            var reactCom = require('bus/${val}/index')['default'];
+            Actions(this).changeCom(reactCom);
+            }, 'bus/${val}/index');
+        }`;
+    }).join(',\n');
+
+
+    var str = `
+const RouterMap = {
+    linksList: [
+${linksListStr}
+    ],
+    rule: {
+${ruleStr}
+    }
+}
+
+export default RouterMap;
+
+`
+
+    fs.writeFile('src/js/entry/routerMap.js', str);
+    console.log('buildEntry success');
+
 });
 
 
