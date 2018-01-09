@@ -8,7 +8,9 @@ class View extends Component {
 		let me = this;
 		let {props} = me;
 		return (
-			<input {...props} ref="input" onChange={me.change.bind(me)}  />
+			props.type === 'textarea' ? 
+			<textarea {...props} ref="input" onChange={me.change.bind(me)}></textarea> :
+			<input {...props} ref="input" onChange={me.change.bind(me)}/> 
 		);
 	}
 	change(e){

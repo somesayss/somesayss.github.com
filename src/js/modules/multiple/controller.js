@@ -15,6 +15,7 @@ class Controller extends Control {
 		onChange: limit.K,
 		onFocus: limit.K,
 		onBlur: limit.K,
+		defaultValue: '',
 		width: 300,
 		height: 30,
 		readOnly: true
@@ -22,7 +23,7 @@ class Controller extends Control {
 	constructor(props){
 		let me = super();
 		let {state} = me;
-		state.list = state.originList = me.parseListByChildren(props);
+		state.list = state.originList = me.parseListByChildren(props, 'init');
 		me.setInitFocusNmuber();
 	}
 	setInitFocusNmuber(){
@@ -36,10 +37,15 @@ class Controller extends Control {
 			};
 		});
 	}
-	parseListByChildren(props){
+	parseListByChildren(props, flag){
 		let me = this;
 		let {state} = me;
-		let propsValue = limit.isArray(props.value) ? props.value : props.value.split(',');
+		let propsValue;
+		if( flag === 'init' ){
+			propsValue = limit.isArray(props.defaultValue) ? props.defaultValue : props.defaultValue.split(',');
+		}else{
+			propsValue = limit.isArray(props.value) ? props.value : props.value.split(',');
+		};
 		return React.Children.map(props.children, (child, key) => {
 			let val = child.props;
 			let valValue = val.value;
@@ -50,7 +56,7 @@ class Controller extends Control {
 	componentWillUpdate(nextState){
 		let me = this;
 		let {state} = me;
-		state.list = state.originList = me.parseListByChildren(nextState);
+		state.list = state.originList = me.parseListByChildren(nextState, 'update');
 	}
 	onFocus(key){
 		let me = this;

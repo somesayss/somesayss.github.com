@@ -9,7 +9,7 @@ class Test1 extends Component {
 		let {props} = me;
 		return (
 			<div className={me.getClassName('page-test1')}>
-				pageTest1
+				test xixihahaxixihaha
 			</div>
 		);
 	}
@@ -18,9 +18,6 @@ class Test1 extends Component {
 	}
 	componentDidUpdate(){
 
-	}
-	componentWillUnmount(){
-		
 	}
 };
 

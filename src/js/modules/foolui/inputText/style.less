@@ -1,0 +1,118 @@
+@fooluiDefaultColor: #CCC;
+@fooluiMainColor: #4285f4;
+@fooluiErrorColor: #F00;
+@fooluiColor: #666;
+
+.mod-foolui-input-text{
+	display:inline-block;
+	border:1px solid @fooluiDefaultColor;
+	transition:all .2s ease 0s;
+	border-radius:3px;
+	.foolui-input-text-table{
+		display:table;
+		height:100%;
+		width:100%;
+	}
+	.foolui-input-text-tablecell{
+		display:table-cell;
+		height:100%;
+		vertical-align:middle;
+		text-align:center;
+	}
+	
+	.foolui-input-text-input{
+		width:100%;
+		height:100%;
+		border:none;
+		font-size:12px;
+		padding:0 0 0 5px;
+		border-radius:5px;
+		color:@fooluiColor;
+	}
+	.foolui-input-text-close{
+		font-size:14px;
+		color:@fooluiColor;
+		display:inline-block;
+		height:14px;
+		overflow:hidden;
+		line-height:14px;
+	}
+	.foolui-input-text-eye{
+		display:inline-block;
+		width:8px;
+		height:8px;
+		margin:3px 2px 0 0;
+		background:@fooluiColor;
+		border-radius:50px;
+		border:1px solid @fooluiColor;
+	}
+	.foolui-input-text-content{
+		padding:0 2px;
+	}
+	&.foolui-input-text-placeholder{
+		.input-text-dosome{
+			color:#FFF;
+			height:100%;
+			padding:2px;
+			.foolui-input-text-table{
+				border-radius:3px;
+				background:@fooluiColor;
+			}
+		}
+	}
+	&.foolui-input-text-focus{
+		border:1px solid @fooluiMainColor;
+		box-shadow:0 0 3px lighten(@fooluiMainColor, 20%);
+		.foolui-input-text-close{
+			color:@fooluiMainColor;
+		}
+		.foolui-input-text-eye{
+			background:@fooluiMainColor;
+			border:1px solid @fooluiMainColor;
+		}
+	}
+	&.foolui-input-text-focus.foolui-input-text-placeholder{
+		.input-text-dosome{ 
+			.foolui-input-text-table{
+				background:@fooluiMainColor;
+			}
+		}
+	}
+	&.foolui-input-text-error{
+		border:1px solid @fooluiErrorColor;
+		box-shadow:0 0 3px lighten(@fooluiErrorColor, 20%);
+		.input-text-dosome{
+			color:#FFF;
+			height:100%;
+			padding:2px;
+			.foolui-input-text-table{
+				border-radius:3px;
+				background:@fooluiErrorColor;
+			}
+		}
+	}
+	&.foolui-input-text-disabled{
+		cursor:not-allowed;
+		.foolui-input-text-input{
+			cursor:not-allowed;
+		}
+		.input-text-dosome{
+			.foolui-input-text-table{
+				background:lighten(@fooluiColor, 30%);
+			}
+		}
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

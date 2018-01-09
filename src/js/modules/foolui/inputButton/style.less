@@ -1,0 +1,87 @@
+@defaultColor: #F2F2F2;
+@primaryColor: #4285f4;
+@warningColor: #F90;
+@errorColor: #F00;
+@disabledColor: #4285f4;
+/*默认*/
+.mod-foolui-input-button{
+	border:1px solid darken(@defaultColor, 20%);
+	background:@defaultColor;
+	height:30px;
+	line-height:30px;
+	font-size:12px;
+	color:#666;
+	padding:0 10px;
+	position:relative;
+	border-radius:3px;
+	&:focus{
+		outline:none;
+	}
+	&:active, &:active:before{
+		background:darken(@defaultColor, 10%);
+	}
+	&:before{
+		position:absolute;
+		content:'';
+		width:100%;
+		height:100%;
+		top:0;
+		left:0;
+		transform:scale(1);
+		opacity:1;
+		background:@defaultColor;
+		border-radius:3px;
+	}
+	&.foolui-input-button-clicked:before{
+		transition:all .3s ease-out 0s;
+		transform:scale(1.3);
+		opacity:0;
+	}
+	span{
+		position:relative;
+	}
+}
+
+.mod-foolui-input-button.foolui-input-button-color-primary{
+	border:1px solid darken(@primaryColor, 10%);
+	background:@primaryColor;
+	&:active, &:active:before{
+		background:darken(@primaryColor, 5%);
+	}
+	color:#FFF;
+	&:before{
+		background:@primaryColor;
+	}
+}
+
+.mod-foolui-input-button.foolui-input-button-color-warning{
+	border:1px solid darken(@warningColor, 10%);
+	background:@warningColor;
+	&:active, &:active:before{
+		background:darken(@warningColor, 5%);
+	}
+	color:#FFF;
+	&:before{
+		background:@warningColor;
+	}
+}
+
+.mod-foolui-input-button.foolui-input-button-color-error{
+	border:1px solid darken(@errorColor, 10%);
+	background:@errorColor;
+	&:active, &:active:before{
+		background:darken(@errorColor, 5%);
+	}
+	color:#FFF;
+	&:before{
+		background:@errorColor;
+	}
+}
+
+.mod-foolui-input-button.foolui-input-button-color-disabled{
+	cursor:not-allowed;
+	color:#999;
+	&:active, &:active:before{
+		background:@defaultColor;
+	}
+}

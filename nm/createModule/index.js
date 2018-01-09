@@ -167,7 +167,7 @@ function pageInit(name){
 		return promiseWrite(`${path}${val}`, templatePageMap[val](lessName, componentName) );
 	});
 	Promise.all(promiseArr).then(() => {
-		console.log('mod init success');
+		console.log('page init success');
 	}, (e) => {
 		console.log('错误', e);
 	});

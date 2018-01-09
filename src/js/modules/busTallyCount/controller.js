@@ -8,15 +8,15 @@ class Controller extends Control {
 	static defaultProps = {
 		actionId: 'BusTallyCount'
 	}
-	onSelectType(data, val, e){
+	onSelectType(data, nodeVal, e, val, checked){
 		let me = this;
-		data.checked = !e.target.checked;
+		data.checked = !checked;
 		return me.updateComponent();
 	}
-	onSelectAllType(key, val, e){
+	onSelectAllType(key, nodeVal, e, val, checked){
 		let me = this;
 		let {state: {countDataList}} = me;
-		let checked = !e.target.checked;
+		checked = !checked;
 		countDataList.forEach((val) => {
 			if( key === 'surplus' ){
 				if( val.much >= 0 ){

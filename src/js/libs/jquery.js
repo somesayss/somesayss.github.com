@@ -43,9 +43,8 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
 //# sourceMappingURL=es5-sham.map
 
 // 入口
-$(function(){
-	var DOC = document;
-	var HEAD = document.head || document.getElementsByTagName('head')[0];
+(function(DOC){
+	var HEAD = DOC.head || DOC.getElementsByTagName('head')[0];
 	var scripts = DOC.getElementsByTagName('script');
     var lastScript = scripts[scripts.length - 1];
     var src = lastScript.src;
@@ -69,7 +68,7 @@ $(function(){
     	loadScript.onload = null
     	$(loadScript).remove();
     };
-});
+})(document);
 
 
 

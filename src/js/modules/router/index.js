@@ -8,7 +8,7 @@ class Router extends RouterBase {
 		// 全部地址
 		linksList: [],
 		// 默认地址
-		defaultWhiteList: [],
+		defaultWhiteList: null,
 		// 白名单[登陆后的]
 		whiteList: null,
 		// 404
@@ -30,6 +30,9 @@ class Router extends RouterBase {
 		if( limit.contains(linksList, hash) ){
 			// 未登陆
 			if( whiteList === null ){
+				if( defaultWhiteList === null ){
+					return true;
+				};
 				// 如果在默认权限表里
 				if( limit(defaultWhiteList).concat([notFound, noPermission, login]).contains(hash).val() ){
 					return true;

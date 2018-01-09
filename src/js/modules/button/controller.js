@@ -10,6 +10,7 @@ class Controller extends Control {
 		type: 'button',
 		disabled: false,
 		colorType: 'default',	// 颜色类型 default[灰色#F2F2F2] primary[蓝色#4285f4] warning[橘黄#F90] error[红色#F00]
+		size: 'default', // default[30] big[40] small[25]
 		value: '按 钮',
 		onClick: limit.K
 	}

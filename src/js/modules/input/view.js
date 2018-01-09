@@ -2,13 +2,13 @@
 
 import './style.less';
 
-import Checkbox from './checkbox';
-
 import domUtil from 'common/domUtil';
 import Component from 'common/myReflux/component';
 
+import Radio from 'modules/radio/index';
 import Button from 'modules/button/index';
 import Select from 'modules/select/index';
+import Checkbox from 'modules/checkbox/index';
 import Textarea from 'modules/textarea/index';
 import Multiple from 'modules/multiple/index';
 import Upload from 'modules/inputUpload/index';
@@ -64,10 +64,10 @@ class View extends Component {
 		};
 		return props[`${me.getType()}Width`]
 	}
-	doOriginFun(val, e, args){
+	doOriginFun(method, e, args){
 		let me = this;
 		let {props} = me;
-		let originFun = props[val];
+		let originFun = props[method];
 		if( originFun ){
 			undefined::originFun(e.target ? e.target.value: e, e, ...args);
 		};
@@ -78,13 +78,15 @@ class View extends Component {
 		let newProps = limit.filter(props, (val, key) => {
 			return !limit.contains(['actionId', 'actionUUid', 'className', 'placeholder'], key);
 		});
-		['onFocus', 'onBlur', 'onChange'].forEach((val) => {
-			newProps[val] = function(e, ...args){
-				let fun = Actions(me)[`${props.type}${val.slice(2)}`];
+		['onFocus', 'onBlur', 'onChange'].forEach((method) => {
+			newProps[method] = function(e, ...args){
+				let fun = Actions(me)[`${props.type}${method.slice(2)}`];
+				// 如果是事件对象，进入异步操作会被销毁，我们要保存一个下来
+ 				let copyEvent = (e && e.target && e.target.nodeType) ? limit.assign({}, e) : e;
 				if( fun ){
-					fun(e, ...args).then(me.doOriginFun.bind(me, val, e, args));
+					fun(e, ...args).then(me.doOriginFun.bind(me, method, copyEvent, args));
 				}else{
-					Actions(me)[`${val.slice(2).toLowerCase()}`](e, ...args).then(me.doOriginFun.bind(me, val, e, args));
+					Actions(me)[`${method.slice(2).toLowerCase()}`](e, ...args).then(me.doOriginFun.bind(me, method, copyEvent, args));
 				};
 			};
 		});
@@ -109,7 +111,7 @@ class View extends Component {
 						<a href="javascript:;" tabIndex="-1" className="ch-clear" onClick={!props.disabled ? Actions(me).clear.bind(me) : null}>×</a>
 					}
 				}}
-				<input className={props.pswShow?'':'fn-hide'} autoComplete="off" {...me.parseProps()} ref="input" type={me.getType()}   />
+				<input className={props.pswShow?'':'fn-hide'} autoComplete="off" {...me.parseProps()} ref="input" type={me.getType()} />
 				{do{
 					if( props.type === 'password' ){
 						<input className={props.pswShow?'fn-hide':''} autoComplete="off" {...me.parseProps()} ref="inputPwd" type="text" name=""/>
@@ -182,7 +184,11 @@ class View extends Component {
 	}
 	checkboxRender(){
 		let me = this;
-		return <Checkbox {...me.parseProps()} />
+		return <Checkbox {...me.parseProps()} ref="input" />
+	}
+	radioRender(){
+		let me = this;
+		return <Radio {...me.parseProps()} ref="input" />
 	}
 	calendarRender(){
 		let me = this;
