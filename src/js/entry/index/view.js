@@ -22,7 +22,7 @@ class Index extends Component {
 	createRouter(defaultWhiteList, whiteList){
 		let me = this;
 		return new Router({
-			defaultHash: 'test1',
+			defaultHash: 'test',
 			defaultWhiteList,
 			whiteList,
 			linksList: RouterMap.linksList,

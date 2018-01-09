@@ -1,9 +1,9 @@
-"use strict";
 
 import './style.less';
 
+const { Pagination } = antd;
+
 import Component from 'common/myReflux/component';
-import Page from 'modules/page/index';
 
 // 组件类
 class SearchList extends Component {
@@ -13,10 +13,14 @@ class SearchList extends Component {
 		return (
 			<div className={me.getClassName('search-list')}>
 				{props.children}
-				<Page className="search-list-page" 
+				<Pagination className="search-list-page" 
 					onChange={Actions(me).change}
-					totle={props.totle}
-					page={props.page} />
+					total={props.totle}
+					current={props.page} 
+					pageSize={props.number}
+					onShowSizeChange={Actions(me).showSizeChange}
+					showQuickJumper={props.showQuickJumper}
+					showSizeChanger={props.showSizeChanger} />
 			</div>
 		);
 	}

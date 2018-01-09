@@ -1,21 +1,29 @@
-"use strict";
 	
 // 依赖
-import Control from 'common/myReflux/control';
 import Ajax from 'modules/ajax/index';
+import Control from 'common/myReflux/control';
 
 class Controller extends Control {
 	state = {
 		page: 1,
-		number: 5,
+		number: 10,
 		totle: 0
 	}
 	static defaultProps = {
 		actionId: 'searchList',
 		url: '',
+		showQuickJumper: true,
+		showSizeChanger: true,
 		searchParam: [],
 		onSuccess: limit.K,
 		onError: limit.K
+	}
+	onShowSizeChange(current, pageSize){
+		let me = this;
+		let {state} = me;
+		state.number = pageSize;
+		state.page = current;
+		return me.updateComponent();
 	}
 	// 上一页
 	onPrev(){
