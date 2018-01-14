@@ -2,57 +2,57 @@
 @charset "UTF-8";
 
 @keyframes buttonLoading{
-	0% {transform:rotate(0);}
-	100% {transform:rotate(360deg);}
+  0% {transform:rotate(0);}
+  100% {transform:rotate(360deg);}
 }
 
 .limitIcon{
-	display:inline-block;
-	width:20px;
-	height:20px;
-	line-height:22px;
-	text-align:center;
-	color:#4285f4;
-	font-size:14px;
-	overflow:hidden;
-	&:hover,&:focus{
-		color:#062e71; 
-		text-shadow:0 0 1px #4285f4;
-	}
+  display:inline-block;
+  width:20px;
+  height:20px;
+  line-height:22px;
+  text-align:center;
+  color:#4285f4;
+  font-size:14px;
+  overflow:hidden;
+  &:hover,&:focus{
+    color:#062e71; 
+    text-shadow:0 0 1px #4285f4;
+  }
 }
 button.limitIcon{
-	cursor:pointer;
-	padding:0;
-	background:none;
-	border:none;
-	&:focus{
-		outline:none;
-	}
-	&.loading{
-		animation:buttonLoading 1s linear infinite;
-	}
+  cursor:pointer;
+  padding:0;
+  background:none;
+  border:none;
+  &:focus{
+    outline:none;
+  }
+  &.loading{
+    animation:buttonLoading 1s linear infinite;
+  }
 }
 button.limitIcon[disabled]{
-	cursor:not-allowed;
-	color:#999;
-	&:hover{
-		text-shadow:none;
-		color:#999;
-	}
+  cursor:not-allowed;
+  color:#999;
+  &:hover{
+    text-shadow:none;
+    color:#999;
+  }
 }
 
 @color: #FFF;
 
 body{
-	background: @color;
+  background: @color;
 }
 
 .imgshow2{
-	width:200px;
-	height:200px;
-	background:url("../imgs/tutu.jpg");
+  width:200px;
+  height:200px;
+  background:url("../imgs/tutu.jpg");
 }
 
 .foolui-code{
-	
+  
 }
