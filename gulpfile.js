@@ -19,13 +19,9 @@ gulp.task('default', ['buildEntry', 'zip']);
 gulp.task('zip', () => {
     // common.js
     gulp.src(staticConfig.commonJsList)
-        .pipe( concat('common.js') )
+        .pipe( concat('app.js') )
         .pipe( uglify() )
         .pipe( gulp.dest('dist/js/libs') );
-    // common.css
-    gulp.src(staticConfig.commonCssList)
-        .pipe( concat('common.css') )
-        .pipe( gulp.dest('dist/css') );
     // 编译less
     var lessList = isBuild ? ['src/css/**/*.less', 'src/js/**/style.less'] : ['src/css/**/*.less'];
     gulp.src(lessList)
