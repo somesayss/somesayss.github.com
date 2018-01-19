@@ -31,7 +31,8 @@ class VideoCamera extends Component {
 		new VideoStream().then((stream) => {
 			console.log(stream)
 			window.myStream = stream;
-			video.src = URL.createObjectURL(stream);
+			// video.src = URL.createObjectURL(stream);
+			video.srcObject = stream;
 		});
 	}
 	doScreenshots(){
