@@ -29,7 +29,7 @@ pageDO(){
 	echo -n "输入名称:"
 	read pagename
 	if [ $init == "init" ]; then
-		echo -n "是否覆盖[true|false]:"
+		echo -n "是否覆盖[false|true](默认false):"
 		read isoverwrite
 		node mm/$init page $pagename $isoverwrite
 	else
@@ -44,7 +44,7 @@ modDO(){
 	echo -n "输入名称:"
 	read modame
 	if [ $init == "init" ]; then
-		echo -n "是否覆盖[true|false]:"
+		echo -n "是否覆盖[false|true](默认false):"
 		read isoverwrite
 		node mm/$init mod $modame $isoverwrite
 	else
@@ -59,7 +59,7 @@ entryDO(){
 	echo -n "输入名称:"
 	read entryName
 	if [ $init == "init" ]; then
-		echo -n "是否覆盖[true|false]:"
+		echo -n "是否覆盖[false|true](默认false):"
 		read isoverwrite
 		node mm/$init entry $entryName $isoverwrite
 	else
@@ -68,8 +68,11 @@ entryDO(){
 }
 
 webpackDO(){
+	echo -n "是否要开启https[false|true](默认false):"
+	read isHttps
+	[ $isHttps ] && isHttps="--https"
 	gulp
-	node_modules/.bin/webpack-dev-server --config ./config/serverConfig.js --hot
+	node_modules/.bin/webpack-dev-server --config ./config/serverConfig.js --hot $isHttps
 }
 
 buildDO(){
