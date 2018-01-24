@@ -1,6 +1,7 @@
 
 const RouterMap = {
     linksList: [
+		'antForm',
 		'calendar',
 		'checkbox',
 		'foolui/index',
@@ -24,6 +25,12 @@ const RouterMap = {
 		'videoCamera'
     ],
     rule: {
+		'antForm': function(){
+            require.ensure([], (a) => {
+            var reactCom = require('bus/antForm/index')['default'];
+            Actions(this).changeCom(reactCom);
+            }, 'bus/antForm/index');
+        },
 		'calendar': function(){
             require.ensure([], (a) => {
             var reactCom = require('bus/calendar/index')['default'];

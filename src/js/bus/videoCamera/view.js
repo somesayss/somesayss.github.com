@@ -7,6 +7,19 @@ import Ajax from 'modules/ajax/index';
 import Component from 'common/myReflux/component';
 import DialogWidget from 'modules/dialog/widget';
 
+var attachMediaStream = function(element, stream) {
+  if (typeof element.srcObject !== 'undefined') {
+    element.srcObject = stream;
+  } else if (typeof element.mozSrcObject !== 'undefined') {
+    element.mozSrcObject = stream;
+  } else if (typeof element.src !== 'undefined') {
+    element.src = URL.createObjectURL(stream);
+  } else {
+    console.log('Error attaching stream to element.');
+  }
+};
+
+
 class VideoCamera extends Component {
 	render(){
 		let me = this;
@@ -28,12 +41,23 @@ class VideoCamera extends Component {
 	componentDidMount(){
 		let me = this;
 		let {refs: {video}} = me;
-		new VideoStream().then((stream) => {
-			console.log(stream)
-			window.myStream = stream;
+		$(video).attr('playsinline', 'true');
+		$(video).prop('muted', 'muted');
+		navigator.getUserMedia({
+			audio: true,
+			video: true
+		}, (stream) => {
+			attachMediaStream(video, stream);
+			alert(123);
 			// video.src = URL.createObjectURL(stream);
-			video.srcObject = stream;
-		});
+		}, (e) => {
+			console.log(e);
+		})
+		// new VideoStream().then((stream) => {
+		// 	console.log(stream)
+		// 	window.myStream = stream;
+		// 	video.src = URL.createObjectURL(stream);
+		// });
 	}
 	doScreenshots(){
 		let me = this;

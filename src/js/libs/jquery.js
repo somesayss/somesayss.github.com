@@ -43,10 +43,15 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
 //# sourceMappingURL=es5-sham.map
 
 // 入口
-(function(DOC){
+$(function(DOC){
+	var DOC = document;
 	var HEAD = DOC.head || DOC.getElementsByTagName('head')[0];
 	var scripts = DOC.getElementsByTagName('script');
     var lastScript = scripts[scripts.length - 1];
+    var targetScript = $('script[entry]')[0];
+    if( targetScript ){
+    	lastScript = targetScript;
+    };
     var src = lastScript.src;
 	var REX = /((?:http|https):\/\/[^\/]*)(.+?)\./;
 	var base = '';
@@ -68,7 +73,7 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
     	loadScript.onload = null
     	$(loadScript).remove();
     };
-})(document);
+});
 
 
 

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="renderer" content="webkit" /><!-- 360浏览器切换内核 webkit | ie-comp[IE6/7]? | ie-stand[IE8910]? -->
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1" /><!-- 手机头部设置 -->
+<meta name="description" content="" />
+<meta name="keywords" content=""  />
+<title>index</title>
+<!-- #公用静态资源 -->
+	<!-- 未打包CSS --> 
+	<!-- 已打包CSS -->
+
+<!-- /公用静态资源 -->
+
+<!-- /脚本入口 -->
+
+
+</head>
+<body class="fn-PaLe20 fn-PaTo20 fn-PaRi20 fn-PaBo20">
+	<video src="http://flv2.bn.netease.com/videolib3/1604/28/fVobI0704/SD/fVobI0704-mobile.mp4" 
+		autoplay="autoplay"
+		playsinline="true" 
+		width="300"
+		id="video1">
+	</video>
+	<video src="http://flv2.bn.netease.com/videolib3/1604/28/fVobI0704/SD/fVobI0704-mobile.mp4" 
+		autoplay="autoplay"
+		playsinline="true" 
+		muted="muted"
+		width="300"
+		id="video1">
+	</video>
+	<button id="aaa">开启</button>
+	<button id="bbb">关闭</button>
+	<!-- <audio src="/dist/assets/music/a1.mp3" 
+		controls="controls"
+		id="video" >
+	</audio> -->
+	<script type="text/javascript">
+	document.getElementById('aaa').onclick = function(){
+		document.getElementById('video1').muted = false;
+	}
+	document.getElementById('bbb').onclick = function(){
+		document.getElementById('video1').muted = true;
+	}
+
+	// document.getElementById('video2').muted = false;
+	</script>
+</body>
+</html>
