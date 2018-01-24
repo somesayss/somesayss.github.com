@@ -88,27 +88,20 @@ class Dialog extends React.Component {
 		let me = this;
 		let {props, refs: {dialog}} = me;
 		dialog = $(dialog);
-		if( DomUtil.isIE8() ){
-			let WIN = window;
-			let scrollY = WIN.scrollY || document.documentElement.scrollTop;
-			let winHeight = WIN.innerHeight || document.documentElement.offsetHeight;
-			let height = props.height;
-			let width = props.width;
-			if( !limit.isNumber(height) ){
-				height = dialog.height();
-			};
-			if( !limit.isNumber(width) ){
-				width = dialog.width();
-			};
-			let top = scrollY + (winHeight)/2 - height/2;
-			let marginLeft = -width/2;
-			dialog.css({top, marginLeft});
-		}else{
-			dialog.css({
-				top: '50%',
-				transform: 'translate(-50%, -50%)'
-			});
+		let WIN = window;
+		let scrollY = WIN.scrollY || document.documentElement.scrollTop;
+		let winHeight = WIN.innerHeight || document.documentElement.offsetHeight;
+		let height = props.height;
+		let width = props.width;
+		if( !limit.isNumber(height) ){
+			height = dialog.height();
 		};
+		if( !limit.isNumber(width) ){
+			width = dialog.width();
+		};
+		let top = scrollY + (winHeight)/2 - height/2;
+		let marginLeft = -width/2;
+		dialog.css({top, marginLeft});
 	}
 };
 

@@ -13,7 +13,7 @@ class Controller extends Control {
 		hasCover: true,
 		hide: false,
 		timeout: 0,
-		useEsc: false
+		useEsc: true
 	}
 };
 

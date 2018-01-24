@@ -35,7 +35,7 @@ class AntFormItem extends Component {
 	}
 	render(){
 		let me = this;
-		let {props: {getFieldDecorator, children, name, initialValue, trigger}, state: {formItemUid}} = me;
+		let {props: {getFieldDecorator, children, name, initialValue, trigger, superNowarp}, state: {formItemUid}} = me;
 		let rules = me.getSuperRule();
 		return (
 			<FormItem>
@@ -43,9 +43,8 @@ class AntFormItem extends Component {
 		            rules,
 		            initialValue,
 		            trigger: trigger || 'onChange'
-	          	})(
-		           children
-		        )}
+	          	})( !superNowarp ? children : <span></span> )}
+	          	{ superNowarp ? children : null }
 			</FormItem>
 		);
 	}

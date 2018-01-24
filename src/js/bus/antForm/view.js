@@ -6,14 +6,21 @@ import AntForm from 'modules/antForm/form';
 import Component from 'common/myReflux/component';
 import AntFormItem from 'modules/antForm/formItem';
 
-const {Input, Button, Select} = antd;
+const {Input, Button, Select, Checkbox} = antd;
 const {Option} = Select;
+const {Group: CheckboxGroup} = Checkbox;
 
 class AntFormView extends Component {
 	changeHideValue(){
 		let me = this;
 		let {refs: {AntFormABC}} = me;
 		AntFormABC.setFieldsValue({a5: 'a1'});
+	}
+	seleceXinqu(val){
+		let me = this;
+		let {refs: {AntFormABC}} = me;
+		AntFormABC.setFieldsValue({a7: val});
+		AntFormABC.validateFields(['a7']);
 	}
 	render(){
 		let me = this;
@@ -56,6 +63,7 @@ class AntFormView extends Component {
 
 					<AntFormItem name="a5" 
 						initialValue=""
+						superNowarp="true"
 						rules={[{ required: true, message: '请输入姓名!' }]}>
 						<div style={{width:200}}>
 							隐藏域
@@ -63,10 +71,12 @@ class AntFormView extends Component {
 						</div>
 					</AntFormItem><br /><br />
 
-					<AntFormItem name="a6" 
-						initialValue="a6"
-						rules={[{ required: true, message: '请输入姓名!' }]}>
+					<AntFormItem name="a7" 
+						trigger=""
+						superNowarp="true"
+						rules={[{ required: true, message: '请选择兴趣!' }]}>
 						<div style={{width:200}}>
+							<CheckboxGroup options={['兴趣1','兴趣2','兴趣3']} onChange={me.seleceXinqu.bind(me)}/>
 						</div>
 					</AntFormItem><br /><br />
 
