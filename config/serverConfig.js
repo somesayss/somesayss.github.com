@@ -58,7 +58,13 @@ module.exports = {
             }]
         }, {
             test: /\.(png|jpg)$/,
-            loader: 'url-loader?limit=8192&name=imgs/[name].[ext]'
+            use: [{
+                loader: 'url-loader',
+                options: {
+                    limit: 8192,
+                    name: 'imgs/[name].[ext]'
+                }
+            }]
         }]
     },
     plugins: [],

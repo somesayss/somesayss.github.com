@@ -6,7 +6,7 @@ module.exports = {
 	    'src/js/libs/limit.min.js'
 	],
 	staticList: [
-		'imgs',
+		// 'imgs',
     	'assets'
 	]
 };
