@@ -1,11 +1,11 @@
 #!/bin/bash
 
-echo -e "1.打包上传[git]\n2.创建页面[page]\n3.创建模块[mod]\n4.创建入口[entry]\n5.启动webpack服务[webpack]\n6.编译[build]\n7.服务[server]"
+echo -e "1.打包上传[git]\n2.创建页面[page]\n3.创建模块[mod]\n4.创建入口[entry]\n5.启动webpack服务[webpack]\n6.编译[build]\n7.服务[server]\n8.上线上传[online]"
 echo -n "输入你想要的操作:"
 read type
 
 if [[ $type -le 7 && $type -ge 1 ]]; then
-	doArr=(other git page mod entry webpack build server)
+	doArr=(other git page mod entry webpack build server online)
 	type=${doArr[type]}
 fi
 
@@ -16,7 +16,9 @@ gitDO(){
 	[ ! $commit ] && commit="add"
 	echo "当前分支是${branch}开始打包推送"
 	gulp --build
-	node_modules/.bin/webpack --config ./config/buildConfig.js
+	gulp lessAfter
+	node_modules/.bin/webpack --config ./config/onDaily.js
+	gulp assets
 	git add -A
 	git commit -m $commit
 	git push origin $branch
@@ -72,6 +74,7 @@ webpackDO(){
 	read isHttps
 	[ $isHttps ] && isHttps="--https"
 	gulp
+	gulp assets
 	node_modules/.bin/webpack-dev-server --config ./config/serverConfig.js --hot $isHttps
 }
 
@@ -82,13 +85,29 @@ buildDO(){
 }
 
 serverDO(){
-	echo -n "端口号:(默认3000):"
+	echo -n "端口号:(默认3030):"
 	read port
-	[ ! $port ] && port="3000"
+	[ ! $port ] && port="3030"
 	gulp --build
 	gulp lessAfter
 	node_modules/.bin/webpack --config ./config/buildConfig.js
+	gulp assets
 	anywhere $port
+}
+
+onlineDO(){
+	branch=`git symbolic-ref --short -q HEAD`
+	echo -n "输入注释(默认是add):"
+	read commit
+	[ ! $commit ] && commit="add"
+	echo "当前分支是${branch}开始打包推送"
+	gulp --build
+	gulp lessAfter
+	node_modules/.bin/webpack --config ./config/onLine.js
+	gulp assets
+	git add -A
+	git commit -m $commit
+	git push origin $branch
 }
 
 ${type}DO

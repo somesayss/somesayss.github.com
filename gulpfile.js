@@ -1,4 +1,5 @@
 // 定义
+const del = require('del');
 const fs = require('fs');
 const gulp = require('gulp');
 const glob = require('glob');
@@ -7,13 +8,19 @@ const uglify= require('gulp-uglify');
 const cssmin = require('gulp-cssmin');
 const concat = require('gulp-concat');
 const staticConfig = require('./config/staticConfig')
- 
+  
 // 任务
 const env = gulp.env;
 const isBuild = env.build;
 
 // 默认打包，压缩
-gulp.task('default', ['buildEntry', 'zip']);
+gulp.task('default', ['del', 'buildEntry', 'zip']);
+
+// 删除编译目录
+gulp.task('del', function(){
+    del.sync(['dist']);
+    console.log('del success');
+});
 
 // 自定义打包
 gulp.task('zip', () => {
@@ -29,12 +36,17 @@ gulp.task('zip', () => {
         .pipe( less() )
         .pipe( cssmin() )
         .pipe( gulp.dest('dist/css') );
+    console.log('zip ok.');
+});
+
+gulp.task('assets', () => {
     // 静态文件
     staticConfig.staticList.forEach((val) => {
+        del.sync([`dist/${val}`]);
         gulp.src([`src/${val}/**/*`])
             .pipe( gulp.dest(`dist/${val}`) )
     });
-    console.log('zip ok.');
+    console.log('assets ok.');
 });
 
 gulp.task('lessAfter', () => {

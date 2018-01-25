@@ -26,8 +26,8 @@ module.exports = {
         filename: '[name].js', 
         chunkFilename:'js/[name].js',
         path: path.join(rootPath, 'dist'),
-        // publicPath: '/dist/' //访问路径
-        publicPath: 'http://localhost:3000/dist/' //访问路径
+        publicPath: '/dist/' //访问路径
+        // publicPath: 'http://localhost:3000/dist/' //访问路径
     },
     // 全局变量
     externals: {
