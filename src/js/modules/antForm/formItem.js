@@ -9,6 +9,7 @@ const {Form: {Item: FormItem}} = antd;
 class AntFormItem extends Component {
 	static defaultProps = {
 		formItemKey: 'antd',
+		superClassName: 'ant-form-auto'
 	}
 	state = {
 		formItemUid: `FID${limit.getTimeUid()}`
@@ -35,10 +36,10 @@ class AntFormItem extends Component {
 	}
 	render(){
 		let me = this;
-		let {props: {getFieldDecorator, children, name, initialValue, trigger, superNowarp}, state: {formItemUid}} = me;
+		let {props: {getFieldDecorator, children, name, initialValue, trigger, superNowarp, superClassName}, state: {formItemUid}} = me;
 		let rules = me.getSuperRule();
 		return (
-			<FormItem>
+			<FormItem className={superClassName}>
 				{getFieldDecorator(name || formItemUid, {
 		            rules,
 		            initialValue,
