@@ -34,6 +34,23 @@ gulp.task('zip', () => {
         gulp.src([`src/${val}/**/*`])
             .pipe( gulp.dest(`dist/${val}`) )
     });
+    console.log('zip ok.');
+});
+
+gulp.task('lessAfter', () => {
+     glob.sync('dist/css/**/*.css').forEach((files) => {
+        // console.log(files)
+        // fs.writeFile(files, str);
+        var data = fs.readFileSync(files, 'utf-8');
+        data = data.replace(/url(\(.*?\))/g, (a,b,c) => {
+            console.log('需要转义的地址->', b);
+            var key = b.replace(/((?:\.\.\/)+)/, '../');
+            return 'url' + key;
+        });
+        console.log(files)
+        fs.writeFile(files, data);
+    });
+     console.log('lessAfter ok.')
 });
 
 gulp.task('buildEntry', () => {
@@ -69,7 +86,7 @@ export default RouterMap;
 `
 
     fs.writeFile('src/js/entry/routerMap.js', str);
-    console.log('buildEntry success');
+    console.log('buildEntry ok.');
 
 });
 

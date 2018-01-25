@@ -77,6 +77,7 @@ webpackDO(){
 
 buildDO(){
 	gulp --build
+	gulp lessAfter
 	node_modules/.bin/webpack --config ./config/buildConfig.js
 }
 
@@ -85,6 +86,7 @@ serverDO(){
 	read port
 	[ ! $port ] && port="3000"
 	gulp --build
+	gulp lessAfter
 	node_modules/.bin/webpack --config ./config/buildConfig.js
 	anywhere $port
 }

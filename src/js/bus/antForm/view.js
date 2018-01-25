@@ -6,6 +6,9 @@ import AntForm from 'modules/antForm/form';
 import Component from 'common/myReflux/component';
 import AntFormItem from 'modules/antForm/formItem';
 
+import Abc from './abc';
+
+
 const {Input, Button, Select, Checkbox} = antd;
 const {Option} = Select;
 const {Group: CheckboxGroup} = Checkbox;
@@ -78,6 +81,12 @@ class AntFormView extends Component {
 						<div style={{width:200}}>
 							<CheckboxGroup options={['兴趣1','兴趣2','兴趣3']} onChange={me.seleceXinqu.bind(me)}/>
 						</div>
+					</AntFormItem><br /><br />
+
+					<AntFormItem name="a8" 
+						trigger=""
+						rules={[{ required: true, message: '请选择兴趣!' }]}>
+						<Abc />
 					</AntFormItem><br /><br />
 
 					<Button htmlType="submit" className="fn-MR10">确 定</Button>

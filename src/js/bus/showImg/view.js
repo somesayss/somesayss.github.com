@@ -14,8 +14,7 @@ class ShowImg extends Component {
 		let {props} = me;
 		return (
 			<div className={me.getClassName('page-showImg')}>
-				
-				<Button type="primary">Primary</Button>
+				<div className="imgshow1"></div>
 			</div>
 		);
 	}
